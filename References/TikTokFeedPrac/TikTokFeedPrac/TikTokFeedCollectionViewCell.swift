@@ -11,10 +11,10 @@ import SnapKit
 final class TikTokFeedCollectionViewCell: UICollectionViewCell {
     static let identifier = String(describing: TikTokFeedCollectionViewCell.self)
     
-    let testImageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.contentMode = .scaleToFill
-        return imageView
+    let containerView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .white
+        return view
     }()
     
     override init(frame: CGRect) {
@@ -29,15 +29,15 @@ final class TikTokFeedCollectionViewCell: UICollectionViewCell {
     }
     
     private func configureConstraints() {
-        contentView.addSubview(testImageView)
+        contentView.addSubview(containerView)
         
-        testImageView.snp.makeConstraints {
-            $0.edges.equalTo(contentView.safeAreaLayoutGuide)
+        containerView.snp.makeConstraints {
+            $0.top.bottom.equalToSuperview().inset(32.0)
+            $0.horizontalEdges.equalToSuperview().inset(16.0)
         }
     }
     
     private func configureUI() {
-        contentView.backgroundColor = .brown
     }
     
 }

@@ -13,7 +13,7 @@ final class TikTokFeedViewController: UIViewController {
     lazy var collectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: createCollectionViewLayout())
         collectionView.isPagingEnabled = true
-        collectionView.dataSource = self
+        collectionView.dataSource = self        
         
         collectionView.register(TikTokFeedCollectionViewCell.self, forCellWithReuseIdentifier: TikTokFeedCollectionViewCell.identifier)
         
@@ -33,6 +33,7 @@ final class TikTokFeedViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        configureNavigationBar()
         configureConstraints()
     }
 
@@ -40,19 +41,27 @@ final class TikTokFeedViewController: UIViewController {
         
         let layout = UICollectionViewFlowLayout()
         
-        let topSafeareInset = getSafeareInset().top
+        guard let navigationController else { return UICollectionViewLayout() }
+        let navigationBarHeight = navigationController.navigationBar.frame.height
+        print("navigationBarHeight", navigationBarHeight)
+        let topSafeareInset = getSafeAreaInset().top
+        print("SafeAreaInset", getSafeAreaInset())
+        print("getStatusBarRect", getStatusBarRect())
         let tabBarHeight = tabBarController?.tabBar.frame.height ?? 0
+        print("dd", tabBarController?.tabBar.frame)
+        print("tabBarHeight", tabBarHeight)
         layout.scrollDirection = .vertical
         layout.itemSize = CGSize(width: view.frame.size.width,
-                                 height: view.frame.size.height - (topSafeareInset + tabBarHeight))
-        layout.sectionInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+                                 height: view.frame.size.height - (topSafeareInset + navigationBarHeight + tabBarHeight))
         
-        layout.minimumLineSpacing = 0
+        layout.sectionInset = .zero
+        layout.minimumLineSpacing = .zero
+        layout.minimumInteritemSpacing = .zero
                 
         return layout
     }
     
-    private func getSafeareInset() -> UIEdgeInsets {
+    private func getSafeAreaInset() -> UIEdgeInsets {
         // connectedScenes에 접근하여 첫번째 scene 가져오기
         let connectedScene = UIApplication.shared.connectedScenes.first
         
@@ -67,14 +76,32 @@ final class TikTokFeedViewController: UIViewController {
         return safeAreaInset
     }
     
+    private func getStatusBarRect() -> CGRect {
+        // connectedScenes에 접근하여 첫번째 scene 가져오기
+        let connectedScene = UIApplication.shared.connectedScenes.first
+        
+        // UIWindowScene으로 캐스팅
+        let windowScene = connectedScene as? UIWindowScene
+        
+        // 첫번째 window 가져오기
+        let window = windowScene?.windows.first
+        
+        // safeAreaFrame 획득
+        let safeAreaFrame = window?.windowScene?.statusBarManager?.statusBarFrame ?? .zero
+        return safeAreaFrame
+    }
+    
+    private func configureNavigationBar() {
+        navigationItem.title = "테스트"
+        navigationController?.navigationBar.backgroundColor = .white
+    }
+    
     private func configureConstraints() {
         view.addSubview(collectionView)
         
         collectionView.snp.makeConstraints {
             $0.edges.equalTo(view.safeAreaLayoutGuide)
         }
-        
-        navigationController?.navigationBar.isHidden = true
     }
 }
 
@@ -86,7 +113,11 @@ extension TikTokFeedViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TikTokFeedCollectionViewCell.identifier, for: indexPath) as? TikTokFeedCollectionViewCell else { return UICollectionViewCell() }
         
-        cell.testImageView.image = dataList[indexPath.item]
+        if indexPath.item % 2 == 0 {
+            cell.backgroundColor = .green
+        } else {
+            cell.backgroundColor = .brown
+        }
         
         return cell
     }
