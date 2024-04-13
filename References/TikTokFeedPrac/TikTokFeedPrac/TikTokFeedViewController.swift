@@ -53,9 +53,16 @@ final class TikTokFeedViewController: UIViewController {
     }
     
     private func getSafeareInset() -> UIEdgeInsets {
+        // connectedScenes에 접근하여 첫번째 scene 가져오기
         let connectedScene = UIApplication.shared.connectedScenes.first
+        
+        // UIWindowScene으로 캐스팅
         let windowScene = connectedScene as? UIWindowScene
+        
+        // 첫번째 window 가져오기
         let window = windowScene?.windows.first
+        
+        // safeAreaInset 획득
         let safeAreaInset = window?.safeAreaInsets ?? .zero
         return safeAreaInset
     }

@@ -9,16 +9,20 @@
 /* Begin PBXBuildFile section */
 		0049D87F2BC96B4800F59852 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0049D87E2BC96B4800F59852 /* AppDelegate.swift */; };
 		0049D8812BC96B4800F59852 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0049D8802BC96B4800F59852 /* SceneDelegate.swift */; };
-		0049D8862BC96B4800F59852 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0049D8842BC96B4800F59852 /* Main.storyboard */; };
 		0049D8882BC96B4900F59852 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0049D8872BC96B4900F59852 /* Assets.xcassets */; };
 		0049D88B2BC96B4900F59852 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0049D8892BC96B4900F59852 /* LaunchScreen.storyboard */; };
+		00F65D372BCA16290027A897 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 00F65D362BCA16290027A897 /* Alamofire */; };
+		00F65D3A2BCA167F0027A897 /* RxCocoa in Frameworks */ = {isa = PBXBuildFile; productRef = 00F65D392BCA167F0027A897 /* RxCocoa */; };
+		00F65D3C2BCA167F0027A897 /* RxSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 00F65D3B2BCA167F0027A897 /* RxSwift */; };
+		00F65D3F2BCA176B0027A897 /* Realm in Frameworks */ = {isa = PBXBuildFile; productRef = 00F65D3E2BCA176B0027A897 /* Realm */; };
+		00F65D412BCA176B0027A897 /* RealmSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 00F65D402BCA176B0027A897 /* RealmSwift */; };
+		00F65D442BCA178C0027A897 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 00F65D432BCA178C0027A897 /* SnapKit */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		0049D87B2BC96B4800F59852 /* PicPoint.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PicPoint.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0049D87E2BC96B4800F59852 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		0049D8802BC96B4800F59852 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		0049D8852BC96B4800F59852 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		0049D8872BC96B4900F59852 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		0049D88A2BC96B4900F59852 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		0049D88C2BC96B4900F59852 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -29,6 +33,12 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				00F65D3C2BCA167F0027A897 /* RxSwift in Frameworks */,
+				00F65D3A2BCA167F0027A897 /* RxCocoa in Frameworks */,
+				00F65D3F2BCA176B0027A897 /* Realm in Frameworks */,
+				00F65D442BCA178C0027A897 /* SnapKit in Frameworks */,
+				00F65D412BCA176B0027A897 /* RealmSwift in Frameworks */,
+				00F65D372BCA16290027A897 /* Alamofire in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -54,14 +64,53 @@
 		0049D87D2BC96B4800F59852 /* PicPoint */ = {
 			isa = PBXGroup;
 			children = (
+				00F65D492BCA1C8D0027A897 /* Resources */,
+				00F65D482BCA1C5B0027A897 /* Protocols */,
+				00F65D472BCA1C450027A897 /* Extensions */,
+				00F65D462BCA1B3E0027A897 /* Network */,
+				00F65D452BCA179C0027A897 /* Present */,
 				0049D87E2BC96B4800F59852 /* AppDelegate.swift */,
 				0049D8802BC96B4800F59852 /* SceneDelegate.swift */,
-				0049D8842BC96B4800F59852 /* Main.storyboard */,
 				0049D8872BC96B4900F59852 /* Assets.xcassets */,
 				0049D8892BC96B4900F59852 /* LaunchScreen.storyboard */,
 				0049D88C2BC96B4900F59852 /* Info.plist */,
 			);
 			path = PicPoint;
+			sourceTree = "<group>";
+		};
+		00F65D452BCA179C0027A897 /* Present */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Present;
+			sourceTree = "<group>";
+		};
+		00F65D462BCA1B3E0027A897 /* Network */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Network;
+			sourceTree = "<group>";
+		};
+		00F65D472BCA1C450027A897 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		00F65D482BCA1C5B0027A897 /* Protocols */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Protocols;
+			sourceTree = "<group>";
+		};
+		00F65D492BCA1C8D0027A897 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Resources;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -80,6 +129,14 @@
 			dependencies = (
 			);
 			name = PicPoint;
+			packageProductDependencies = (
+				00F65D362BCA16290027A897 /* Alamofire */,
+				00F65D392BCA167F0027A897 /* RxCocoa */,
+				00F65D3B2BCA167F0027A897 /* RxSwift */,
+				00F65D3E2BCA176B0027A897 /* Realm */,
+				00F65D402BCA176B0027A897 /* RealmSwift */,
+				00F65D432BCA178C0027A897 /* SnapKit */,
+			);
 			productName = PicPoint;
 			productReference = 0049D87B2BC96B4800F59852 /* PicPoint.app */;
 			productType = "com.apple.product-type.application";
@@ -108,6 +165,12 @@
 				Base,
 			);
 			mainGroup = 0049D8722BC96B4800F59852;
+			packageReferences = (
+				00F65D352BCA16290027A897 /* XCRemoteSwiftPackageReference "Alamofire" */,
+				00F65D382BCA167F0027A897 /* XCRemoteSwiftPackageReference "RxSwift" */,
+				00F65D3D2BCA176B0027A897 /* XCRemoteSwiftPackageReference "realm-swift" */,
+				00F65D422BCA178C0027A897 /* XCRemoteSwiftPackageReference "SnapKit" */,
+			);
 			productRefGroup = 0049D87C2BC96B4800F59852 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -124,7 +187,6 @@
 			files = (
 				0049D88B2BC96B4900F59852 /* LaunchScreen.storyboard in Resources */,
 				0049D8882BC96B4900F59852 /* Assets.xcassets in Resources */,
-				0049D8862BC96B4800F59852 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -143,14 +205,6 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
-		0049D8842BC96B4800F59852 /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				0049D8852BC96B4800F59852 /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
 		0049D8892BC96B4900F59852 /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -365,6 +419,74 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		00F65D352BCA16290027A897 /* XCRemoteSwiftPackageReference "Alamofire" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Alamofire/Alamofire.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.9.1;
+			};
+		};
+		00F65D382BCA167F0027A897 /* XCRemoteSwiftPackageReference "RxSwift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/ReactiveX/RxSwift";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 6.6.0;
+			};
+		};
+		00F65D3D2BCA176B0027A897 /* XCRemoteSwiftPackageReference "realm-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/realm/realm-swift.git";
+			requirement = {
+				kind = exactVersion;
+				version = 10.49.1;
+			};
+		};
+		00F65D422BCA178C0027A897 /* XCRemoteSwiftPackageReference "SnapKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SnapKit/SnapKit.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.7.1;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		00F65D362BCA16290027A897 /* Alamofire */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 00F65D352BCA16290027A897 /* XCRemoteSwiftPackageReference "Alamofire" */;
+			productName = Alamofire;
+		};
+		00F65D392BCA167F0027A897 /* RxCocoa */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 00F65D382BCA167F0027A897 /* XCRemoteSwiftPackageReference "RxSwift" */;
+			productName = RxCocoa;
+		};
+		00F65D3B2BCA167F0027A897 /* RxSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 00F65D382BCA167F0027A897 /* XCRemoteSwiftPackageReference "RxSwift" */;
+			productName = RxSwift;
+		};
+		00F65D3E2BCA176B0027A897 /* Realm */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 00F65D3D2BCA176B0027A897 /* XCRemoteSwiftPackageReference "realm-swift" */;
+			productName = Realm;
+		};
+		00F65D402BCA176B0027A897 /* RealmSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 00F65D3D2BCA176B0027A897 /* XCRemoteSwiftPackageReference "realm-swift" */;
+			productName = RealmSwift;
+		};
+		00F65D432BCA178C0027A897 /* SnapKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 00F65D422BCA178C0027A897 /* XCRemoteSwiftPackageReference "SnapKit" */;
+			productName = SnapKit;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 0049D8732BC96B4800F59852 /* Project object */;
 }
