@@ -11,6 +11,8 @@
 		0049D8812BC96B4800F59852 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0049D8802BC96B4800F59852 /* SceneDelegate.swift */; };
 		0049D8882BC96B4900F59852 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0049D8872BC96B4900F59852 /* Assets.xcassets */; };
 		0049D88B2BC96B4900F59852 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0049D8892BC96B4900F59852 /* LaunchScreen.storyboard */; };
+		00AA9A792BCC24B90069C55C /* HomeTabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00AA9A782BCC24B90069C55C /* HomeTabBarViewController.swift */; };
+		00AA9A7B2BCC25C90069C55C /* UserDefaults+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00AA9A7A2BCC25C90069C55C /* UserDefaults+Extensions.swift */; };
 		00B7C3EF2BCA5A42009AC333 /* APIKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00B7C3EE2BCA5A42009AC333 /* APIKeys.swift */; };
 		00B7C3F12BCA5BE2009AC333 /* Router.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00B7C3F02BCA5BE2009AC333 /* Router.swift */; };
 		00B7C3F32BCA5C42009AC333 /* TargetType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00B7C3F22BCA5C42009AC333 /* TargetType.swift */; };
@@ -28,6 +30,7 @@
 		00C71D652BCC098F00D933FD /* SignUpViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00C71D642BCC098F00D933FD /* SignUpViewModel.swift */; };
 		00C71D672BCC0FDA00D933FD /* SignUpQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00C71D662BCC0FDA00D933FD /* SignUpQuery.swift */; };
 		00C71D692BCC11C900D933FD /* SignUpModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00C71D682BCC11C900D933FD /* SignUpModel.swift */; };
+		00C71D6E2BCC22E200D933FD /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00C71D6D2BCC22E200D933FD /* HomeViewController.swift */; };
 		00F65D372BCA16290027A897 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 00F65D362BCA16290027A897 /* Alamofire */; };
 		00F65D3A2BCA167F0027A897 /* RxCocoa in Frameworks */ = {isa = PBXBuildFile; productRef = 00F65D392BCA167F0027A897 /* RxCocoa */; };
 		00F65D3C2BCA167F0027A897 /* RxSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 00F65D3B2BCA167F0027A897 /* RxSwift */; };
@@ -43,6 +46,8 @@
 		0049D8872BC96B4900F59852 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		0049D88A2BC96B4900F59852 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		0049D88C2BC96B4900F59852 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		00AA9A782BCC24B90069C55C /* HomeTabBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeTabBarViewController.swift; sourceTree = "<group>"; };
+		00AA9A7A2BCC25C90069C55C /* UserDefaults+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UserDefaults+Extensions.swift"; sourceTree = "<group>"; };
 		00B7C3EE2BCA5A42009AC333 /* APIKeys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIKeys.swift; sourceTree = "<group>"; };
 		00B7C3F02BCA5BE2009AC333 /* Router.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Router.swift; sourceTree = "<group>"; };
 		00B7C3F22BCA5C42009AC333 /* TargetType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TargetType.swift; sourceTree = "<group>"; };
@@ -60,6 +65,7 @@
 		00C71D642BCC098F00D933FD /* SignUpViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpViewModel.swift; sourceTree = "<group>"; };
 		00C71D662BCC0FDA00D933FD /* SignUpQuery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpQuery.swift; sourceTree = "<group>"; };
 		00C71D682BCC11C900D933FD /* SignUpModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpModel.swift; sourceTree = "<group>"; };
+		00C71D6D2BCC22E200D933FD /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -115,11 +121,20 @@
 			path = PicPoint;
 			sourceTree = "<group>";
 		};
+		00AA9A772BCC247C0069C55C /* HomeTabBar */ = {
+			isa = PBXGroup;
+			children = (
+				00AA9A782BCC24B90069C55C /* HomeTabBarViewController.swift */,
+				00C71D6A2BCC22AC00D933FD /* Home */,
+			);
+			path = HomeTabBar;
+			sourceTree = "<group>";
+		};
 		00B7C3F42BCA5EE9009AC333 /* SignIn */ = {
 			isa = PBXGroup;
 			children = (
-				00B7C4002BCA643E009AC333 /* ViewModels */,
 				00B7C3FF2BCA642E009AC333 /* Views */,
+				00B7C4002BCA643E009AC333 /* ViewModels */,
 			);
 			path = SignIn;
 			sourceTree = "<group>";
@@ -127,8 +142,8 @@
 		00B7C3F52BCA5F01009AC333 /* SignUp */ = {
 			isa = PBXGroup;
 			children = (
-				00C71D632BCC088400D933FD /* ViewModels */,
 				00C71D622BCC087F00D933FD /* Views */,
+				00C71D632BCC088400D933FD /* ViewModels */,
 			);
 			path = SignUp;
 			sourceTree = "<group>";
@@ -225,9 +240,34 @@
 			path = ViewModels;
 			sourceTree = "<group>";
 		};
+		00C71D6A2BCC22AC00D933FD /* Home */ = {
+			isa = PBXGroup;
+			children = (
+				00C71D6C2BCC22BC00D933FD /* Views */,
+				00C71D6B2BCC22B900D933FD /* ViewModels */,
+			);
+			path = Home;
+			sourceTree = "<group>";
+		};
+		00C71D6B2BCC22B900D933FD /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		00C71D6C2BCC22BC00D933FD /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				00C71D6D2BCC22E200D933FD /* HomeViewController.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
 		00F65D452BCA179C0027A897 /* Present */ = {
 			isa = PBXGroup;
 			children = (
+				00AA9A772BCC247C0069C55C /* HomeTabBar */,
 				00B7C3F52BCA5F01009AC333 /* SignUp */,
 				00B7C3F42BCA5EE9009AC333 /* SignIn */,
 			);
@@ -249,6 +289,7 @@
 		00F65D472BCA1C450027A897 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				00AA9A7A2BCC25C90069C55C /* UserDefaults+Extensions.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -357,10 +398,13 @@
 				00B7C4142BCA6C7F009AC333 /* LoginModel.swift in Sources */,
 				00C71D652BCC098F00D933FD /* SignUpViewModel.swift in Sources */,
 				00C71D692BCC11C900D933FD /* SignUpModel.swift in Sources */,
+				00AA9A7B2BCC25C90069C55C /* UserDefaults+Extensions.swift in Sources */,
 				00B7C4062BCA68DB009AC333 /* HTTPHeader.swift in Sources */,
+				00C71D6E2BCC22E200D933FD /* HomeViewController.swift in Sources */,
 				00B7C40C2BCA6A6E009AC333 /* LoginViewModel.swift in Sources */,
 				00B7C3F32BCA5C42009AC333 /* TargetType.swift in Sources */,
 				00B7C3F12BCA5BE2009AC333 /* Router.swift in Sources */,
+				00AA9A792BCC24B90069C55C /* HomeTabBarViewController.swift in Sources */,
 				00B7C4112BCA6BB7009AC333 /* UserManager.swift in Sources */,
 				00C71D612BCC087B00D933FD /* SignViewController.swift in Sources */,
 				00B7C3FA2BCA5F60009AC333 /* UIViewControllerConfiguration.swift in Sources */,
@@ -514,6 +558,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 59V6NJY3X6;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = PicPoint/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -545,6 +590,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 59V6NJY3X6;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = PicPoint/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;

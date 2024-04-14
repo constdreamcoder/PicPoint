@@ -12,11 +12,32 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     var window: UIWindow?
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
-       guard let windowScene = (scene as? UIWindowScene) else { return }
-        
-        window = UIWindow(windowScene: windowScene)
-        window?.rootViewController = UINavigationController(rootViewController: SignInViewController())
-        window?.makeKeyAndVisible()
+        if UserDefaults.standard.accessToken == "" {
+            guard let windowScene = (scene as? UIWindowScene) else { return }
+            
+            window = UIWindow(windowScene: windowScene)
+            window?.rootViewController = UINavigationController(rootViewController: SignInViewController())
+            window?.makeKeyAndVisible()
+        } else {
+            guard let accessTokenDueDate = UserDefaults.standard.accessTokenDueDate else {
+                return }
+            print("dueDate", Date().timeIntervalSince(accessTokenDueDate))
+            if Date().timeIntervalSince(accessTokenDueDate) <= 0 {
+                guard let windowScene = (scene as? UIWindowScene) else { return }
+                
+                window = UIWindow(windowScene: windowScene)
+                window?.rootViewController = HomeTabBarViewController()
+                window?.makeKeyAndVisible()
+            } else {
+                UserDefaults.standard.clearAllData()
+                
+                guard let windowScene = (scene as? UIWindowScene) else { return }
+
+                window = UIWindow(windowScene: windowScene)
+                window?.rootViewController = UINavigationController(rootViewController: SignInViewController())
+                window?.makeKeyAndVisible()
+            }
+        }
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {

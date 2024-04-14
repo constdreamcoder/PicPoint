@@ -43,10 +43,10 @@ final class SignInViewController: BaseViewController {
     }()
     
     private let viewModel = LoginViewModel()
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         configureNavigationBar()
         configureConstraints()
         configureUI()
@@ -94,11 +94,10 @@ extension SignInViewController: UIViewControllerConfiguration {
     
     func bind() {
         
-        
         let input = LoginViewModel.Input(
             emailText: emailTextField.rx.text.orEmpty,
             passwordText: passwordTextField.rx.text.orEmpty,
-            loginButtonTapped: signInButton.rx.tap, 
+            loginButtonTapped: signInButton.rx.tap,
             goToSignUpButtonTapped: goToSignUpButton.rx.tap
         )
         
@@ -111,6 +110,14 @@ extension SignInViewController: UIViewControllerConfiguration {
         output.loginSuccessTrigger
             .drive(with: self) { owner, _ in
                 print("로그인 성공")
+                let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene
+                let sceneDelegate = windowScene?.delegate as? SceneDelegate
+                
+                let homeTabBarVC = HomeTabBarViewController()
+                let homeTabBarNav = UINavigationController(rootViewController: homeTabBarVC)
+                
+                sceneDelegate?.window?.rootViewController = homeTabBarNav
+                sceneDelegate?.window?.makeKeyAndVisible()
             }
             .disposed(by: disposeBag)
         

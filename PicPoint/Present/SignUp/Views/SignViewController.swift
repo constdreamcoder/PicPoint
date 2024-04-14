@@ -28,6 +28,8 @@ final class SignUpViewController: BaseViewController {
         return textField
     }()
     
+    // TODO: - 비밀번호 확인 TextField 생성
+    
     let nickTextField: UITextField = {
         let textField = UITextField()
         textField.placeholder = "닉네임을 입력해주세요"

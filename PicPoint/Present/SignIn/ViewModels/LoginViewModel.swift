@@ -55,11 +55,18 @@ final class LoginViewModel: ViewModelType {
                 return UserManager.login(query: loginQuery)
             }
             .subscribe(with: self) { owner, loginModel in
-                UserDefaults.standard.set(loginModel.userId, forKey: "userId")
-                UserDefaults.standard.set(loginModel.email, forKey: "email")
-                UserDefaults.standard.set(loginModel.nick, forKey: "nick")
-                UserDefaults.standard.set(loginModel.accessToken, forKey: "accessToken")
-                UserDefaults.standard.set(loginModel.refreshToken, forKey: "refreshToken")
+                UserDefaults.standard.userId = loginModel.userId
+                UserDefaults.standard.email = loginModel.email
+                UserDefaults.standard.nick = loginModel.nick
+                UserDefaults.standard.accessToken = loginModel.accessToken
+                UserDefaults.standard.refreshToken = loginModel.refreshToken
+                
+                let accessTokenDueDate = Date().addingTimeInterval(120 * 60) 
+//                let testAccessTokenDueDate = Date().addingTimeInterval(1 * 60)
+                UserDefaults.standard.accessTokenDueDate = accessTokenDueDate
+                let refreshTokenDueDate = Date().addingTimeInterval(1200 * 60)
+//                let testRefreshTokenDueDate = Date().addingTimeInterval(5 * 60)
+                UserDefaults.standard.refreshTokenDueDate = refreshTokenDueDate
                 loginSuccessTrigger.accept(())
             } onError: { owner, error in
                 print("로그인 오류 발생, \(error)")
