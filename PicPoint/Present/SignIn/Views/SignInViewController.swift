@@ -35,6 +35,13 @@ final class SignInViewController: BaseViewController {
         return button
     }()
     
+    let goToSignUpButton: UIButton = {
+        let button = UIButton()
+        button.setTitle("회원가입하러 가기", for: .normal)
+        button.backgroundColor = .systemBlue
+        return button
+    }()
+    
     private let viewModel = LoginViewModel()
 
     override func viewDidLoad() {
@@ -56,7 +63,8 @@ extension SignInViewController: UIViewControllerConfiguration {
         [
             emailTextField,
             passwordTextField,
-            signInButton
+            signInButton,
+            goToSignUpButton
         ].forEach { view.addSubview($0) }
         
         emailTextField.snp.makeConstraints {
@@ -73,6 +81,11 @@ extension SignInViewController: UIViewControllerConfiguration {
             $0.top.equalTo(passwordTextField.snp.bottom).offset(16.0)
             $0.horizontalEdges.equalTo(view.safeAreaLayoutGuide).inset(16.0)
         }
+        
+        goToSignUpButton.snp.makeConstraints {
+            $0.top.equalTo(signInButton.snp.bottom).offset(16.0)
+            $0.horizontalEdges.equalTo(view.safeAreaLayoutGuide).inset(16.0)
+        }
     }
     
     func configureUI() {
@@ -85,7 +98,8 @@ extension SignInViewController: UIViewControllerConfiguration {
         let input = LoginViewModel.Input(
             emailText: emailTextField.rx.text.orEmpty,
             passwordText: passwordTextField.rx.text.orEmpty,
-            loginButtonTapped: signInButton.rx.tap
+            loginButtonTapped: signInButton.rx.tap, 
+            goToSignUpButtonTapped: goToSignUpButton.rx.tap
         )
         
         let output = viewModel.transform(input: input)
@@ -99,5 +113,13 @@ extension SignInViewController: UIViewControllerConfiguration {
                 print("로그인 성공")
             }
             .disposed(by: disposeBag)
+        
+        output.moveToSignUpVC
+            .drive(with: self) { owner, _ in
+                let signUpVC = SignUpViewController()
+                owner.navigationController?.pushViewController(signUpVC, animated: true)
+            }
+            .disposed(by: disposeBag)
+        
     }
 }

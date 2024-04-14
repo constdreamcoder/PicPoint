@@ -22,8 +22,12 @@
 		00B7C4092BCA695C009AC333 /* LoginQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00B7C4082BCA695C009AC333 /* LoginQuery.swift */; };
 		00B7C40C2BCA6A6E009AC333 /* LoginViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00B7C40B2BCA6A6E009AC333 /* LoginViewModel.swift */; };
 		00B7C40E2BCA6A93009AC333 /* ViewModelType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00B7C40D2BCA6A93009AC333 /* ViewModelType.swift */; };
-		00B7C4112BCA6BB7009AC333 /* LoginManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00B7C4102BCA6BB7009AC333 /* LoginManager.swift */; };
+		00B7C4112BCA6BB7009AC333 /* UserManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00B7C4102BCA6BB7009AC333 /* UserManager.swift */; };
 		00B7C4142BCA6C7F009AC333 /* LoginModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00B7C4132BCA6C7F009AC333 /* LoginModel.swift */; };
+		00C71D612BCC087B00D933FD /* SignViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00C71D602BCC087B00D933FD /* SignViewController.swift */; };
+		00C71D652BCC098F00D933FD /* SignUpViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00C71D642BCC098F00D933FD /* SignUpViewModel.swift */; };
+		00C71D672BCC0FDA00D933FD /* SignUpQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00C71D662BCC0FDA00D933FD /* SignUpQuery.swift */; };
+		00C71D692BCC11C900D933FD /* SignUpModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00C71D682BCC11C900D933FD /* SignUpModel.swift */; };
 		00F65D372BCA16290027A897 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 00F65D362BCA16290027A897 /* Alamofire */; };
 		00F65D3A2BCA167F0027A897 /* RxCocoa in Frameworks */ = {isa = PBXBuildFile; productRef = 00F65D392BCA167F0027A897 /* RxCocoa */; };
 		00F65D3C2BCA167F0027A897 /* RxSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 00F65D3B2BCA167F0027A897 /* RxSwift */; };
@@ -50,8 +54,12 @@
 		00B7C4082BCA695C009AC333 /* LoginQuery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginQuery.swift; sourceTree = "<group>"; };
 		00B7C40B2BCA6A6E009AC333 /* LoginViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewModel.swift; sourceTree = "<group>"; };
 		00B7C40D2BCA6A93009AC333 /* ViewModelType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModelType.swift; sourceTree = "<group>"; };
-		00B7C4102BCA6BB7009AC333 /* LoginManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginManager.swift; sourceTree = "<group>"; };
+		00B7C4102BCA6BB7009AC333 /* UserManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserManager.swift; sourceTree = "<group>"; };
 		00B7C4132BCA6C7F009AC333 /* LoginModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginModel.swift; sourceTree = "<group>"; };
+		00C71D602BCC087B00D933FD /* SignViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignViewController.swift; sourceTree = "<group>"; };
+		00C71D642BCC098F00D933FD /* SignUpViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpViewModel.swift; sourceTree = "<group>"; };
+		00C71D662BCC0FDA00D933FD /* SignUpQuery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpQuery.swift; sourceTree = "<group>"; };
+		00C71D682BCC11C900D933FD /* SignUpModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -119,6 +127,8 @@
 		00B7C3F52BCA5F01009AC333 /* SignUp */ = {
 			isa = PBXGroup;
 			children = (
+				00C71D632BCC088400D933FD /* ViewModels */,
+				00C71D622BCC087F00D933FD /* Views */,
 			);
 			path = SignUp;
 			sourceTree = "<group>";
@@ -168,6 +178,7 @@
 			isa = PBXGroup;
 			children = (
 				00B7C4082BCA695C009AC333 /* LoginQuery.swift */,
+				00C71D662BCC0FDA00D933FD /* SignUpQuery.swift */,
 			);
 			path = Queries;
 			sourceTree = "<group>";
@@ -184,7 +195,7 @@
 		00B7C40F2BCA6B56009AC333 /* Managers */ = {
 			isa = PBXGroup;
 			children = (
-				00B7C4102BCA6BB7009AC333 /* LoginManager.swift */,
+				00B7C4102BCA6BB7009AC333 /* UserManager.swift */,
 			);
 			path = Managers;
 			sourceTree = "<group>";
@@ -193,8 +204,25 @@
 			isa = PBXGroup;
 			children = (
 				00B7C4132BCA6C7F009AC333 /* LoginModel.swift */,
+				00C71D682BCC11C900D933FD /* SignUpModel.swift */,
 			);
 			path = Responses;
+			sourceTree = "<group>";
+		};
+		00C71D622BCC087F00D933FD /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				00C71D602BCC087B00D933FD /* SignViewController.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		00C71D632BCC088400D933FD /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				00C71D642BCC098F00D933FD /* SignUpViewModel.swift */,
+			);
+			path = ViewModels;
 			sourceTree = "<group>";
 		};
 		00F65D452BCA179C0027A897 /* Present */ = {
@@ -327,17 +355,21 @@
 			files = (
 				00B7C4092BCA695C009AC333 /* LoginQuery.swift in Sources */,
 				00B7C4142BCA6C7F009AC333 /* LoginModel.swift in Sources */,
+				00C71D652BCC098F00D933FD /* SignUpViewModel.swift in Sources */,
+				00C71D692BCC11C900D933FD /* SignUpModel.swift in Sources */,
 				00B7C4062BCA68DB009AC333 /* HTTPHeader.swift in Sources */,
 				00B7C40C2BCA6A6E009AC333 /* LoginViewModel.swift in Sources */,
 				00B7C3F32BCA5C42009AC333 /* TargetType.swift in Sources */,
 				00B7C3F12BCA5BE2009AC333 /* Router.swift in Sources */,
-				00B7C4112BCA6BB7009AC333 /* LoginManager.swift in Sources */,
+				00B7C4112BCA6BB7009AC333 /* UserManager.swift in Sources */,
+				00C71D612BCC087B00D933FD /* SignViewController.swift in Sources */,
 				00B7C3FA2BCA5F60009AC333 /* UIViewControllerConfiguration.swift in Sources */,
 				00B7C3F72BCA5F38009AC333 /* SignInViewController.swift in Sources */,
 				00B7C3EF2BCA5A42009AC333 /* APIKeys.swift in Sources */,
 				00B7C40E2BCA6A93009AC333 /* ViewModelType.swift in Sources */,
 				00B7C3FE2BCA6142009AC333 /* BaseViewController.swift in Sources */,
 				0049D87F2BC96B4800F59852 /* AppDelegate.swift in Sources */,
+				00C71D672BCC0FDA00D933FD /* SignUpQuery.swift in Sources */,
 				0049D8812BC96B4800F59852 /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

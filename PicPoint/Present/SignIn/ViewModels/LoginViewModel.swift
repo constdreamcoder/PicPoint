@@ -16,11 +16,13 @@ final class LoginViewModel: ViewModelType {
         let emailText: ControlProperty<String>
         let passwordText: ControlProperty<String>
         let loginButtonTapped: ControlEvent<Void>
+        let goToSignUpButtonTapped: ControlEvent<Void>
     }
     
     struct Output {
         let loginValidation: Driver<Bool>
         let loginSuccessTrigger: Driver<Void>
+        let moveToSignUpVC: Driver<Void>
     }
     
     func transform(input: Input) -> Output {
@@ -50,7 +52,7 @@ final class LoginViewModel: ViewModelType {
             .debounce(.seconds(1), scheduler: MainScheduler.instance)
             .withLatestFrom(loginObservable)
             .flatMap { loginQuery in
-                return LoginManager.login(query: loginQuery)
+                return UserManager.login(query: loginQuery)
             }
             .subscribe(with: self) { owner, loginModel in
                 UserDefaults.standard.set(loginModel.userId, forKey: "userId")
@@ -60,13 +62,14 @@ final class LoginViewModel: ViewModelType {
                 UserDefaults.standard.set(loginModel.refreshToken, forKey: "refreshToken")
                 loginSuccessTrigger.accept(())
             } onError: { owner, error in
-                print("오류 발생, \(error)")
+                print("로그인 오류 발생, \(error)")
             }
             .disposed(by: disposeBag)
             
         return Output(
             loginValidation: loginValid.asDriver(),
-            loginSuccessTrigger: loginSuccessTrigger.asDriver(onErrorJustReturn: ())
+            loginSuccessTrigger: loginSuccessTrigger.asDriver(onErrorJustReturn: ()),
+            moveToSignUpVC: input.goToSignUpButtonTapped.asDriver()
         )
     }
     
