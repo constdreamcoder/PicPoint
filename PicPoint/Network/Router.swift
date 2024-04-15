@@ -11,6 +11,7 @@ import Alamofire
 enum Router {
     case login(query: LoginQuery)
     case signUp(query: SignUpQuery)
+    case withdrawal
 }
 
 extension Router: TargetType {
@@ -23,6 +24,8 @@ extension Router: TargetType {
         switch self {
         case .login, .signUp:
             return .post
+        case .withdrawal:
+            return .get
         }
     }
     
@@ -32,6 +35,8 @@ extension Router: TargetType {
             return "/users/login"
         case .signUp:
             return "/users/join"
+        case .withdrawal:
+            return "/users/withdraw"
         }
     }
     
@@ -40,6 +45,11 @@ extension Router: TargetType {
         case .login, .signUp:
             return [
                 HTTPHeader.contentType.rawValue: HTTPHeader.json.rawValue,
+                HTTPHeader.sesacKey.rawValue: APIKeys.sesacKey
+            ]
+        case .withdrawal:
+            return [
+                HTTPHeader.authorization.rawValue: UserDefaults.standard.accessToken,
                 HTTPHeader.sesacKey.rawValue: APIKeys.sesacKey
             ]
         }
@@ -61,6 +71,8 @@ extension Router: TargetType {
         case .signUp(query: let query):
             let encoder = JSONEncoder()
             return try? encoder.encode(query)
+        case .withdrawal:
+            return nil
         }
     }
 }

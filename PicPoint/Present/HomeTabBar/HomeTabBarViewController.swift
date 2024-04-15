@@ -13,18 +13,26 @@ final class HomeTabBarViewController: UITabBarController {
         super.viewDidLoad()
         
         let homeVC = HomeViewController()
+        let profileVC = ProfileViewController()
      
         let homeNav = UINavigationController(rootViewController: homeVC)
+        let profileNav = UINavigationController(rootViewController: profileVC)
         
         homeNav.tabBarItem = UITabBarItem(
-            title: "검색",
-            image: UIImage(systemName: "magnifyingglass"),
-            selectedImage: UIImage(systemName: "magnifyingglass")
+            title: "홈",
+            image: UIImage(systemName: "house"),
+            selectedImage: UIImage(systemName: "house.fill")
+        )
+        
+        profileNav.tabBarItem = UITabBarItem(
+            title: "프로필",
+            image: UIImage(systemName: "person"),
+            selectedImage: UIImage(systemName: "person.fill")
         )
         
         tabBar.tintColor = .black
         tabBar.backgroundColor = .white
         
-        setViewControllers([homeNav], animated: false)
+        setViewControllers([homeNav, profileNav], animated: false)
     }
 }

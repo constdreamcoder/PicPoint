@@ -35,7 +35,6 @@ struct UserManager {
     
     static func signUp(query: SignUpQuery) -> Single<SignUpModel> {
         return Single<SignUpModel>.create { singleObserver in
-            
             do {
                 let urlRequest = try Router.signUp(query: query).asURLRequest()
                 
@@ -50,7 +49,29 @@ struct UserManager {
                             singleObserver(.failure(AFError))
                         }
                     }
+            } catch {
+                singleObserver(.failure(error))
+            }
+            return Disposables.create()
+        }
+    }
+    
+    static func withdraw() -> Single<WithdrawalModel> {
+        return Single<WithdrawalModel>.create { singleObserver in
+            do {
+                let urlRequest = try Router.withdrawal.asURLRequest()
                 
+                AF.request(urlRequest)
+                    .validate(statusCode: 200...500)
+                    .responseDecodable(of: WithdrawalModel.self) { response in
+                        switch response.result {
+                        case .success(let withdrawalModel):
+                            singleObserver(.success(withdrawalModel))
+                        case .failure(let AFError):
+                            print(response.response?.statusCode)
+                            singleObserver(.failure(AFError))
+                        }
+                    }
             } catch {
                 singleObserver(.failure(error))
             }

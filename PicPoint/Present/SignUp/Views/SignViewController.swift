@@ -76,7 +76,7 @@ final class SignUpViewController: BaseViewController {
         return button
     }()
     
-    let viewModel = SignUpViewModel()
+    private let viewModel = SignUpViewModel()
 
     override func viewDidLoad() {
         super.viewDidLoad()
