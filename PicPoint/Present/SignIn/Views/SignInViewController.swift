@@ -114,9 +114,8 @@ extension SignInViewController: UIViewControllerConfiguration {
                 let sceneDelegate = windowScene?.delegate as? SceneDelegate
                 
                 let homeTabBarVC = HomeTabBarViewController()
-                let homeTabBarNav = UINavigationController(rootViewController: homeTabBarVC)
                 
-                sceneDelegate?.window?.rootViewController = homeTabBarNav
+                sceneDelegate?.window?.rootViewController = homeTabBarVC
                 sceneDelegate?.window?.makeKeyAndVisible()
             }
             .disposed(by: disposeBag)
