@@ -51,7 +51,7 @@ extension HomeCollectionViewCellBottomView: UIViewConfiguration {
         
         titleLabel.snp.makeConstraints {
             $0.top.equalToSuperview()
-            $0.top.horizontalEdges.equalToSuperview().inset(16.0)
+            $0.horizontalEdges.equalToSuperview().inset(16.0)
         }
         
         contentLabel.snp.makeConstraints {

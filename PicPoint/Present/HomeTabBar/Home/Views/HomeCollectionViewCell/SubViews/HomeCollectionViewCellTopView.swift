@@ -9,11 +9,14 @@ import UIKit
 import SnapKit
 
 final class HomeCollectionViewCellTopView: UIView {
-    let profileImageView: UIImageView = {
+    
+    lazy var profileImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.image = UIImage(systemName: "person.circle")
         imageView.tintColor = .black
         imageView.contentMode = .scaleToFill
+        imageView.layer.cornerRadius = profileImageViewWidth / 2
+        imageView.clipsToBounds = true
         return imageView
     }()
     
@@ -55,6 +58,8 @@ final class HomeCollectionViewCellTopView: UIView {
         return button
     }()
     
+    private let profileImageViewWidth: CGFloat = 40.0
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
     
@@ -77,7 +82,7 @@ extension HomeCollectionViewCellTopView: UIViewConfiguration {
         
         profileImageView.snp.makeConstraints {
             $0.centerY.equalToSuperview()
-            $0.size.equalTo(40.0)
+            $0.size.equalTo(profileImageViewWidth)
             $0.leading.equalTo(8.0)
         }
         

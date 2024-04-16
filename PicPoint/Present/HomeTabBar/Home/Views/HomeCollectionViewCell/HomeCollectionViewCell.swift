@@ -48,10 +48,20 @@ final class HomeCollectionViewCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+    override func prepareForReuse() {
+        super.prepareForReuse()
+    }
+    
     // MARK: - Custom Methods
     func updatePostData(_ element: Post) {
         topView.userNicknameLabel.text = element.creator.nick
         
+        if let profileImage = element.creator.profileImage, profileImage.count > 0 {
+            let url = URL(string: APIKeys.baseURL + "/\(profileImage)")
+            let placeholderImage = UIImage(systemName: "person.circle")
+            topView.profileImageView.kf.setImageWithAuthHeaders(with: url, placeholder: placeholderImage)
+        }
+       
         if element.files.count > 0 {
             let url = URL(string: APIKeys.baseURL + "/\(element.files[0])")
             let placeholderImage = UIImage(systemName: "photo")
