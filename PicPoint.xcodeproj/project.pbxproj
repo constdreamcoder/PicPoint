@@ -58,6 +58,8 @@
 		00FE92AF2BCE54F000554D0F /* PostRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00FE92AE2BCE54F000554D0F /* PostRouter.swift */; };
 		00FE92B32BCE56F600554D0F /* fetchPostsQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00FE92B22BCE56F600554D0F /* fetchPostsQuery.swift */; };
 		00FE92B72BCE59FF00554D0F /* PostListModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00FE92B62BCE59FF00554D0F /* PostListModel.swift */; };
+		00FE92BA2BCE877C00554D0F /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 00FE92B92BCE877C00554D0F /* Kingfisher */; };
+		00FE92BE2BCE91F500554D0F /* Kingfisher+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00FE92BD2BCE91F500554D0F /* Kingfisher+Extensions.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -108,6 +110,7 @@
 		00FE92AE2BCE54F000554D0F /* PostRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostRouter.swift; sourceTree = "<group>"; };
 		00FE92B22BCE56F600554D0F /* fetchPostsQuery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = fetchPostsQuery.swift; sourceTree = "<group>"; };
 		00FE92B62BCE59FF00554D0F /* PostListModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostListModel.swift; sourceTree = "<group>"; };
+		00FE92BD2BCE91F500554D0F /* Kingfisher+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Kingfisher+Extensions.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -117,6 +120,7 @@
 			files = (
 				00F65D3C2BCA167F0027A897 /* RxSwift in Frameworks */,
 				00F65D3A2BCA167F0027A897 /* RxCocoa in Frameworks */,
+				00FE92BA2BCE877C00554D0F /* Kingfisher in Frameworks */,
 				00F65D3F2BCA176B0027A897 /* Realm in Frameworks */,
 				00F65D442BCA178C0027A897 /* SnapKit in Frameworks */,
 				00F65D412BCA176B0027A897 /* RealmSwift in Frameworks */,
@@ -429,6 +433,7 @@
 				00AA9A7A2BCC25C90069C55C /* UserDefaults+Extensions.swift */,
 				00AFF6032BCD155E006D319A /* UICollectionViewCell+Extensions.swift */,
 				00321C992BCD79B800BE2407 /* RxSwift+Extensions.swift */,
+				00FE92BD2BCE91F500554D0F /* Kingfisher+Extensions.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -515,6 +520,7 @@
 				00F65D3E2BCA176B0027A897 /* Realm */,
 				00F65D402BCA176B0027A897 /* RealmSwift */,
 				00F65D432BCA178C0027A897 /* SnapKit */,
+				00FE92B92BCE877C00554D0F /* Kingfisher */,
 			);
 			productName = PicPoint;
 			productReference = 0049D87B2BC96B4800F59852 /* PicPoint.app */;
@@ -549,6 +555,7 @@
 				00F65D382BCA167F0027A897 /* XCRemoteSwiftPackageReference "RxSwift" */,
 				00F65D3D2BCA176B0027A897 /* XCRemoteSwiftPackageReference "realm-swift" */,
 				00F65D422BCA178C0027A897 /* XCRemoteSwiftPackageReference "SnapKit" */,
+				00FE92B82BCE877C00554D0F /* XCRemoteSwiftPackageReference "Kingfisher" */,
 			);
 			productRefGroup = 0049D87C2BC96B4800F59852 /* Products */;
 			projectDirPath = "";
@@ -588,6 +595,7 @@
 				00C71D652BCC098F00D933FD /* SignUpViewModel.swift in Sources */,
 				00C71D692BCC11C900D933FD /* SignUpModel.swift in Sources */,
 				00AA9A7B2BCC25C90069C55C /* UserDefaults+Extensions.swift in Sources */,
+				00FE92BE2BCE91F500554D0F /* Kingfisher+Extensions.swift in Sources */,
 				00B7C4062BCA68DB009AC333 /* HTTPHeader.swift in Sources */,
 				0034FAEF2BCC9AA200D932F3 /* ProfileViewController.swift in Sources */,
 				00C71D6E2BCC22E200D933FD /* HomeViewController.swift in Sources */,
@@ -875,6 +883,14 @@
 				minimumVersion = 5.7.1;
 			};
 		};
+		00FE92B82BCE877C00554D0F /* XCRemoteSwiftPackageReference "Kingfisher" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/onevcat/Kingfisher.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 7.11.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -907,6 +923,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 00F65D422BCA178C0027A897 /* XCRemoteSwiftPackageReference "SnapKit" */;
 			productName = SnapKit;
+		};
+		00FE92B92BCE877C00554D0F /* Kingfisher */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 00FE92B82BCE877C00554D0F /* XCRemoteSwiftPackageReference "Kingfisher" */;
+			productName = Kingfisher;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

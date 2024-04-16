@@ -27,7 +27,7 @@ final class HomeViewModel: ViewModelType {
         
         input.viewDidLoadTrigger
             .flatMap { _ in
-                PostManager.fetchPostList(query: .init())
+                PostManager.fetchPostList(query: .init(limit: "50"))
             }
             .subscribe(with: self) { owner, postListModel in
                 postList.accept(postListModel.data)

@@ -9,6 +9,7 @@ import UIKit
 import SnapKit
 import RxSwift
 import RxCocoa
+import Kingfisher
 
 final class HomeCollectionViewCell: UICollectionViewCell {
     
@@ -45,6 +46,22 @@ final class HomeCollectionViewCell: UICollectionViewCell {
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    // MARK: - Custom Methods
+    func updatePostData(_ element: Post) {
+        topView.userNicknameLabel.text = element.creator.nick
+        
+        if element.files.count > 0 {
+            let url = URL(string: APIKeys.baseURL + "/\(element.files[0])")
+            let placeholderImage = UIImage(systemName: "photo")
+            photoImageView.kf.setImageWithAuthHeaders(with: url, placeholder: placeholderImage)
+        }
+        
+        iconView.heartStackView.label.text = "\(element.likes.count)"
+        iconView.commentStackView.label.text = "\(element.comments.count)"
+        bottomView.titleLabel.text = element.title
+        bottomView.contentLabel.text = element.content
     }
 }
 

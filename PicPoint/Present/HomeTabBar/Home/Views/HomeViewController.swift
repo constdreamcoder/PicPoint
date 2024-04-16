@@ -87,11 +87,7 @@ extension HomeViewController: UIViewControllerConfiguration {
         output.postList
             .drive(collectionView.rx.items(cellIdentifier: HomeCollectionViewCell.identifier, cellType: HomeCollectionViewCell.self)) { item, element, cell in
                 
-                cell.topView.userNicknameLabel.text = element.creator.nick
-                cell.iconView.heartStackView.label.text = "\(element.likes.count)"
-                cell.iconView.commentStackView.label.text = "\(element.comments.count)"
-                cell.bottomView.titleLabel.text = element.title
-                cell.bottomView.contentLabel.text = element.content
+                cell.updatePostData(element)
                 
                 if item % 2 == 0 {
                     cell.backgroundColor = .green
