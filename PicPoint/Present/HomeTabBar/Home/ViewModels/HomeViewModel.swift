@@ -10,34 +10,29 @@ import RxSwift
 import RxCocoa
 
 final class HomeViewModel: ViewModelType {
-    
-    let dataList: [String] = [
-        "오호옿오호오홍호오호옿옿",
-        "오호옿오호오홍호오호옿옿",
-        "오호옿오호오홍호오호옿옿",
-        "오호옿오호오홍호오호옿옿",
-        "오호옿오호오홍호오호옿옿",
-        "오호옿오호오홍호오호옿옿",
-        "오호옿오호오홍호오호옿옿",
-        "오호옿오호오홍호오호옿옿",
-        "오호옿오호오홍호오호옿옿",
-        "오호옿오호오홍호오호옿옿",
-        "오호옿오호오홍호오호옿옿",
-        "오호옿오호오홍호오호옿옿",
-        "오호옿오호오홍호오호옿옿"
-    ]
-    
+
     var disposeBag = DisposeBag()
     
     struct Input {
+        let viewDidLoadTrigger: Observable<Void>
         let rightBarButtonItemTapped: ControlEvent<Void>
     }
     
     struct Output {
-        
+        let postList: Driver<[Post]>
     }
     
     func transform(input: Input) -> Output {
+        let postList = BehaviorRelay<[Post]>(value: [])
+        
+        input.viewDidLoadTrigger
+            .flatMap { _ in
+                PostManager.fetchPostList(query: .init())
+            }
+            .subscribe(with: self) { owner, postListModel in
+                postList.accept(postListModel.data)
+            }
+            .disposed(by: disposeBag)
         
         input.rightBarButtonItemTapped
             .bind(with: self) { owner, _ in
@@ -45,6 +40,6 @@ final class HomeViewModel: ViewModelType {
             }
             .disposed(by: disposeBag)
         
-        return Output()
+        return Output(postList: postList.asDriver())
     }
 }

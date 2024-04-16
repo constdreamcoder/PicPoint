@@ -75,9 +75,24 @@ extension HomeViewController: UIViewControllerConfiguration {
     }
     
     func bind() {
+        guard let rightBarButtonItem = navigationItem.rightBarButtonItem else { return }
+                
+        let input = HomeViewModel.Input(
+            viewDidLoadTrigger: Observable<Void>.just(()),
+            rightBarButtonItemTapped: rightBarButtonItem.rx.tap
+        )
         
-        Observable.just(viewModel.dataList)
-            .bind(to: collectionView.rx.items(cellIdentifier: HomeCollectionViewCell.identifier, cellType: HomeCollectionViewCell.self)) { item, element, cell in
+        let output = viewModel.transform(input: input)
+        
+        output.postList
+            .drive(collectionView.rx.items(cellIdentifier: HomeCollectionViewCell.identifier, cellType: HomeCollectionViewCell.self)) { item, element, cell in
+                
+                cell.topView.userNicknameLabel.text = element.creator.nick
+                cell.iconView.heartStackView.label.text = "\(element.likes.count)"
+                cell.iconView.commentStackView.label.text = "\(element.comments.count)"
+                cell.bottomView.titleLabel.text = element.title
+                cell.bottomView.contentLabel.text = element.content
+                
                 if item % 2 == 0 {
                     cell.backgroundColor = .green
                 } else {
@@ -85,13 +100,6 @@ extension HomeViewController: UIViewControllerConfiguration {
                 }
             }
             .disposed(by: disposeBag)
-            
-        guard let rightBarButtonItem = navigationItem.rightBarButtonItem else { return }
-        let input = HomeViewModel.Input(
-            rightBarButtonItemTapped: rightBarButtonItem.rx.tap
-        )
-        
-        let output = viewModel.transform(input: input)
     }
 }
 
@@ -112,6 +120,4 @@ extension HomeViewController: UICollectionViewConfiguration {
                 
         return layout
     }
-    
-    
 }

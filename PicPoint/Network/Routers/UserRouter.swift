@@ -8,13 +8,13 @@
 import Foundation
 import Alamofire
 
-enum Router {
+enum UserRouter {
     case login(query: LoginQuery)
     case signUp(query: SignUpQuery)
     case withdrawal
 }
 
-extension Router: TargetType {
+extension UserRouter: TargetType {
     
     var baseURL: String {
         return APIKeys.baseURL

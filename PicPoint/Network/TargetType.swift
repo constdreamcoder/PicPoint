@@ -20,9 +20,12 @@ protocol TargetType: URLRequestConvertible {
 
 extension TargetType {
     func asURLRequest() throws -> URLRequest {
-        let url = try baseURL.asURL()
         
-        var urlRequest = try URLRequest(url: url.appendingPathComponent(path), method: method)
+        let url = try baseURL.asURL().appendingPathComponent(path)
+        
+        let appendedURL = url.appending(queryItems: queryItems ?? [])
+
+        var urlRequest = try URLRequest(url: appendedURL, method: method)
         urlRequest.allHTTPHeaderFields = header
         urlRequest.httpBody = parameters?.data(using: .utf8)
         urlRequest.httpBody = body

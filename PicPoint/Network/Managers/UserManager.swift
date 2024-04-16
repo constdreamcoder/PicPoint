@@ -13,7 +13,7 @@ struct UserManager {
     static func login(query: LoginQuery) -> Single<LoginModel> {
         return Single<LoginModel>.create { singleObserver in
             do {
-                let urlRequest = try Router.login(query: query).asURLRequest()
+                let urlRequest = try UserRouter.login(query: query).asURLRequest()
                 
                 AF.request(urlRequest)
                     .validate(statusCode: 200...500)
@@ -36,7 +36,7 @@ struct UserManager {
     static func signUp(query: SignUpQuery) -> Single<SignUpModel> {
         return Single<SignUpModel>.create { singleObserver in
             do {
-                let urlRequest = try Router.signUp(query: query).asURLRequest()
+                let urlRequest = try UserRouter.signUp(query: query).asURLRequest()
                 
                 AF.request(urlRequest)
                     .validate(statusCode: 200...500)
@@ -59,7 +59,7 @@ struct UserManager {
     static func withdraw() -> Single<WithdrawalModel> {
         return Single<WithdrawalModel>.create { singleObserver in
             do {
-                let urlRequest = try Router.withdrawal.asURLRequest()
+                let urlRequest = try UserRouter.withdrawal.asURLRequest()
                 
                 AF.request(urlRequest)
                     .validate(statusCode: 200...500)

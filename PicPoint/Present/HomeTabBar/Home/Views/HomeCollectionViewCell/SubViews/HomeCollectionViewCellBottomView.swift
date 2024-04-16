@@ -14,8 +14,8 @@ final class HomeCollectionViewCellBottomView: UIView {
         let label = UILabel()
         label.text = "컨텐츠제목입니다~~"
         label.textColor = .black
-        label.font = .systemFont(ofSize: 20.0, weight: .semibold)
-        label.numberOfLines = 2
+        label.font = .systemFont(ofSize: 18.0, weight: .semibold)
+        label.numberOfLines = 1
         return label
     }()
     
@@ -23,7 +23,7 @@ final class HomeCollectionViewCellBottomView: UIView {
         let label = UILabel()
         label.text = "컨텐츠 내용 영역입니다영역입니다영역입니다영역입니다영역입니다영역입니다영역입니다영역입니다~~~~~~~~~"
         label.textColor = .black
-        label.font = .systemFont(ofSize: 18.0)
+        label.font = .systemFont(ofSize: 16.0)
         label.numberOfLines = 1
         return label
     }()
