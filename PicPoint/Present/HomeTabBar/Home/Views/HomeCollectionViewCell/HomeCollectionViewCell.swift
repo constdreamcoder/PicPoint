@@ -11,7 +11,7 @@ import RxSwift
 import RxCocoa
 import Kingfisher
 
-final class HomeCollectionViewCell: UICollectionViewCell {
+final class HomeCollectionViewCell: BaseCollectionViewCell {
     
     let containerView: UIView = {
         let view = UIView()
@@ -19,23 +19,23 @@ final class HomeCollectionViewCell: UICollectionViewCell {
         return view
     }()
     
-    let topView = HomeCollectionViewCellTopView()
-    
-    let photoImageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.image = UIImage(systemName: "photo")
-        imageView.contentMode = .scaleToFill
-        imageView.tintColor = .darkGray
-        imageView.backgroundColor = .lightGray
-        return imageView
+    let topView: HomeCollectionViewCellTopView = {
+        let topView = HomeCollectionViewCellTopView()
+        let rightButton = topView.rightButton
+        rightButton.tintColor = .black
+        let image = UIImage(systemName: "ellipsis")
+        rightButton.setImage(image, for: .normal)
+        let symbolConfig = UIImage.SymbolConfiguration(pointSize: 24)
+        rightButton.setPreferredSymbolConfiguration(symbolConfig, forImageIn: .normal)
+        return topView
     }()
+    
+    let photoImageView = PhotoImageView(frame: .zero)
     
     let iconView = HomeCollectionViewCellIconView()
     
     let bottomView = HomeCollectionViewCellBottomView()
-    
-    private let disposeBag = DisposeBag()
-    
+        
     override init(frame: CGRect) {
         super.init(frame: frame)
         
@@ -50,13 +50,16 @@ final class HomeCollectionViewCell: UICollectionViewCell {
     
     override func prepareForReuse() {
         super.prepareForReuse()
+        
+        disposeBag = DisposeBag()
     }
     
     // MARK: - Custom Methods
     func updatePostData(_ element: Post) {
         topView.userNicknameLabel.text = element.creator.nick
+        topView.subTitleLabel.text = ""
         
-        if let profileImage = element.creator.profileImage, profileImage.count > 0 {
+        if let profileImage = element.creator.profileImage, !profileImage.isEmpty {
             let url = URL(string: APIKeys.baseURL + "/\(profileImage)")
             let placeholderImage = UIImage(systemName: "person.circle")
             topView.profileImageView.kf.setImageWithAuthHeaders(with: url, placeholder: placeholderImage)
@@ -75,9 +78,9 @@ final class HomeCollectionViewCell: UICollectionViewCell {
     }
 }
 
-extension HomeCollectionViewCell: UICollectionViewCellConfiguration {
-    func configureConstraints() {
-       
+extension HomeCollectionViewCell {
+    override func configureConstraints() {
+        super.configureConstraints()
         [
             topView,
             photoImageView,
@@ -115,8 +118,16 @@ extension HomeCollectionViewCell: UICollectionViewCellConfiguration {
         }
     }
     
-    func configureUI() {
+    override func configureUI() {
+        super.configureUI()
+        
         containerView.layer.cornerRadius = 16.0
+        
+        containerView.layer.shadowColor = UIColor.black.cgColor // 그림자 색상
+        containerView.layer.shadowOpacity = 0.5 // 그림자 투명도
+        containerView.layer.shadowOffset = CGSize(width: 0, height: 2) // 그림자 오프셋
+        containerView.layer.shadowRadius = 4.0 // 그림자 반경
+        containerView.layer.masksToBounds = false // 마스킹 방지 (그림자가 잘리지 않도록)
         
         topView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
         topView.layer.cornerRadius = 16.0

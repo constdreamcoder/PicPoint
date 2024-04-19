@@ -31,10 +31,10 @@ final class HomeViewController: BaseViewController {
     }()
     
     private let viewModel = HomeViewModel()
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         configureNavigationBar()
         configureConstraints()
         configureUI()
@@ -50,6 +50,8 @@ final class HomeViewController: BaseViewController {
         let window = windowScene?.windows.first
         
         let safeAreaInset = window?.safeAreaInsets ?? .zero
+        print("safeAreaInset", safeAreaInset)
+        print("statusBarFrame", window?.windowScene?.statusBarManager?.statusBarFrame)
         return safeAreaInset
     }
 }
@@ -76,7 +78,7 @@ extension HomeViewController: UIViewControllerConfiguration {
     
     func bind() {
         guard let rightBarButtonItem = navigationItem.rightBarButtonItem else { return }
-                
+        
         let input = HomeViewModel.Input(
             viewDidLoadTrigger: Observable<Void>.just(()),
             rightBarButtonItemTapped: rightBarButtonItem.rx.tap
@@ -88,32 +90,42 @@ extension HomeViewController: UIViewControllerConfiguration {
             .drive(collectionView.rx.items(cellIdentifier: HomeCollectionViewCell.identifier, cellType: HomeCollectionViewCell.self)) { item, element, cell in
                 
                 cell.updatePostData(element)
-                
-                if item % 2 == 0 {
-                    cell.backgroundColor = .green
-                } else {
-                    cell.backgroundColor = .brown
-                }
             }
             .disposed(by: disposeBag)
+        
+        Observable.zip(
+            collectionView.rx.itemSelected,
+            collectionView.rx.modelSelected(Post.self)
+        )
+        .bind(with: self) { owner, value in
+            let detailVC = DetailViewController(detailViewModel: DetailViewModel(post: value.1))
+            owner.navigationController?.pushViewController(detailVC, animated: true)
+        }
+        .disposed(by: disposeBag)
+        
     }
 }
 
 extension HomeViewController: UICollectionViewConfiguration {
     func createCollectionViewLayout() -> UICollectionViewLayout {
-        let layout = UICollectionViewFlowLayout()
+       
+        let itemSize = NSCollectionLayoutSize(
+            widthDimension: .fractionalWidth(1.0),
+            heightDimension: .fractionalHeight(1.0)
+        )
+        let item = NSCollectionLayoutItem(layoutSize: itemSize)
         
-        guard let navigationController else { return UICollectionViewLayout() }
-        let navigationBarHeight = navigationController.navigationBar.frame.height
-        let topSafeareInset = getSafeAreaInset().top
-        let tabBarHeight = tabBarController?.tabBar.frame.height ?? 0
-        layout.scrollDirection = .vertical
-        layout.itemSize = CGSize(width: view.frame.size.width,
-                                 height: view.frame.size.height - (topSafeareInset + navigationBarHeight + tabBarHeight))
-        layout.sectionInset = .zero
-        layout.minimumLineSpacing = .zero
-        layout.minimumInteritemSpacing = .zero
-                
-        return layout
+        let groupSize = NSCollectionLayoutSize(
+            widthDimension: .fractionalWidth(1.0),
+            heightDimension: .fractionalHeight(1.0)
+        )
+        let group = NSCollectionLayoutGroup.horizontal(
+            layoutSize: groupSize,
+            subitems: [item]
+        )
+        
+        let section = NSCollectionLayoutSection(group: group)
+        
+        return UICollectionViewCompositionalLayout(section: section)
     }
 }

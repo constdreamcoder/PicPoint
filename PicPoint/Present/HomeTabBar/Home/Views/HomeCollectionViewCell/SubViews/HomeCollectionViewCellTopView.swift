@@ -28,7 +28,7 @@ final class HomeCollectionViewCellTopView: UIView {
         return label
     }()
     
-    let placeAddressLabel: UILabel = {
+    let subTitleLabel: UILabel = {
         let label = UILabel()
         label.text = "서울시 창동"
         label.textColor = .lightGray
@@ -43,18 +43,13 @@ final class HomeCollectionViewCellTopView: UIView {
         stackView.spacing = 2.0
         [
             userNicknameLabel,
-            placeAddressLabel
+            subTitleLabel
         ].forEach { stackView.addArrangedSubview($0) }
         return stackView
     }()
     
-    let otherSettingsButton: UIButton = {
+    let rightButton: UIButton = {
         let button = UIButton()
-        button.tintColor = .black
-        let image = UIImage(systemName: "ellipsis")
-        button.setImage(image, for: .normal)
-        let symbolConfig = UIImage.SymbolConfiguration(pointSize: 24)
-        button.setPreferredSymbolConfiguration(symbolConfig, forImageIn: .normal)
         return button
     }()
     
@@ -77,7 +72,7 @@ extension HomeCollectionViewCellTopView: UIViewConfiguration {
         [
             profileImageView,
             profileInfoStackView,
-            otherSettingsButton,
+            rightButton,
         ].forEach { addSubview($0) }
         
         profileImageView.snp.makeConstraints {
@@ -89,15 +84,15 @@ extension HomeCollectionViewCellTopView: UIViewConfiguration {
         profileInfoStackView.snp.makeConstraints {
             $0.centerY.equalTo(profileImageView)
             $0.leading.equalTo(profileImageView.snp.trailing).offset(8.0)
-            $0.trailing.equalTo(otherSettingsButton.snp.leading).offset(-16.0)
+            $0.trailing.equalTo(rightButton.snp.leading).offset(-16.0)
         }
         
-        otherSettingsButton.snp.makeConstraints {
+        rightButton.snp.makeConstraints {
             $0.centerY.equalTo(profileInfoStackView)
             $0.trailing.equalToSuperview().inset(16.0)
         }
         
-        otherSettingsButton.setContentCompressionResistancePriority(.required, for: .horizontal)
+        rightButton.setContentCompressionResistancePriority(.required, for: .horizontal)
     }
     
     func configureUI() {
