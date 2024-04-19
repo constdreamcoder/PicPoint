@@ -21,10 +21,29 @@ final class DetailViewController: BaseViewController {
         
         collectionView.register(DetailDisplayCollectionViewCell.self, forCellWithReuseIdentifier: DetailDisplayCollectionViewCell.identifier)
         collectionView.register(DetailIntroductionCollectionViewCell.self, forCellWithReuseIdentifier: DetailIntroductionCollectionViewCell.identifier)
+        
+        collectionView.register(
+            DetailRelatedContentCollectionHeaderView.self,
+            forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
+            withReuseIdentifier: DetailRelatedContentCollectionHeaderView.identifier
+        )
         collectionView.register(DetailRelatedContentsCollectionViewCell.self, forCellWithReuseIdentifier: DetailRelatedContentsCollectionViewCell.identifier)
         
         return collectionView
     }()
+    
+    private let bottomView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .white
+        view.layer.masksToBounds = false
+        view.layer.shadowColor = UIColor.black.cgColor
+        view.layer.shadowOffset = CGSize(width: 0, height: -2)
+        view.layer.shadowRadius = 2.0
+        view.layer.shadowOpacity = 0.1
+        return view
+    }()
+    
+    private let iconView = HomeCollectionViewCellIconView()
     
     private lazy var dataSource = RxCollectionViewSectionedReloadDataSource<SectionModelWrapper> { dataSource, collectionView, indexPath, item in
         
@@ -47,6 +66,18 @@ final class DetailViewController: BaseViewController {
             return cell
         }
         return UICollectionViewCell()
+    } configureSupplementaryView: { dataSource, collectionView, kind, indexPath in
+        switch kind {
+        case UICollectionView.elementKindSectionHeader:
+            guard let header = collectionView.dequeueReusableSupplementaryView(
+                ofKind: kind,
+                withReuseIdentifier: DetailRelatedContentCollectionHeaderView.identifier,
+                for: indexPath) as? DetailRelatedContentCollectionHeaderView else { return UICollectionReusableView() }
+            
+            return header
+        default:
+            return UICollectionReusableView()
+        }
     }
     
     private let viewModel: DetailViewModel?
@@ -73,14 +104,29 @@ final class DetailViewController: BaseViewController {
 
 extension DetailViewController: UIViewControllerConfiguration {
     func configureNavigationBar() {
-        
+        tabBarController?.tabBar.isHidden = true
     }
     
     func configureConstraints() {
-        view.addSubview(collectionView)
+        bottomView.addSubview(iconView)
+        
+        iconView.snp.makeConstraints {
+            $0.edges.equalTo(bottomView)
+        }
+        
+        [
+            collectionView,
+            bottomView
+        ].forEach { view.addSubview($0) }
         
         collectionView.snp.makeConstraints {
-            $0.edges.equalTo(view.safeAreaLayoutGuide)
+            $0.top.horizontalEdges.equalTo(view.safeAreaLayoutGuide)
+            $0.bottom.equalTo(bottomView.snp.top)
+        }
+        
+        bottomView.snp.makeConstraints {
+            $0.height.equalTo(50.0)
+            $0.horizontalEdges.bottom.equalTo(view.safeAreaLayoutGuide)
         }
     }
     
@@ -96,6 +142,15 @@ extension DetailViewController: UIViewControllerConfiguration {
         
         output.sections
             .drive(collectionView.rx.items(dataSource: dataSource))
+            .disposed(by: disposeBag)
+        
+        output.post
+            .drive(with: self) { owner, post in
+                guard let post else { return }
+                
+                owner.iconView.heartStackView.label.text = "\(post.likes.count)"
+                owner.iconView.commentStackView.label.text = "\(post.comments.count)"
+            }
             .disposed(by: disposeBag)
     }
 }
@@ -146,7 +201,20 @@ extension DetailViewController: UICollectionViewConfiguration {
                     subitems: [item]
                 )
                 group.interItemSpacing = .fixed(2)
+                
                 let section = NSCollectionLayoutSection(group: group)
+                
+                let headerFooterSize = NSCollectionLayoutSize(
+                    widthDimension: .fractionalWidth(1.0),
+                    heightDimension: .absolute(56.0)
+                )
+                let header = NSCollectionLayoutBoundarySupplementaryItem(
+                    layoutSize: headerFooterSize,
+                    elementKind: UICollectionView.elementKindSectionHeader,
+                    alignment: .top
+                )
+                section.boundarySupplementaryItems = [header]
+                
                 return section
             }
             return nil

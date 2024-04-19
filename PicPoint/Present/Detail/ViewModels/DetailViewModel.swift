@@ -13,6 +13,7 @@ import Differentiator
 final class DetailViewModel: ViewModelType {
     
     private let sectionsRelay = BehaviorRelay<[SectionModelWrapper]>(value: [])
+    private let postRelay = BehaviorRelay<Post?>(value: nil)
     
     var disposeBag = DisposeBag()
 
@@ -22,6 +23,7 @@ final class DetailViewModel: ViewModelType {
     
     struct Output {
         let sections: Driver<[SectionModelWrapper]>
+        let post: Driver<Post?>
     }
     
     init(post: Post) {
@@ -31,8 +33,8 @@ final class DetailViewModel: ViewModelType {
                 let sections: [SectionModelWrapper] = [
                     SectionModelWrapper(
                         DetailCollectionViewFirstSectionDataModel(
-                            header: "",
                             items: [.init(
+                                header: "",
                                 title: post.title ?? "",
                                 files: post.files)
                             ]
@@ -40,8 +42,8 @@ final class DetailViewModel: ViewModelType {
                     ),
                     SectionModelWrapper(
                         DetailCollectionViewSecondSectionDataModel(
-                            header: "",
                             items: [.init(
+                                header: "",
                                 content: post.content ?? "",
                                 createdAt: post.createdAt,
                                 creator: post.creator)
@@ -50,12 +52,13 @@ final class DetailViewModel: ViewModelType {
                     ),
                     SectionModelWrapper(
                         DetailCollectionViewThirdSectionDataModel(
-                            header: "",
+                            header: "연관 장소",
                             items: ["1", "2", "3", "4", "5"]
                         )
                     )
                 ]
                 owner.sectionsRelay.accept(sections)
+                owner.postRelay.accept(post)
             }
             .disposed(by: disposeBag)
     }
@@ -63,7 +66,8 @@ final class DetailViewModel: ViewModelType {
     func transform(input: Input) -> Output {
         
         return Output(
-            sections: sectionsRelay.asDriver(onErrorJustReturn: [])
+            sections: sectionsRelay.asDriver(onErrorJustReturn: []), 
+            post: postRelay.asDriver()
         )
     }
 }

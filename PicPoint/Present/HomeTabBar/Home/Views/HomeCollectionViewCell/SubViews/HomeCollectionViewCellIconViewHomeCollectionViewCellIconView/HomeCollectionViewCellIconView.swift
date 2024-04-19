@@ -10,16 +10,16 @@ import SnapKit
 
 final class HomeCollectionViewCellIconView: UIView {
     
-    let heartStackView: IconLablelStackView = {
-        let stackView = IconLablelStackView()
+    let heartStackView: IconLabelStackView = {
+        let stackView = IconLabelStackView()
         let buttonImage = UIImage(systemName: "heart")
         stackView.button.setImage(buttonImage, for: .normal)
         stackView.label.text = "256" // TODO: - 999 개 이상일 때 +999 표시
         return stackView
     }()
     
-    let commentStackView: IconLablelStackView = {
-        let stackView = IconLablelStackView()
+    let commentStackView: IconLabelStackView = {
+        let stackView = IconLabelStackView()
         let buttonImage = UIImage(systemName: "bubble")
         stackView.button.setImage(buttonImage, for: .normal)
         stackView.label.text = "55" // TODO: - 999 개 이상일 때 +999 표시

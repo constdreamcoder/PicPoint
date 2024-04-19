@@ -26,12 +26,12 @@ extension SectionModelWrapper {
 
 // MARK: - DetailCollectionViewFirstSectionDataModel
 struct FirstSectionCellData {
+    var header: String
     var title: String
     var files: [String]
 }
 
 struct DetailCollectionViewFirstSectionDataModel {
-    var header: String
     var items: [Item]
 }
 
@@ -46,13 +46,13 @@ extension DetailCollectionViewFirstSectionDataModel: SectionModelType {
 
 // MARK: - DetailCollectionViewSecondSectionDataModel
 struct SecondSectionCellData {
+    var header: String
     var content: String
     var createdAt: String
     var creator: Creator
 }
 
 struct DetailCollectionViewSecondSectionDataModel {
-    var header: String
     var items: [Item]
 }
 
@@ -65,7 +65,6 @@ extension DetailCollectionViewSecondSectionDataModel: SectionModelType {
         self.items = items
     }
 }
-
 
 // MARK: - DetailCollectionViewThirdSectionDataModel
 struct DetailCollectionViewThirdSectionDataModel {

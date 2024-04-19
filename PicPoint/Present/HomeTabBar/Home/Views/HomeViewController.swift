@@ -41,18 +41,10 @@ final class HomeViewController: BaseViewController {
         bind()
     }
     
-    // MARK: - Custom Methods
-    private func getSafeAreaInset() -> UIEdgeInsets {
-        let connectedScene = UIApplication.shared.connectedScenes.first
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         
-        let windowScene = connectedScene as? UIWindowScene
-        
-        let window = windowScene?.windows.first
-        
-        let safeAreaInset = window?.safeAreaInsets ?? .zero
-        print("safeAreaInset", safeAreaInset)
-        print("statusBarFrame", window?.windowScene?.statusBarManager?.statusBarFrame)
-        return safeAreaInset
+        tabBarController?.tabBar.isHidden = false
     }
 }
 

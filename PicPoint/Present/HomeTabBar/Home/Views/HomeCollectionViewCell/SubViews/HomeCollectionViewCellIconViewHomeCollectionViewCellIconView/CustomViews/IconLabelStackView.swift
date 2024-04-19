@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 
-final class IconLablelStackView: UIStackView {
+final class IconLabelStackView: UIStackView {
     
     let button: UIButton = {
         let button = UIButton()
@@ -37,7 +37,7 @@ final class IconLablelStackView: UIStackView {
     }
 }
 
-extension IconLablelStackView: UIViewConfiguration {
+extension IconLabelStackView: UIViewConfiguration {
     func configureConstraints() {
         [button, label].forEach { addArrangedSubview($0) }
     }
