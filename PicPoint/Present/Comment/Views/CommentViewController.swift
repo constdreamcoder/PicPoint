@@ -59,6 +59,7 @@ extension CommentViewController: UIViewControllerConfiguration {
        
         collectionView.snp.makeConstraints {
             $0.top.horizontalEdges.equalTo(view.safeAreaLayoutGuide)
+            $0.bottom.equalTo(commentWritingSectionView.snp.top)
         }
         
         commentWritingSectionView.snp.makeConstraints {
