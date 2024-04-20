@@ -157,6 +157,7 @@ extension DetailViewController: UIViewControllerConfiguration {
 
 extension DetailViewController: UICollectionViewConfiguration {
     func createCollectionViewLayout() -> UICollectionViewLayout {
+        // TODO: - 열거형으로 정리하기
         return UICollectionViewCompositionalLayout { sectionNumber, layoutEnvironment -> NSCollectionLayoutSection? in
             if sectionNumber == 0 {
                 let item = NSCollectionLayoutItem(

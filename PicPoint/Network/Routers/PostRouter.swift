@@ -10,6 +10,7 @@ import Alamofire
 
 enum PostRouter {
     case fetchPosts(query: FetchPostsQuery)
+    case fetchPost(params: FetchPostParams)
 }
 
 extension PostRouter: TargetType {
@@ -20,21 +21,21 @@ extension PostRouter: TargetType {
     
     var method: HTTPMethod {
         switch self {
-        case .fetchPosts:
+        case .fetchPosts, .fetchPost:
             return .get
         }
     }
     
     var path: String {
         switch self {
-        case .fetchPosts:
+        case .fetchPosts, .fetchPost:
             return "/posts"
         }
     }
     
     var header: [String : String] {
         switch self {
-        case .fetchPosts:
+        case .fetchPosts, .fetchPost:
             return [
                 HTTPHeader.authorization.rawValue: UserDefaults.standard.accessToken,
                 HTTPHeader.sesacKey.rawValue: APIKeys.sesacKey
@@ -43,7 +44,12 @@ extension PostRouter: TargetType {
     }
     
     var parameters: String? {
-        return nil
+        switch self {
+        case .fetchPosts:
+            return nil
+        case .fetchPost(let params):
+            return "/\(params.postId)"
+        }
     }
     
     var queryItems: [URLQueryItem]? {
@@ -54,12 +60,14 @@ extension PostRouter: TargetType {
                 .init(name: "limit", value: query.limit),
                 .init(name: "product_id", value: query.product_id)
             ]
+        case .fetchPost:
+            return nil
         }
     }
     
     var body: Data? {
         switch self {
-        case .fetchPosts:
+        case .fetchPosts, .fetchPost:
             return nil
         }
     }

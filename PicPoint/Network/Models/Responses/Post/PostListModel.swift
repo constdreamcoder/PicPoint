@@ -24,7 +24,7 @@ struct PostListModel: Decodable {
 }
 
 struct Post: Decodable {
-    let post_id: String
+    let postId: String
     let title: String?
     let content: String?
     let content1: String?
@@ -40,8 +40,8 @@ struct Post: Decodable {
     let hashTags: [String]
     let comments: [Comment]
     
-    enum CodingKeys: CodingKey {
-        case post_id
+    enum CodingKeys: String, CodingKey {
+        case postId = "post_id"
         case title
         case content
         case content1
@@ -60,7 +60,7 @@ struct Post: Decodable {
     
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.post_id = try container.decode(String.self, forKey: .post_id)
+        self.postId = try container.decode(String.self, forKey: .postId)
         self.title = try container.decodeIfPresent(String.self, forKey: .title) ?? ""
         self.content = try container.decodeIfPresent(String.self, forKey: .content) ?? ""
         self.content1 = try container.decodeIfPresent(String.self, forKey: .content1) ?? ""

@@ -41,7 +41,6 @@ final class HomeCollectionViewCell: BaseCollectionViewCell {
         
         configureConstraints()
         configureUI()
-        bind()
     }
     
     required init?(coder: NSCoder) {
@@ -123,19 +122,20 @@ extension HomeCollectionViewCell {
         
         containerView.layer.cornerRadius = 16.0
         
-        containerView.layer.shadowColor = UIColor.black.cgColor // 그림자 색상
-        containerView.layer.shadowOpacity = 0.5 // 그림자 투명도
-        containerView.layer.shadowOffset = CGSize(width: 0, height: 2) // 그림자 오프셋
-        containerView.layer.shadowRadius = 4.0 // 그림자 반경
-        containerView.layer.masksToBounds = false // 마스킹 방지 (그림자가 잘리지 않도록)
+        containerView.layer.shadowColor = UIColor.black.cgColor
+        containerView.layer.shadowOpacity = 0.5
+        containerView.layer.shadowOffset = CGSize(width: 0, height: 2)
+        containerView.layer.shadowRadius = 4.0
+        containerView.layer.masksToBounds = false
         
         topView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
         topView.layer.cornerRadius = 16.0
         topView.layer.masksToBounds = true
     }
     
-    func bind() {
+    func bind(_ post: Post) {
         
+            
     }
 }
 

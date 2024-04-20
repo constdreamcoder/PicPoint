@@ -48,10 +48,7 @@ final class HomeCollectionViewCellTopView: UIView {
         return stackView
     }()
     
-    let rightButton: UIButton = {
-        let button = UIButton()
-        return button
-    }()
+    let rightButton = UIButton()
     
     private let profileImageViewWidth: CGFloat = 40.0
     

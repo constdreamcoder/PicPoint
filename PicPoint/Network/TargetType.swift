@@ -21,11 +21,17 @@ protocol TargetType: URLRequestConvertible {
 extension TargetType {
     func asURLRequest() throws -> URLRequest {
         
-        let url = try baseURL.asURL().appendingPathComponent(path)
+        var url = try baseURL.asURL().appendingPathComponent(path)
         
-        let appendedURL = url.appending(queryItems: queryItems ?? [])
-
-        var urlRequest = try URLRequest(url: appendedURL, method: method)
+        if let params = parameters, !params.isEmpty {
+            url = url.appending(path: params)
+        }
+        
+        if let queryItems = queryItems, !queryItems.isEmpty {
+            url = url.appending(queryItems: queryItems)
+        }
+        
+        var urlRequest = try URLRequest(url: url, method: method)
         urlRequest.allHTTPHeaderFields = header
         urlRequest.httpBody = parameters?.data(using: .utf8)
         urlRequest.httpBody = body

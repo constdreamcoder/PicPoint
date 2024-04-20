@@ -30,7 +30,7 @@ extension BaseCollectionViewCell: UICollectionViewCellConfiguration {
     }
     
     func configureUI() {
-//        backgroundColor = .white
-//        contentView.backgroundColor = .white
+        backgroundColor = .white
+        contentView.backgroundColor = .white
     }
 }

@@ -53,7 +53,7 @@ final class DetailViewModel: ViewModelType {
                     SectionModelWrapper(
                         DetailCollectionViewThirdSectionDataModel(
                             header: "연관 장소",
-                            items: ["1", "2", "3", "4", "5"]
+                            items: ["1", "2", "3", "4", "5", "5", "5", "5"]
                         )
                     )
                 ]

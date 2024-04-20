@@ -82,6 +82,14 @@ extension HomeViewController: UIViewControllerConfiguration {
             .drive(collectionView.rx.items(cellIdentifier: HomeCollectionViewCell.identifier, cellType: HomeCollectionViewCell.self)) { item, element, cell in
                 
                 cell.updatePostData(element)
+                
+                cell.iconView.commentStackView.button.rx.tap
+                    .bind(with: self) { owner, _ in
+                        let commentVC = CommentViewController(commentViewModel: CommentViewModel(postId: element.postId))
+                        let commentNav = UINavigationController(rootViewController: commentVC)
+                        owner.present(commentNav, animated: true)
+                    }
+                    .disposed(by: cell.disposeBag)
             }
             .disposed(by: disposeBag)
         
