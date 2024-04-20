@@ -25,7 +25,20 @@ final class HomeViewModel: ViewModelType {
     func transform(input: Input) -> Output {
         let postList = BehaviorRelay<[Post]>(value: [])
         
-//        
+        input.viewDidLoadTrigger
+            .flatMap { _ in
+                PostManager.fetchPostList(query: .init(limit: "50"))
+            }
+            .subscribe(with: self) { owner, postListModel in
+                postList.accept(postListModel.data)
+            }
+            .disposed(by: disposeBag)
+        
+        input.rightBarButtonItemTapped
+            .bind(with: self) { owner, _ in
+                print("검색")
+            }
+            .disposed(by: disposeBag)
         
         return Output(postList: postList.asDriver())
     }
