@@ -17,11 +17,15 @@ final class CommentViewModel: ViewModelType {
     
     struct Input {
         let commentTextEvent: ControlProperty<String>
+        let commentDidBeginEditing: ControlEvent<Void>
+        let commentDidEndEditing: ControlEvent<Void>
     }
     
     struct Output {
         let commentList: Driver<[Comment]>
         let commentText: Driver<String>
+        let commentDidBeginEditingTrigger: Driver<Void>
+        let commentDidEndEditingTrigger: Driver<Void>
     }
     
     init(postId: String) {
@@ -44,9 +48,12 @@ final class CommentViewModel: ViewModelType {
             }
             .disposed(by: disposeBag)
         
+        
         return Output(
             commentList: commentListRelay.asDriver(),
-            commentText: input.commentTextEvent.asDriver()
+            commentText: input.commentTextEvent.asDriver(),
+            commentDidBeginEditingTrigger: input.commentDidBeginEditing.asDriver(),
+            commentDidEndEditingTrigger: input.commentDidEndEditing.asDriver()
         )
     }
 }

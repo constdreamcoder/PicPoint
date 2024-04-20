@@ -73,9 +73,12 @@ extension CommentViewController: UIViewControllerConfiguration {
     
     func bind() {
         
+        let textView = commentWritingSectionView.commentTextView
         
         let input = CommentViewModel.Input(
-            commentTextEvent: commentWritingSectionView.commentTextView.rx.text.orEmpty
+            commentTextEvent: textView.rx.text.orEmpty, 
+            commentDidBeginEditing: textView.rx.didBeginEditing, 
+            commentDidEndEditing: textView.rx.didEndEditing
         )
      
         guard let viewModel else { return }
@@ -115,6 +118,26 @@ extension CommentViewController: UIViewControllerConfiguration {
                     if constraint.firstAttribute == .height {
                         constraint.constant = estimatedSize.height
                     }
+                }
+            }
+            .disposed(by: disposeBag)
+        
+        output.commentDidBeginEditingTrigger
+            .drive(with: self) { owner, _ in
+                if textView.text == owner.commentWritingSectionView.textViewPlaceHolder 
+                    && textView.textColor == .lightGray {
+                    textView.text = nil
+                    textView.textColor = .black
+                }
+            }
+            .disposed(by: disposeBag)
+        
+        output.commentDidEndEditingTrigger
+            .drive(with: self) { owner, _ in
+                if textView.textColor == .black
+                    && textView.text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+                    textView.text = owner.commentWritingSectionView.textViewPlaceHolder
+                    textView.textColor = .lightGray
                 }
             }
             .disposed(by: disposeBag)

@@ -10,9 +10,10 @@ import SnapKit
 
 final class CommentWritingSectionView: UIView {
     
-    let commentTextView: UITextView = {
+    lazy var commentTextView: UITextView = {
         let textView = UITextView()
-        textView.text = "댓글을 작성해주세요"
+        textView.text = textViewPlaceHolder
+        textView.textColor = .lightGray
         textView.font = .systemFont(ofSize: 16.0)
         textView.layer.borderWidth = 1.0
         textView.layer.borderColor = UIColor.black.withAlphaComponent(0.6).cgColor
@@ -32,6 +33,8 @@ final class CommentWritingSectionView: UIView {
         button.configuration = buttonConfiguration
         return button
     }()
+    
+    let textViewPlaceHolder: String = "댓글을 작성해주세요"
 
     override init(frame: CGRect) {
         super.init(frame: frame)
