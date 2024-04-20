@@ -16,11 +16,12 @@ final class CommentViewModel: ViewModelType {
     var disposeBag = DisposeBag()
     
     struct Input {
-        
+        let commentTextEvent: ControlProperty<String>
     }
     
     struct Output {
         let commentList: Driver<[Comment]>
+        let commentText: Driver<String>
     }
     
     init(postId: String) {
@@ -44,7 +45,8 @@ final class CommentViewModel: ViewModelType {
             .disposed(by: disposeBag)
         
         return Output(
-            commentList: commentListRelay.asDriver()
+            commentList: commentListRelay.asDriver(),
+            commentText: input.commentTextEvent.asDriver()
         )
     }
 }

@@ -19,6 +19,7 @@
 		001253E72BD3A00B0065F1E6 /* CommentCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001253E62BD3A00B0065F1E6 /* CommentCollectionViewCell.swift */; };
 		001253EA2BD3B1360065F1E6 /* CommentProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001253E92BD3B1360065F1E6 /* CommentProfileView.swift */; };
 		001253EF2BD3C5010065F1E6 /* FetchPostParams.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001253EE2BD3C5010065F1E6 /* FetchPostParams.swift */; };
+		001253F32BD3DC8C0065F1E6 /* CommentWritingSectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001253F22BD3DC8C0065F1E6 /* CommentWritingSectionView.swift */; };
 		00321C9A2BCD79B800BE2407 /* RxSwift+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00321C992BCD79B800BE2407 /* RxSwift+Extensions.swift */; };
 		0034FAEF2BCC9AA200D932F3 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0034FAEE2BCC9AA200D932F3 /* ProfileViewController.swift */; };
 		0034FAF12BCC9DBC00D932F3 /* ProfileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0034FAF02BCC9DBC00D932F3 /* ProfileViewModel.swift */; };
@@ -97,6 +98,7 @@
 		001253E62BD3A00B0065F1E6 /* CommentCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentCollectionViewCell.swift; sourceTree = "<group>"; };
 		001253E92BD3B1360065F1E6 /* CommentProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentProfileView.swift; sourceTree = "<group>"; };
 		001253EE2BD3C5010065F1E6 /* FetchPostParams.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchPostParams.swift; sourceTree = "<group>"; };
+		001253F22BD3DC8C0065F1E6 /* CommentWritingSectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentWritingSectionView.swift; sourceTree = "<group>"; };
 		00321C992BCD79B800BE2407 /* RxSwift+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RxSwift+Extensions.swift"; sourceTree = "<group>"; };
 		0034FAEE2BCC9AA200D932F3 /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		0034FAF02BCC9DBC00D932F3 /* ProfileViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewModel.swift; sourceTree = "<group>"; };
@@ -233,8 +235,8 @@
 			isa = PBXGroup;
 			children = (
 				000AD26A2BD2CFCF00FC7768 /* CommentViewController.swift */,
-				001253E62BD3A00B0065F1E6 /* CommentCollectionViewCell.swift */,
-				001253E82BD3B0FD0065F1E6 /* SubViews */,
+				001253F42BD3E4110065F1E6 /* SubViews */,
+				001253F12BD3DC580065F1E6 /* CommentCollectionViewCellCommentCollectionViewCell */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -261,6 +263,23 @@
 				001253EE2BD3C5010065F1E6 /* FetchPostParams.swift */,
 			);
 			path = Parameters;
+			sourceTree = "<group>";
+		};
+		001253F12BD3DC580065F1E6 /* CommentCollectionViewCellCommentCollectionViewCell */ = {
+			isa = PBXGroup;
+			children = (
+				001253E62BD3A00B0065F1E6 /* CommentCollectionViewCell.swift */,
+				001253E82BD3B0FD0065F1E6 /* SubViews */,
+			);
+			path = CommentCollectionViewCellCommentCollectionViewCell;
+			sourceTree = "<group>";
+		};
+		001253F42BD3E4110065F1E6 /* SubViews */ = {
+			isa = PBXGroup;
+			children = (
+				001253F22BD3DC8C0065F1E6 /* CommentWritingSectionView.swift */,
+			);
+			path = SubViews;
 			sourceTree = "<group>";
 		};
 		0034FAEB2BCC9A7700D932F3 /* Profile */ = {
@@ -772,6 +791,7 @@
 				001253EA2BD3B1360065F1E6 /* CommentProfileView.swift in Sources */,
 				0034FAF82BCC9F5400D932F3 /* SettingsViewModel.swift in Sources */,
 				00FE92AC2BCE53EA00554D0F /* PostManager.swift in Sources */,
+				001253F32BD3DC8C0065F1E6 /* CommentWritingSectionView.swift in Sources */,
 				00FE92B32BCE56F600554D0F /* fetchPostsQuery.swift in Sources */,
 				00B7C3F12BCA5BE2009AC333 /* UserRouter.swift in Sources */,
 				00AA9A792BCC24B90069C55C /* HomeTabBarViewController.swift in Sources */,

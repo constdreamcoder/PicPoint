@@ -22,6 +22,8 @@ final class CommentViewController: BaseViewController {
         return collectionView
     }()
     
+    let commentWritingSectionView = CommentWritingSectionView()
+    
     private let viewModel: CommentViewModel?
     
     init(commentViewModel: CommentViewModel) {
@@ -50,10 +52,17 @@ extension CommentViewController: UIViewControllerConfiguration {
     }
     
     func configureConstraints() {
-        view.addSubview(collectionView)
-        
+        [
+            collectionView,
+            commentWritingSectionView
+        ].forEach { view.addSubview($0) }
+       
         collectionView.snp.makeConstraints {
-            $0.edges.equalTo(view.safeAreaLayoutGuide)
+            $0.top.horizontalEdges.equalTo(view.safeAreaLayoutGuide)
+        }
+        
+        commentWritingSectionView.snp.makeConstraints {
+            $0.horizontalEdges.bottom.equalTo(view.safeAreaLayoutGuide)
         }
     }
     
@@ -62,7 +71,11 @@ extension CommentViewController: UIViewControllerConfiguration {
     }
     
     func bind() {
-        let input = CommentViewModel.Input()
+        
+        
+        let input = CommentViewModel.Input(
+            commentTextEvent: commentWritingSectionView.commentTextView.rx.text.orEmpty
+        )
      
         guard let viewModel else { return }
         let output = viewModel.transform(input: input)
@@ -81,6 +94,30 @@ extension CommentViewController: UIViewControllerConfiguration {
                 cell.commentView.agoLabel.text = element.createdAt.timeAgoToDisplay
             }
             .disposed(by: disposeBag)
+        
+        output.commentText
+            .drive(with: self) { owner, commentText in
+                let textVeiw = owner.commentWritingSectionView.commentTextView
+                let size = CGSize(
+                    width: textVeiw.frame.size.width,
+                    height: .infinity
+                )
+                let estimatedSize = textVeiw.sizeThatFits(size)
+                
+                guard textVeiw.contentSize.height < 100.0 else {
+                    textVeiw.isScrollEnabled = true
+                    return
+                }
+                
+                textVeiw.isScrollEnabled = false
+                textVeiw.constraints.forEach { constraint in
+                    if constraint.firstAttribute == .height {
+                        constraint.constant = estimatedSize.height
+                    }
+                }
+            }
+            .disposed(by: disposeBag)
+
     }
 }
 
