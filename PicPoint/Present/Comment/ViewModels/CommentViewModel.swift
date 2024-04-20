@@ -50,6 +50,7 @@ final class CommentViewModel: ViewModelType {
             .disposed(by: disposeBag)
         
         input.sendButtonTap
+            .debounce(.seconds(1), scheduler: MainScheduler.instance)
             .withLatestFrom(postIdSubject)
             .withLatestFrom(input.commentTextEvent) { ($0, $1) }
             .flatMap {
