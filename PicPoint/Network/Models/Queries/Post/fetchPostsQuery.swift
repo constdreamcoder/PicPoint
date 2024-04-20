@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct FetchPostsQuery: Encodable {
+struct FetchPostsQuery {
     let next: String?
     let limit: String?
     let product_id: String?

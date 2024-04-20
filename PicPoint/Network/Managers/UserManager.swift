@@ -10,10 +10,10 @@ import RxSwift
 import Alamofire
 
 struct UserManager {
-    static func login(query: LoginQuery) -> Single<LoginModel> {
+    static func login(body: LoginBody) -> Single<LoginModel> {
         return Single<LoginModel>.create { singleObserver in
             do {
-                let urlRequest = try UserRouter.login(query: query).asURLRequest()
+                let urlRequest = try UserRouter.login(body: body).asURLRequest()
                 
                 AF.request(urlRequest)
                     .validate(statusCode: 200...500)
@@ -33,10 +33,10 @@ struct UserManager {
         }
     }
     
-    static func signUp(query: SignUpQuery) -> Single<SignUpModel> {
+    static func signUp(body: SignUpBody) -> Single<SignUpModel> {
         return Single<SignUpModel>.create { singleObserver in
             do {
-                let urlRequest = try UserRouter.signUp(query: query).asURLRequest()
+                let urlRequest = try UserRouter.signUp(body: body).asURLRequest()
                 
                 AF.request(urlRequest)
                     .validate(statusCode: 200...500)

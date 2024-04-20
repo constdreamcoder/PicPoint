@@ -33,7 +33,7 @@ final class LoginViewModel: ViewModelType {
             input.emailText,
             input.passwordText
         ).map { email, password in
-            return LoginQuery(email: email, password: password)
+            return LoginBody(email: email, password: password)
         }
         
         loginObservable
@@ -52,7 +52,7 @@ final class LoginViewModel: ViewModelType {
             .debounce(.seconds(1), scheduler: MainScheduler.instance)
             .withLatestFrom(loginObservable)
             .flatMap { loginQuery in
-                return UserManager.login(query: loginQuery)
+                return UserManager.login(body: loginQuery)
             }
             .subscribe(with: self) { owner, loginModel in
                 UserDefaults.standard.userId = loginModel.userId

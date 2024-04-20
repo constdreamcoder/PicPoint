@@ -1,5 +1,5 @@
 //
-//  SignUpQuery.swift
+//  SignUpBody.swift
 //  PicPoint
 //
 //  Created by SUCHAN CHANG on 4/14/24.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct SignUpQuery: Encodable {
+struct SignUpBody: Encodable {
     let email: String
     let password: String
     let nick: String

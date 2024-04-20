@@ -56,7 +56,7 @@ extension CommentViewController: UIViewControllerConfiguration {
             collectionView,
             commentWritingSectionView
         ].forEach { view.addSubview($0) }
-       
+        
         collectionView.snp.makeConstraints {
             $0.top.horizontalEdges.equalTo(view.safeAreaLayoutGuide)
             $0.bottom.equalTo(commentWritingSectionView.snp.top)
@@ -75,12 +75,14 @@ extension CommentViewController: UIViewControllerConfiguration {
         
         let textView = commentWritingSectionView.commentTextView
         
+        
         let input = CommentViewModel.Input(
-            commentTextEvent: textView.rx.text.orEmpty, 
-            commentDidBeginEditing: textView.rx.didBeginEditing, 
-            commentDidEndEditing: textView.rx.didEndEditing
+            commentTextEvent: textView.rx.text.orEmpty,
+            commentDidBeginEditing: textView.rx.didBeginEditing,
+            commentDidEndEditing: textView.rx.didEndEditing, 
+            sendButtonTap: commentWritingSectionView.sendButton.rx.tap
         )
-     
+        
         guard let viewModel else { return }
         let output = viewModel.transform(input: input)
         
@@ -124,7 +126,7 @@ extension CommentViewController: UIViewControllerConfiguration {
         
         output.commentDidBeginEditingTrigger
             .drive(with: self) { owner, _ in
-                if textView.text == owner.commentWritingSectionView.textViewPlaceHolder 
+                if textView.text == owner.commentWritingSectionView.textViewPlaceHolder
                     && textView.textColor == .lightGray {
                     textView.text = nil
                     textView.textColor = .black
@@ -141,7 +143,8 @@ extension CommentViewController: UIViewControllerConfiguration {
                 }
             }
             .disposed(by: disposeBag)
-
+        
+        
     }
 }
 

@@ -9,8 +9,8 @@ import Foundation
 import Alamofire
 
 enum UserRouter {
-    case login(query: LoginQuery)
-    case signUp(query: SignUpQuery)
+    case login(body: LoginBody)
+    case signUp(body: SignUpBody)
     case withdrawal
 }
 
@@ -65,12 +65,12 @@ extension UserRouter: TargetType {
     
     var body: Data? {
         switch self {
-        case .login(let query):
+        case .login(let body):
             let encoder = JSONEncoder()
-            return try? encoder.encode(query)
-        case .signUp(query: let query):
+            return try? encoder.encode(body)
+        case .signUp(let body):
             let encoder = JSONEncoder()
-            return try? encoder.encode(query)
+            return try? encoder.encode(body)
         case .withdrawal:
             return nil
         }

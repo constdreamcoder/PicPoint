@@ -38,6 +38,7 @@ extension String {
         let day = 24 * hour
         let week = 7 * day
         let month = 4 * week
+        let year = 12 * month
         
         let quotient: Int
         let unit: String
@@ -57,10 +58,14 @@ extension String {
         } else if secondsAgo < month {
             quotient = secondsAgo / week
             unit = "주"
-        } else {
+        } else if secondsAgo < year {
             quotient = secondsAgo / month
             unit = "달"
+        } else {
+            quotient = secondsAgo / year
+            unit = "년"
         }
+        
         return "\(quotient)\(unit) 전"
     }
 }

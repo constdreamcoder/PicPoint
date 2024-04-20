@@ -19,6 +19,7 @@ final class CommentViewModel: ViewModelType {
         let commentTextEvent: ControlProperty<String>
         let commentDidBeginEditing: ControlEvent<Void>
         let commentDidEndEditing: ControlEvent<Void>
+        let sendButtonTap: ControlEvent<Void>
     }
     
     struct Output {
@@ -48,6 +49,18 @@ final class CommentViewModel: ViewModelType {
             }
             .disposed(by: disposeBag)
         
+        input.sendButtonTap
+            .withLatestFrom(postIdSubject)
+            .withLatestFrom(input.commentTextEvent) { ($0, $1) }
+            .flatMap {
+                CommentManager.writeComment(
+                    params: .init(postId: $0),
+                    body: .init(content: $1)
+                )
+            }
+            .withLatestFrom(commentListRelay) { [$0] + $1 }
+            .subscribe { commentListRelay.accept($0) }
+            .disposed(by: disposeBag)
         
         return Output(
             commentList: commentListRelay.asDriver(),

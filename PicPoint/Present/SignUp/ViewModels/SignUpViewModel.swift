@@ -38,7 +38,7 @@ final class SignUpViewModel: ViewModelType {
             input.phoneNumText,
             input.birthDayText
         ).map { emailText, passwordText, nickText, phoneNumText, birthDayText in
-            return SignUpQuery(
+            return SignUpBody(
                 email: emailText,
                 password: passwordText,
                 nick: nickText,
@@ -64,7 +64,7 @@ final class SignUpViewModel: ViewModelType {
             .debounce(.seconds(1), scheduler: MainScheduler.instance)
             .withLatestFrom(signUpObservable)
             .flatMap{ signUpQuery in
-                UserManager.signUp(query: signUpQuery)
+                UserManager.signUp(body: signUpQuery)
             }
             .subscribe(with: self) { owner, signUpModel in
                 print("회원가입 완료")
