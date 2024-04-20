@@ -18,12 +18,13 @@ final class DetailViewModel: ViewModelType {
     var disposeBag = DisposeBag()
 
     struct Input {
-        
+        let commentButtonTap: ControlEvent<Void>
     }
     
     struct Output {
         let sections: Driver<[SectionModelWrapper]>
         let post: Driver<Post?>
+        let postId: Driver<String>
     }
     
     init(post: Post) {
@@ -64,10 +65,21 @@ final class DetailViewModel: ViewModelType {
     }
     
     func transform(input: Input) -> Output {
+        let postIdRelay = PublishRelay<String>()
+        
+        input.commentButtonTap
+            .withLatestFrom(postRelay)
+            .subscribe { post in
+                print("dd")
+                guard let post else { return }
+                postIdRelay.accept(post.postId)
+            }
+            .disposed(by: disposeBag)
         
         return Output(
             sections: sectionsRelay.asDriver(onErrorJustReturn: []), 
-            post: postRelay.asDriver()
+            post: postRelay.asDriver(), 
+            postId: postIdRelay.asDriver(onErrorJustReturn: "")
         )
     }
 }

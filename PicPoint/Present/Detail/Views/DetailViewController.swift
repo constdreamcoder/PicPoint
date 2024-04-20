@@ -105,6 +105,9 @@ final class DetailViewController: BaseViewController {
 extension DetailViewController: UIViewControllerConfiguration {
     func configureNavigationBar() {
         tabBarController?.tabBar.isHidden = true
+        navigationItem.title = "상세화면"
+        navigationController?.navigationBar.topItem?.title = ""
+        navigationController?.navigationBar.tintColor = .black
     }
     
     func configureConstraints() {
@@ -135,7 +138,10 @@ extension DetailViewController: UIViewControllerConfiguration {
     }
     
     func bind() {
-        let input = DetailViewModel.Input()
+    
+        let input = DetailViewModel.Input(
+            commentButtonTap: iconView.commentStackView.button.rx.tap
+        )
         
         guard let viewModel = viewModel else { return }
         let output = viewModel.transform(input: input)
@@ -152,6 +158,15 @@ extension DetailViewController: UIViewControllerConfiguration {
                 owner.iconView.commentStackView.label.text = "\(post.comments.count)"
             }
             .disposed(by: disposeBag)
+        
+        output.postId
+            .drive(with: self) { owner, postId in
+                let commentVC = CommentViewController(commentViewModel: CommentViewModel(postId: postId))
+                let commenetNav = UINavigationController(rootViewController: commentVC)
+                owner.present(commenetNav, animated: true)
+            }
+            .disposed(by: disposeBag)
+        
     }
 }
 
