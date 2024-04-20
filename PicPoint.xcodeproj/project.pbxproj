@@ -16,7 +16,7 @@
 		000AD2672BD2849900FC7768 /* SeparatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000AD2662BD2849900FC7768 /* SeparatorView.swift */; };
 		000AD26B2BD2CFCF00FC7768 /* CommentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000AD26A2BD2CFCF00FC7768 /* CommentViewController.swift */; };
 		001253E52BD373E50065F1E6 /* CommentViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001253E42BD373E50065F1E6 /* CommentViewModel.swift */; };
-		001253E72BD3A00B0065F1E6 /* CommentCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001253E62BD3A00B0065F1E6 /* CommentCollectionViewCell.swift */; };
+		001253E72BD3A00B0065F1E6 /* CommentTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001253E62BD3A00B0065F1E6 /* CommentTableViewCell.swift */; };
 		001253EA2BD3B1360065F1E6 /* CommentProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001253E92BD3B1360065F1E6 /* CommentProfileView.swift */; };
 		001253EF2BD3C5010065F1E6 /* FetchPostParams.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001253EE2BD3C5010065F1E6 /* FetchPostParams.swift */; };
 		001253F32BD3DC8C0065F1E6 /* CommentWritingSectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001253F22BD3DC8C0065F1E6 /* CommentWritingSectionView.swift */; };
@@ -99,7 +99,7 @@
 		000AD2662BD2849900FC7768 /* SeparatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeparatorView.swift; sourceTree = "<group>"; };
 		000AD26A2BD2CFCF00FC7768 /* CommentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentViewController.swift; sourceTree = "<group>"; };
 		001253E42BD373E50065F1E6 /* CommentViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentViewModel.swift; sourceTree = "<group>"; };
-		001253E62BD3A00B0065F1E6 /* CommentCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentCollectionViewCell.swift; sourceTree = "<group>"; };
+		001253E62BD3A00B0065F1E6 /* CommentTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentTableViewCell.swift; sourceTree = "<group>"; };
 		001253E92BD3B1360065F1E6 /* CommentProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentProfileView.swift; sourceTree = "<group>"; };
 		001253EE2BD3C5010065F1E6 /* FetchPostParams.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchPostParams.swift; sourceTree = "<group>"; };
 		001253F22BD3DC8C0065F1E6 /* CommentWritingSectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentWritingSectionView.swift; sourceTree = "<group>"; };
@@ -244,7 +244,7 @@
 			children = (
 				000AD26A2BD2CFCF00FC7768 /* CommentViewController.swift */,
 				001253F42BD3E4110065F1E6 /* SubViews */,
-				001253F12BD3DC580065F1E6 /* CommentCollectionViewCellCommentCollectionViewCell */,
+				001253F12BD3DC580065F1E6 /* CommentTableViewCell */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -274,13 +274,13 @@
 			path = Parameters;
 			sourceTree = "<group>";
 		};
-		001253F12BD3DC580065F1E6 /* CommentCollectionViewCellCommentCollectionViewCell */ = {
+		001253F12BD3DC580065F1E6 /* CommentTableViewCell */ = {
 			isa = PBXGroup;
 			children = (
-				001253E62BD3A00B0065F1E6 /* CommentCollectionViewCell.swift */,
+				001253E62BD3A00B0065F1E6 /* CommentTableViewCell.swift */,
 				001253E82BD3B0FD0065F1E6 /* SubViews */,
 			);
-			path = CommentCollectionViewCellCommentCollectionViewCell;
+			path = CommentTableViewCell;
 			sourceTree = "<group>";
 		};
 		001253F42BD3E4110065F1E6 /* SubViews */ = {
@@ -816,7 +816,7 @@
 				000AD26B2BD2CFCF00FC7768 /* CommentViewController.swift in Sources */,
 				00C71D692BCC11C900D933FD /* SignUpModel.swift in Sources */,
 				00AA9A7B2BCC25C90069C55C /* UserDefaults+Extensions.swift in Sources */,
-				001253E72BD3A00B0065F1E6 /* CommentCollectionViewCell.swift in Sources */,
+				001253E72BD3A00B0065F1E6 /* CommentTableViewCell.swift in Sources */,
 				003540202BCFBB2200A71415 /* UITableViewCell+Extensions.swift in Sources */,
 				00353FE02BCFAA7500A71415 /* DetailViewController.swift in Sources */,
 				00FE92BE2BCE91F500554D0F /* Kingfisher+Extensions.swift in Sources */,

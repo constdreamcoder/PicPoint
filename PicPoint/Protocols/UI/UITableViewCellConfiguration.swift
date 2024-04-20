@@ -8,7 +8,7 @@
 import Foundation
 
 @objc protocol UITableViewCellConfiguration {
-    func confiugreConstraints()
+    func configureConstraints()
     func configureUI()
     @objc optional func configureOtherSettings()
 }

@@ -12,14 +12,15 @@ import RxCocoa
 import Kingfisher
 
 final class CommentViewController: BaseViewController {
-    
-    lazy var collectionView: UICollectionView = {
-        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: createCollectionViewLayout())
-        collectionView.backgroundColor = .white
+
+    let tableView: UITableView = {
+        let tableView = UITableView()
+        tableView.backgroundColor = .white
+        tableView.separatorStyle = .none
         
-        collectionView.register(CommentCollectionViewCell.self, forCellWithReuseIdentifier: CommentCollectionViewCell.identifier)
+        tableView.register(CommentTableViewCell.self, forCellReuseIdentifier: CommentTableViewCell.identifier)
         
-        return collectionView
+        return tableView
     }()
     
     let commentWritingSectionView = CommentWritingSectionView()
@@ -53,11 +54,11 @@ extension CommentViewController: UIViewControllerConfiguration {
     
     func configureConstraints() {
         [
-            collectionView,
+            tableView,
             commentWritingSectionView
         ].forEach { view.addSubview($0) }
         
-        collectionView.snp.makeConstraints {
+        tableView.snp.makeConstraints {
             $0.top.horizontalEdges.equalTo(view.safeAreaLayoutGuide)
             $0.bottom.equalTo(commentWritingSectionView.snp.top)
         }
@@ -87,7 +88,7 @@ extension CommentViewController: UIViewControllerConfiguration {
         let output = viewModel.transform(input: input)
         
         output.commentList
-            .drive(collectionView.rx.items(cellIdentifier: CommentCollectionViewCell.identifier, cellType: CommentCollectionViewCell.self)) { item, element, cell in
+            .drive(tableView.rx.items(cellIdentifier: CommentTableViewCell.identifier, cellType: CommentTableViewCell.self)) { item, element, cell in
                 
                 if let profileImage = element.creator.profileImage, !profileImage.isEmpty {
                     let url = URL(string: APIKeys.baseURL + "/\(profileImage)")
@@ -143,24 +144,5 @@ extension CommentViewController: UIViewControllerConfiguration {
                 }
             }
             .disposed(by: disposeBag)
-        
-        
     }
 }
-
-extension CommentViewController: UICollectionViewConfiguration {
-    func createCollectionViewLayout() -> UICollectionViewLayout {
-        return UICollectionViewCompositionalLayout { sectionNumber, layoutEnvironment -> NSCollectionLayoutSection? in
-            var config = UICollectionLayoutListConfiguration(appearance: .plain)
-            config.showsSeparators = false
-            
-            let section = NSCollectionLayoutSection.list(
-                using: config,
-                layoutEnvironment: layoutEnvironment
-            )
-            
-            return section
-        }
-    }
-}
-
