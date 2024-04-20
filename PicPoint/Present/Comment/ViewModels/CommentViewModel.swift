@@ -20,6 +20,7 @@ final class CommentViewModel: ViewModelType {
         let commentDidBeginEditing: ControlEvent<Void>
         let commentDidEndEditing: ControlEvent<Void>
         let sendButtonTap: ControlEvent<Void>
+        let commentDeleteEvent: Observable<(ControlEvent<IndexPath>.Element, ControlEvent<Comment>.Element)>
     }
     
     struct Output {
@@ -61,6 +62,20 @@ final class CommentViewModel: ViewModelType {
             }
             .withLatestFrom(commentListRelay) { [$0] + $1 }
             .subscribe { commentListRelay.accept($0) }
+            .disposed(by: disposeBag)
+        
+        input.commentDeleteEvent
+            .map { $1.commentId }
+            .withLatestFrom(postIdSubject) { ($1, $0) }
+            .flatMap {
+                CommentManager.deleteComment(params: .init(postId: $0, commentId: $1))
+            }
+            .withLatestFrom(commentListRelay) { deletedCommentId, commentList in
+                commentList.filter { $0.commentId != deletedCommentId }
+            }
+            .subscribe(with: self) { owner, updatedCommentList in
+                commentListRelay.accept(updatedCommentList)
+            }
             .disposed(by: disposeBag)
         
         return Output(

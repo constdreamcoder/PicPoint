@@ -76,12 +76,17 @@ extension CommentViewController: UIViewControllerConfiguration {
         
         let textView = commentWritingSectionView.commentTextView
         
+        let commentDeleteEvent = Observable.zip(
+            tableView.rx.itemDeleted,
+            tableView.rx.modelDeleted(Comment.self)
+        )
         
         let input = CommentViewModel.Input(
             commentTextEvent: textView.rx.text.orEmpty,
             commentDidBeginEditing: textView.rx.didBeginEditing,
             commentDidEndEditing: textView.rx.didEndEditing, 
-            sendButtonTap: commentWritingSectionView.sendButton.rx.tap
+            sendButtonTap: commentWritingSectionView.sendButton.rx.tap,
+            commentDeleteEvent: commentDeleteEvent
         )
         
         guard let viewModel else { return }

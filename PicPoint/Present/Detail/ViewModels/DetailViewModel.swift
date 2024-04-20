@@ -70,7 +70,6 @@ final class DetailViewModel: ViewModelType {
         input.commentButtonTap
             .withLatestFrom(postRelay)
             .subscribe { post in
-                print("dd")
                 guard let post else { return }
                 postIdRelay.accept(post.postId)
             }

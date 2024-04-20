@@ -10,6 +10,7 @@ import Alamofire
 
 enum CommentRouter {
     case writeComment(params: WriteCommentParams, body: WriteCommentBody)
+    case deleteComment(params: DeleteCommentParams)
 }
 
 extension CommentRouter: TargetType {
@@ -22,12 +23,14 @@ extension CommentRouter: TargetType {
         switch self {
         case .writeComment:
             return .post
+        case .deleteComment:
+            return .delete
         }
     }
     
     var path: String {
         switch self {
-        case .writeComment:
+        case .writeComment, .deleteComment:
             return "/posts"
         }
     }
@@ -40,6 +43,11 @@ extension CommentRouter: TargetType {
                 HTTPHeader.sesacKey.rawValue: APIKeys.sesacKey,
                 HTTPHeader.contentType.rawValue: HTTPHeader.json.rawValue
             ]
+        case .deleteComment:
+            return [
+                HTTPHeader.authorization.rawValue: UserDefaults.standard.accessToken,
+                HTTPHeader.sesacKey.rawValue: APIKeys.sesacKey
+            ]
         }
     }
     
@@ -47,6 +55,8 @@ extension CommentRouter: TargetType {
         switch self {
         case .writeComment(let params, _):
             return "/\(params.postId)/comments"
+        case .deleteComment(let params):
+            return "/\(params.postId)/comments/\(params.commentId)"
         }
     }
     
@@ -59,6 +69,8 @@ extension CommentRouter: TargetType {
         case .writeComment( _, let body):
             let encoder = JSONEncoder()
             return try? encoder.encode(body)
+        case .deleteComment:
+            return nil
         }
     }
 }

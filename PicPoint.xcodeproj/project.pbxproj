@@ -24,6 +24,7 @@
 		001253F82BD415A90065F1E6 /* WriteCommentParams.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001253F72BD415A90065F1E6 /* WriteCommentParams.swift */; };
 		001253FE2BD418350065F1E6 /* WriteCommentBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001253FD2BD418350065F1E6 /* WriteCommentBody.swift */; };
 		001254002BD4190D0065F1E6 /* CommentManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001253FF2BD4190D0065F1E6 /* CommentManager.swift */; };
+		001254022BD427840065F1E6 /* DeleteCommentParams.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001254012BD427840065F1E6 /* DeleteCommentParams.swift */; };
 		00321C9A2BCD79B800BE2407 /* RxSwift+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00321C992BCD79B800BE2407 /* RxSwift+Extensions.swift */; };
 		0034FAEF2BCC9AA200D932F3 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0034FAEE2BCC9AA200D932F3 /* ProfileViewController.swift */; };
 		0034FAF12BCC9DBC00D932F3 /* ProfileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0034FAF02BCC9DBC00D932F3 /* ProfileViewModel.swift */; };
@@ -107,6 +108,7 @@
 		001253F72BD415A90065F1E6 /* WriteCommentParams.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WriteCommentParams.swift; sourceTree = "<group>"; };
 		001253FD2BD418350065F1E6 /* WriteCommentBody.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WriteCommentBody.swift; sourceTree = "<group>"; };
 		001253FF2BD4190D0065F1E6 /* CommentManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentManager.swift; sourceTree = "<group>"; };
+		001254012BD427840065F1E6 /* DeleteCommentParams.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteCommentParams.swift; sourceTree = "<group>"; };
 		00321C992BCD79B800BE2407 /* RxSwift+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RxSwift+Extensions.swift"; sourceTree = "<group>"; };
 		0034FAEE2BCC9AA200D932F3 /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		0034FAF02BCC9DBC00D932F3 /* ProfileViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewModel.swift; sourceTree = "<group>"; };
@@ -303,6 +305,7 @@
 			isa = PBXGroup;
 			children = (
 				001253F72BD415A90065F1E6 /* WriteCommentParams.swift */,
+				001254012BD427840065F1E6 /* DeleteCommentParams.swift */,
 			);
 			path = Comment;
 			sourceTree = "<group>";
@@ -865,6 +868,7 @@
 				000AD2542BD234E800FC7768 /* PhotoImageView.swift in Sources */,
 				0049D8812BC96B4800F59852 /* SceneDelegate.swift in Sources */,
 				003540252BCFCC2D00A71415 /* BaseTableViewCell.swift in Sources */,
+				001254022BD427840065F1E6 /* DeleteCommentParams.swift in Sources */,
 				00AFF6042BCD155E006D319A /* UICollectionReusableView+Extensions.swift in Sources */,
 				0034FAF62BCC9F1200D932F3 /* SettingsViewController.swift in Sources */,
 				001254002BD4190D0065F1E6 /* CommentManager.swift in Sources */,
