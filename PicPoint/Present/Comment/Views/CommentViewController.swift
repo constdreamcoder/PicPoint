@@ -149,5 +149,11 @@ extension CommentViewController: UIViewControllerConfiguration {
                 }
             }
             .disposed(by: disposeBag)
+        
+        output.sendButtonTapTrigger
+            .drive(with: self) { owner, _ in
+                owner.commentWritingSectionView.commentTextView.text = nil
+            }
+            .disposed(by: disposeBag)
     }
 }

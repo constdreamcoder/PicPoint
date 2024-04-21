@@ -28,6 +28,7 @@ final class CommentViewModel: ViewModelType {
         let commentText: Driver<String>
         let commentDidBeginEditingTrigger: Driver<Void>
         let commentDidEndEditingTrigger: Driver<Void>
+        let sendButtonTapTrigger: Driver<Void>
     }
     
     init(postId: String) {
@@ -50,7 +51,7 @@ final class CommentViewModel: ViewModelType {
             }
             .disposed(by: disposeBag)
         
-        input.sendButtonTap
+        let sendButtonTapTrigger = input.sendButtonTap
             .debounce(.seconds(1), scheduler: MainScheduler.instance)
             .withLatestFrom(postIdSubject)
             .withLatestFrom(input.commentTextEvent) { ($0, $1) }
@@ -61,8 +62,8 @@ final class CommentViewModel: ViewModelType {
                 )
             }
             .withLatestFrom(commentListRelay) { [$0] + $1 }
-            .subscribe { commentListRelay.accept($0) }
-            .disposed(by: disposeBag)
+            .map { commentListRelay.accept($0) }
+            
         
         input.commentDeleteEvent
             .map { $1.commentId }
@@ -82,7 +83,8 @@ final class CommentViewModel: ViewModelType {
             commentList: commentListRelay.asDriver(),
             commentText: input.commentTextEvent.asDriver(),
             commentDidBeginEditingTrigger: input.commentDidBeginEditing.asDriver(),
-            commentDidEndEditingTrigger: input.commentDidEndEditing.asDriver()
+            commentDidEndEditingTrigger: input.commentDidEndEditing.asDriver(),
+            sendButtonTapTrigger: sendButtonTapTrigger.asDriver(onErrorJustReturn: ())
         )
     }
 }
