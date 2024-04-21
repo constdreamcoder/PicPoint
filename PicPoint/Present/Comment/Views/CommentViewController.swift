@@ -42,8 +42,8 @@ final class CommentViewController: BaseViewController {
         
         configureNavigationBar()
         configureConstraints()
-        configureUI()
         bind()
+        configureUI()
     }
 }
 
@@ -69,7 +69,7 @@ extension CommentViewController: UIViewControllerConfiguration {
     }
     
     func configureUI() {
-        
+        commentWritingSectionView.sendButton.isEnabled = false
     }
     
     func bind() {
@@ -93,7 +93,7 @@ extension CommentViewController: UIViewControllerConfiguration {
         let output = viewModel.transform(input: input)
         
         output.commentList
-            .drive(tableView.rx.items(cellIdentifier: CommentTableViewCell.identifier, cellType: CommentTableViewCell.self)) { item, element, cell in
+            .drive(tableView.rx.items(cellIdentifier: CommentTableViewCell.identifier, cellType: CommentTableViewCell.self)) { row, element, cell in
                 
                 if let profileImage = element.creator.profileImage, !profileImage.isEmpty {
                     let url = URL(string: APIKeys.baseURL + "/\(profileImage)")
@@ -154,6 +154,9 @@ extension CommentViewController: UIViewControllerConfiguration {
             .drive(with: self) { owner, _ in
                 owner.commentWritingSectionView.commentTextView.text = nil
             }
+            .disposed(by: disposeBag)
+        output.commentSendingValid
+            .drive(commentWritingSectionView.sendButton.rx.isEnabled)
             .disposed(by: disposeBag)
     }
 }

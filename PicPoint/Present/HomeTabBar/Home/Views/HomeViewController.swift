@@ -30,6 +30,19 @@ final class HomeViewController: BaseViewController {
         return collectionView
     }()
     
+    lazy var addPostButton: UIButton = {
+        let button = UIButton()
+        let image = UIImage(systemName: "plus")?.withTintColor(.white, renderingMode: .alwaysOriginal)
+        button.setImage(image, for: .normal)
+        button.backgroundColor = .black
+        let symbolConfig = UIImage.SymbolConfiguration(pointSize: addPostButtonWidth / 2)
+        button.setPreferredSymbolConfiguration(symbolConfig, forImageIn: .normal)
+        button.layer.cornerRadius = addPostButtonWidth / 2
+        return button
+    }()
+    
+    private let addPostButtonWidth: CGFloat = 44.0
+    
     private let viewModel = HomeViewModel()
     
     override func viewDidLoad() {
@@ -57,10 +70,18 @@ extension HomeViewController: UIViewControllerConfiguration {
     }
     
     func configureConstraints() {
-        view.addSubview(collectionView)
-        
+        [
+            collectionView,
+            addPostButton
+        ].forEach { view.addSubview($0) }
+       
         collectionView.snp.makeConstraints {
             $0.edges.equalTo(view.safeAreaLayoutGuide)
+        }
+        
+        addPostButton.snp.makeConstraints {
+            $0.size.equalTo(addPostButtonWidth)
+            $0.trailing.bottom.equalTo(view.safeAreaLayoutGuide).inset(16.0)
         }
     }
     
@@ -70,10 +91,11 @@ extension HomeViewController: UIViewControllerConfiguration {
     
     func bind() {
         guard let rightBarButtonItem = navigationItem.rightBarButtonItem else { return }
-        
+       
         let input = HomeViewModel.Input(
             viewDidLoadTrigger: Observable<Void>.just(()),
-            rightBarButtonItemTapped: rightBarButtonItem.rx.tap
+            rightBarButtonItemTapped: rightBarButtonItem.rx.tap, 
+            addButtonTap: addPostButton.rx.tap
         )
         
         let output = viewModel.transform(input: input)
@@ -102,6 +124,15 @@ extension HomeViewController: UIViewControllerConfiguration {
             owner.navigationController?.pushViewController(detailVC, animated: true)
         }
         .disposed(by: disposeBag)
+        
+        output.addButtonTapTrigger
+            .drive(with: self) { owner, _ in
+                let addPostVC = AddPostViewController()
+                let addPostNav = UINavigationController(rootViewController: addPostVC)
+                addPostNav.modalPresentationStyle = .fullScreen
+                owner.present(addPostNav, animated: true)
+            }
+            .disposed(by: disposeBag)
         
     }
 }

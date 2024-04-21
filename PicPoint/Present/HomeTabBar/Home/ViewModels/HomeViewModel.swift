@@ -16,10 +16,12 @@ final class HomeViewModel: ViewModelType {
     struct Input {
         let viewDidLoadTrigger: Observable<Void>
         let rightBarButtonItemTapped: ControlEvent<Void>
+        let addButtonTap: ControlEvent<Void>
     }
     
     struct Output {
         let postList: Driver<[Post]>
+        let addButtonTapTrigger: Driver<Void>
     }
     
     func transform(input: Input) -> Output {
@@ -40,6 +42,9 @@ final class HomeViewModel: ViewModelType {
             }
             .disposed(by: disposeBag)
         
-        return Output(postList: postList.asDriver())
+        return Output(
+            postList: postList.asDriver(),
+            addButtonTapTrigger: input.addButtonTap.asDriver()
+        )
     }
 }

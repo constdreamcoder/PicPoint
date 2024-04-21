@@ -1,5 +1,5 @@
 //
-//  DetailTableViewSectionDataModels.swift
+//  DetailCollectionViewSectionDataModels.swift
 //  PicPoint
 //
 //  Created by SUCHAN CHANG on 4/17/24.

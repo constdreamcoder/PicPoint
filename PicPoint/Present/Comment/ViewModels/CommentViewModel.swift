@@ -29,6 +29,7 @@ final class CommentViewModel: ViewModelType {
         let commentDidBeginEditingTrigger: Driver<Void>
         let commentDidEndEditingTrigger: Driver<Void>
         let sendButtonTapTrigger: Driver<Void>
+        let commentSendingValid: Driver<Bool>
     }
     
     init(postId: String) {
@@ -41,6 +42,7 @@ final class CommentViewModel: ViewModelType {
     
     func transform(input: Input) -> Output {
         let commentListRelay = BehaviorRelay<[Comment]>(value: [])
+        let commentSendingValidation = BehaviorRelay(value: false)
         
         postIdSubject
             .flatMap {
@@ -79,12 +81,23 @@ final class CommentViewModel: ViewModelType {
             }
             .disposed(by: disposeBag)
         
+        let commentTextEventTrigger = input.commentTextEvent
+            .map {
+                if $0.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+                    commentSendingValidation.accept(false)
+                } else {
+                    commentSendingValidation.accept(true)
+                }
+                return $0
+            }
+        
         return Output(
             commentList: commentListRelay.asDriver(),
-            commentText: input.commentTextEvent.asDriver(),
+            commentText: commentTextEventTrigger.asDriver(onErrorJustReturn: ""),
             commentDidBeginEditingTrigger: input.commentDidBeginEditing.asDriver(),
             commentDidEndEditingTrigger: input.commentDidEndEditing.asDriver(),
-            sendButtonTapTrigger: sendButtonTapTrigger.asDriver(onErrorJustReturn: ())
+            sendButtonTapTrigger: sendButtonTapTrigger.asDriver(onErrorJustReturn: ()),
+            commentSendingValid: commentSendingValidation.asDriver()
         )
     }
 }
