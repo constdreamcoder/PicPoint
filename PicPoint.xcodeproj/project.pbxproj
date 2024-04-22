@@ -9,6 +9,9 @@
 /* Begin PBXBuildFile section */
 		000220222BD178B20051F04B /* DetailDisplayCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000220212BD178B20051F04B /* DetailDisplayCollectionViewCell.swift */; };
 		0003E9322BD54B0800695D40 /* Label+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0003E9312BD54B0800695D40 /* Label+Extension.swift */; };
+		0003E9342BD57DA400695D40 /* SelectImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0003E9332BD57DA400695D40 /* SelectImageViewController.swift */; };
+		0003E9392BD57ECF00695D40 /* SelectImageViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0003E9382BD57ECF00695D40 /* SelectImageViewModel.swift */; };
+		0003E93B2BD584AF00695D40 /* SelectImageCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0003E93A2BD584AF00695D40 /* SelectImageCollectionViewCell.swift */; };
 		000AD24B2BD1FF2000FC7768 /* DetailIntroductionCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000AD24A2BD1FF2000FC7768 /* DetailIntroductionCollectionViewCell.swift */; };
 		000AD2512BD21C1900FC7768 /* DetailRelatedContentsCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000AD2502BD21C1900FC7768 /* DetailRelatedContentsCollectionViewCell.swift */; };
 		000AD2542BD234E800FC7768 /* PhotoImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000AD2532BD234E800FC7768 /* PhotoImageView.swift */; };
@@ -26,6 +29,7 @@
 		001253FE2BD418350065F1E6 /* WriteCommentBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001253FD2BD418350065F1E6 /* WriteCommentBody.swift */; };
 		001254002BD4190D0065F1E6 /* CommentManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001253FF2BD4190D0065F1E6 /* CommentManager.swift */; };
 		001254022BD427840065F1E6 /* DeleteCommentParams.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001254012BD427840065F1E6 /* DeleteCommentParams.swift */; };
+		001C91EC2BD5ED510028E67B /* SelectImageCollectionReusableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001C91EB2BD5ED510028E67B /* SelectImageCollectionReusableView.swift */; };
 		00321C9A2BCD79B800BE2407 /* RxSwift+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00321C992BCD79B800BE2407 /* RxSwift+Extensions.swift */; };
 		0034FAEF2BCC9AA200D932F3 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0034FAEE2BCC9AA200D932F3 /* ProfileViewController.swift */; };
 		0034FAF12BCC9DBC00D932F3 /* ProfileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0034FAF02BCC9DBC00D932F3 /* ProfileViewModel.swift */; };
@@ -107,6 +111,9 @@
 /* Begin PBXFileReference section */
 		000220212BD178B20051F04B /* DetailDisplayCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailDisplayCollectionViewCell.swift; sourceTree = "<group>"; };
 		0003E9312BD54B0800695D40 /* Label+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Label+Extension.swift"; sourceTree = "<group>"; };
+		0003E9332BD57DA400695D40 /* SelectImageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectImageViewController.swift; sourceTree = "<group>"; };
+		0003E9382BD57ECF00695D40 /* SelectImageViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectImageViewModel.swift; sourceTree = "<group>"; };
+		0003E93A2BD584AF00695D40 /* SelectImageCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectImageCollectionViewCell.swift; sourceTree = "<group>"; };
 		000AD24A2BD1FF2000FC7768 /* DetailIntroductionCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailIntroductionCollectionViewCell.swift; sourceTree = "<group>"; };
 		000AD2502BD21C1900FC7768 /* DetailRelatedContentsCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailRelatedContentsCollectionViewCell.swift; sourceTree = "<group>"; };
 		000AD2532BD234E800FC7768 /* PhotoImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoImageView.swift; sourceTree = "<group>"; };
@@ -124,6 +131,7 @@
 		001253FD2BD418350065F1E6 /* WriteCommentBody.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WriteCommentBody.swift; sourceTree = "<group>"; };
 		001253FF2BD4190D0065F1E6 /* CommentManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentManager.swift; sourceTree = "<group>"; };
 		001254012BD427840065F1E6 /* DeleteCommentParams.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteCommentParams.swift; sourceTree = "<group>"; };
+		001C91EB2BD5ED510028E67B /* SelectImageCollectionReusableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectImageCollectionReusableView.swift; sourceTree = "<group>"; };
 		00321C992BCD79B800BE2407 /* RxSwift+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RxSwift+Extensions.swift"; sourceTree = "<group>"; };
 		0034FAEE2BCC9AA200D932F3 /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		0034FAF02BCC9DBC00D932F3 /* ProfileViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewModel.swift; sourceTree = "<group>"; };
@@ -215,6 +223,33 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0003E9352BD57E6B00695D40 /* SelctionImage */ = {
+			isa = PBXGroup;
+			children = (
+				0003E9362BD57E9700695D40 /* Views */,
+				0003E9372BD57EBD00695D40 /* ViewModels */,
+			);
+			path = SelctionImage;
+			sourceTree = "<group>";
+		};
+		0003E9362BD57E9700695D40 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				0003E9332BD57DA400695D40 /* SelectImageViewController.swift */,
+				001C91EA2BD5ECD80028E67B /* HeaderView */,
+				001C91ED2BD5ED5A0028E67B /* Cells */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		0003E9372BD57EBD00695D40 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				0003E9382BD57ECF00695D40 /* SelectImageViewModel.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
 		000AD2522BD234C800FC7768 /* CusomView */ = {
 			isa = PBXGroup;
 			children = (
@@ -242,14 +277,14 @@
 			path = SubViews;
 			sourceTree = "<group>";
 		};
-		000AD25D2BD2635A00FC7768 /* CollectionViewCells */ = {
+		000AD25D2BD2635A00FC7768 /* Cells */ = {
 			isa = PBXGroup;
 			children = (
 				000AD25B2BD2632F00FC7768 /* DetailDisplayCollectionViewCell */,
 				000AD24A2BD1FF2000FC7768 /* DetailIntroductionCollectionViewCell.swift */,
 				000AD2502BD21C1900FC7768 /* DetailRelatedContentsCollectionViewCell.swift */,
 			);
-			path = CollectionViewCells;
+			path = Cells;
 			sourceTree = "<group>";
 		};
 		000AD2682BD2BC5100FC7768 /* HeaderView */ = {
@@ -355,6 +390,22 @@
 			path = Comment;
 			sourceTree = "<group>";
 		};
+		001C91EA2BD5ECD80028E67B /* HeaderView */ = {
+			isa = PBXGroup;
+			children = (
+				001C91EB2BD5ED510028E67B /* SelectImageCollectionReusableView.swift */,
+			);
+			path = HeaderView;
+			sourceTree = "<group>";
+		};
+		001C91ED2BD5ED5A0028E67B /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				0003E93A2BD584AF00695D40 /* SelectImageCollectionViewCell.swift */,
+			);
+			path = Cells;
+			sourceTree = "<group>";
+		};
 		0034FAEB2BCC9A7700D932F3 /* Profile */ = {
 			isa = PBXGroup;
 			children = (
@@ -420,7 +471,7 @@
 			children = (
 				00353FDF2BCFAA7500A71415 /* DetailViewController.swift */,
 				000AD2682BD2BC5100FC7768 /* HeaderView */,
-				000AD25D2BD2635A00FC7768 /* CollectionViewCells */,
+				000AD25D2BD2635A00FC7768 /* Cells */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -477,6 +528,7 @@
 				00760E4B2BD512B700741C40 /* Enums */,
 				00760E3F2BD4FD2600741C40 /* Views */,
 				00760E402BD4FD2C00741C40 /* ViewModels */,
+				0003E9352BD57E6B00695D40 /* SelctionImage */,
 			);
 			path = AddPost;
 			sourceTree = "<group>";
@@ -933,10 +985,12 @@
 				0034FAEF2BCC9AA200D932F3 /* ProfileViewController.swift in Sources */,
 				00760E462BD5072000741C40 /* SelectImageTableViewCell.swift in Sources */,
 				00C71D6E2BCC22E200D933FD /* HomeViewController.swift in Sources */,
+				001C91EC2BD5ED510028E67B /* SelectImageCollectionReusableView.swift in Sources */,
 				00AFF6092BCD2AAD006D319A /* HomeCollectionViewCellTopView.swift in Sources */,
 				0035401A2BCFBA2600A71415 /* DetailCollectionViewSectionDataModels.swift in Sources */,
 				001253F62BD4155B0065F1E6 /* CommentRouter.swift in Sources */,
 				00B7C40C2BCA6A6E009AC333 /* LoginViewModel.swift in Sources */,
+				0003E9392BD57ECF00695D40 /* SelectImageViewModel.swift in Sources */,
 				00760E4A2BD5128600741C40 /* AddPostCollectionViewSectionDataModel.swift in Sources */,
 				00AFF60B2BCD2CA5006D319A /* HomeCollectionViewCellIconView.swift in Sources */,
 				0003E9322BD54B0800695D40 /* Label+Extension.swift in Sources */,
@@ -956,6 +1010,7 @@
 				00C71D612BCC087B00D933FD /* SignUpViewController.swift in Sources */,
 				00B7C3FA2BCA5F60009AC333 /* UIViewControllerConfiguration.swift in Sources */,
 				0034FAF12BCC9DBC00D932F3 /* ProfileViewModel.swift in Sources */,
+				0003E93B2BD584AF00695D40 /* SelectImageCollectionViewCell.swift in Sources */,
 				00B7C3F72BCA5F38009AC333 /* SignInViewController.swift in Sources */,
 				00FE92B72BCE59FF00554D0F /* PostListModel.swift in Sources */,
 				000AD24B2BD1FF2000FC7768 /* DetailIntroductionCollectionViewCell.swift in Sources */,
@@ -983,6 +1038,7 @@
 				001254022BD427840065F1E6 /* DeleteCommentParams.swift in Sources */,
 				00AFF6042BCD155E006D319A /* UICollectionReusableView+Extensions.swift in Sources */,
 				0034FAF62BCC9F1200D932F3 /* SettingsViewController.swift in Sources */,
+				0003E9342BD57DA400695D40 /* SelectImageViewController.swift in Sources */,
 				001254002BD4190D0065F1E6 /* CommentManager.swift in Sources */,
 				0035401E2BCFBAED00A71415 /* UITableViewCellConfiguration.swift in Sources */,
 				00AFF6062BCD15B7006D319A /* UICollectionViewCellConfiguration.swift in Sources */,

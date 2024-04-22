@@ -16,7 +16,7 @@ final class TitleTableViewCell: BaseTableViewCell {
         let view = InnerTextViewContainerView()
         view.textView.text = titleTextViewPlaceHolder
         view.textView.textColor = .lightGray
-        view.textView.font = .systemFont(ofSize: 20.0, weight: .heavy)
+        view.textView.font = .systemFont(ofSize: 18.0, weight: .heavy)
         return view
     }()
     

@@ -62,7 +62,8 @@ final class AddPostViewController: BaseViewController {
                         tableView.beginUpdates()
                         tableView.endUpdates()
                         UIView.setAnimationsEnabled(true)
-                    }                }
+                    }               
+                }
                 .disposed(by: cell.disposeBag)
             
             return cell
@@ -84,7 +85,8 @@ final class AddPostViewController: BaseViewController {
                         tableView.beginUpdates()
                         tableView.endUpdates()
                         UIView.setAnimationsEnabled(true)
-                    }                }
+                    }               
+                }
                 .disposed(by: cell.disposeBag)
             
             return cell
@@ -150,23 +152,18 @@ extension AddPostViewController: UIViewControllerConfiguration {
         output.sections
             .drive(tableView.rx.items(dataSource: dataSource))
             .disposed(by: disposeBag)
+        
+        guard let selectImageTableViewCell = tableView.cellForRow(at: IndexPath(row: 0, section: 0)) as? SelectImageTableViewCell else { return }
+        
+        selectImageTableViewCell.collectionView.rx.itemSelected
+            .bind(with: self) { owner, indexPath in
+                if indexPath.item == 0 {
+                    let selectImageVC = SelectImageViewController()
+                    let selectImageNav = UINavigationController(rootViewController: selectImageVC)
+                    selectImageNav.modalPresentationStyle = .fullScreen
+                    owner.present(selectImageNav, animated: true)
+                }
+            }
+            .disposed(by: selectImageTableViewCell.disposeBag)
     }
-}
-
-extension AddPostViewController: UICollectionViewConfiguration {
-    func createCollectionViewLayout() -> UICollectionViewLayout {
-        return UICollectionViewCompositionalLayout { sectionNumber, layoutEnvironment -> NSCollectionLayoutSection? in
-            
-            var config = UICollectionLayoutListConfiguration(appearance: .plain)
-            config.showsSeparators = true
-            
-            let section = NSCollectionLayoutSection.list(
-                using: config,
-                layoutEnvironment: layoutEnvironment
-            )
-            
-            return section
-        }
-    }
-    
 }

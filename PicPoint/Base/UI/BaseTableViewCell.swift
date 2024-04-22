@@ -32,5 +32,7 @@ extension BaseTableViewCell: UITableViewCellConfiguration {
     func configureUI() {
         backgroundColor = .white
         contentView.backgroundColor = .white
+        
+        selectionStyle = .none
     }
 }

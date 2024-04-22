@@ -1,8 +1,8 @@
 //
-//  SelectImageInnerCollectionViewCell.swift
+//  SelectImageCollectionViewCell.swift
 //  PicPoint
 //
-//  Created by SUCHAN CHANG on 4/21/24.
+//  Created by SUCHAN CHANG on 4/22/24.
 //
 
 import UIKit
@@ -10,32 +10,26 @@ import SnapKit
 import RxSwift
 import RxCocoa
 
-final class SelectImageInnerCollectionViewCell: BaseCollectionViewCell {
+final class SelectImageCollectionViewCell: BaseCollectionViewCell {
     
     let photoImageView: PhotoImageView = {
         let imageView = PhotoImageView(frame: .zero)
-        imageView.layer.cornerRadius = 8.0
-        imageView.clipsToBounds = true
-        imageView.contentMode = .scaleAspectFit
         return imageView
     }()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
+        
+        configureConstraints()
+        configureUI()
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
-    override func prepareForReuse() {
-        super.prepareForReuse()
-        
-        disposeBag = DisposeBag()
-    }
 }
 
-extension SelectImageInnerCollectionViewCell {
+extension SelectImageCollectionViewCell {
     override func configureConstraints() {
         super.configureConstraints()
         
@@ -47,6 +41,9 @@ extension SelectImageInnerCollectionViewCell {
     }
     
     override func configureUI() {
-        super.configureUI()        
+        super.configureUI()
+        
+        contentView.layer.borderColor = UIColor.black.cgColor
+        contentView.layer.borderWidth = 0.5
     }
 }

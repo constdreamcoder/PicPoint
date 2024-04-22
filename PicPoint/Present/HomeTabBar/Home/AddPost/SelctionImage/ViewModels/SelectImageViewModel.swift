@@ -1,19 +1,15 @@
 //
-//  AddPostViewModel.swift
+//  SelectImageViewModel.swift
 //  PicPoint
 //
-//  Created by SUCHAN CHANG on 4/21/24.
+//  Created by SUCHAN CHANG on 4/22/24.
 //
 
 import Foundation
 import RxSwift
 import RxCocoa
 
-final class AddPostViewModel: ViewModelType {
-    
-    private let sections: [AddPostCollectionViewSectionDataModel] = [
-        .init(items: AddPostCollectionVIewCellType.allCases)
-    ]
+final class SelectImageViewModel: ViewModelType {
     
     var disposeBag = DisposeBag()
     
@@ -22,7 +18,6 @@ final class AddPostViewModel: ViewModelType {
     }
     
     struct Output {
-        let sections: Driver<[AddPostCollectionViewSectionDataModel]>
         let rightBarButtonItemTapTrigger: Driver<Void>
     }
     
@@ -32,9 +27,7 @@ final class AddPostViewModel: ViewModelType {
             .map {
                 print("눌림")
             }
-        
         return Output(
-            sections: Observable.just(sections).asDriver(onErrorJustReturn: []),
             rightBarButtonItemTapTrigger: rightBarButtonItemTapTrigger.asDriver(onErrorJustReturn: ())
         )
     }

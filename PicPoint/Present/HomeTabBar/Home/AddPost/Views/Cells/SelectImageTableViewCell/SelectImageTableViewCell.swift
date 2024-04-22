@@ -60,8 +60,11 @@ extension SelectImageTableViewCell {
     }
     
     func bind() {
-        Observable.just([1, 2, 3, 4, 5, 6])
+        Observable.just(["1", "2", "3", "4", "5", "6"])
             .bind(to: collectionView.rx.items(cellIdentifier: SelectImageInnerCollectionViewCell.identifier, cellType: SelectImageInnerCollectionViewCell.self)) { item, element, cell in
+                if item == 0 {
+                    cell.photoImageView.image = UIImage(systemName: "photo.badge.plus")
+                }
                 
             }
             .disposed(by: disposeBag)
@@ -75,7 +78,7 @@ extension SelectImageTableViewCell: UICollectionViewConfiguration {
         layout.itemSize = CGSize(width: itemSize / 4, height: itemSize / 4)
         layout.minimumLineSpacing = spacing
         layout.minimumInteritemSpacing = 0
-        layout.sectionInset = UIEdgeInsets(top: 16, left: spacing * 2, bottom: 16, right: spacing * 2)
+        layout.sectionInset = UIEdgeInsets(top: 0, left: spacing * 2, bottom: 0, right: spacing * 2)
         layout.scrollDirection = .horizontal
         
         return layout

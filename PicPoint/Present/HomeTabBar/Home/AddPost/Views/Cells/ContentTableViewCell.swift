@@ -35,6 +35,8 @@ final class ContentTableViewCell: BaseTableViewCell {
 
     private let charactersLimit = 800
     
+    weak var tableViewDelegate: UITableView?
+    
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
