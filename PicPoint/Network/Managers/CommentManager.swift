@@ -57,6 +57,5 @@ struct CommentManager {
             return Disposables.create()
         }
     }
-    
-   
+
 }

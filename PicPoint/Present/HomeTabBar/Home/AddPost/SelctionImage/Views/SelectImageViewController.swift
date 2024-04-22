@@ -9,12 +9,13 @@ import UIKit
 import SnapKit
 import RxSwift
 import RxCocoa
+import Photos
 
 final class SelectImageViewController: BaseViewController {
     
     lazy var collectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: createCollectionViewLayout())
-        collectionView.backgroundColor = .white
+        collectionView.backgroundColor = .clear
         
         collectionView.register(SelectImageCollectionViewCell.self, forCellWithReuseIdentifier: SelectImageCollectionViewCell.identifier)
         
@@ -23,11 +24,25 @@ final class SelectImageViewController: BaseViewController {
     
     let selectedImageView: PhotoImageView = {
         let imageView = PhotoImageView(frame: .zero)
+        //imageView.image = UIImage(named: "testImage")
         imageView.contentMode = .scaleAspectFit
+        imageView.backgroundColor = .clear
         return imageView
     }()
     
-    private let viewModel = SelectImageViewModel()
+    private let viewModel: SelectImageViewModel?
+    
+    init(
+        selectImageViewModel: SelectImageViewModel
+    ) {
+        self.viewModel = selectImageViewModel
+        
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -73,16 +88,18 @@ extension SelectImageViewController: UIViewControllerConfiguration {
     }
     
     func configureUI() {
-        
+        view.backgroundColor = .black
     }
     
     func bind() {
         
         guard let rightBarButtonItem = navigationItem.rightBarButtonItem else { return }
         let input = SelectImageViewModel.Input(
-            rightBarButtonItemTap: rightBarButtonItem.rx.tap
+            rightBarButtonItemTap: rightBarButtonItem.rx.tap, 
+            itemTap: collectionView.rx.modelSelected(PHAsset.self)
         )
         
+        guard let viewModel else { return }
         let output = viewModel.transform(input: input)
         
         output.rightBarButtonItemTapTrigger
@@ -91,13 +108,27 @@ extension SelectImageViewController: UIViewControllerConfiguration {
             }
             .disposed(by: disposeBag)
         
-        Observable.just([1,2,3,4,5,6,7,8,9,90,34,52,345,2])
-            .bind(to: collectionView.rx.items(cellIdentifier: SelectImageCollectionViewCell.identifier, cellType: SelectImageCollectionViewCell.self)) {
+        output.assets
+            .drive(collectionView.rx.items(cellIdentifier: SelectImageCollectionViewCell.identifier, cellType: SelectImageCollectionViewCell.self)) { [weak self]
                 item, element, cell in
+                guard let self else { return }
                 
+                self.getUIImageFromPHAsset(element) {
+                    cell.photoImageView.image = $0
+                }
             }
             .disposed(by: disposeBag)
         
+        output.selectedImage
+            .drive(with: self) { [weak self] owner, selectedAsset in
+                guard let self else { return }
+
+                guard let selectedAsset else { return }
+                self.getUIImageFromPHAsset(selectedAsset) {
+                    self.selectedImageView.image = $0
+                }
+            }
+            .disposed(by: disposeBag)
     }
 }
 

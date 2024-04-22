@@ -10,6 +10,7 @@ import SnapKit
 import RxSwift
 import RxCocoa
 import RxDataSources
+import Photos
 
 final class AddPostViewController: BaseViewController {
     
@@ -62,7 +63,7 @@ final class AddPostViewController: BaseViewController {
                         tableView.beginUpdates()
                         tableView.endUpdates()
                         UIView.setAnimationsEnabled(true)
-                    }               
+                    }
                 }
                 .disposed(by: cell.disposeBag)
             
@@ -85,7 +86,7 @@ final class AddPostViewController: BaseViewController {
                         tableView.beginUpdates()
                         tableView.endUpdates()
                         UIView.setAnimationsEnabled(true)
-                    }               
+                    }
                 }
                 .disposed(by: cell.disposeBag)
             
@@ -135,10 +136,16 @@ extension AddPostViewController: UIViewControllerConfiguration {
     }
     
     func bind() {
+        
+        let imageCellTapSubject = PublishSubject<IndexPath>()
+        let imageCellButtonTapSubject = PublishSubject<Int>()
+        
         guard let rightBarButtonItem = navigationItem.rightBarButtonItem else { return }
         
         let input = AddPostViewModel.Input(
-            rightBarButtonItemTap: rightBarButtonItem.rx.tap
+            rightBarButtonItemTap: rightBarButtonItem.rx.tap,
+            imageCellTapSubject: imageCellTapSubject, 
+            imageCellButtonTapSubject: imageCellButtonTapSubject
         )
         
         let output = viewModel.transform(input: input)
@@ -153,17 +160,139 @@ extension AddPostViewController: UIViewControllerConfiguration {
             .drive(tableView.rx.items(dataSource: dataSource))
             .disposed(by: disposeBag)
         
+        output.errorMessage
+            .drive(with: self) { owner, errorMessage in
+                if !errorMessage.isEmpty {
+                    owner.makeErrorAlert(message: errorMessage)
+                }
+            }
+            .disposed(by: disposeBag)
+        
         guard let selectImageTableViewCell = tableView.cellForRow(at: IndexPath(row: 0, section: 0)) as? SelectImageTableViewCell else { return }
         
         selectImageTableViewCell.collectionView.rx.itemSelected
             .bind(with: self) { owner, indexPath in
                 if indexPath.item == 0 {
-                    let selectImageVC = SelectImageViewController()
-                    let selectImageNav = UINavigationController(rootViewController: selectImageVC)
-                    selectImageNav.modalPresentationStyle = .fullScreen
-                    owner.present(selectImageNav, animated: true)
+                    owner.populatePhotos()
                 }
+                imageCellTapSubject.onNext(indexPath)
+            }
+            .disposed(by: selectImageTableViewCell.disposeBag)
+        
+        output.selectedImages
+            .drive(selectImageTableViewCell.collectionView.rx.items(cellIdentifier: SelectImageInnerCollectionViewCell.identifier, cellType: SelectImageInnerCollectionViewCell.self)) { [weak self] item, element, cell in
+                guard let self else { return }
+                
+                if item == 0 {
+                    cell.photoImageView.image = UIImage(systemName: "photo.badge.plus")
+                    cell.deleteButton.isHidden = true
+                } else {
+                    self.getUIImageFromPHAsset(element) {
+                        cell.photoImageView.image = $0
+                    }
+                }
+                
+                cell.deleteButton.rx.tap
+                    .bind { _ in
+                        imageCellButtonTapSubject.onNext(item)
+                    }
+                    .disposed(by: cell.disposeBag)
             }
             .disposed(by: selectImageTableViewCell.disposeBag)
     }
+}
+
+// MARK: - Fetch Photo Images from User Gallery
+// TODO: - 추후 옮기 Manager로 빼기
+extension AddPostViewController {
+    
+    private func showLocationSettingAlert() {
+        let alert = UIAlertController(title: "", message: "사진을 첨부하려면 사진첩 접근 권한을 변경해주세요.", preferredStyle: .alert)
+        
+        let goSetting = UIAlertAction(title: "설정으로 이동", style: .default) { _ in
+            
+            if let setting = URL(string: UIApplication.openSettingsURLString) {
+                UIApplication.shared.open(setting)
+            } else {
+                print("설정으로 가주세여~~~~~!!")
+            }
+        }
+        
+        let cancel = UIAlertAction(title: "취소", style: .cancel)
+        
+        alert.addAction(goSetting)
+        alert.addAction(cancel)
+        
+        present(alert, animated: true)
+    }
+    
+    private func moveToSelectImageVC(with assets: [PHAsset]) {
+        let selectImageVC = SelectImageViewController(
+            selectImageViewModel: SelectImageViewModel(
+                assets: assets,
+                delegate: viewModel
+            )
+        )
+        let selectImageNav = UINavigationController(rootViewController: selectImageVC)
+        selectImageNav.modalPresentationStyle = .fullScreen
+        present(selectImageNav, animated: true)
+    }
+    
+    private func populatePhotos() {
+        
+        PHPhotoLibrary.requestAuthorization(for: .readWrite) { [weak self] status in
+            guard let self else { return }
+            switch status {
+            case .notDetermined:
+                print("notDetermined")
+            case .restricted:
+                print("restricted")
+            case .denied:
+                print("denied")
+                DispatchQueue.main.async {
+                    self.showLocationSettingAlert()
+                }
+            case .authorized:
+                print("authorized")
+                fetchPhotos()
+            case .limited:
+                print("limited")
+                fetchPhotos()
+            @unknown default:
+                print("error")
+            }
+            
+        }
+    }
+    
+    private func getAssetFetchOptions() -> PHFetchOptions {
+        let options = PHFetchOptions()
+        
+        let sortDescriptior = NSSortDescriptor(key: "creationDate", ascending: false)
+        
+        options.sortDescriptors = [sortDescriptior]
+        
+        return options
+    }
+    
+    private func fetchPhotos() {
+        let allPhotos = PHAsset.fetchAssets(with: .image, options: getAssetFetchOptions())
+        
+        var assets = [PHAsset]()
+        
+        DispatchQueue.global(qos: .background).async {
+            allPhotos.enumerateObjects { [weak self] asset, count, stop in
+                guard let self else { return }
+                
+                assets.append(asset)
+
+                if count == allPhotos.count - 1 {
+                    DispatchQueue.main.async {
+                        self.moveToSelectImageVC(with: assets)
+                    }
+                }
+            }
+        }
+    }
+    
 }

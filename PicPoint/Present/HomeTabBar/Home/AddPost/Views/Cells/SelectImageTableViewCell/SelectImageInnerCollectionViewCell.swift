@@ -20,8 +20,27 @@ final class SelectImageInnerCollectionViewCell: BaseCollectionViewCell {
         return imageView
     }()
     
+    let deleteButton: UIButton = {
+        let button = UIButton()
+        var buttonConfiguration = UIButton.Configuration.filled()
+        buttonConfiguration.baseBackgroundColor = .white
+        buttonConfiguration.baseForegroundColor = .black
+        buttonConfiguration.image = UIImage(systemName: "xmark.circle.fill")
+        buttonConfiguration.contentInsets = .zero
+        let symbolConfiguration = UIImage.SymbolConfiguration(pointSize: 20)
+        buttonConfiguration.preferredSymbolConfigurationForImage = symbolConfiguration
+        button.configuration = buttonConfiguration
+        button.layer.cornerRadius = 15
+        button.clipsToBounds = true
+        return button
+    }()
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
+        
+        configureConstraints()
+        configureUI()
+        bind()
     }
     
     required init?(coder: NSCoder) {
@@ -38,15 +57,27 @@ final class SelectImageInnerCollectionViewCell: BaseCollectionViewCell {
 extension SelectImageInnerCollectionViewCell {
     override func configureConstraints() {
         super.configureConstraints()
-        
-        contentView.addSubview(photoImageView)
-        
+         [
+            photoImageView,
+            deleteButton
+         ].forEach { contentView.addSubview($0) }
+      
         photoImageView.snp.makeConstraints {
             $0.edges.equalTo(contentView.safeAreaLayoutGuide)
+        }
+        
+        deleteButton.snp.makeConstraints {
+            $0.trailing.equalTo(photoImageView)
+            $0.top.equalTo(photoImageView)
         }
     }
     
     override func configureUI() {
         super.configureUI()        
     }
+    
+    func bind() {
+        
+    }
+
 }

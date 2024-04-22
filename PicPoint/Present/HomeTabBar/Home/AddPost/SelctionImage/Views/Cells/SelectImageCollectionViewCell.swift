@@ -43,6 +43,9 @@ extension SelectImageCollectionViewCell {
     override func configureUI() {
         super.configureUI()
         
+        backgroundColor = .black
+        contentView.backgroundColor = .black
+        
         contentView.layer.borderColor = UIColor.black.cgColor
         contentView.layer.borderWidth = 0.5
     }

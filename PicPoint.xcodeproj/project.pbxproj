@@ -29,7 +29,7 @@
 		001253FE2BD418350065F1E6 /* WriteCommentBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001253FD2BD418350065F1E6 /* WriteCommentBody.swift */; };
 		001254002BD4190D0065F1E6 /* CommentManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001253FF2BD4190D0065F1E6 /* CommentManager.swift */; };
 		001254022BD427840065F1E6 /* DeleteCommentParams.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001254012BD427840065F1E6 /* DeleteCommentParams.swift */; };
-		001C91EC2BD5ED510028E67B /* SelectImageCollectionReusableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001C91EB2BD5ED510028E67B /* SelectImageCollectionReusableView.swift */; };
+		001C92032BD6A2820028E67B /* UIViewController+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001C92022BD6A2820028E67B /* UIViewController+Extensions.swift */; };
 		00321C9A2BCD79B800BE2407 /* RxSwift+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00321C992BCD79B800BE2407 /* RxSwift+Extensions.swift */; };
 		0034FAEF2BCC9AA200D932F3 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0034FAEE2BCC9AA200D932F3 /* ProfileViewController.swift */; };
 		0034FAF12BCC9DBC00D932F3 /* ProfileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0034FAF02BCC9DBC00D932F3 /* ProfileViewModel.swift */; };
@@ -131,7 +131,7 @@
 		001253FD2BD418350065F1E6 /* WriteCommentBody.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WriteCommentBody.swift; sourceTree = "<group>"; };
 		001253FF2BD4190D0065F1E6 /* CommentManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentManager.swift; sourceTree = "<group>"; };
 		001254012BD427840065F1E6 /* DeleteCommentParams.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteCommentParams.swift; sourceTree = "<group>"; };
-		001C91EB2BD5ED510028E67B /* SelectImageCollectionReusableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectImageCollectionReusableView.swift; sourceTree = "<group>"; };
+		001C92022BD6A2820028E67B /* UIViewController+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Extensions.swift"; sourceTree = "<group>"; };
 		00321C992BCD79B800BE2407 /* RxSwift+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RxSwift+Extensions.swift"; sourceTree = "<group>"; };
 		0034FAEE2BCC9AA200D932F3 /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		0034FAF02BCC9DBC00D932F3 /* ProfileViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewModel.swift; sourceTree = "<group>"; };
@@ -236,7 +236,6 @@
 			isa = PBXGroup;
 			children = (
 				0003E9332BD57DA400695D40 /* SelectImageViewController.swift */,
-				001C91EA2BD5ECD80028E67B /* HeaderView */,
 				001C91ED2BD5ED5A0028E67B /* Cells */,
 			);
 			path = Views;
@@ -388,14 +387,6 @@
 				001253FD2BD418350065F1E6 /* WriteCommentBody.swift */,
 			);
 			path = Comment;
-			sourceTree = "<group>";
-		};
-		001C91EA2BD5ECD80028E67B /* HeaderView */ = {
-			isa = PBXGroup;
-			children = (
-				001C91EB2BD5ED510028E67B /* SelectImageCollectionReusableView.swift */,
-			);
-			path = HeaderView;
 			sourceTree = "<group>";
 		};
 		001C91ED2BD5ED5A0028E67B /* Cells */ = {
@@ -801,6 +792,7 @@
 				0035401F2BCFBB2200A71415 /* UITableViewCell+Extensions.swift */,
 				0035402A2BD0212800A71415 /* String+Extensions.swift */,
 				0003E9312BD54B0800695D40 /* Label+Extension.swift */,
+				001C92022BD6A2820028E67B /* UIViewController+Extensions.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -983,9 +975,9 @@
 				003540182BCFB99F00A71415 /* DetailViewModel.swift in Sources */,
 				00B7C4062BCA68DB009AC333 /* HTTPHeader.swift in Sources */,
 				0034FAEF2BCC9AA200D932F3 /* ProfileViewController.swift in Sources */,
+				001C92032BD6A2820028E67B /* UIViewController+Extensions.swift in Sources */,
 				00760E462BD5072000741C40 /* SelectImageTableViewCell.swift in Sources */,
 				00C71D6E2BCC22E200D933FD /* HomeViewController.swift in Sources */,
-				001C91EC2BD5ED510028E67B /* SelectImageCollectionReusableView.swift in Sources */,
 				00AFF6092BCD2AAD006D319A /* HomeCollectionViewCellTopView.swift in Sources */,
 				0035401A2BCFBA2600A71415 /* DetailCollectionViewSectionDataModels.swift in Sources */,
 				001253F62BD4155B0065F1E6 /* CommentRouter.swift in Sources */,
