@@ -29,18 +29,7 @@ final class SelectImageViewController: BaseViewController {
         return imageView
     }()
     
-    let dismissButton: UIButton = {
-        let button = UIButton()
-        var buttonConfiguration = UIButton.Configuration.filled()
-        buttonConfiguration.baseBackgroundColor = .darkGray
-        buttonConfiguration.baseForegroundColor = .lightGray
-        buttonConfiguration.image = UIImage(systemName: "xmark.circle.fill")
-        buttonConfiguration.contentInsets = .zero
-        let symbolConfiguration = UIImage.SymbolConfiguration(pointSize: 22)
-        buttonConfiguration.preferredSymbolConfigurationForImage = symbolConfiguration
-        button.configuration = buttonConfiguration
-        return button
-    }()
+    let dismissButton = DismissButton()
     
     private let viewModel: SelectImageViewModel?
     

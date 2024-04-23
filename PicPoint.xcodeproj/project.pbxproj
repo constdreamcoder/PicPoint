@@ -82,6 +82,8 @@
 		00AFF6152BCD5C84006D319A /* HomeCollectionViewCellBottomView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00AFF6142BCD5C84006D319A /* HomeCollectionViewCellBottomView.swift */; };
 		00B67D822BD8102F0097ACDE /* RecommendedVisitTimeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00B67D812BD8102F0097ACDE /* RecommendedVisitTimeViewController.swift */; };
 		00B67D842BD810570097ACDE /* RecommendedVisitTimeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00B67D832BD810570097ACDE /* RecommendedVisitTimeViewModel.swift */; };
+		00B67D872BD824710097ACDE /* PreviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00B67D862BD824710097ACDE /* PreviewViewController.swift */; };
+		00B67D8A2BD827160097ACDE /* DismissButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00B67D892BD827160097ACDE /* DismissButton.swift */; };
 		00B7C3EF2BCA5A42009AC333 /* APIKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00B7C3EE2BCA5A42009AC333 /* APIKeys.swift */; };
 		00B7C3F12BCA5BE2009AC333 /* UserRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00B7C3F02BCA5BE2009AC333 /* UserRouter.swift */; };
 		00B7C3F32BCA5C42009AC333 /* TargetType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00B7C3F22BCA5C42009AC333 /* TargetType.swift */; };
@@ -190,6 +192,8 @@
 		00AFF6142BCD5C84006D319A /* HomeCollectionViewCellBottomView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeCollectionViewCellBottomView.swift; sourceTree = "<group>"; };
 		00B67D812BD8102F0097ACDE /* RecommendedVisitTimeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecommendedVisitTimeViewController.swift; sourceTree = "<group>"; };
 		00B67D832BD810570097ACDE /* RecommendedVisitTimeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecommendedVisitTimeViewModel.swift; sourceTree = "<group>"; };
+		00B67D862BD824710097ACDE /* PreviewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewViewController.swift; sourceTree = "<group>"; };
+		00B67D892BD827160097ACDE /* DismissButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DismissButton.swift; sourceTree = "<group>"; };
 		00B7C3EE2BCA5A42009AC333 /* APIKeys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIKeys.swift; sourceTree = "<group>"; };
 		00B7C3F02BCA5BE2009AC333 /* UserRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserRouter.swift; sourceTree = "<group>"; };
 		00B7C3F22BCA5C42009AC333 /* TargetType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TargetType.swift; sourceTree = "<group>"; };
@@ -437,6 +441,8 @@
 		001C920B2BD6D4BC0028E67B /* SubViewControllers */ = {
 			isa = PBXGroup;
 			children = (
+				00B67D882BD826E30097ACDE /* CustomViews */,
+				00B67D852BD8245A0097ACDE /* Preview */,
 				0003E9352BD57E6B00695D40 /* SelctionImage */,
 				00242C5A2BD7DDEB00B4C96E /* RecommendedVisitTime */,
 				001C92042BD6D30B0028E67B /* SelectVisitDate */,
@@ -681,6 +687,22 @@
 				00AFF6142BCD5C84006D319A /* HomeCollectionViewCellBottomView.swift */,
 			);
 			path = SubViews;
+			sourceTree = "<group>";
+		};
+		00B67D852BD8245A0097ACDE /* Preview */ = {
+			isa = PBXGroup;
+			children = (
+				00B67D862BD824710097ACDE /* PreviewViewController.swift */,
+			);
+			path = Preview;
+			sourceTree = "<group>";
+		};
+		00B67D882BD826E30097ACDE /* CustomViews */ = {
+			isa = PBXGroup;
+			children = (
+				00B67D892BD827160097ACDE /* DismissButton.swift */,
+			);
+			path = CustomViews;
 			sourceTree = "<group>";
 		};
 		00B7C3F42BCA5EE9009AC333 /* SignIn */ = {
@@ -1028,6 +1050,7 @@
 				00AFF60D2BCD2CE0006D319A /* UIViewConfiguration.swift in Sources */,
 				0034FAFA2BCCA19E00D932F3 /* WithdrawalModel.swift in Sources */,
 				00B7C4092BCA695C009AC333 /* LoginBody.swift in Sources */,
+				00B67D872BD824710097ACDE /* PreviewViewController.swift in Sources */,
 				000AD25A2BD258EA00FC7768 /* DetailDisplayInnerCollectionViewCell.swift in Sources */,
 				00760E4D2BD512C800741C40 /* AddPostCollectionViewCellType.swift in Sources */,
 				00760E572BD531EA00741C40 /* TitleTableViewCell.swift in Sources */,
@@ -1088,6 +1111,7 @@
 				003540272BCFCC7500A71415 /* BaseCollectionViewCell.swift in Sources */,
 				00760E552BD531BB00741C40 /* VisitDateTableViewCell.swift in Sources */,
 				00B7C40E2BCA6A93009AC333 /* ViewModelType.swift in Sources */,
+				00B67D8A2BD827160097ACDE /* DismissButton.swift in Sources */,
 				0035402B2BD0212800A71415 /* String+Extensions.swift in Sources */,
 				00B7C3FE2BCA6142009AC333 /* BaseViewController.swift in Sources */,
 				000AD2652BD27E0B00FC7768 /* DetailRelatedContentCollectionHeaderView.swift in Sources */,

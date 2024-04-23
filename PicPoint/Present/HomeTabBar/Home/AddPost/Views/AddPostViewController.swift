@@ -197,6 +197,16 @@ extension AddPostViewController: UIViewControllerConfiguration {
                 owner.populatePhotos()
             }
             .disposed(by: disposeBag)
+        
+        output.showTappedAsset
+            .drive(with: self) { owner, asset in
+                owner.getUIImageFromPHAsset(asset) { photoImage in
+                    let previewVC = PreviewViewController()
+                    previewVC.photoImage = photoImage
+                    owner.present(previewVC, animated: true)
+                }
+            }
+            .disposed(by: disposeBag)
     }
 }
 

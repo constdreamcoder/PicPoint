@@ -89,8 +89,9 @@ extension SelectImageTableViewCell {
             .bind(with: self) { owner, indexPath in
                 if indexPath.item == 0 {
                     addPostViewModel.fetchPhotosTriggerSubject.onNext(())
+                } else {
+                    addPostViewModel.imageCellTapSubject.onNext(indexPath)
                 }
-                addPostViewModel.imageCellTapSubject.onNext(indexPath)
             }
             .disposed(by: disposeBag)
     }

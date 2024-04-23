@@ -20,7 +20,7 @@ final class RecommendedVisitTimeTableViewCell: BaseTableViewCell {
     
     let rightLabel: UILabel = {
         let label = UILabel()
-        label.text = "테스트"
+        label.text = ""
         label.textColor = .lightGray
         label.font = .systemFont(ofSize: 18.0, weight: .bold)
         return label

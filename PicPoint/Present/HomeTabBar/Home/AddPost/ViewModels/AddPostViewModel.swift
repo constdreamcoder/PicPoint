@@ -38,6 +38,7 @@ final class AddPostViewModel: ViewModelType {
         let errorMessage: Driver<String>
         let fetchPhotos: Driver<Void>
         let itemTapTrigger: Driver<(AddPostCollectionViewCellType ,Date)>
+        let showTappedAsset: Driver<PHAsset>
     }
     
     func transform(input: Input) -> Output {
@@ -47,14 +48,9 @@ final class AddPostViewModel: ViewModelType {
                 print("눌림")
             }
         
-        imageCellTapSubject
-            .withLatestFrom(selectedImagesRelay)
-            .subscribe(with: self) { owner, assets in
-                if assets.count >= 6 {
-                    owner.errorMessageRelay.accept("추가할 수 있는 이미지를 초과하였습니다. 최대 5개의 이미지까지만 추가 가능합니다.")
-                }
-            }
-            .disposed(by: disposeBag)
+        let showTappedAsset = imageCellTapSubject
+            .withLatestFrom(selectedImagesRelay) { $1[$0.item] }
+            
         
         imageCellButtonTapSubject
             .withLatestFrom(selectedImagesRelay) {
@@ -69,14 +65,24 @@ final class AddPostViewModel: ViewModelType {
         
         let itemTap = input.itemTap
             .withLatestFrom(visitDateRelay) { ($0, $1) }
+        
+        let fetchPhotosTrigger = fetchPhotosTriggerSubject
+            .withLatestFrom(selectedImagesRelay)
+            .withUnretained(self)
+            .map { owner, assets in
+                if assets.count >= 6 {
+                    owner.errorMessageRelay.accept("추가할 수 있는 이미지를 초과하였습니다. 최대 5개의 이미지까지만 추가 가능합니다.")
+                }
+            }
             
         return Output(
             sections: Observable.just(sections).asDriver(onErrorJustReturn: []),
             rightBarButtonItemTapTrigger: rightBarButtonItemTapTrigger.asDriver(onErrorJustReturn: ()),
             selectedImages: selectedImagesRelay.asDriver(), 
             errorMessage: errorMessageRelay.asDriver(), 
-            fetchPhotos: fetchPhotosTriggerSubject.asDriver(onErrorJustReturn: ()),
-            itemTapTrigger: itemTap.asDriver(onErrorJustReturn: (.none, Date()))
+            fetchPhotos: fetchPhotosTrigger.asDriver(onErrorJustReturn: ()),
+            itemTapTrigger: itemTap.asDriver(onErrorJustReturn: (.none, Date())), 
+            showTappedAsset: showTappedAsset.asDriver(onErrorJustReturn: PHAsset())
         )
     }
 }
