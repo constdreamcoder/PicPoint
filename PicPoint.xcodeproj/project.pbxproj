@@ -80,6 +80,8 @@
 		00AFF60D2BCD2CE0006D319A /* UIViewConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00AFF60C2BCD2CE0006D319A /* UIViewConfiguration.swift */; };
 		00AFF6102BCD5868006D319A /* IconLabelStackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00AFF60F2BCD5868006D319A /* IconLabelStackView.swift */; };
 		00AFF6152BCD5C84006D319A /* HomeCollectionViewCellBottomView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00AFF6142BCD5C84006D319A /* HomeCollectionViewCellBottomView.swift */; };
+		00B67D822BD8102F0097ACDE /* RecommendedVisitTimeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00B67D812BD8102F0097ACDE /* RecommendedVisitTimeViewController.swift */; };
+		00B67D842BD810570097ACDE /* RecommendedVisitTimeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00B67D832BD810570097ACDE /* RecommendedVisitTimeViewModel.swift */; };
 		00B7C3EF2BCA5A42009AC333 /* APIKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00B7C3EE2BCA5A42009AC333 /* APIKeys.swift */; };
 		00B7C3F12BCA5BE2009AC333 /* UserRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00B7C3F02BCA5BE2009AC333 /* UserRouter.swift */; };
 		00B7C3F32BCA5C42009AC333 /* TargetType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00B7C3F22BCA5C42009AC333 /* TargetType.swift */; };
@@ -186,6 +188,8 @@
 		00AFF60C2BCD2CE0006D319A /* UIViewConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewConfiguration.swift; sourceTree = "<group>"; };
 		00AFF60F2BCD5868006D319A /* IconLabelStackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconLabelStackView.swift; sourceTree = "<group>"; };
 		00AFF6142BCD5C84006D319A /* HomeCollectionViewCellBottomView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeCollectionViewCellBottomView.swift; sourceTree = "<group>"; };
+		00B67D812BD8102F0097ACDE /* RecommendedVisitTimeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecommendedVisitTimeViewController.swift; sourceTree = "<group>"; };
+		00B67D832BD810570097ACDE /* RecommendedVisitTimeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecommendedVisitTimeViewModel.swift; sourceTree = "<group>"; };
 		00B7C3EE2BCA5A42009AC333 /* APIKeys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIKeys.swift; sourceTree = "<group>"; };
 		00B7C3F02BCA5BE2009AC333 /* UserRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserRouter.swift; sourceTree = "<group>"; };
 		00B7C3F22BCA5C42009AC333 /* TargetType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TargetType.swift; sourceTree = "<group>"; };
@@ -434,9 +438,35 @@
 			isa = PBXGroup;
 			children = (
 				0003E9352BD57E6B00695D40 /* SelctionImage */,
+				00242C5A2BD7DDEB00B4C96E /* RecommendedVisitTime */,
 				001C92042BD6D30B0028E67B /* SelectVisitDate */,
 			);
 			path = SubViewControllers;
+			sourceTree = "<group>";
+		};
+		00242C5A2BD7DDEB00B4C96E /* RecommendedVisitTime */ = {
+			isa = PBXGroup;
+			children = (
+				00242C5B2BD7DDF900B4C96E /* Views */,
+				00242C5C2BD7DDFD00B4C96E /* ViewModels */,
+			);
+			path = RecommendedVisitTime;
+			sourceTree = "<group>";
+		};
+		00242C5B2BD7DDF900B4C96E /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				00B67D812BD8102F0097ACDE /* RecommendedVisitTimeViewController.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		00242C5C2BD7DDFD00B4C96E /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				00B67D832BD810570097ACDE /* RecommendedVisitTimeViewModel.swift */,
+			);
+			path = ViewModels;
 			sourceTree = "<group>";
 		};
 		0034FAEB2BCC9A7700D932F3 /* Profile */ = {
@@ -1030,6 +1060,7 @@
 				00B7C40C2BCA6A6E009AC333 /* LoginViewModel.swift in Sources */,
 				0003E9392BD57ECF00695D40 /* SelectImageViewModel.swift in Sources */,
 				00760E4A2BD5128600741C40 /* AddPostCollectionViewSectionDataModel.swift in Sources */,
+				00B67D822BD8102F0097ACDE /* RecommendedVisitTimeViewController.swift in Sources */,
 				00AFF60B2BCD2CA5006D319A /* HomeCollectionViewCellIconView.swift in Sources */,
 				0003E9322BD54B0800695D40 /* Label+Extension.swift in Sources */,
 				00AFF5FC2BCD1274006D319A /* HomeViewModel.swift in Sources */,
@@ -1062,6 +1093,7 @@
 				000AD2652BD27E0B00FC7768 /* DetailRelatedContentCollectionHeaderView.swift in Sources */,
 				00AFF6022BCD152E006D319A /* CellIdentifiable.swift in Sources */,
 				000AD2672BD2849900FC7768 /* SeparatorView.swift in Sources */,
+				00B67D842BD810570097ACDE /* RecommendedVisitTimeViewModel.swift in Sources */,
 				001253F82BD415A90065F1E6 /* WriteCommentParams.swift in Sources */,
 				001253E52BD373E50065F1E6 /* CommentViewModel.swift in Sources */,
 				00760E5E2BD540C200741C40 /* InnerTextViewContainerView.swift in Sources */,

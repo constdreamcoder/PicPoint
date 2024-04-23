@@ -42,7 +42,8 @@ final class AddPostViewController: BaseViewController {
             return cell
         } else if item == .recommendedVisitTimeCell {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: RecommendedVisitTimeTableViewCell.identifier, for: indexPath) as? RecommendedVisitTimeTableViewCell else { return UITableViewCell() }
-            
+            cell.addPostViewModel = viewModel
+            cell.bind()
             return cell
         } else if item == .visitDateCell {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: VisitDateTableViewCell.identifier, for: indexPath) as? VisitDateTableViewCell else { return UITableViewCell() }
@@ -180,6 +181,13 @@ extension AddPostViewController: UIViewControllerConfiguration {
                     )
                     selecteVisitDateVC.modalPresentationStyle = .overFullScreen
                     owner.present(selecteVisitDateVC, animated: true)
+                } else if value.0 == .recommendedVisitTimeCell {
+                    let recommendedVisitTimeViewModel = RecommendedVisitTimeViewModel(delegate: owner.viewModel)
+                    let recommendedVisitTimeVC = RecommendedVisitTimeViewController(
+                        recommendedVisitTimeViewModel: recommendedVisitTimeViewModel
+                    )
+                    recommendedVisitTimeVC.modalPresentationStyle = .overFullScreen
+                    owner.present(recommendedVisitTimeVC, animated: true)
                 }
             }
             .disposed(by: disposeBag)

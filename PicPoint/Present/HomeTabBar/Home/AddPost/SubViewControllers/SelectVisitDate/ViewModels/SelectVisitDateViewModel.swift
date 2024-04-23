@@ -22,7 +22,7 @@ final class SelectVisitDateViewModel: ViewModelType {
     var disposeBag = DisposeBag()
     
     struct Input {
-        let datePickerDate: ControlProperty<Date>
+        let datePickerDateChanged: ControlEvent<Date>
     }
     
     struct Output {
@@ -36,7 +36,7 @@ final class SelectVisitDateViewModel: ViewModelType {
     }
     
     func transform(input: Input) -> Output {
-        input.datePickerDate
+        input.datePickerDateChanged
             .subscribe(with: self) { owner, visitDate in
                 owner.delegate?.sendVisitDate(visitDate)
             }

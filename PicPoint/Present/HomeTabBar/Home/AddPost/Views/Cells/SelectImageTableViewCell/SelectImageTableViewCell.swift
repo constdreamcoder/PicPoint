@@ -88,7 +88,7 @@ extension SelectImageTableViewCell {
         collectionView.rx.itemSelected
             .bind(with: self) { owner, indexPath in
                 if indexPath.item == 0 {
-                    addPostViewModel.fetchPhotosTrigger.onNext(())
+                    addPostViewModel.fetchPhotosTriggerSubject.onNext(())
                 }
                 addPostViewModel.imageCellTapSubject.onNext(indexPath)
             }

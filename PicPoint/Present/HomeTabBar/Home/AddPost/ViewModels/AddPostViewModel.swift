@@ -19,8 +19,9 @@ final class AddPostViewModel: ViewModelType {
     let imageCellButtonTapSubject = PublishSubject<Int>()
     let selectedImagesRelay = BehaviorRelay<[PHAsset]>(value: [PHAsset()])
     let imageCellTapSubject = PublishSubject<IndexPath>()
-    let fetchPhotosTrigger = PublishSubject<Void>()
+    let fetchPhotosTriggerSubject = PublishSubject<Void>()
     let visitDateRelay = BehaviorRelay<Date>(value: Date())
+    let recommendedVisitTimeRelay = BehaviorRelay<Date>(value: Date())
     private let errorMessageRelay = BehaviorRelay<String>(value: "")
     
     var disposeBag = DisposeBag()
@@ -74,7 +75,7 @@ final class AddPostViewModel: ViewModelType {
             rightBarButtonItemTapTrigger: rightBarButtonItemTapTrigger.asDriver(onErrorJustReturn: ()),
             selectedImages: selectedImagesRelay.asDriver(), 
             errorMessage: errorMessageRelay.asDriver(), 
-            fetchPhotos: fetchPhotosTrigger.asDriver(onErrorJustReturn: ()),
+            fetchPhotos: fetchPhotosTriggerSubject.asDriver(onErrorJustReturn: ()),
             itemTapTrigger: itemTap.asDriver(onErrorJustReturn: (.none, Date()))
         )
     }
@@ -100,6 +101,16 @@ extension AddPostViewModel: SelectVisitDateViewModelDelegate {
         Observable.just(date)
             .subscribe(with: self) { owner, visitDate in
                 owner.visitDateRelay.accept(visitDate)
+            }
+            .disposed(by: disposeBag)
+    }
+}
+
+extension AddPostViewModel: RecommendedVisitTimeViewModelDelegate {
+    func sendRecommendedVisitTime(_ date: Date) {
+        Observable.just(date)
+            .subscribe(with: self) { owner, recommenedtime in
+                owner.recommendedVisitTimeRelay.accept(recommenedtime)
             }
             .disposed(by: disposeBag)
     }

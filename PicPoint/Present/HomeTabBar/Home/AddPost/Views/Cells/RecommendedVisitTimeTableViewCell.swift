@@ -26,6 +26,8 @@ final class RecommendedVisitTimeTableViewCell: BaseTableViewCell {
         return label
     }()
     
+    weak var addPostViewModel: AddPostViewModel?
+
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
@@ -66,5 +68,15 @@ extension RecommendedVisitTimeTableViewCell {
     
     override func configureUI() {
         super.configureUI()
+    }
+    
+    func bind() {
+        guard let addPostViewModel else { return }
+        
+        addPostViewModel.recommendedVisitTimeRelay.asDriver()
+            .drive(with: self) { owner, recommendedTime in
+                owner.rightLabel.text = recommendedTime.convertToTimeString
+            }
+            .disposed(by: disposeBag)
     }
 }

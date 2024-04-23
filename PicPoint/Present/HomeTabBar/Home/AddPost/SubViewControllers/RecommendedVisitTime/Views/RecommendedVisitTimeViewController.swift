@@ -1,8 +1,8 @@
 //
-//  SelectedVisitDateViewController.swift
+//  RecommendedVisitTimeViewController.swift
 //  PicPoint
 //
-//  Created by SUCHAN CHANG on 4/23/24.
+//  Created by SUCHAN CHANG on 4/24/24.
 //
 
 import UIKit
@@ -10,23 +10,23 @@ import SnapKit
 import RxSwift
 import RxCocoa
 
-final class SelectedVisitDateViewController: BaseBottomViewViewController {
+final class RecommendedVisitTimeViewController: BaseBottomViewViewController {
     
     let datePicker: UIDatePicker = {
         let datePicker = UIDatePicker()
         datePicker.preferredDatePickerStyle = .wheels
-        datePicker.datePickerMode = .date
+        datePicker.datePickerMode = .time
         datePicker.locale = Locale(identifier: "ko-KR")
         datePicker.timeZone = .autoupdatingCurrent
         return datePicker
     }()
     
-    private let viewModel: SelectVisitDateViewModel?
+    let viewModel: RecommendedVisitTimeViewModel?
     
     init(
-        selectVisitDateViewModel: SelectVisitDateViewModel?
+        recommendedVisitTimeViewModel: RecommendedVisitTimeViewModel?
     ) {
-        self.viewModel = selectVisitDateViewModel
+        self.viewModel = recommendedVisitTimeViewModel
         
         super.init(nibName: nil, bundle: nil)
     }
@@ -37,7 +37,7 @@ final class SelectedVisitDateViewController: BaseBottomViewViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-    
+
         configureNavigationBar()
         configureConstraints()
         configureUI()
@@ -45,7 +45,7 @@ final class SelectedVisitDateViewController: BaseBottomViewViewController {
     }
 }
 
-extension SelectedVisitDateViewController {
+extension RecommendedVisitTimeViewController {
     override func configureNavigationBar() {
         super.configureNavigationBar()
     }
@@ -66,16 +66,12 @@ extension SelectedVisitDateViewController {
     
     override func bind() {
         super.bind()
-        
-        let input = SelectVisitDateViewModel.Input(
+                
+        let input = RecommendedVisitTimeViewModel.Input(
             datePickerDateChanged: datePicker.rx.date.changed
         )
         
         guard let viewModel else { return }
         let output = viewModel.transform(input: input)
-        
-        output.visitDate
-            .drive(datePicker.rx.date)
-            .disposed(by: disposeBag)
     }
 }

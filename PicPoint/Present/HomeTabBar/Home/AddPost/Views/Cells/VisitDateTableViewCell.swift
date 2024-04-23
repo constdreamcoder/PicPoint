@@ -78,7 +78,7 @@ extension VisitDateTableViewCell {
         // TODO: - 새로운 날짜 선택 후에도 방문일 버튼을 다시 탭하면 오늘 날짜로 다시 보이는 오류 수정 필요
         addPostViewModel.visitDateRelay.asDriver()
             .drive(with: self) { owner, visitDate in
-                owner.rightLabel.text = visitDate.convertToString
+                owner.rightLabel.text = visitDate.convertToDateString
             }
             .disposed(by: disposeBag)
     }
