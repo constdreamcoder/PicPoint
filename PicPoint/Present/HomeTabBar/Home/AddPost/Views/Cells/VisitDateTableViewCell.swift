@@ -6,6 +6,9 @@
 //
 
 import UIKit
+import SnapKit
+import RxSwift
+import RxCocoa
 
 final class VisitDateTableViewCell: BaseTableViewCell {
     
@@ -17,11 +20,13 @@ final class VisitDateTableViewCell: BaseTableViewCell {
     
     let rightLabel: UILabel = {
         let label = UILabel()
-        label.text = "테스트"
+        label.text = ""
         label.textColor = .lightGray
         label.font = .systemFont(ofSize: 18.0, weight: .bold)
         return label
     }()
+    
+    weak var addPostViewModel: AddPostViewModel?
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -32,6 +37,12 @@ final class VisitDateTableViewCell: BaseTableViewCell {
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        
+        disposeBag = DisposeBag()
     }
     
 }
@@ -58,5 +69,17 @@ extension VisitDateTableViewCell {
     
     override func configureUI() {
         super.configureUI()
+        
+    }
+    
+    func bind() {
+        guard let addPostViewModel else { return }
+        
+        // TODO: - 새로운 날짜 선택 후에도 방문일 버튼을 다시 탭하면 오늘 날짜로 다시 보이는 오류 수정 필요
+        addPostViewModel.visitDateRelay.asDriver()
+            .drive(with: self) { owner, visitDate in
+                owner.rightLabel.text = visitDate.convertToString
+            }
+            .disposed(by: disposeBag)
     }
 }

@@ -9,13 +9,13 @@ import Foundation
 import Differentiator
 
 struct AddPostCollectionViewSectionDataModel {
-    var items: [AddPostCollectionVIewCellType]
+    var items: [AddPostCollectionViewCellType]
 }
 
 extension AddPostCollectionViewSectionDataModel: SectionModelType {
-    typealias Item = AddPostCollectionVIewCellType
+    typealias Item = AddPostCollectionViewCellType
 
-    init(original: AddPostCollectionViewSectionDataModel, items: [AddPostCollectionVIewCellType]) {
+    init(original: AddPostCollectionViewSectionDataModel, items: [AddPostCollectionViewCellType]) {
         self = original
         self.items = items
     }

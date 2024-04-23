@@ -24,11 +24,13 @@ final class SelectImageViewModel: ViewModelType {
     var disposeBag = DisposeBag()
     
     struct Input {
+        let dismissButtonTap: ControlEvent<Void>
         let rightBarButtonItemTap: ControlEvent<Void>
         let itemTap: ControlEvent<PHAsset>
     }
     
     struct Output {
+        let dismissButtonTapTrigger: Driver<Void>
         let rightBarButtonItemTapTrigger: Driver<Void>
         let assets: Driver<[PHAsset]>
         let selectedImage: Driver<PHAsset?>
@@ -66,6 +68,7 @@ final class SelectImageViewModel: ViewModelType {
             .disposed(by: disposeBag)
     
         return Output(
+            dismissButtonTapTrigger: input.dismissButtonTap.asDriver(onErrorJustReturn: ()),
             rightBarButtonItemTapTrigger: rightBarButtonItemTap.asDriver(onErrorJustReturn: ()),
             assets: assetsRelay.asDriver(),
             selectedImage: selectedImageRelay.asDriver()

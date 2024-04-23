@@ -24,12 +24,13 @@ final class SelectImageTableViewCell: BaseTableViewCell {
     private let spacing = 8.0
     private lazy var itemSize = UIScreen.main.bounds.width - (spacing * 5)
     
+    weak var addPostViewModel: AddPostViewModel?
+    
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
         configureConstraints()
         configureUI()
-        bind()
     }
     
     required init?(coder: NSCoder) {
@@ -60,7 +61,38 @@ extension SelectImageTableViewCell {
     }
     
     func bind() {
-
+        guard let addPostViewModel else { return }
+        
+        addPostViewModel.selectedImagesRelay.asDriver()
+            .drive(collectionView.rx.items(cellIdentifier: SelectImageInnerCollectionViewCell.identifier, cellType: SelectImageInnerCollectionViewCell.self)) { [weak self] item, element, cell in
+                guard let self else { return }
+                
+                if item == 0 {
+                    cell.photoImageView.image = UIImage(systemName: "photo.badge.plus")
+                    cell.deleteButton.isHidden = true
+                } else {
+                    self.getUIImageFromPHAsset(element) {
+                        cell.photoImageView.image = $0
+                        cell.deleteButton.isHidden = false
+                    }
+                }
+                
+                cell.deleteButton.rx.tap
+                    .bind { _ in
+                        self.addPostViewModel?.imageCellButtonTapSubject.onNext(item)
+                    }
+                    .disposed(by: cell.disposeBag)
+            }
+            .disposed(by: disposeBag)
+        
+        collectionView.rx.itemSelected
+            .bind(with: self) { owner, indexPath in
+                if indexPath.item == 0 {
+                    addPostViewModel.fetchPhotosTrigger.onNext(())
+                }
+                addPostViewModel.imageCellTapSubject.onNext(indexPath)
+            }
+            .disposed(by: disposeBag)
     }
 }
 

@@ -28,10 +28,13 @@ final class AddPostViewController: BaseViewController {
         
         return tableView
     }()
-    private lazy var dataSource = RxTableViewSectionedReloadDataSource<AddPostCollectionViewSectionDataModel> { dataSource, tableView, indexPath, item in
+    private lazy var dataSource = RxTableViewSectionedReloadDataSource<AddPostCollectionViewSectionDataModel> { [weak self] dataSource, tableView, indexPath, item in
+        guard let self else { return UITableViewCell() }
+        
         if item == .selectImageCell {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: SelectImageTableViewCell.identifier, for: indexPath) as? SelectImageTableViewCell else { return UITableViewCell() }
-            
+            cell.addPostViewModel = self.viewModel
+            cell.bind()
             return cell
         } else if item == .selectLocationCell {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: SelectLocationTableViewCell.identifier, for: indexPath) as? SelectLocationTableViewCell else { return UITableViewCell() }
@@ -43,7 +46,8 @@ final class AddPostViewController: BaseViewController {
             return cell
         } else if item == .visitDateCell {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: VisitDateTableViewCell.identifier, for: indexPath) as? VisitDateTableViewCell else { return UITableViewCell() }
-            
+            cell.addPostViewModel = self.viewModel
+            cell.bind()
             return cell
         } else if item == .titleCell {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: TitleTableViewCell.identifier, for: indexPath) as? TitleTableViewCell else { return UITableViewCell() }
@@ -137,15 +141,13 @@ extension AddPostViewController: UIViewControllerConfiguration {
     
     func bind() {
         
-        let imageCellTapSubject = PublishSubject<IndexPath>()
-        let imageCellButtonTapSubject = PublishSubject<Int>()
-        
         guard let rightBarButtonItem = navigationItem.rightBarButtonItem else { return }
         
+        let itemTap = tableView.rx.modelSelected(AddPostCollectionViewCellType.self)
+        
         let input = AddPostViewModel.Input(
-            rightBarButtonItemTap: rightBarButtonItem.rx.tap,
-            imageCellTapSubject: imageCellTapSubject, 
-            imageCellButtonTapSubject: imageCellButtonTapSubject
+            rightBarButtonItemTap: rightBarButtonItem.rx.tap, 
+            itemTap: itemTap
         )
         
         let output = viewModel.transform(input: input)
@@ -168,37 +170,25 @@ extension AddPostViewController: UIViewControllerConfiguration {
             }
             .disposed(by: disposeBag)
         
-        guard let selectImageTableViewCell = tableView.cellForRow(at: IndexPath(row: 0, section: 0)) as? SelectImageTableViewCell else { return }
-        
-        selectImageTableViewCell.collectionView.rx.itemSelected
-            .bind(with: self) { owner, indexPath in
-                if indexPath.item == 0 {
-                    owner.populatePhotos()
+        output.itemTapTrigger
+            .drive(with: self) { owner, value in
+                if value.0 == .visitDateCell {
+                    let selectVisitDateViewModel = SelectVisitDateViewModel(delegate: owner.viewModel)
+                    selectVisitDateViewModel.selectedVisitDateRelay.accept(value.1)
+                    let selecteVisitDateVC = SelectedVisitDateViewController(
+                        selectVisitDateViewModel: selectVisitDateViewModel
+                    )
+                    selecteVisitDateVC.modalPresentationStyle = .overFullScreen
+                    owner.present(selecteVisitDateVC, animated: true)
                 }
-                imageCellTapSubject.onNext(indexPath)
             }
-            .disposed(by: selectImageTableViewCell.disposeBag)
+            .disposed(by: disposeBag)
         
-        output.selectedImages
-            .drive(selectImageTableViewCell.collectionView.rx.items(cellIdentifier: SelectImageInnerCollectionViewCell.identifier, cellType: SelectImageInnerCollectionViewCell.self)) { [weak self] item, element, cell in
-                guard let self else { return }
-                
-                if item == 0 {
-                    cell.photoImageView.image = UIImage(systemName: "photo.badge.plus")
-                    cell.deleteButton.isHidden = true
-                } else {
-                    self.getUIImageFromPHAsset(element) {
-                        cell.photoImageView.image = $0
-                    }
-                }
-                
-                cell.deleteButton.rx.tap
-                    .bind { _ in
-                        imageCellButtonTapSubject.onNext(item)
-                    }
-                    .disposed(by: cell.disposeBag)
+        output.fetchPhotos
+            .drive(with: self) { owner, _ in
+                owner.populatePhotos()
             }
-            .disposed(by: selectImageTableViewCell.disposeBag)
+            .disposed(by: disposeBag)
     }
 }
 

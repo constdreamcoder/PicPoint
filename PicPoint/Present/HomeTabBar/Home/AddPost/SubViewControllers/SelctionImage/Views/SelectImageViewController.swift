@@ -24,10 +24,22 @@ final class SelectImageViewController: BaseViewController {
     
     let selectedImageView: PhotoImageView = {
         let imageView = PhotoImageView(frame: .zero)
-        //imageView.image = UIImage(named: "testImage")
         imageView.contentMode = .scaleAspectFit
         imageView.backgroundColor = .clear
         return imageView
+    }()
+    
+    let dismissButton: UIButton = {
+        let button = UIButton()
+        var buttonConfiguration = UIButton.Configuration.filled()
+        buttonConfiguration.baseBackgroundColor = .darkGray
+        buttonConfiguration.baseForegroundColor = .lightGray
+        buttonConfiguration.image = UIImage(systemName: "xmark.circle.fill")
+        buttonConfiguration.contentInsets = .zero
+        let symbolConfiguration = UIImage.SymbolConfiguration(pointSize: 22)
+        buttonConfiguration.preferredSymbolConfigurationForImage = symbolConfiguration
+        button.configuration = buttonConfiguration
+        return button
     }()
     
     private let viewModel: SelectImageViewModel?
@@ -52,11 +64,12 @@ final class SelectImageViewController: BaseViewController {
         configureUI()
         bind()
     }
-}
-
-extension SelectImageViewController {
-    @objc func leftBarButtonItemTapped(_ barButtonItem: UIBarButtonItem) {
-        dismiss(animated: true)
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        
+        dismissButton.layer.cornerRadius = dismissButton.frame.width / 2
+        dismissButton.clipsToBounds = true
     }
 }
 
@@ -64,8 +77,10 @@ extension SelectImageViewController: UIViewControllerConfiguration {
     func configureNavigationBar() {
         navigationItem.title = "이미지 선택"
         
-        navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .close, target: self, action: #selector(leftBarButtonItemTapped))
+        navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
         
+        navigationItem.leftBarButtonItem = UIBarButtonItem(customView: dismissButton)
+                
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "완료", style: .plain, target: self, action: nil)
     }
     
@@ -95,12 +110,19 @@ extension SelectImageViewController: UIViewControllerConfiguration {
         
         guard let rightBarButtonItem = navigationItem.rightBarButtonItem else { return }
         let input = SelectImageViewModel.Input(
-            rightBarButtonItemTap: rightBarButtonItem.rx.tap, 
+            dismissButtonTap: dismissButton.rx.tap, 
+            rightBarButtonItemTap: rightBarButtonItem.rx.tap,
             itemTap: collectionView.rx.modelSelected(PHAsset.self)
         )
         
         guard let viewModel else { return }
         let output = viewModel.transform(input: input)
+        
+        output.dismissButtonTapTrigger
+            .drive(with: self) { owner, _ in
+                owner.dismiss(animated: true)
+            }
+            .disposed(by: disposeBag)
         
         output.rightBarButtonItemTapTrigger
             .drive(with: self) { owner, _ in

@@ -13,18 +13,21 @@ import Photos
 final class AddPostViewModel: ViewModelType {
     
     private let sections: [AddPostCollectionViewSectionDataModel] = [
-        .init(items: AddPostCollectionVIewCellType.allCases)
+        .init(items: [.selectImageCell, .selectLocationCell, .recommendedVisitTimeCell, .visitDateCell, .titleCell, .contentCell])
     ]
     
-    private let selectedImagesRelay = BehaviorRelay<[PHAsset]>(value: [PHAsset()])
+    let imageCellButtonTapSubject = PublishSubject<Int>()
+    let selectedImagesRelay = BehaviorRelay<[PHAsset]>(value: [PHAsset()])
+    let imageCellTapSubject = PublishSubject<IndexPath>()
+    let fetchPhotosTrigger = PublishSubject<Void>()
+    let visitDateRelay = BehaviorRelay<Date>(value: Date())
     private let errorMessageRelay = BehaviorRelay<String>(value: "")
     
     var disposeBag = DisposeBag()
     
     struct Input {
         let rightBarButtonItemTap: ControlEvent<Void>
-        let imageCellTapSubject: PublishSubject<IndexPath>
-        let imageCellButtonTapSubject: PublishSubject<Int>
+        let itemTap: ControlEvent<AddPostCollectionViewCellType>
     }
     
     struct Output {
@@ -32,6 +35,8 @@ final class AddPostViewModel: ViewModelType {
         let rightBarButtonItemTapTrigger: Driver<Void>
         let selectedImages: Driver<[PHAsset]>
         let errorMessage: Driver<String>
+        let fetchPhotos: Driver<Void>
+        let itemTapTrigger: Driver<(AddPostCollectionViewCellType ,Date)>
     }
     
     func transform(input: Input) -> Output {
@@ -41,7 +46,7 @@ final class AddPostViewModel: ViewModelType {
                 print("눌림")
             }
         
-        input.imageCellTapSubject
+        imageCellTapSubject
             .withLatestFrom(selectedImagesRelay)
             .subscribe(with: self) { owner, assets in
                 if assets.count >= 6 {
@@ -50,7 +55,7 @@ final class AddPostViewModel: ViewModelType {
             }
             .disposed(by: disposeBag)
         
-        input.imageCellButtonTapSubject
+        imageCellButtonTapSubject
             .withLatestFrom(selectedImagesRelay) {
                 var temp: [PHAsset] = $1
                 temp.remove(at: $0)
@@ -61,12 +66,16 @@ final class AddPostViewModel: ViewModelType {
             }
             .disposed(by: disposeBag)
         
+        let itemTap = input.itemTap
+            .withLatestFrom(visitDateRelay) { ($0, $1) }
             
         return Output(
             sections: Observable.just(sections).asDriver(onErrorJustReturn: []),
             rightBarButtonItemTapTrigger: rightBarButtonItemTapTrigger.asDriver(onErrorJustReturn: ()),
             selectedImages: selectedImagesRelay.asDriver(), 
-            errorMessage: errorMessageRelay.asDriver()
+            errorMessage: errorMessageRelay.asDriver(), 
+            fetchPhotos: fetchPhotosTrigger.asDriver(onErrorJustReturn: ()),
+            itemTapTrigger: itemTap.asDriver(onErrorJustReturn: (.none, Date()))
         )
     }
 }
@@ -81,6 +90,16 @@ extension AddPostViewModel: SelectImageViewModelDelegate {
             }
             .subscribe(with: self) { owner, newAssets in
                 owner.selectedImagesRelay.accept(newAssets)
+            }
+            .disposed(by: disposeBag)
+    }
+}
+
+extension AddPostViewModel: SelectVisitDateViewModelDelegate {
+    func sendVisitDate(_ date: Date) {
+        Observable.just(date)
+            .subscribe(with: self) { owner, visitDate in
+                owner.visitDateRelay.accept(visitDate)
             }
             .disposed(by: disposeBag)
     }

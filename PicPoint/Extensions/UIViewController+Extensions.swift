@@ -9,6 +9,18 @@ import UIKit
 import Photos
 
 extension UIViewController {
+    func makeErrorAlert(title: String? = nil, message: String? = nil) {
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+
+        let confirmButton = UIAlertAction(title: "확인", style: .default)
+
+        alert.addAction(confirmButton)
+        
+        present(alert, animated: true)
+    }
+}
+
+extension NSObject {
     func getUIImageFromPHAsset(_ asset: PHAsset, completionHandler: @escaping (UIImage) -> Void) {
         let imageManager = PHImageManager.default()
         let targetSize = CGSize(width: 600, height: 600)
@@ -26,15 +38,4 @@ extension UIViewController {
             }
         }
     }
-    
-    func makeErrorAlert(title: String? = nil, message: String? = nil) {
-        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
-
-        let confirmButton = UIAlertAction(title: "확인", style: .default)
-
-        alert.addAction(confirmButton)
-        
-        present(alert, animated: true)
-    }
 }
-

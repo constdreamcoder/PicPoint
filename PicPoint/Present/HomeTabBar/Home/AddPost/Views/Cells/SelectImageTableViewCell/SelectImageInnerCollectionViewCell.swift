@@ -73,7 +73,8 @@ extension SelectImageInnerCollectionViewCell {
     }
     
     override func configureUI() {
-        super.configureUI()        
+        super.configureUI()
+        
     }
     
     func bind() {
