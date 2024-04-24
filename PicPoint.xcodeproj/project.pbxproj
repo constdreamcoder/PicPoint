@@ -109,6 +109,7 @@
 		00E414EE2BD91CAD00C76BE4 /* NSObject+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E414ED2BD91CAD00C76BE4 /* NSObject+Extensions.swift */; };
 		00E414F02BD93C5500C76BE4 /* WritePostBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E414EF2BD93C5500C76BE4 /* WritePostBody.swift */; };
 		00E414F22BD94FFC00C76BE4 /* CLPlacemark+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E414F12BD94FFC00C76BE4 /* CLPlacemark+Extensions.swift */; };
+		00E414F42BD95C5500C76BE4 /* DeletePostParams.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E414F32BD95C5500C76BE4 /* DeletePostParams.swift */; };
 		00F65D372BCA16290027A897 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 00F65D362BCA16290027A897 /* Alamofire */; };
 		00F65D3A2BCA167F0027A897 /* RxCocoa in Frameworks */ = {isa = PBXBuildFile; productRef = 00F65D392BCA167F0027A897 /* RxCocoa */; };
 		00F65D3C2BCA167F0027A897 /* RxSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 00F65D3B2BCA167F0027A897 /* RxSwift */; };
@@ -226,6 +227,7 @@
 		00E414ED2BD91CAD00C76BE4 /* NSObject+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSObject+Extensions.swift"; sourceTree = "<group>"; };
 		00E414EF2BD93C5500C76BE4 /* WritePostBody.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WritePostBody.swift; sourceTree = "<group>"; };
 		00E414F12BD94FFC00C76BE4 /* CLPlacemark+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CLPlacemark+Extensions.swift"; sourceTree = "<group>"; };
+		00E414F32BD95C5500C76BE4 /* DeletePostParams.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeletePostParams.swift; sourceTree = "<group>"; };
 		00FE92AB2BCE53EA00554D0F /* PostManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostManager.swift; sourceTree = "<group>"; };
 		00FE92AE2BCE54F000554D0F /* PostRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostRouter.swift; sourceTree = "<group>"; };
 		00FE92B22BCE56F600554D0F /* fetchPostsQuery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = fetchPostsQuery.swift; sourceTree = "<group>"; };
@@ -389,6 +391,7 @@
 			isa = PBXGroup;
 			children = (
 				001253EE2BD3C5010065F1E6 /* FetchPostParams.swift */,
+				00E414F32BD95C5500C76BE4 /* DeletePostParams.swift */,
 			);
 			path = Post;
 			sourceTree = "<group>";
@@ -1101,6 +1104,7 @@
 				00760E482BD50AE600741C40 /* SelectImageInnerCollectionViewCell.swift in Sources */,
 				00AFF6002BCD14D3006D319A /* HomeCollectionViewCell.swift in Sources */,
 				00AFF60D2BCD2CE0006D319A /* UIViewConfiguration.swift in Sources */,
+				00E414F42BD95C5500C76BE4 /* DeletePostParams.swift in Sources */,
 				0034FAFA2BCCA19E00D932F3 /* WithdrawalModel.swift in Sources */,
 				00B7C4092BCA695C009AC333 /* LoginBody.swift in Sources */,
 				00B67D872BD824710097ACDE /* PreviewViewController.swift in Sources */,

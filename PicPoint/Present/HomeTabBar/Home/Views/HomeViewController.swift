@@ -59,6 +59,20 @@ final class HomeViewController: BaseViewController {
         
         tabBarController?.tabBar.isHidden = false
     }
+    
+    private func makeActionSheet(title: String = "", message: String = "", handler: @escaping () -> Void) {
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .actionSheet)
+
+        let confirmButton = UIAlertAction(title: "삭제", style: .destructive) { _ in
+            handler()
+        }
+        let cancelButton = UIAlertAction(title: "취소", style: .cancel)
+
+        alert.addAction(confirmButton)
+        alert.addAction(cancelButton)
+        
+        present(alert, animated: true)
+    }
 }
 
 extension HomeViewController: UIViewControllerConfiguration {
@@ -90,28 +104,28 @@ extension HomeViewController: UIViewControllerConfiguration {
     }
     
     func bind() {
+        
+        let deletePostTap = PublishSubject<String>()
+        
         guard let rightBarButtonItem = navigationItem.rightBarButtonItem else { return }
        
         let input = HomeViewModel.Input(
             viewDidLoadTrigger: Observable<Void>.just(()),
             rightBarButtonItemTapped: rightBarButtonItem.rx.tap, 
-            addButtonTap: addPostButton.rx.tap
+            addButtonTap: addPostButton.rx.tap, 
+            deletePostTap: deletePostTap
         )
         
         let output = viewModel.transform(input: input)
         
         output.postList
-            .drive(collectionView.rx.items(cellIdentifier: HomeCollectionViewCell.identifier, cellType: HomeCollectionViewCell.self)) { item, element, cell in
+            .drive(collectionView.rx.items(cellIdentifier: HomeCollectionViewCell.identifier, cellType: HomeCollectionViewCell.self)) { [weak self] item, element, cell in
+                guard let self else { return }
+                
+                cell.homeViewModel = viewModel
+                cell.bind(element)
                 
                 cell.updatePostData(element)
-                
-                cell.iconView.commentStackView.button.rx.tap
-                    .bind(with: self) { owner, _ in
-                        let commentVC = CommentViewController(commentViewModel: CommentViewModel(postId: element.postId))
-                        let commentNav = UINavigationController(rootViewController: commentVC)
-                        owner.present(commentNav, animated: true)
-                    }
-                    .disposed(by: cell.disposeBag)
             }
             .disposed(by: disposeBag)
         
@@ -134,6 +148,21 @@ extension HomeViewController: UIViewControllerConfiguration {
             }
             .disposed(by: disposeBag)
         
+        output.otherOptionsButtonTapTrigger
+            .drive(with: self) { owner, postId in
+                owner.makeActionSheet() {
+                    deletePostTap.onNext(postId)
+                }
+            }
+            .disposed(by: disposeBag)
+        
+        output.postId
+            .drive(with: self) { owner, postId in
+                let commentVC = CommentViewController(commentViewModel: CommentViewModel(postId: postId))
+                let commentNav = UINavigationController(rootViewController: commentVC)
+                owner.present(commentNav, animated: true)
+            }
+            .disposed(by: disposeBag)
     }
 }
 

@@ -13,6 +13,7 @@ enum PostRouter {
     case fetchPost(params: FetchPostParams)
     case uploadImages(body: UploadImagesBody)
     case writePost(body: WritePostBody)
+    case deletePost(params: DeletePostParams)
 }
 
 extension PostRouter: TargetType {
@@ -27,12 +28,14 @@ extension PostRouter: TargetType {
             return .get
         case .uploadImages, .writePost:
             return .post
+        case .deletePost:
+            return .delete
         }
     }
     
     var path: String {
         switch self {
-        case .fetchPosts, .fetchPost, .writePost:
+        case .fetchPosts, .fetchPost, .writePost, .deletePost:
             return "/posts"
         case .uploadImages:
             return "/posts/files"
@@ -41,7 +44,7 @@ extension PostRouter: TargetType {
     
     var header: [String : String] {
         switch self {
-        case .fetchPosts, .fetchPost:
+        case .fetchPosts, .fetchPost, .deletePost:
             return [
                 HTTPHeader.authorization.rawValue: UserDefaults.standard.accessToken,
                 HTTPHeader.sesacKey.rawValue: APIKeys.sesacKey
@@ -69,6 +72,8 @@ extension PostRouter: TargetType {
             return "/\(params.postId)"
         case .uploadImages:
             return nil
+        case .deletePost(let params):
+            return "/\(params.postId)"
         }
     }
     
@@ -80,14 +85,14 @@ extension PostRouter: TargetType {
                 .init(name: "limit", value: query.limit),
                 .init(name: "product_id", value: query.product_id)
             ]
-        case .fetchPost, .uploadImages, .writePost:
+        case .fetchPost, .uploadImages, .writePost, .deletePost:
             return nil
         }
     }
     
     var body: Data? {
         switch self {
-        case .fetchPosts, .fetchPost, .uploadImages:
+        case .fetchPosts, .fetchPost, .uploadImages, .deletePost:
             return nil
         case .writePost(let body):
             let encoder = JSONEncoder()

@@ -10,6 +10,8 @@ import RxSwift
 import RxCocoa
 
 final class HomeViewModel: ViewModelType {
+    let otherOptionsButtonTap = PublishRelay<String>()
+    let commentButtonTap = PublishRelay<String>()
 
     var disposeBag = DisposeBag()
     
@@ -17,11 +19,14 @@ final class HomeViewModel: ViewModelType {
         let viewDidLoadTrigger: Observable<Void>
         let rightBarButtonItemTapped: ControlEvent<Void>
         let addButtonTap: ControlEvent<Void>
+        let deletePostTap: PublishSubject<String>
     }
     
     struct Output {
         let postList: Driver<[Post]>
         let addButtonTapTrigger: Driver<Void>
+        let otherOptionsButtonTapTrigger: Driver<String>
+        let postId: Driver<String>
     }
     
     func transform(input: Input) -> Output {
@@ -29,7 +34,7 @@ final class HomeViewModel: ViewModelType {
         
         input.viewDidLoadTrigger
             .flatMap { _ in
-                PostManager.fetchPostList(query: .init(limit: "50"))
+                PostManager.fetchPostList(query: .init(limit: "50", product_id: APIKeys.productId))
             }
             .subscribe(with: self) { owner, postListModel in
                 postList.accept(postListModel.data)
@@ -42,9 +47,21 @@ final class HomeViewModel: ViewModelType {
             }
             .disposed(by: disposeBag)
         
+        input.deletePostTap
+            .flatMap { postId in
+                PostManager.deletePost(params: DeletePostParams(postId: postId))
+            }
+            .subscribe(with: self) { owner, deletedPostId in
+                print("삭제가 완료되었습니다.")
+                print("deletedPostId", deletedPostId)
+            }
+            .disposed(by: disposeBag)
+        
         return Output(
             postList: postList.asDriver(),
-            addButtonTapTrigger: input.addButtonTap.asDriver()
+            addButtonTapTrigger: input.addButtonTap.asDriver(),
+            otherOptionsButtonTapTrigger: otherOptionsButtonTap.asDriver(onErrorJustReturn: ""),
+            postId: commentButtonTap.asDriver(onErrorJustReturn: "")
         )
     }
 }

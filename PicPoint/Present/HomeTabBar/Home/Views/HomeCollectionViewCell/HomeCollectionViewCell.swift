@@ -36,6 +36,8 @@ final class HomeCollectionViewCell: BaseCollectionViewCell {
     
     let bottomView = HomeCollectionViewCellBottomView()
         
+    weak var homeViewModel: HomeViewModel?
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         
@@ -136,8 +138,19 @@ extension HomeCollectionViewCell {
     }
     
     func bind(_ post: Post) {
-        
+        guard let homeViewModel else { return }
             
+        topView.rightButton.rx.tap
+            .bind { trigger in
+                homeViewModel.otherOptionsButtonTap.accept(post.postId)
+            }
+            .disposed(by: disposeBag)
+        
+        iconView.commentStackView.button.rx.tap
+            .bind { _ in
+                homeViewModel.commentButtonTap.accept(post.postId)
+            }
+            .disposed(by: disposeBag)
     }
 }
 

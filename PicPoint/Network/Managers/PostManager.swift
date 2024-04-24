@@ -119,4 +119,28 @@ struct PostManager {
             return Disposables.create()
         }
     }
+    
+    static func deletePost(params: DeletePostParams) -> Single<String> {
+        return Single<String>.create { singleObserver in
+            do {
+                let urlRequest = try PostRouter.deletePost(params: params).asURLRequest()
+                
+                AF.request(urlRequest)
+                    .validate(statusCode: 200...500)
+                    .response { response in
+                        switch response.result {
+                        case .success:
+                            singleObserver(.success(params.postId))
+                        case .failure(let AFError):
+                            print(response.response?.statusCode)
+                            print(AFError)
+                            singleObserver(.failure(AFError))
+                        }
+                    }
+            } catch {
+                singleObserver(.failure(error))
+            }
+            return Disposables.create()
+        }
+    }
 }

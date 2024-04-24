@@ -21,7 +21,15 @@ final class SelectLocationViewController: BaseViewController {
         return label
     }()
     
-    var viewModel: SelectLocationViewModel?
+    private var viewModel: SelectLocationViewModel?
+    
+    private lazy var tap: UILongPressGestureRecognizer = {
+        let tap = UILongPressGestureRecognizer(target: self, action: nil)
+        tap.minimumPressDuration = 0.3
+        mapView.addGestureRecognizer(tap)
+        
+        return tap
+    }()
     
     init(
         selectLocationViewModel: SelectLocationViewModel?
@@ -42,6 +50,12 @@ final class SelectLocationViewController: BaseViewController {
         configureConstraints()
         configureUI()
         bind()
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        mapView.removeGestureRecognizer(tap)
     }
 }
 
@@ -70,11 +84,8 @@ extension SelectLocationViewController: UIViewControllerConfiguration {
     }
     
     func bind() {
-    
-        let longTap = addLongPressGesture()
-        
         let input = SelectLocationViewModel.Input(
-            longTap: longTap.rx.event
+            longTap: tap.rx.event
         )
         
         guard let viewModel else { return }
@@ -83,7 +94,7 @@ extension SelectLocationViewController: UIViewControllerConfiguration {
         output.gestureState
             .drive(with: self) { owner, gestureState in
                 if gestureState == .began {
-                    owner.searchLocation(owner.getMapPoint(longTap))
+                    owner.searchLocation(owner.getMapPoint(owner.tap))
                 }
             }
             .disposed(by: disposeBag)
@@ -92,13 +103,6 @@ extension SelectLocationViewController: UIViewControllerConfiguration {
 
 // MARK: - Map-Related Custom Methods
 extension SelectLocationViewController {
-    private func addLongPressGesture() -> UILongPressGestureRecognizer {
-        let tap = UILongPressGestureRecognizer(target: self, action: nil)
-        tap.minimumPressDuration = 0.3
-        mapView.addGestureRecognizer(tap)
-        
-        return tap
-    }
     
     private func getMapPoint(_ longTap: UILongPressGestureRecognizer) -> CLLocationCoordinate2D {
         let location: CGPoint = longTap.location(in: mapView)
