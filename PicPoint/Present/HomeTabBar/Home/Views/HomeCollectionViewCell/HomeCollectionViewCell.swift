@@ -50,6 +50,8 @@ final class HomeCollectionViewCell: BaseCollectionViewCell {
     override func prepareForReuse() {
         super.prepareForReuse()
         
+        topView.profileImageView.image = UIImage(systemName: "person.circle")
+        photoImageView.image = UIImage(systemName: "photo")
         disposeBag = DisposeBag()
     }
     

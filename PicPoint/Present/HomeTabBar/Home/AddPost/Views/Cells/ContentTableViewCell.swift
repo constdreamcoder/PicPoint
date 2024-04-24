@@ -33,6 +33,7 @@ final class ContentTableViewCell: BaseTableViewCell {
     
     private let contentTextViewPlaceHolder: String = """
                                                      나만의 사진 찍는 꿀팁에 대해서 공유해주세요!!
+                                                     해시태그는 본문에 작성하시면 자동으로 추가됩니다.
                                                      """
 
     private let charactersLimit = 800

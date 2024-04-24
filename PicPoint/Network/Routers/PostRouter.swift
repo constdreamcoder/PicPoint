@@ -12,6 +12,7 @@ enum PostRouter {
     case fetchPosts(query: FetchPostsQuery)
     case fetchPost(params: FetchPostParams)
     case uploadImages(body: UploadImagesBody)
+    case writePost(body: WritePostBody)
 }
 
 extension PostRouter: TargetType {
@@ -24,14 +25,14 @@ extension PostRouter: TargetType {
         switch self {
         case .fetchPosts, .fetchPost:
             return .get
-        case .uploadImages:
+        case .uploadImages, .writePost:
             return .post
         }
     }
     
     var path: String {
         switch self {
-        case .fetchPosts, .fetchPost:
+        case .fetchPosts, .fetchPost, .writePost:
             return "/posts"
         case .uploadImages:
             return "/posts/files"
@@ -51,12 +52,18 @@ extension PostRouter: TargetType {
                 HTTPHeader.contentType.rawValue: HTTPHeader.formData.rawValue,
                 HTTPHeader.authorization.rawValue: UserDefaults.standard.accessToken,
             ]
+        case .writePost:
+            return [
+                HTTPHeader.sesacKey.rawValue: APIKeys.sesacKey,
+                HTTPHeader.contentType.rawValue: HTTPHeader.json.rawValue,
+                HTTPHeader.authorization.rawValue: UserDefaults.standard.accessToken,
+            ]
         }
     }
     
     var parameters: String? {
         switch self {
-        case .fetchPosts:
+        case .fetchPosts, .writePost:
             return nil
         case .fetchPost(let params):
             return "/\(params.postId)"
@@ -73,7 +80,7 @@ extension PostRouter: TargetType {
                 .init(name: "limit", value: query.limit),
                 .init(name: "product_id", value: query.product_id)
             ]
-        case .fetchPost, .uploadImages:
+        case .fetchPost, .uploadImages, .writePost:
             return nil
         }
     }
@@ -82,6 +89,9 @@ extension PostRouter: TargetType {
         switch self {
         case .fetchPosts, .fetchPost, .uploadImages:
             return nil
+        case .writePost(let body):
+            let encoder = JSONEncoder()
+            return try? encoder.encode(body)
         }
     }
 }

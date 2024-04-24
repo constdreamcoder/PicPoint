@@ -13,6 +13,16 @@ import CoreLocation
 
 final class AddPostViewModel: NSObject, ViewModelType {
     
+    typealias PrepareForRegisteringPostType = (
+        selectedImages: [PHAsset],
+        picturePlacePoint: CLLocationCoordinate2D?,
+        picturePlaceAddressInfos: CLPlacemark?,
+        recommendedVisitTime: Date,
+        visitDate: Date,
+        titleText: String,
+        contentText: String
+    )
+    
     private let sections: [AddPostCollectionViewSectionDataModel] = [
         .init(items: [.selectImageCell, .selectLocationCell, .recommendedVisitTimeCell, .visitDateCell, .titleCell, .contentCell])
     ]
@@ -60,50 +70,17 @@ final class AddPostViewModel: NSObject, ViewModelType {
             titleTextRalay,
             contentTextRalay
         ).subscribe { selectedImages, picturePlacePoint, picturePlaceAddress, titleText, contentText in
-                if selectedImages.count > 1
-                    && picturePlacePoint != nil
-                    && picturePlaceAddress != nil
-                    && !titleText.isEmpty
-                    && !contentText.isEmpty {
-                    registerButtonValid.accept(true)
-                } else {
-                    registerButtonValid.accept(false)
-                }
-            }.disposed(by: disposeBag)
+            if selectedImages.count > 1
+                && picturePlacePoint != nil
+                && picturePlaceAddress != nil
+                && !titleText.isEmpty
+                && !contentText.isEmpty {
+                registerButtonValid.accept(true)
+            } else {
+                registerButtonValid.accept(false)
+            }
+        }.disposed(by: disposeBag)
         
-        
-        input.rightBarButtonItemTap
-            .debounce(.seconds(1), scheduler: MainScheduler.instance)
-            .withLatestFrom(selectedImagesRelay)
-            .withUnretained(self)
-            .map { owner, assets in
-                assets.enumerated().compactMap { iteration in
-                    if iteration.offset != 0 {
-                        return owner.getUIImageFromPHAsset(iteration.element).pngData()
-                    }
-                    return nil
-                }
-            }
-            .map { imageDatas -> UploadImagesBody in
-                let imageFiles = imageDatas.map { imageData in
-                    ImageFile(
-                        imageData: imageData,
-                        name: "testimage\(Int.random(in: 1...1000))",
-                        mimeType: .png
-                    )
-                }
-                return UploadImagesBody(files: imageFiles)
-            }
-            .flatMap { uploadImagesBody in
-                PostManager.uploadImages(body: uploadImagesBody)
-            }
-            .subscribe(with: self) { owner, uploadedImageFileList in
-                print("이미지 업로드됨")
-                print(uploadedImageFileList.files)
-                rightBarButtonItemTapTrigger.accept(())
-            }
-            .disposed(by: disposeBag)
-            
         let showTappedAsset = imageCellTapSubject
             .withLatestFrom(selectedImagesRelay) { $1[$0.item] }
         
@@ -130,6 +107,85 @@ final class AddPostViewModel: NSObject, ViewModelType {
                     owner.errorMessageRelay.accept("추가할 수 있는 이미지를 초과하였습니다. 최대 5개의 이미지까지만 추가 가능합니다.")
                 }
             }
+        
+        let prepareRegisterPost = Observable.combineLatest(
+            selectedImagesRelay,
+            picturePlacePointRelay,
+            picturePlaceAddressInfosRelay,
+            recommendedVisitTimeRelay,
+            visitDateRelay,
+            titleTextRalay,
+            contentTextRalay
+        ).map { value -> PrepareForRegisteringPostType? in
+            if value.0.count > 1
+                && value.1 != nil
+                && value.2 != nil
+                && !value.5.isEmpty
+                && !value.6.isEmpty {
+                return value
+            } else {
+                return nil
+            }
+        }
+        
+        input.rightBarButtonItemTap
+            .debounce(.seconds(1), scheduler: MainScheduler.instance)
+            .withLatestFrom(selectedImagesRelay)
+            .withUnretained(self)
+            .map { owner, assets in
+                assets.enumerated().compactMap { iteration in
+                    if iteration.offset != 0 {
+                        return owner.getUIImageFromPHAsset(iteration.element).pngData()
+                    }
+                    return nil
+                }
+            }
+            .map { imageDatas -> UploadImagesBody in
+                let imageFiles = imageDatas.map { imageData in
+                    ImageFile(
+                        imageData: imageData,
+                        name: "testimage\(Int.random(in: 1...1000))",
+                        mimeType: .png
+                    )
+                }
+                return UploadImagesBody(files: imageFiles)
+            }
+            .flatMap { uploadImagesBody in
+                PostManager.uploadImages(body: uploadImagesBody)
+            }
+            .map { uploadedImageFileList -> [String] in
+                print("이미지 업로드됨")
+                print(uploadedImageFileList.files)
+                return uploadedImageFileList.files
+            }
+            .withLatestFrom(prepareRegisterPost) { ($0, $1) }
+            .map { uploadedImageFiles, elementsForRegisteringPost -> WritePostBody in
+                guard let elementsForRegisteringPost else { return WritePostBody() }
+                guard
+                    let placePoint = elementsForRegisteringPost.picturePlacePoint
+                else { return WritePostBody() }
+                
+                let visitDate = elementsForRegisteringPost.visitDate
+                let recommendedVisitTime = elementsForRegisteringPost.recommendedVisitTime
+                
+                let writePostBody = WritePostBody(
+                    title: elementsForRegisteringPost.titleText,
+                    content: elementsForRegisteringPost.contentText,
+                    content1: "\(placePoint.latitude) \(placePoint.longitude)",
+                    content4: "\(visitDate)/\(recommendedVisitTime)",
+                    product_id: APIKeys.productId,
+                    files: uploadedImageFiles
+                )
+                return writePostBody
+            }
+            .flatMap { PostManager.writePost(body: $0) }
+            .subscribe { post in
+                print("게시글 업로드됨")
+                print(post)
+                rightBarButtonItemTapTrigger.accept(())
+            }
+            .disposed(by: disposeBag)
+        
         
         return Output(
             sections: Observable.just(sections).asDriver(onErrorJustReturn: []),

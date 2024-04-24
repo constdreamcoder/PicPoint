@@ -107,6 +107,8 @@
 		00E414EA2BD915AF00C76BE4 /* UploadImagesBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E414E92BD915AF00C76BE4 /* UploadImagesBody.swift */; };
 		00E414EC2BD9186400C76BE4 /* ImageFileListModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E414EB2BD9186400C76BE4 /* ImageFileListModel.swift */; };
 		00E414EE2BD91CAD00C76BE4 /* NSObject+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E414ED2BD91CAD00C76BE4 /* NSObject+Extensions.swift */; };
+		00E414F02BD93C5500C76BE4 /* WritePostBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E414EF2BD93C5500C76BE4 /* WritePostBody.swift */; };
+		00E414F22BD94FFC00C76BE4 /* CLPlacemark+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E414F12BD94FFC00C76BE4 /* CLPlacemark+Extensions.swift */; };
 		00F65D372BCA16290027A897 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 00F65D362BCA16290027A897 /* Alamofire */; };
 		00F65D3A2BCA167F0027A897 /* RxCocoa in Frameworks */ = {isa = PBXBuildFile; productRef = 00F65D392BCA167F0027A897 /* RxCocoa */; };
 		00F65D3C2BCA167F0027A897 /* RxSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 00F65D3B2BCA167F0027A897 /* RxSwift */; };
@@ -222,6 +224,8 @@
 		00E414E92BD915AF00C76BE4 /* UploadImagesBody.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadImagesBody.swift; sourceTree = "<group>"; };
 		00E414EB2BD9186400C76BE4 /* ImageFileListModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageFileListModel.swift; sourceTree = "<group>"; };
 		00E414ED2BD91CAD00C76BE4 /* NSObject+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSObject+Extensions.swift"; sourceTree = "<group>"; };
+		00E414EF2BD93C5500C76BE4 /* WritePostBody.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WritePostBody.swift; sourceTree = "<group>"; };
+		00E414F12BD94FFC00C76BE4 /* CLPlacemark+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CLPlacemark+Extensions.swift"; sourceTree = "<group>"; };
 		00FE92AB2BCE53EA00554D0F /* PostManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostManager.swift; sourceTree = "<group>"; };
 		00FE92AE2BCE54F000554D0F /* PostRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostRouter.swift; sourceTree = "<group>"; };
 		00FE92B22BCE56F600554D0F /* fetchPostsQuery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = fetchPostsQuery.swift; sourceTree = "<group>"; };
@@ -894,6 +898,7 @@
 			isa = PBXGroup;
 			children = (
 				00E414E92BD915AF00C76BE4 /* UploadImagesBody.swift */,
+				00E414EF2BD93C5500C76BE4 /* WritePostBody.swift */,
 			);
 			path = Post;
 			sourceTree = "<group>";
@@ -935,6 +940,7 @@
 				001C92022BD6A2820028E67B /* UIViewController+Extensions.swift */,
 				00242C542BD7805600B4C96E /* Date+Extensions.swift */,
 				00E414ED2BD91CAD00C76BE4 /* NSObject+Extensions.swift */,
+				00E414F12BD94FFC00C76BE4 /* CLPlacemark+Extensions.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -1153,6 +1159,7 @@
 				00C71D612BCC087B00D933FD /* SignUpViewController.swift in Sources */,
 				00B7C3FA2BCA5F60009AC333 /* UIViewControllerConfiguration.swift in Sources */,
 				0034FAF12BCC9DBC00D932F3 /* ProfileViewModel.swift in Sources */,
+				00E414F22BD94FFC00C76BE4 /* CLPlacemark+Extensions.swift in Sources */,
 				0003E93B2BD584AF00695D40 /* SelectImageCollectionViewCell.swift in Sources */,
 				00E414EC2BD9186400C76BE4 /* ImageFileListModel.swift in Sources */,
 				00B7C3F72BCA5F38009AC333 /* SignInViewController.swift in Sources */,
@@ -1166,6 +1173,7 @@
 				0035402B2BD0212800A71415 /* String+Extensions.swift in Sources */,
 				00B7C3FE2BCA6142009AC333 /* BaseViewController.swift in Sources */,
 				000AD2652BD27E0B00FC7768 /* DetailRelatedContentCollectionHeaderView.swift in Sources */,
+				00E414F02BD93C5500C76BE4 /* WritePostBody.swift in Sources */,
 				00AFF6022BCD152E006D319A /* CellIdentifiable.swift in Sources */,
 				000AD2672BD2849900FC7768 /* SeparatorView.swift in Sources */,
 				00B67D842BD810570097ACDE /* RecommendedVisitTimeViewModel.swift in Sources */,
