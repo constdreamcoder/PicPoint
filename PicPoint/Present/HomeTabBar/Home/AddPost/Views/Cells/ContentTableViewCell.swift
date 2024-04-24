@@ -31,18 +31,19 @@ final class ContentTableViewCell: BaseTableViewCell {
         return label
     }()
     
-    private let contentTextViewPlaceHolder: String = "내용을 입력해주세요"
+    private let contentTextViewPlaceHolder: String = """
+                                                     나만의 사진 찍는 꿀팁에 대해서 공유해주세요!!
+                                                     """
 
     private let charactersLimit = 800
     
-    weak var tableViewDelegate: UITableView?
-    
+    weak var addPostViewModel: AddPostViewModel?
+
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
         configureConstraints()
         configureUI()
-        bind()
     }
     
     required init?(coder: NSCoder) {
@@ -86,7 +87,7 @@ extension ContentTableViewCell {
         
     }
     
-    func bind() {
+    func bind(_ tableView: UITableView) {
         let textView = contentTextView.textView
 
         contentTextView.textView.rx.didBeginEditing
@@ -113,6 +114,34 @@ extension ContentTableViewCell {
         contentTextView.textView.rx
             .setDelegate(self)
             .disposed(by: disposeBag)
+        
+        contentTextView.textView.rx.text.orEmpty
+            .bind(with: self) { owner, text in
+                guard owner.contentTextViewPlaceHolder != text else { return }
+                guard let addPostViewModel = owner.addPostViewModel else { return }
+                addPostViewModel.contentTextRalay.accept(text)
+            }
+            .disposed(by: disposeBag)
+        
+        contentTextView.textView.rx.didChange
+            .bind(with: self) { owner, _ in
+                let size = owner.contentTextView.textView.bounds.size
+                let newSize = tableView.sizeThatFits(
+                    CGSize(
+                        width: size.width,
+                        height: CGFloat.greatestFiniteMagnitude
+                    )
+                )
+                
+                if size.height != newSize.height {
+                    UIView.setAnimationsEnabled(false)
+                    tableView.beginUpdates()
+                    tableView.endUpdates()
+                    UIView.setAnimationsEnabled(true)
+                }
+            }
+            .disposed(by: disposeBag)
+        
     }
 }
 

@@ -37,10 +37,10 @@ final class LoginViewModel: ViewModelType {
         }
         
         loginObservable
-            .bind(with: self) { owner, loginQuery in
-                if loginQuery.email.contains("@") 
-                    && loginQuery.email.contains(".com")
-                    && loginQuery.password.count > 3 {
+            .bind(with: self) { owner, loginBody in
+                if loginBody.email.contains("@") 
+                    && loginBody.email.contains(".com")
+                    && loginBody.password.count > 3 {
                     loginValid.accept(true)
                 } else {
                     loginValid.accept(false)

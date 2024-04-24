@@ -18,13 +18,17 @@ final class AddPostViewModel: ViewModelType {
     ]
     
     let imageCellButtonTapSubject = PublishSubject<Int>()
-    let selectedImagesRelay = BehaviorRelay<[PHAsset]>(value: [PHAsset()])
     let imageCellTapSubject = PublishSubject<IndexPath>()
     let fetchPhotosTriggerSubject = PublishSubject<Void>()
-    let visitDateRelay = BehaviorRelay<Date>(value: Date())
-    let recommendedVisitTimeRelay = BehaviorRelay<Date>(value: Date())
+    
+    let selectedImagesRelay = BehaviorRelay<[PHAsset]>(value: [PHAsset()])
     let picturePlacePointRelay = BehaviorRelay<CLLocationCoordinate2D?>(value: nil)
     let picturePlaceAddressInfosRelay = BehaviorRelay<CLPlacemark?>(value: nil)
+    let recommendedVisitTimeRelay = BehaviorRelay<Date>(value: Date())
+    let visitDateRelay = BehaviorRelay<Date>(value: Date())
+    let titleTextRalay = BehaviorRelay<String>(value: "")
+    let contentTextRalay = BehaviorRelay<String>(value: "")
+    
     private let errorMessageRelay = BehaviorRelay<String>(value: "")
     
     var disposeBag = DisposeBag()
@@ -42,9 +46,31 @@ final class AddPostViewModel: ViewModelType {
         let fetchPhotos: Driver<Void>
         let itemTapTrigger: Driver<(AddPostCollectionViewCellType ,Date)>
         let showTappedAsset: Driver<PHAsset>
+        let registerButtonValid: Driver<Bool>
     }
     
     func transform(input: Input) -> Output {
+        let registerButtonValid = BehaviorRelay<Bool>(value: false)
+        
+        Observable.combineLatest(
+            selectedImagesRelay,
+            picturePlacePointRelay,
+            picturePlaceAddressInfosRelay,
+            titleTextRalay,
+            contentTextRalay
+        ).subscribe { selectedImages, picturePlacePoint, picturePlaceAddress, titleText, contentText in
+                if selectedImages.count > 1
+                    && picturePlacePoint != nil
+                    && picturePlaceAddress != nil
+                    && !titleText.isEmpty
+                    && !contentText.isEmpty {
+                    registerButtonValid.accept(true)
+                } else {
+                    registerButtonValid.accept(false)
+                }
+            }.disposed(by: disposeBag)
+        
+        
         let rightBarButtonItemTapTrigger = input.rightBarButtonItemTap
             .debounce(.seconds(1), scheduler: MainScheduler.instance)
             .map {
@@ -53,7 +79,7 @@ final class AddPostViewModel: ViewModelType {
         
         let showTappedAsset = imageCellTapSubject
             .withLatestFrom(selectedImagesRelay) { $1[$0.item] }
-            
+        
         
         imageCellButtonTapSubject
             .withLatestFrom(selectedImagesRelay) {
@@ -77,15 +103,16 @@ final class AddPostViewModel: ViewModelType {
                     owner.errorMessageRelay.accept("추가할 수 있는 이미지를 초과하였습니다. 최대 5개의 이미지까지만 추가 가능합니다.")
                 }
             }
-            
+        
         return Output(
             sections: Observable.just(sections).asDriver(onErrorJustReturn: []),
             rightBarButtonItemTapTrigger: rightBarButtonItemTapTrigger.asDriver(onErrorJustReturn: ()),
-            selectedImages: selectedImagesRelay.asDriver(), 
-            errorMessage: errorMessageRelay.asDriver(), 
+            selectedImages: selectedImagesRelay.asDriver(),
+            errorMessage: errorMessageRelay.asDriver(),
             fetchPhotos: fetchPhotosTrigger.asDriver(onErrorJustReturn: ()),
-            itemTapTrigger: itemTap.asDriver(onErrorJustReturn: (.none, Date())), 
-            showTappedAsset: showTappedAsset.asDriver(onErrorJustReturn: PHAsset())
+            itemTapTrigger: itemTap.asDriver(onErrorJustReturn: (.none, Date())),
+            showTappedAsset: showTappedAsset.asDriver(onErrorJustReturn: PHAsset()),
+            registerButtonValid: registerButtonValid.asDriver(onErrorJustReturn: false)
         )
     }
 }

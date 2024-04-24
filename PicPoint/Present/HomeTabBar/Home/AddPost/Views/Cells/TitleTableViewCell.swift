@@ -16,7 +16,7 @@ final class TitleTableViewCell: BaseTableViewCell {
         let view = InnerTextViewContainerView()
         view.textView.text = titleTextViewPlaceHolder
         view.textView.textColor = .lightGray
-        view.textView.font = .systemFont(ofSize: 18.0, weight: .heavy)
+        view.textView.font = .systemFont(ofSize: 18.0, weight: .semibold)
         return view
     }()
     
@@ -32,15 +32,16 @@ final class TitleTableViewCell: BaseTableViewCell {
     }()
     
     private let titleTextViewPlaceHolder: String = "제목을 입력해주세요"
-    
+
     private let charactersLimit = 35
+
+    weak var addPostViewModel: AddPostViewModel?
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
         configureConstraints()
         configureUI()
-        bind()
     }
 
     required init?(coder: NSCoder) {
@@ -85,7 +86,7 @@ extension TitleTableViewCell {
         
     }
     
-    func bind() {
+    func bind(_ tableView: UITableView) {
         let textView = titleTextView.textView
 
         titleTextView.textView.rx.didBeginEditing
@@ -111,6 +112,34 @@ extension TitleTableViewCell {
         titleTextView.textView.rx
             .setDelegate(self)
             .disposed(by: disposeBag)
+        
+        titleTextView.textView.rx.text.orEmpty
+            .bind(with: self) { owner, text in
+                guard owner.titleTextViewPlaceHolder != text else { return }
+                guard let addPostViewModel = owner.addPostViewModel else { return }
+                addPostViewModel.titleTextRalay.accept(text)
+            }
+            .disposed(by: disposeBag)
+        
+        titleTextView.textView.rx.didChange
+            .bind(with: self) { owner, _ in
+                let size = owner.titleTextView.textView.bounds.size
+                let newSize = tableView.sizeThatFits(
+                    CGSize(
+                        width: size.width,
+                        height: CGFloat.greatestFiniteMagnitude
+                    )
+                )
+                
+                if size.height != newSize.height {
+                    UIView.setAnimationsEnabled(false)
+                    tableView.beginUpdates()
+                    tableView.endUpdates()
+                    UIView.setAnimationsEnabled(true)
+                }
+            }
+            .disposed(by: disposeBag)
+        
     }
 }
 

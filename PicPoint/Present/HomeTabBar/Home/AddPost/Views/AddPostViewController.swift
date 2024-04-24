@@ -33,68 +33,44 @@ final class AddPostViewController: BaseViewController {
         
         if item == .selectImageCell {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: SelectImageTableViewCell.identifier, for: indexPath) as? SelectImageTableViewCell else { return UITableViewCell() }
+            
             cell.addPostViewModel = self.viewModel
             cell.bind()
+            
             return cell
         } else if item == .selectLocationCell {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: SelectLocationTableViewCell.identifier, for: indexPath) as? SelectLocationTableViewCell else { return UITableViewCell() }
+            
             cell.addPostViewModel = viewModel
             cell.bind()
+            
             return cell
         } else if item == .recommendedVisitTimeCell {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: RecommendedVisitTimeTableViewCell.identifier, for: indexPath) as? RecommendedVisitTimeTableViewCell else { return UITableViewCell() }
+            
             cell.addPostViewModel = viewModel
             cell.bind()
+            
             return cell
         } else if item == .visitDateCell {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: VisitDateTableViewCell.identifier, for: indexPath) as? VisitDateTableViewCell else { return UITableViewCell() }
+            
             cell.addPostViewModel = self.viewModel
             cell.bind()
+            
             return cell
         } else if item == .titleCell {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: TitleTableViewCell.identifier, for: indexPath) as? TitleTableViewCell else { return UITableViewCell() }
             
-            cell.titleTextView.textView.rx.didChange
-                .bind(with: self) { owner, _ in
-                    let size = cell.titleTextView.textView.bounds.size
-                    let newSize = tableView.sizeThatFits(
-                        CGSize(
-                            width: size.width,
-                            height: CGFloat.greatestFiniteMagnitude
-                        )
-                    )
-                    
-                    if size.height != newSize.height {
-                        UIView.setAnimationsEnabled(false)
-                        tableView.beginUpdates()
-                        tableView.endUpdates()
-                        UIView.setAnimationsEnabled(true)
-                    }
-                }
-                .disposed(by: cell.disposeBag)
+            cell.addPostViewModel = viewModel
+            cell.bind(tableView)
             
             return cell
         } else if item == .contentCell {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: ContentTableViewCell.identifier, for: indexPath) as? ContentTableViewCell else { return UITableViewCell() }
             
-            cell.contentTextView.textView.rx.didChange
-                .bind(with: self) { owner, _ in
-                    let size = cell.contentTextView.textView.bounds.size
-                    let newSize = tableView.sizeThatFits(
-                        CGSize(
-                            width: size.width,
-                            height: CGFloat.greatestFiniteMagnitude
-                        )
-                    )
-                    
-                    if size.height != newSize.height {
-                        UIView.setAnimationsEnabled(false)
-                        tableView.beginUpdates()
-                        tableView.endUpdates()
-                        UIView.setAnimationsEnabled(true)
-                    }
-                }
-                .disposed(by: cell.disposeBag)
+            cell.addPostViewModel = viewModel
+            cell.bind(tableView)
             
             return cell
         }
@@ -111,7 +87,6 @@ final class AddPostViewController: BaseViewController {
         configureUI()
         bind()
     }
-    
 }
 
 extension AddPostViewController {
@@ -213,6 +188,10 @@ extension AddPostViewController: UIViewControllerConfiguration {
                     owner.present(previewVC, animated: true)
                 }
             }
+            .disposed(by: disposeBag)
+        
+        output.registerButtonValid
+            .drive(rightBarButtonItem.rx.isEnabled)
             .disposed(by: disposeBag)
     }
 }
