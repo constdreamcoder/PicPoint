@@ -162,17 +162,18 @@ final class AddPostViewModel: NSObject, ViewModelType {
             .map { uploadedImageFiles, elementsForRegisteringPost -> WritePostBody in
                 guard let elementsForRegisteringPost else { return WritePostBody() }
                 guard
-                    let placePoint = elementsForRegisteringPost.picturePlacePoint
+                    let placePoint = elementsForRegisteringPost.picturePlacePoint,
+                    let addressInfos = elementsForRegisteringPost.picturePlaceAddressInfos
                 else { return WritePostBody() }
                 
                 let visitDate = elementsForRegisteringPost.visitDate
                 let recommendedVisitTime = elementsForRegisteringPost.recommendedVisitTime
-                
+               
                 let writePostBody = WritePostBody(
                     title: elementsForRegisteringPost.titleText,
                     content: elementsForRegisteringPost.contentText,
-                    content1: "\(placePoint.latitude) \(placePoint.longitude)",
-                    content4: "\(visitDate)/\(recommendedVisitTime)",
+                    content1: "\(placePoint.latitude)/\(placePoint.longitude)/\(addressInfos.fullAddress.trimmingCharacters(in: .whitespacesAndNewlines))/\(addressInfos.shortAddress.trimmingCharacters(in: .whitespacesAndNewlines))",
+                    content2: "\(visitDate)/\(recommendedVisitTime)",
                     product_id: APIKeys.productId,
                     files: uploadedImageFiles
                 )

@@ -28,6 +28,7 @@ extension SectionModelWrapper {
 struct FirstSectionCellData {
     var header: String
     var title: String
+    var address: String
     var files: [String]
 }
 
@@ -48,7 +49,7 @@ extension DetailCollectionViewFirstSectionDataModel: SectionModelType {
 struct SecondSectionCellData {
     var header: String
     var content: String
-    var createdAt: String
+    var visitDate: String
     var creator: Creator
 }
 
@@ -67,19 +68,41 @@ extension DetailCollectionViewSecondSectionDataModel: SectionModelType {
 }
 
 // MARK: - DetailCollectionViewThirdSectionDataModel
+struct ThirdSectionCellData {
+    var header: String
+    var latitude: Double
+    var longitude: Double
+    var longAddress: String
+    var hashTags: [String]
+}
+
 struct DetailCollectionViewThirdSectionDataModel {
     var header: String
     var items: [Item]
 }
 
 extension DetailCollectionViewThirdSectionDataModel: SectionModelType {
+
+    typealias Item = ThirdSectionCellData
     
-    typealias Item = String
-    
-    init(original: DetailCollectionViewThirdSectionDataModel, items: [String]) {
+    init(original: DetailCollectionViewThirdSectionDataModel, items: [ThirdSectionCellData]) {
         self = original
         self.items = items
     }
 }
 
+// MARK: - DetailCollectionViewForthSectionDataModel
+struct DetailCollectionViewForthSectionDataModel {
+    var header: String
+    var items: [Item]
+}
 
+extension DetailCollectionViewForthSectionDataModel: SectionModelType {
+    
+    typealias Item = String
+    
+    init(original: DetailCollectionViewForthSectionDataModel, items: [String]) {
+        self = original
+        self.items = items
+    }
+}

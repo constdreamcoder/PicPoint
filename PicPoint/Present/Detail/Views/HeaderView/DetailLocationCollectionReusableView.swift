@@ -1,25 +1,24 @@
 //
-//  DetailRelatedContentCollectionHeaderView.swift
+//  DetailLocationCollectionReusableView.swift
 //  PicPoint
 //
-//  Created by SUCHAN CHANG on 4/19/24.
+//  Created by SUCHAN CHANG on 4/25/24.
 //
 
 import UIKit
-import SnapKit
 
-final class DetailRelatedContentCollectionHeaderView: UICollectionReusableView {
+final class DetailLocationCollectionReusableView: UICollectionReusableView {
     
     let separatorView = SeparatorView()
     
     let headerLabel: UILabel = {
         let label = UILabel()
-        label.text = "연관장소"
+        label.text = "위치정보"
         label.textColor = .black
         label.font = .systemFont(ofSize: 20.0, weight: .bold)
         return  label
     }()
-        
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         
@@ -32,7 +31,7 @@ final class DetailRelatedContentCollectionHeaderView: UICollectionReusableView {
     }
 }
 
-extension DetailRelatedContentCollectionHeaderView: UIViewConfiguration {
+extension DetailLocationCollectionReusableView: UIViewConfiguration {
     func configureConstraints() {
         [
             separatorView,

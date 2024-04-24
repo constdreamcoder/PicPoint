@@ -8,10 +8,16 @@
 import Foundation
 
 extension String {
-    var convertToDateType: Date? {
+    var convertToISO8601DateType: Date? {
         let inputDateFormatter = ISO8601DateFormatter()
         inputDateFormatter.timeZone = .current
         inputDateFormatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
+        return inputDateFormatter.date(from: self) ?? Date()
+    }
+    
+    var convertToDateType: Date? {
+        let inputDateFormatter = DateFormatter()
+        inputDateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss Z"
         return inputDateFormatter.date(from: self) ?? Date()
     }
     
@@ -27,7 +33,7 @@ extension String {
     }
     
     var timeAgoToDisplay: String {
-        let date = self.convertToDateType
+        let date = self.convertToISO8601DateType
         
         guard let date = date else { return "" }
         
@@ -67,5 +73,10 @@ extension String {
         }
         
         return "\(quotient)\(unit) 전"
+    }
+    
+    static func convertToStringWithHashtags(_ array: [String]) -> String {
+        let result = array.map { "#\($0)" }.joined(separator: " ")
+        return result
     }
 }

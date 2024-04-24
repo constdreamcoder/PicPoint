@@ -108,12 +108,13 @@ extension HomeViewController: UIViewControllerConfiguration {
         let deletePostTap = PublishSubject<String>()
         
         guard let rightBarButtonItem = navigationItem.rightBarButtonItem else { return }
-       
+        
         let input = HomeViewModel.Input(
             viewDidLoadTrigger: Observable<Void>.just(()),
             rightBarButtonItemTapped: rightBarButtonItem.rx.tap, 
             addButtonTap: addPostButton.rx.tap, 
-            deletePostTap: deletePostTap
+            deletePostTap: deletePostTap,
+            postTap: collectionView.rx.modelSelected(Post.self)
         )
         
         let output = viewModel.transform(input: input)
@@ -129,16 +130,16 @@ extension HomeViewController: UIViewControllerConfiguration {
             }
             .disposed(by: disposeBag)
         
-        Observable.zip(
-            collectionView.rx.itemSelected,
-            collectionView.rx.modelSelected(Post.self)
-        )
-        .bind(with: self) { owner, value in
-            let detailVC = DetailViewController(detailViewModel: DetailViewModel(post: value.1))
-            owner.navigationController?.pushViewController(detailVC, animated: true)
-        }
-        .disposed(by: disposeBag)
-        
+        output.postTapTrigger
+            .drive(with: self) { owner, post in
+                if let post {
+                    let detailVM = DetailViewModel(post: post)
+                    let detailVC = DetailViewController(detailViewModel: detailVM)
+                    owner.navigationController?.pushViewController(detailVC, animated: true)
+                }
+            }
+            .disposed(by: disposeBag)
+      
         output.addButtonTapTrigger
             .drive(with: self) { owner, _ in
                 let addPostVC = AddPostViewController()

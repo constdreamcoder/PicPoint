@@ -48,7 +48,7 @@ final class DetailIntroductionCollectionViewCell: BaseCollectionViewCell {
             topView.profileImageView.kf.setImageWithAuthHeaders(with: url, placeholder: placeholderImage)
         }
         topView.userNicknameLabel.text = cellData.creator.nick
-        topView.subTitleLabel.text = cellData.createdAt.getDateString
+        topView.subTitleLabel.text = cellData.visitDate
         contentLabel.text = cellData.content
     }
 }

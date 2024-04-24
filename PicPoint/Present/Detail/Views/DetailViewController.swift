@@ -23,6 +23,13 @@ final class DetailViewController: BaseViewController {
         collectionView.register(DetailIntroductionCollectionViewCell.self, forCellWithReuseIdentifier: DetailIntroductionCollectionViewCell.identifier)
         
         collectionView.register(
+            DetailLocationCollectionReusableView.self,
+            forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
+            withReuseIdentifier: DetailLocationCollectionReusableView.identifier
+        )
+        collectionView.register(DetailLocationCollectionViewCell.self, forCellWithReuseIdentifier: DetailLocationCollectionViewCell.identifier)
+        
+        collectionView.register(
             DetailRelatedContentCollectionHeaderView.self,
             forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
             withReuseIdentifier: DetailRelatedContentCollectionHeaderView.identifier
@@ -45,7 +52,8 @@ final class DetailViewController: BaseViewController {
     
     private let iconView = HomeCollectionViewCellIconView()
     
-    private lazy var dataSource = RxCollectionViewSectionedReloadDataSource<SectionModelWrapper> { dataSource, collectionView, indexPath, item in
+    private lazy var dataSource = RxCollectionViewSectionedReloadDataSource<SectionModelWrapper> { [weak self] dataSource, collectionView, indexPath, item in
+        guard let self else { return UICollectionViewCell() }
         
         if indexPath.section == 0 {
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: DetailDisplayCollectionViewCell.identifier, for: indexPath) as? DetailDisplayCollectionViewCell else { return UICollectionViewCell() }
@@ -60,7 +68,16 @@ final class DetailViewController: BaseViewController {
                 cell.updateSecondSectionDatas(cellData)
             }
             return cell
+            
         } else if indexPath.section == 2 {
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: DetailLocationCollectionViewCell.identifier, for: indexPath) as? DetailLocationCollectionViewCell else { return UICollectionViewCell() }
+            if let cellData = item as? ThirdSectionCellData {
+                cell.updateThirdSectionDatas(cellData)
+                cell.detailViewModel = viewModel
+                cell.bind(cellData)
+            }
+            return cell
+        } else if indexPath.section == 3 {
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: DetailRelatedContentsCollectionViewCell.identifier, for: indexPath) as? DetailRelatedContentsCollectionViewCell else { return UICollectionViewCell() }
             
             return cell
@@ -69,12 +86,23 @@ final class DetailViewController: BaseViewController {
     } configureSupplementaryView: { dataSource, collectionView, kind, indexPath in
         switch kind {
         case UICollectionView.elementKindSectionHeader:
-            guard let header = collectionView.dequeueReusableSupplementaryView(
-                ofKind: kind,
-                withReuseIdentifier: DetailRelatedContentCollectionHeaderView.identifier,
-                for: indexPath) as? DetailRelatedContentCollectionHeaderView else { return UICollectionReusableView() }
-            
-            return header
+            if indexPath.section == 2 {
+                guard let header = collectionView.dequeueReusableSupplementaryView(
+                    ofKind: kind,
+                    withReuseIdentifier: DetailLocationCollectionReusableView.identifier,
+                    for: indexPath) as? DetailLocationCollectionReusableView else { return UICollectionReusableView() }
+                
+                return header
+            } else if indexPath.section == 3 {
+                guard let header = collectionView.dequeueReusableSupplementaryView(
+                    ofKind: kind,
+                    withReuseIdentifier: DetailRelatedContentCollectionHeaderView.identifier,
+                    for: indexPath) as? DetailRelatedContentCollectionHeaderView else { return UICollectionReusableView() }
+                
+                return header
+            } else {
+                return UICollectionReusableView()
+            }
         default:
             return UICollectionReusableView()
         }
@@ -167,6 +195,15 @@ extension DetailViewController: UIViewControllerConfiguration {
             }
             .disposed(by: disposeBag)
         
+        output.mapViewTapTrigger
+            .drive(with: self) { owner, coordinates in
+                print("coordinates",coordinates)
+                let mapPreviewVC = MapPreviewViewController()
+                mapPreviewVC.coordinates = coordinates
+                owner.navigationController?.pushViewController(mapPreviewVC, animated: true)
+            }
+            .disposed(by: disposeBag)
+        
     }
 }
 
@@ -203,6 +240,27 @@ extension DetailViewController: UICollectionViewConfiguration {
                 
                 return section
             } else if sectionNumber == 2 {
+                var config = UICollectionLayoutListConfiguration(appearance: .plain)
+                config.showsSeparators = false
+                
+                let section = NSCollectionLayoutSection.list(
+                    using: config,
+                    layoutEnvironment: layoutEnvironment
+                )
+                
+                let headerFooterSize = NSCollectionLayoutSize(
+                    widthDimension: .fractionalWidth(1.0),
+                    heightDimension: .absolute(56.0)
+                )
+                let header = NSCollectionLayoutBoundarySupplementaryItem(
+                    layoutSize: headerFooterSize,
+                    elementKind: UICollectionView.elementKindSectionHeader,
+                    alignment: .top
+                )
+                section.boundarySupplementaryItems = [header]
+                
+                return section
+            } else if sectionNumber == 3 {
                 let item = NSCollectionLayoutItem(
                     layoutSize: .init(
                         widthDimension: .fractionalWidth(0.5),

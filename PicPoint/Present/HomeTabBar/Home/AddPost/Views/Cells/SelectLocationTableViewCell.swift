@@ -76,12 +76,7 @@ extension SelectLocationTableViewCell {
         addPostViewModel.picturePlaceAddressInfosRelay.asDriver()
             .drive(with: self) { owner, addresInfos in
                 guard let addresInfos else { return }
-                // 시/도 정보와 도시 정보가 동일한 경우 예외 처리
-                if addresInfos.administrativeArea == addresInfos.locality {
-                    owner.rightLabel.text = "\(addresInfos.locality ?? "") \(addresInfos.subLocality ?? "")"
-                } else {
-                    owner.rightLabel.text = "\(addresInfos.administrativeArea ?? "") \(addresInfos.locality ?? "") \(addresInfos.subLocality ?? "")"
-                }
+                owner.rightLabel.text = addresInfos.shortAddress
             }
             .disposed(by: disposeBag)
     }

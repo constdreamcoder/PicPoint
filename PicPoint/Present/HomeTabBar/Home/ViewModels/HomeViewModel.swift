@@ -20,6 +20,7 @@ final class HomeViewModel: ViewModelType {
         let rightBarButtonItemTapped: ControlEvent<Void>
         let addButtonTap: ControlEvent<Void>
         let deletePostTap: PublishSubject<String>
+        let postTap: ControlEvent<Post>
     }
     
     struct Output {
@@ -27,10 +28,12 @@ final class HomeViewModel: ViewModelType {
         let addButtonTapTrigger: Driver<Void>
         let otherOptionsButtonTapTrigger: Driver<String>
         let postId: Driver<String>
+        let postTapTrigger: Driver<Post?>
     }
     
     func transform(input: Input) -> Output {
         let postList = BehaviorRelay<[Post]>(value: [])
+        let postTapTrigger = PublishRelay<Post?>()
         
         input.viewDidLoadTrigger
             .flatMap { _ in
@@ -48,8 +51,8 @@ final class HomeViewModel: ViewModelType {
             .disposed(by: disposeBag)
         
         input.deletePostTap
-            .flatMap { postId in
-                PostManager.deletePost(params: DeletePostParams(postId: postId))
+            .flatMap {
+                PostManager.deletePost(params: DeletePostParams(postId: $0))
             }
             .subscribe(with: self) { owner, deletedPostId in
                 print("삭제가 완료되었습니다.")
@@ -57,11 +60,23 @@ final class HomeViewModel: ViewModelType {
             }
             .disposed(by: disposeBag)
         
+        input.postTap
+            .flatMap {
+                PostManager.fetchPost(params: FetchPostParams(postId: $0.postId))
+            }
+            .subscribe {
+                print("fetch 완료")
+                postTapTrigger.accept($0)
+            }
+            .disposed(by: disposeBag)
+            
+        
         return Output(
             postList: postList.asDriver(),
             addButtonTapTrigger: input.addButtonTap.asDriver(),
             otherOptionsButtonTapTrigger: otherOptionsButtonTap.asDriver(onErrorJustReturn: ""),
-            postId: commentButtonTap.asDriver(onErrorJustReturn: "")
+            postId: commentButtonTap.asDriver(onErrorJustReturn: ""), 
+            postTapTrigger: postTapTrigger.asDriver(onErrorJustReturn: nil)
         )
     }
 }

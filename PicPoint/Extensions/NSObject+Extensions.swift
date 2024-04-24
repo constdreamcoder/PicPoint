@@ -7,6 +7,8 @@
 
 import UIKit
 import Photos
+import RxSwift
+import RxCocoa
 
 extension NSObject {    
     func getUIImageFromPHAsset(_ asset: PHAsset) -> UIImage {

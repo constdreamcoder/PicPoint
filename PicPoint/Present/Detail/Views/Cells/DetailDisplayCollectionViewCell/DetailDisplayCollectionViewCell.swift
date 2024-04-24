@@ -45,7 +45,7 @@ final class DetailDisplayCollectionViewCell: BaseCollectionViewCell {
     
     let titleLabel: UILabel = {
         let label = UILabel()
-        label.text = "소예르"
+        label.text = ""
         label.textColor = .white
         label.font = .systemFont(ofSize: 24.0, weight: .bold)
         return label
@@ -53,7 +53,7 @@ final class DetailDisplayCollectionViewCell: BaseCollectionViewCell {
     
     let addressLabel: UILabel = {
         let label = UILabel()
-        label.text = "전라남도 담양군"
+        label.text = ""
         label.textColor = .white
         label.font = .systemFont(ofSize: 14.0)
         return label
@@ -115,6 +115,7 @@ final class DetailDisplayCollectionViewCell: BaseCollectionViewCell {
         bind(files: cellData.files)
         
         titleLabel.text = cellData.title
+        addressLabel.text = cellData.address
     }
 }
 
