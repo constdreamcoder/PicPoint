@@ -11,6 +11,7 @@ import Alamofire
 enum PostRouter {
     case fetchPosts(query: FetchPostsQuery)
     case fetchPost(params: FetchPostParams)
+    case uploadImages(body: UploadImagesBody)
 }
 
 extension PostRouter: TargetType {
@@ -23,6 +24,8 @@ extension PostRouter: TargetType {
         switch self {
         case .fetchPosts, .fetchPost:
             return .get
+        case .uploadImages:
+            return .post
         }
     }
     
@@ -30,6 +33,8 @@ extension PostRouter: TargetType {
         switch self {
         case .fetchPosts, .fetchPost:
             return "/posts"
+        case .uploadImages:
+            return "/posts/files"
         }
     }
     
@@ -40,6 +45,12 @@ extension PostRouter: TargetType {
                 HTTPHeader.authorization.rawValue: UserDefaults.standard.accessToken,
                 HTTPHeader.sesacKey.rawValue: APIKeys.sesacKey
             ]
+        case .uploadImages:
+            return [
+                HTTPHeader.sesacKey.rawValue: APIKeys.sesacKey,
+                HTTPHeader.contentType.rawValue: HTTPHeader.formData.rawValue,
+                HTTPHeader.authorization.rawValue: UserDefaults.standard.accessToken,
+            ]
         }
     }
     
@@ -49,6 +60,8 @@ extension PostRouter: TargetType {
             return nil
         case .fetchPost(let params):
             return "/\(params.postId)"
+        case .uploadImages:
+            return nil
         }
     }
     
@@ -60,14 +73,14 @@ extension PostRouter: TargetType {
                 .init(name: "limit", value: query.limit),
                 .init(name: "product_id", value: query.product_id)
             ]
-        case .fetchPost:
+        case .fetchPost, .uploadImages:
             return nil
         }
     }
     
     var body: Data? {
         switch self {
-        case .fetchPosts, .fetchPost:
+        case .fetchPosts, .fetchPost, .uploadImages:
             return nil
         }
     }

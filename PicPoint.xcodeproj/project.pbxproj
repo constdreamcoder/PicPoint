@@ -104,6 +104,9 @@
 		00C71D672BCC0FDA00D933FD /* SignUpBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00C71D662BCC0FDA00D933FD /* SignUpBody.swift */; };
 		00C71D692BCC11C900D933FD /* SignUpModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00C71D682BCC11C900D933FD /* SignUpModel.swift */; };
 		00C71D6E2BCC22E200D933FD /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00C71D6D2BCC22E200D933FD /* HomeViewController.swift */; };
+		00E414EA2BD915AF00C76BE4 /* UploadImagesBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E414E92BD915AF00C76BE4 /* UploadImagesBody.swift */; };
+		00E414EC2BD9186400C76BE4 /* ImageFileListModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E414EB2BD9186400C76BE4 /* ImageFileListModel.swift */; };
+		00E414EE2BD91CAD00C76BE4 /* NSObject+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E414ED2BD91CAD00C76BE4 /* NSObject+Extensions.swift */; };
 		00F65D372BCA16290027A897 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 00F65D362BCA16290027A897 /* Alamofire */; };
 		00F65D3A2BCA167F0027A897 /* RxCocoa in Frameworks */ = {isa = PBXBuildFile; productRef = 00F65D392BCA167F0027A897 /* RxCocoa */; };
 		00F65D3C2BCA167F0027A897 /* RxSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 00F65D3B2BCA167F0027A897 /* RxSwift */; };
@@ -216,6 +219,9 @@
 		00C71D662BCC0FDA00D933FD /* SignUpBody.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpBody.swift; sourceTree = "<group>"; };
 		00C71D682BCC11C900D933FD /* SignUpModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpModel.swift; sourceTree = "<group>"; };
 		00C71D6D2BCC22E200D933FD /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
+		00E414E92BD915AF00C76BE4 /* UploadImagesBody.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadImagesBody.swift; sourceTree = "<group>"; };
+		00E414EB2BD9186400C76BE4 /* ImageFileListModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageFileListModel.swift; sourceTree = "<group>"; };
+		00E414ED2BD91CAD00C76BE4 /* NSObject+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSObject+Extensions.swift"; sourceTree = "<group>"; };
 		00FE92AB2BCE53EA00554D0F /* PostManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostManager.swift; sourceTree = "<group>"; };
 		00FE92AE2BCE54F000554D0F /* PostRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostRouter.swift; sourceTree = "<group>"; };
 		00FE92B22BCE56F600554D0F /* fetchPostsQuery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = fetchPostsQuery.swift; sourceTree = "<group>"; };
@@ -397,6 +403,7 @@
 			children = (
 				00FE92B02BCE56D000554D0F /* User */,
 				001253FC2BD417FB0065F1E6 /* Comment */,
+				00E414E82BD9158900C76BE4 /* Post */,
 			);
 			path = Bodies;
 			sourceTree = "<group>";
@@ -499,9 +506,9 @@
 		0034FAEB2BCC9A7700D932F3 /* Profile */ = {
 			isa = PBXGroup;
 			children = (
-				0034FAF22BCC9EF400D932F3 /* Settings */,
 				0034FAEC2BCC9A8800D932F3 /* Views */,
 				0034FAED2BCC9A8D00D932F3 /* ViewModels */,
+				0034FAF22BCC9EF400D932F3 /* Settings */,
 			);
 			path = Profile;
 			sourceTree = "<group>";
@@ -883,6 +890,14 @@
 			path = Views;
 			sourceTree = "<group>";
 		};
+		00E414E82BD9158900C76BE4 /* Post */ = {
+			isa = PBXGroup;
+			children = (
+				00E414E92BD915AF00C76BE4 /* UploadImagesBody.swift */,
+			);
+			path = Post;
+			sourceTree = "<group>";
+		};
 		00F65D452BCA179C0027A897 /* Present */ = {
 			isa = PBXGroup;
 			children = (
@@ -919,6 +934,7 @@
 				0003E9312BD54B0800695D40 /* Label+Extension.swift */,
 				001C92022BD6A2820028E67B /* UIViewController+Extensions.swift */,
 				00242C542BD7805600B4C96E /* Date+Extensions.swift */,
+				00E414ED2BD91CAD00C76BE4 /* NSObject+Extensions.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -979,6 +995,7 @@
 			isa = PBXGroup;
 			children = (
 				00FE92B62BCE59FF00554D0F /* PostListModel.swift */,
+				00E414EB2BD9186400C76BE4 /* ImageFileListModel.swift */,
 			);
 			path = Post;
 			sourceTree = "<group>";
@@ -1107,6 +1124,7 @@
 				00242C592BD7C7CA00B4C96E /* BaseBottomViewViewController.swift in Sources */,
 				00760E462BD5072000741C40 /* SelectImageTableViewCell.swift in Sources */,
 				00C71D6E2BCC22E200D933FD /* HomeViewController.swift in Sources */,
+				00E414EA2BD915AF00C76BE4 /* UploadImagesBody.swift in Sources */,
 				00AFF6092BCD2AAD006D319A /* HomeCollectionViewCellTopView.swift in Sources */,
 				0035401A2BCFBA2600A71415 /* DetailCollectionViewSectionDataModels.swift in Sources */,
 				001253F62BD4155B0065F1E6 /* CommentRouter.swift in Sources */,
@@ -1127,6 +1145,7 @@
 				00FE92AC2BCE53EA00554D0F /* PostManager.swift in Sources */,
 				001253F32BD3DC8C0065F1E6 /* CommentWritingSectionView.swift in Sources */,
 				00FE92B32BCE56F600554D0F /* fetchPostsQuery.swift in Sources */,
+				00E414EE2BD91CAD00C76BE4 /* NSObject+Extensions.swift in Sources */,
 				00760E592BD5321500741C40 /* ContentTableViewCell.swift in Sources */,
 				00B7C3F12BCA5BE2009AC333 /* UserRouter.swift in Sources */,
 				00AA9A792BCC24B90069C55C /* HomeTabBarViewController.swift in Sources */,
@@ -1135,6 +1154,7 @@
 				00B7C3FA2BCA5F60009AC333 /* UIViewControllerConfiguration.swift in Sources */,
 				0034FAF12BCC9DBC00D932F3 /* ProfileViewModel.swift in Sources */,
 				0003E93B2BD584AF00695D40 /* SelectImageCollectionViewCell.swift in Sources */,
+				00E414EC2BD9186400C76BE4 /* ImageFileListModel.swift in Sources */,
 				00B7C3F72BCA5F38009AC333 /* SignInViewController.swift in Sources */,
 				00FE92B72BCE59FF00554D0F /* PostListModel.swift in Sources */,
 				000AD24B2BD1FF2000FC7768 /* DetailIntroductionCollectionViewCell.swift in Sources */,

@@ -123,10 +123,7 @@ extension SelectImageViewController: UIViewControllerConfiguration {
             .drive(collectionView.rx.items(cellIdentifier: SelectImageCollectionViewCell.identifier, cellType: SelectImageCollectionViewCell.self)) { [weak self]
                 item, element, cell in
                 guard let self else { return }
-                
-                self.getUIImageFromPHAsset(element) {
-                    cell.photoImageView.image = $0
-                }
+                cell.photoImageView.image = self.getUIImageFromPHAsset(element)
             }
             .disposed(by: disposeBag)
         
@@ -135,9 +132,7 @@ extension SelectImageViewController: UIViewControllerConfiguration {
                 guard let self else { return }
 
                 guard let selectedAsset else { return }
-                self.getUIImageFromPHAsset(selectedAsset) {
-                    self.selectedImageView.image = $0
-                }
+                self.selectedImageView.image = self.getUIImageFromPHAsset(selectedAsset)
             }
             .disposed(by: disposeBag)
     }

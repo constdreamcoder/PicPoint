@@ -11,7 +11,7 @@ import RxCocoa
 import Photos
 import CoreLocation
 
-final class AddPostViewModel: ViewModelType {
+final class AddPostViewModel: NSObject, ViewModelType {
     
     private let sections: [AddPostCollectionViewSectionDataModel] = [
         .init(items: [.selectImageCell, .selectLocationCell, .recommendedVisitTimeCell, .visitDateCell, .titleCell, .contentCell])
@@ -51,6 +51,7 @@ final class AddPostViewModel: ViewModelType {
     
     func transform(input: Input) -> Output {
         let registerButtonValid = BehaviorRelay<Bool>(value: false)
+        let rightBarButtonItemTapTrigger = PublishRelay<Void>()
         
         Observable.combineLatest(
             selectedImagesRelay,
@@ -71,12 +72,38 @@ final class AddPostViewModel: ViewModelType {
             }.disposed(by: disposeBag)
         
         
-        let rightBarButtonItemTapTrigger = input.rightBarButtonItemTap
+        input.rightBarButtonItemTap
             .debounce(.seconds(1), scheduler: MainScheduler.instance)
-            .map {
-                print("눌림")
+            .withLatestFrom(selectedImagesRelay)
+            .withUnretained(self)
+            .map { owner, assets in
+                assets.enumerated().compactMap { iteration in
+                    if iteration.offset != 0 {
+                        return owner.getUIImageFromPHAsset(iteration.element).pngData()
+                    }
+                    return nil
+                }
             }
-        
+            .map { imageDatas -> UploadImagesBody in
+                let imageFiles = imageDatas.map { imageData in
+                    ImageFile(
+                        imageData: imageData,
+                        name: "testimage\(Int.random(in: 1...1000))",
+                        mimeType: .png
+                    )
+                }
+                return UploadImagesBody(files: imageFiles)
+            }
+            .flatMap { uploadImagesBody in
+                PostManager.uploadImages(body: uploadImagesBody)
+            }
+            .subscribe(with: self) { owner, uploadedImageFileList in
+                print("이미지 업로드됨")
+                print(uploadedImageFileList.files)
+                rightBarButtonItemTapTrigger.accept(())
+            }
+            .disposed(by: disposeBag)
+            
         let showTappedAsset = imageCellTapSubject
             .withLatestFrom(selectedImagesRelay) { $1[$0.item] }
         

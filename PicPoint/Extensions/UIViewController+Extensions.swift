@@ -19,23 +19,3 @@ extension UIViewController {
         present(alert, animated: true)
     }
 }
-
-extension NSObject {
-    func getUIImageFromPHAsset(_ asset: PHAsset, completionHandler: @escaping (UIImage) -> Void) {
-        let imageManager = PHImageManager.default()
-        let targetSize = CGSize(width: 600, height: 600)
-        let options = PHImageRequestOptions()
-        options.isSynchronous = true
-        
-        imageManager.requestImage(
-            for: asset,
-            targetSize: targetSize,
-            contentMode: .aspectFit,
-            options: options
-        ) { image, info in
-            if let image = image {
-                completionHandler(image)
-            }
-        }
-    }
-}

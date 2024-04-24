@@ -71,10 +71,8 @@ extension SelectImageTableViewCell {
                     cell.photoImageView.image = UIImage(systemName: "photo.badge.plus")
                     cell.deleteButton.isHidden = true
                 } else {
-                    self.getUIImageFromPHAsset(element) {
-                        cell.photoImageView.image = $0
-                        cell.deleteButton.isHidden = false
-                    }
+                    cell.photoImageView.image = self.getUIImageFromPHAsset(element)
+                    cell.deleteButton.isHidden = false
                 }
                 
                 cell.deleteButton.rx.tap
