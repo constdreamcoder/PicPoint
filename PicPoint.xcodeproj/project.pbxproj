@@ -34,6 +34,7 @@
 		001C920A2BD6D3C10028E67B /* SelectVisitDateViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001C92092BD6D3C10028E67B /* SelectVisitDateViewModel.swift */; };
 		00242C552BD7805600B4C96E /* Date+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00242C542BD7805600B4C96E /* Date+Extensions.swift */; };
 		00242C592BD7C7CA00B4C96E /* BaseBottomViewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00242C582BD7C7CA00B4C96E /* BaseBottomViewViewController.swift */; };
+		002F01C02BD8822200992674 /* SelectLocationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 002F01BF2BD8822200992674 /* SelectLocationViewModel.swift */; };
 		00321C9A2BCD79B800BE2407 /* RxSwift+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00321C992BCD79B800BE2407 /* RxSwift+Extensions.swift */; };
 		0034FAEF2BCC9AA200D932F3 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0034FAEE2BCC9AA200D932F3 /* ProfileViewController.swift */; };
 		0034FAF12BCC9DBC00D932F3 /* ProfileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0034FAF02BCC9DBC00D932F3 /* ProfileViewModel.swift */; };
@@ -84,6 +85,7 @@
 		00B67D842BD810570097ACDE /* RecommendedVisitTimeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00B67D832BD810570097ACDE /* RecommendedVisitTimeViewModel.swift */; };
 		00B67D872BD824710097ACDE /* PreviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00B67D862BD824710097ACDE /* PreviewViewController.swift */; };
 		00B67D8A2BD827160097ACDE /* DismissButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00B67D892BD827160097ACDE /* DismissButton.swift */; };
+		00B67D8D2BD82ACB0097ACDE /* SelectLocationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00B67D8C2BD82ACB0097ACDE /* SelectLocationViewController.swift */; };
 		00B7C3EF2BCA5A42009AC333 /* APIKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00B7C3EE2BCA5A42009AC333 /* APIKeys.swift */; };
 		00B7C3F12BCA5BE2009AC333 /* UserRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00B7C3F02BCA5BE2009AC333 /* UserRouter.swift */; };
 		00B7C3F32BCA5C42009AC333 /* TargetType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00B7C3F22BCA5C42009AC333 /* TargetType.swift */; };
@@ -144,6 +146,7 @@
 		001C92092BD6D3C10028E67B /* SelectVisitDateViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectVisitDateViewModel.swift; sourceTree = "<group>"; };
 		00242C542BD7805600B4C96E /* Date+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Extensions.swift"; sourceTree = "<group>"; };
 		00242C582BD7C7CA00B4C96E /* BaseBottomViewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseBottomViewViewController.swift; sourceTree = "<group>"; };
+		002F01BF2BD8822200992674 /* SelectLocationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectLocationViewModel.swift; sourceTree = "<group>"; };
 		00321C992BCD79B800BE2407 /* RxSwift+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RxSwift+Extensions.swift"; sourceTree = "<group>"; };
 		0034FAEE2BCC9AA200D932F3 /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		0034FAF02BCC9DBC00D932F3 /* ProfileViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewModel.swift; sourceTree = "<group>"; };
@@ -194,6 +197,7 @@
 		00B67D832BD810570097ACDE /* RecommendedVisitTimeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecommendedVisitTimeViewModel.swift; sourceTree = "<group>"; };
 		00B67D862BD824710097ACDE /* PreviewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewViewController.swift; sourceTree = "<group>"; };
 		00B67D892BD827160097ACDE /* DismissButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DismissButton.swift; sourceTree = "<group>"; };
+		00B67D8C2BD82ACB0097ACDE /* SelectLocationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectLocationViewController.swift; sourceTree = "<group>"; };
 		00B7C3EE2BCA5A42009AC333 /* APIKeys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIKeys.swift; sourceTree = "<group>"; };
 		00B7C3F02BCA5BE2009AC333 /* UserRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserRouter.swift; sourceTree = "<group>"; };
 		00B7C3F22BCA5C42009AC333 /* TargetType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TargetType.swift; sourceTree = "<group>"; };
@@ -444,6 +448,7 @@
 				00B67D882BD826E30097ACDE /* CustomViews */,
 				00B67D852BD8245A0097ACDE /* Preview */,
 				0003E9352BD57E6B00695D40 /* SelctionImage */,
+				00B67D8B2BD82AAA0097ACDE /* SelectLocation */,
 				00242C5A2BD7DDEB00B4C96E /* RecommendedVisitTime */,
 				001C92042BD6D30B0028E67B /* SelectVisitDate */,
 			);
@@ -471,6 +476,22 @@
 			isa = PBXGroup;
 			children = (
 				00B67D832BD810570097ACDE /* RecommendedVisitTimeViewModel.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		002F01BD2BD8820600992674 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				00B67D8C2BD82ACB0097ACDE /* SelectLocationViewController.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		002F01BE2BD8820E00992674 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				002F01BF2BD8822200992674 /* SelectLocationViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -703,6 +724,15 @@
 				00B67D892BD827160097ACDE /* DismissButton.swift */,
 			);
 			path = CustomViews;
+			sourceTree = "<group>";
+		};
+		00B67D8B2BD82AAA0097ACDE /* SelectLocation */ = {
+			isa = PBXGroup;
+			children = (
+				002F01BD2BD8820600992674 /* Views */,
+				002F01BE2BD8820E00992674 /* ViewModels */,
+			);
+			path = SelectLocation;
 			sourceTree = "<group>";
 		};
 		00B7C3F42BCA5EE9009AC333 /* SignIn */ = {
@@ -1084,6 +1114,7 @@
 				0003E9392BD57ECF00695D40 /* SelectImageViewModel.swift in Sources */,
 				00760E4A2BD5128600741C40 /* AddPostCollectionViewSectionDataModel.swift in Sources */,
 				00B67D822BD8102F0097ACDE /* RecommendedVisitTimeViewController.swift in Sources */,
+				00B67D8D2BD82ACB0097ACDE /* SelectLocationViewController.swift in Sources */,
 				00AFF60B2BCD2CA5006D319A /* HomeCollectionViewCellIconView.swift in Sources */,
 				0003E9322BD54B0800695D40 /* Label+Extension.swift in Sources */,
 				00AFF5FC2BCD1274006D319A /* HomeViewModel.swift in Sources */,
@@ -1131,6 +1162,7 @@
 				003540252BCFCC2D00A71415 /* BaseTableViewCell.swift in Sources */,
 				00760E502BD52EF000741C40 /* SelectLocationTableViewCell.swift in Sources */,
 				001254022BD427840065F1E6 /* DeleteCommentParams.swift in Sources */,
+				002F01C02BD8822200992674 /* SelectLocationViewModel.swift in Sources */,
 				00242C552BD7805600B4C96E /* Date+Extensions.swift in Sources */,
 				00AFF6042BCD155E006D319A /* UICollectionReusableView+Extensions.swift in Sources */,
 				0034FAF62BCC9F1200D932F3 /* SettingsViewController.swift in Sources */,

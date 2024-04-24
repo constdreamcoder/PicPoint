@@ -38,7 +38,8 @@ final class AddPostViewController: BaseViewController {
             return cell
         } else if item == .selectLocationCell {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: SelectLocationTableViewCell.identifier, for: indexPath) as? SelectLocationTableViewCell else { return UITableViewCell() }
-            
+            cell.addPostViewModel = viewModel
+            cell.bind()
             return cell
         } else if item == .recommendedVisitTimeCell {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: RecommendedVisitTimeTableViewCell.identifier, for: indexPath) as? RecommendedVisitTimeTableViewCell else { return UITableViewCell() }
@@ -121,7 +122,7 @@ extension AddPostViewController {
 
 extension AddPostViewController: UIViewControllerConfiguration {
     func configureNavigationBar() {
-        navigationItem.title = "새 게시글"
+        navigationItem.title = "새 게시글 작성"
         
         navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .close, target: self, action: #selector(leftBarButtonItemTapped))
         
@@ -188,6 +189,12 @@ extension AddPostViewController: UIViewControllerConfiguration {
                     )
                     recommendedVisitTimeVC.modalPresentationStyle = .overFullScreen
                     owner.present(recommendedVisitTimeVC, animated: true)
+                } else if value.0 == .selectLocationCell {
+                    let selectLocationViewModel = SelectLocationViewModel(delegate: owner.viewModel)
+                    let selectLocationVC = SelectLocationViewController(
+                        selectLocationViewModel: selectLocationViewModel
+                    )
+                    owner.navigationController?.pushViewController(selectLocationVC, animated: true)
                 }
             }
             .disposed(by: disposeBag)

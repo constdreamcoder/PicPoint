@@ -20,12 +20,14 @@ final class SelectLocationTableViewCell: BaseTableViewCell {
     
     let rightLabel: UILabel = {
         let label = UILabel()
-        label.text = "테스트"
+        label.text = ""
         label.textColor = .lightGray
         label.font = .systemFont(ofSize: 18.0, weight: .bold)
         return label
     }()
     
+    weak var addPostViewModel: AddPostViewModel?
+
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
@@ -66,5 +68,21 @@ extension SelectLocationTableViewCell {
     override func configureUI() {
         super.configureUI()
         
+    }
+    
+    func bind() {
+        guard let addPostViewModel else { return }
+        
+        addPostViewModel.picturePlaceAddressInfosRelay.asDriver()
+            .drive(with: self) { owner, addresInfos in
+                guard let addresInfos else { return }
+                // 시/도 정보와 도시 정보가 동일한 경우 예외 처리
+                if addresInfos.administrativeArea == addresInfos.locality {
+                    owner.rightLabel.text = "\(addresInfos.locality ?? "") \(addresInfos.subLocality ?? "")"
+                } else {
+                    owner.rightLabel.text = "\(addresInfos.administrativeArea ?? "") \(addresInfos.locality ?? "") \(addresInfos.subLocality ?? "")"
+                }
+            }
+            .disposed(by: disposeBag)
     }
 }

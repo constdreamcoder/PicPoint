@@ -9,6 +9,7 @@ import Foundation
 import RxSwift
 import RxCocoa
 import Photos
+import CoreLocation
 
 final class AddPostViewModel: ViewModelType {
     
@@ -22,6 +23,8 @@ final class AddPostViewModel: ViewModelType {
     let fetchPhotosTriggerSubject = PublishSubject<Void>()
     let visitDateRelay = BehaviorRelay<Date>(value: Date())
     let recommendedVisitTimeRelay = BehaviorRelay<Date>(value: Date())
+    let picturePlacePointRelay = BehaviorRelay<CLLocationCoordinate2D?>(value: nil)
+    let picturePlaceAddressInfosRelay = BehaviorRelay<CLPlacemark?>(value: nil)
     private let errorMessageRelay = BehaviorRelay<String>(value: "")
     
     var disposeBag = DisposeBag()
@@ -117,6 +120,17 @@ extension AddPostViewModel: RecommendedVisitTimeViewModelDelegate {
         Observable.just(date)
             .subscribe(with: self) { owner, recommenedtime in
                 owner.recommendedVisitTimeRelay.accept(recommenedtime)
+            }
+            .disposed(by: disposeBag)
+    }
+}
+
+extension AddPostViewModel: SelectLocationViewModelDelegate {
+    func sendSelectedMapPointAndAddressInfos(_ mapPoint: CLLocationCoordinate2D, _ addressInfos: CLPlacemark) {
+        Observable.just((mapPoint, addressInfos))
+            .subscribe(with: self) { owner, value in
+                owner.picturePlacePointRelay.accept(value.0)
+                owner.picturePlaceAddressInfosRelay.accept(value.1)
             }
             .disposed(by: disposeBag)
     }
