@@ -21,17 +21,24 @@ final class DetailLocationCollectionViewCell: BaseCollectionViewCell {
         return view
     }()
     
-    let firstRowView: RowView = {
+    let recommendedVisitTimeView: RowView = {
         let view = RowView()
-        view.iconImageView.image = UIImage(systemName: "location")
-        view.contentLabel.text = "대한민국 서울특별시 마포구 당인동 24-11"
+        view.iconImageView.image = UIImage(systemName: "clock")
+        view.contentLabel.text = ""
         return view
     }()
     
-    let secondRowView: RowView = {
+    let locationView: RowView = {
+        let view = RowView()
+        view.iconImageView.image = UIImage(systemName: "location")
+        view.contentLabel.text = ""
+        return view
+    }()
+    
+    let hashTagsView: RowView = {
         let view = RowView()
         view.iconImageView.image = UIImage(systemName: "number")
-        view.contentLabel.text = "#마포구 #서울 #카페"
+        view.contentLabel.text = ""
         return view
     }()
     
@@ -41,8 +48,9 @@ final class DetailLocationCollectionViewCell: BaseCollectionViewCell {
         stackView.spacing = 16.0
         stackView.distribution = .equalSpacing
         [
-            firstRowView,
-            secondRowView
+            recommendedVisitTimeView,
+            locationView,
+            hashTagsView
         ].forEach { stackView.addArrangedSubview($0) }
         return stackView
     }()
@@ -59,8 +67,6 @@ final class DetailLocationCollectionViewCell: BaseCollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        configureConstraints()
-        configureUI()
     }
     
     required init?(coder: NSCoder) {
@@ -71,14 +77,17 @@ final class DetailLocationCollectionViewCell: BaseCollectionViewCell {
         super.prepareForReuse()
         
         mapViewCoverView.removeGestureRecognizer(tap)
-        
+        mapViewCoverView.addGestureRecognizer(tap)
+
         disposeBag = DisposeBag()
     }
     
     func updateThirdSectionDatas(_ cellData: ThirdSectionCellData) {
         addAnnotationOnMap(latitude: cellData.latitude, longitude: cellData.longitude)
-        firstRowView.contentLabel.text = cellData.longAddress
-        secondRowView.contentLabel.text = String.convertToStringWithHashtags(cellData.hashTags)
+        
+        recommendedVisitTimeView.contentLabel.text = cellData.recommendedVisitTime.convertToDateType?.convertToTimeString
+        locationView.contentLabel.text = cellData.longAddress
+        hashTagsView.contentLabel.text = String.convertToStringWithHashtags(cellData.hashTags)
     }
 }
 
@@ -123,7 +132,7 @@ extension DetailLocationCollectionViewCell {
             Observable<CLLocationCoordinate2D>.just(coordinates),
             tap.rx.event
         ).bind(with: self) { owner, value in
-            detailViewModel.mapViewTap.accept(value.0)
+            detailViewModel.mapViewTapRelay.accept(value.0)
         }
         .disposed(by: disposeBag)
     }

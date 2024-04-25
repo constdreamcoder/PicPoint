@@ -30,9 +30,7 @@ final class SelectLocationTableViewCell: BaseTableViewCell {
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        
-        configureConstraints()
-        configureUI()
+    
     }
     
     required init?(coder: NSCoder) {

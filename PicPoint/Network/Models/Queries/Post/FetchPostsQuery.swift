@@ -1,5 +1,5 @@
 //
-//  fetchPostsQuery.swift
+//  FetchPostsQuery.swift
 //  PicPoint
 //
 //  Created by SUCHAN CHANG on 4/16/24.
@@ -15,7 +15,7 @@ struct FetchPostsQuery {
     init(
         next: String? = "",
         limit: String? = "",
-        product_id: String? = ""
+        product_id: String? = APIKeys.productId
     ) {
         self.next = next
         self.limit = limit

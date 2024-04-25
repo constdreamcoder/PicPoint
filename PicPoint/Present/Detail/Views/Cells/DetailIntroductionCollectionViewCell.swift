@@ -6,6 +6,9 @@
 //
 
 import UIKit
+import SnapKit
+import RxSwift
+import RxCocoa
 
 final class DetailIntroductionCollectionViewCell: BaseCollectionViewCell {
     
@@ -30,11 +33,11 @@ final class DetailIntroductionCollectionViewCell: BaseCollectionViewCell {
         return label
     }()
     
+    weak var detailViewModel: DetailViewModel?
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        configureConstraints()
-        configureUI()
     }
     
     required init?(coder: NSCoder) {
@@ -75,6 +78,11 @@ extension DetailIntroductionCollectionViewCell {
     
     override func configureUI() {
         super.configureUI()
-        
+                
+        topView.rightButton.rx.tap
+            .subscribe(with: self, onNext: { owner, trigger in
+                owner.detailViewModel?.tap.accept(trigger)
+            })
+            .disposed(by: disposeBag)
     }
 }

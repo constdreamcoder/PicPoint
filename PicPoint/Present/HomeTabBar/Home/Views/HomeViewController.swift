@@ -60,7 +60,7 @@ final class HomeViewController: BaseViewController {
         tabBarController?.tabBar.isHidden = false
     }
     
-    private func makeActionSheet(title: String = "", message: String = "", handler: @escaping () -> Void) {
+    private func makeActionSheet(title: String? = nil, message: String? = nil, handler: @escaping () -> Void) {
         let alert = UIAlertController(title: title, message: message, preferredStyle: .actionSheet)
 
         let confirmButton = UIAlertAction(title: "삭제", style: .destructive) { _ in

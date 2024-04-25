@@ -87,8 +87,6 @@ final class DetailDisplayCollectionViewCell: BaseCollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        configureConstraints()
-        configureUI()
     }
     
     required init?(coder: NSCoder) {

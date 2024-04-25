@@ -43,8 +43,8 @@ struct PostManager {
                     .validate(statusCode: 200...500)
                     .responseDecodable(of: Post.self) { response in
                         switch response.result {
-                        case .success(let postListModel):
-                            singleObserver(.success(postListModel))
+                        case .success(let postModel):
+                            singleObserver(.success(postModel))
                         case .failure(let AFError):
                             print(response.response?.statusCode)
                             print(AFError)
@@ -131,6 +131,30 @@ struct PostManager {
                         switch response.result {
                         case .success:
                             singleObserver(.success(params.postId))
+                        case .failure(let AFError):
+                            print(response.response?.statusCode)
+                            print(AFError)
+                            singleObserver(.failure(AFError))
+                        }
+                    }
+            } catch {
+                singleObserver(.failure(error))
+            }
+            return Disposables.create()
+        }
+    }
+    
+    static func FetchPostWithHashTag(query: FetchPostWithHashTagQuery) -> Single<[Post]> {
+        return Single<[Post]>.create { singleObserver in
+            do {
+                let urlRequest = try PostRouter.fetchPostWithHashTag(query: query).asURLRequest()
+                
+                AF.request(urlRequest)
+                    .validate(statusCode: 200...500)
+                    .responseDecodable(of: PostListModel.self) { response in
+                        switch response.result {
+                        case .success(let postListModel):
+                            singleObserver(.success(postListModel.data))
                         case .failure(let AFError):
                             print(response.response?.statusCode)
                             print(AFError)

@@ -13,14 +13,18 @@ import CoreLocation
 
 final class DetailViewModel: ViewModelType {
     
-    let mapViewTap = PublishRelay<CLLocationCoordinate2D>()
+    let tap = PublishRelay<Void>()
+    let mapViewTapRelay = PublishRelay<CLLocationCoordinate2D>()
     private let sectionsRelay = BehaviorRelay<[SectionModelWrapper]>(value: [])
     private let postRelay = BehaviorRelay<Post?>(value: nil)
+    private let hashTagsSubject = BehaviorSubject<[String]>(value: [])
+    private let relatedPostList = BehaviorSubject<[Post]>(value: [])
     
     var disposeBag = DisposeBag()
 
     struct Input {
         let commentButtonTap: ControlEvent<Void>
+        let itemTap: PublishSubject<Int>
     }
     
     struct Output {
@@ -28,11 +32,23 @@ final class DetailViewModel: ViewModelType {
         let post: Driver<Post?>
         let postId: Driver<String>
         let mapViewTapTrigger: Driver<CLLocationCoordinate2D>
+        let itemTapTrigger: Driver<Post?>
     }
     
     init(post: Post) {
         Observable.just(post)
-            .subscribe(with: self) { owner, post in
+            .withUnretained(self)
+            .map { owner, post -> FetchPostWithHashTagQuery in
+                owner.hashTagsSubject.onNext(post.hashTags)
+                return FetchPostWithHashTagQuery(
+                    limit: "10",
+                    hashTag: post.hashTags.count == 0 ? "" : post.hashTags[0]
+                )
+            }
+            .flatMap { fetchPostWithHashTagQuery in
+                PostManager.FetchPostWithHashTag(query: fetchPostWithHashTagQuery)
+            }
+            .subscribe(with: self) { owner, postList in
                 let separatedLocationStrings = post.content1?.components(separatedBy: "/")
                 
                 let latitude = Double(separatedLocationStrings?[0] ?? "") ?? 0
@@ -69,25 +85,41 @@ final class DetailViewModel: ViewModelType {
                                 latitude: latitude,
                                 longitude: longitude,
                                 longAddress: separatedLocationStrings?[2] ?? "",
-                                hashTags: post.hashTags)
+                                hashTags: post.hashTags, 
+                                recommendedVisitTime: separatedDateStrings?[1] ?? "")
                             ]
                         )
                     ),
                     SectionModelWrapper(
                         DetailCollectionViewForthSectionDataModel(
-                            header: "연관장소",
-                            items: ["1", "2", "3", "4", "5", "5", "5", "5"]
+                            header: "", 
+                            items: postList.filter { $0.postId != post.postId }
                         )
                     )
                 ]
                 owner.sectionsRelay.accept(sections)
                 owner.postRelay.accept(post)
+                owner.relatedPostList.onNext(postList)
             }
             .disposed(by: disposeBag)
     }
     
     func transform(input: Input) -> Output {
         let postIdRelay = PublishRelay<String>()
+        let itemTapTrigger = PublishRelay<Post?>()
+        
+        tap
+            .subscribe { _ in
+                print("눌림")
+            } onError: { error in
+                print("onError")
+            } onCompleted: {
+                print("onCompleted")
+            } onDisposed: {
+                print("onDisposed")
+            }
+            .disposed(by: disposeBag)
+
         
         input.commentButtonTap
             .withLatestFrom(postRelay)
@@ -97,11 +129,22 @@ final class DetailViewModel: ViewModelType {
             }
             .disposed(by: disposeBag)
         
+       input.itemTap
+            .withLatestFrom(relatedPostList) { tappedItemIndex, relatedPostList in
+                relatedPostList[tappedItemIndex].postId
+            }
+            .flatMap { postId in
+                PostManager.fetchPost(params: FetchPostParams(postId: postId))
+            }
+            .subscribe { itemTapTrigger.accept($0) }
+            .disposed(by: disposeBag)
+
         return Output(
             sections: sectionsRelay.asDriver(onErrorJustReturn: []), 
             post: postRelay.asDriver(), 
             postId: postIdRelay.asDriver(onErrorJustReturn: ""), 
-            mapViewTapTrigger: mapViewTap.asDriver(onErrorJustReturn: CLLocationCoordinate2D())
+            mapViewTapTrigger: mapViewTapRelay.asDriver(onErrorJustReturn: CLLocationCoordinate2D()),
+            itemTapTrigger: itemTapTrigger.asDriver(onErrorJustReturn: nil)
         )
     }
 }

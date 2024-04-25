@@ -38,8 +38,6 @@ final class SelectImageInnerCollectionViewCell: BaseCollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        configureConstraints()
-        configureUI()
         bind()
     }
     

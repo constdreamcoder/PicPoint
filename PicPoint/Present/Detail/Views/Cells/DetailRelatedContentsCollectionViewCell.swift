@@ -7,6 +7,9 @@
 
 import UIKit
 import SnapKit
+import RxSwift
+import RxCocoa
+import Kingfisher
 
 final class DetailRelatedContentsCollectionViewCell: BaseCollectionViewCell {
     
@@ -33,7 +36,6 @@ final class DetailRelatedContentsCollectionViewCell: BaseCollectionViewCell {
         return label
     }()
     
-    
     let addressLabel: UILabel = {
         let label = UILabel()
         label.text = "서울 도봉구"
@@ -51,12 +53,27 @@ final class DetailRelatedContentsCollectionViewCell: BaseCollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        configureConstraints()
-        configureUI()
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        
+        disposeBag = DisposeBag()
+    }
+    
+    func updateForthSectionDatas(_ cellData: Post) {
+        titleLabel.text = cellData.title
+        
+        let url = URL(string: APIKeys.baseURL + "/\(cellData.files[0])")
+        let placeholderImage = UIImage(systemName: "photo")
+        photoImageView.kf.setImageWithAuthHeaders(with: url, placeholder: placeholderImage)
+        if let shortAddress = cellData.content1?.components(separatedBy: "/")[3] {
+            addressLabel.text = shortAddress
+        }
     }
 }
 

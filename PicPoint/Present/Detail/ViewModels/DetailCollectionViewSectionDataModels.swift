@@ -74,6 +74,7 @@ struct ThirdSectionCellData {
     var longitude: Double
     var longAddress: String
     var hashTags: [String]
+    var recommendedVisitTime: String
 }
 
 struct DetailCollectionViewThirdSectionDataModel {
@@ -99,9 +100,9 @@ struct DetailCollectionViewForthSectionDataModel {
 
 extension DetailCollectionViewForthSectionDataModel: SectionModelType {
     
-    typealias Item = String
+    typealias Item = Post
     
-    init(original: DetailCollectionViewForthSectionDataModel, items: [String]) {
+    init(original: DetailCollectionViewForthSectionDataModel, items: [Post]) {
         self = original
         self.items = items
     }

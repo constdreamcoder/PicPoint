@@ -64,6 +64,9 @@ final class DetailViewController: BaseViewController {
             return cell
         } else if indexPath.section == 1 {
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: DetailIntroductionCollectionViewCell.identifier, for: indexPath) as? DetailIntroductionCollectionViewCell else { return UICollectionViewCell() }
+            
+            cell.detailViewModel = viewModel
+            
             if let cellData = item as? SecondSectionCellData {
                 cell.updateSecondSectionDatas(cellData)
             }
@@ -71,6 +74,7 @@ final class DetailViewController: BaseViewController {
             
         } else if indexPath.section == 2 {
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: DetailLocationCollectionViewCell.identifier, for: indexPath) as? DetailLocationCollectionViewCell else { return UICollectionViewCell() }
+                        
             if let cellData = item as? ThirdSectionCellData {
                 cell.updateThirdSectionDatas(cellData)
                 cell.detailViewModel = viewModel
@@ -79,7 +83,9 @@ final class DetailViewController: BaseViewController {
             return cell
         } else if indexPath.section == 3 {
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: DetailRelatedContentsCollectionViewCell.identifier, for: indexPath) as? DetailRelatedContentsCollectionViewCell else { return UICollectionViewCell() }
-            
+            if let cellData = item as? Post {
+                cell.updateForthSectionDatas(cellData)
+            }
             return cell
         }
         return UICollectionViewCell()
@@ -166,9 +172,12 @@ extension DetailViewController: UIViewControllerConfiguration {
     }
     
     func bind() {
+        
+        let itemTapSubject = PublishSubject<Int>()
     
         let input = DetailViewModel.Input(
-            commentButtonTap: iconView.commentStackView.button.rx.tap
+            commentButtonTap: iconView.commentStackView.button.rx.tap, 
+            itemTap: itemTapSubject
         )
         
         guard let viewModel = viewModel else { return }
@@ -202,8 +211,25 @@ extension DetailViewController: UIViewControllerConfiguration {
                 mapPreviewVC.coordinates = coordinates
                 owner.navigationController?.pushViewController(mapPreviewVC, animated: true)
             }
+            .disposed(by: disposeBag)   
+        
+        collectionView.rx.itemSelected
+            .bind { indexPath in
+                if indexPath.section == 3 {
+                    itemTapSubject.onNext(indexPath.row)
+                }
+            }
             .disposed(by: disposeBag)
         
+        output.itemTapTrigger
+            .drive(with: self) { owner, post in
+                if let post {
+                    let detailVM = DetailViewModel(post: post)
+                    let detailVC = DetailViewController(detailViewModel: detailVM)
+                    owner.navigationController?.pushViewController(detailVC, animated: true)
+                }
+            }
+            .disposed(by: disposeBag)
     }
 }
 
