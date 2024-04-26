@@ -15,7 +15,8 @@ final class MyLikeViewController: BaseViewController {
     lazy var collectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: createCollectionViewLayout())
         collectionView.backgroundColor = .white
-        
+        collectionView.isScrollEnabled = false
+
         collectionView.register(MyLikeCollectionViewCell.self, forCellWithReuseIdentifier: MyLikeCollectionViewCell.identifier)
         
         return collectionView

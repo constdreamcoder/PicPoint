@@ -34,6 +34,10 @@ final class ProfileViewController: BaseViewController {
         
         if indexPath.section == 0 {
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ProfileCollectionViewCell.identifier, for: indexPath) as? ProfileCollectionViewCell else { return UICollectionViewCell() }
+            
+            cell.profileViewModel = viewModel
+            cell.bind()
+            
             return cell
         } else if indexPath.section == 1 {
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ContentsCollectionViewCell.identifier, for: indexPath) as? ContentsCollectionViewCell else { return UICollectionViewCell() }
@@ -110,7 +114,9 @@ extension ProfileViewController: UIViewControllerConfiguration {
     }
     
     func bind() {
-        let input = ProfileViewModel.Input()
+        let input = ProfileViewModel.Input(
+            viewDidLoad: Observable.just(())
+        )
         
         let output = viewModel.transform(input: input)
         

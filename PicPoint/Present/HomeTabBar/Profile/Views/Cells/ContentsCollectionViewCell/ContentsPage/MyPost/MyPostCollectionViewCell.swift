@@ -19,12 +19,23 @@ final class MyPostCollectionViewCell: BaseCollectionViewCell {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        
-        contentView.backgroundColor = .brown
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    func updateCellData(_ post: Post) {
+        if post.files.count > 0 {
+            let url = URL(string: APIKeys.baseURL + "/\(post.files[0])")
+            let placeholderImage = UIImage(systemName: "photo")
+            postCustomView.photoImageView.kf.setImageWithAuthHeaders(with: url, placeholder: placeholderImage)
+        }
+        
+        postCustomView.titleLabel.text = post.title
+        if let shortAddress = post.content1?.components(separatedBy: "/")[3] {
+            postCustomView.addressLabel.text = "서울 도동구"
+        }
     }
 }
 
@@ -32,11 +43,15 @@ extension MyPostCollectionViewCell {
     override func configureConstraints() {
         super.configureConstraints()
         
-//        contentView.addSubview(postCustomView)
-//        
-//        postCustomView.snp.makeConstraints {
-//            $0.edges.equalTo(contentView.safeAreaLayoutGuide)
-//        }
+        contentView.addSubview(postCustomView)
+        
+        postCustomView.snp.makeConstraints {
+            $0.edges.equalTo(contentView.safeAreaLayoutGuide)
+        }
+        
+        postCustomView.photoImageView.snp.updateConstraints {
+            $0.height.equalTo(180.0)
+        }
     }
     
     override func configureUI() {

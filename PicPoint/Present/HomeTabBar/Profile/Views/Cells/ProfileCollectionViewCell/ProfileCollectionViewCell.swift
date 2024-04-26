@@ -9,6 +9,7 @@ import UIKit
 import SnapKit
 import RxSwift
 import RxCocoa
+import Kingfisher
 
 final class ProfileCollectionViewCell: BaseCollectionViewCell {
     
@@ -51,9 +52,11 @@ final class ProfileCollectionViewCell: BaseCollectionViewCell {
         return button
     }()
     
+    weak var profileViewModel: ProfileViewModel?
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
-
+        
     }
     
     required init?(coder: NSCoder) {
@@ -97,5 +100,24 @@ extension ProfileCollectionViewCell {
     override func configureUI() {
         super.configureUI()
         
+    }
+    
+    func bind() {
+        guard let profileViewModel else { return }
+        profileViewModel.myProfile.asDriver()
+            .drive(with: self) { owner, myProfile in
+                guard let myProfile else { return }
+                
+                if let profileImage = myProfile.profileImage, !profileImage.isEmpty {
+                    let url = URL(string: APIKeys.baseURL + "/\(profileImage)")
+                    let placeholderImage = UIImage(systemName: "person.circle")
+                    owner.profileImageView.kf.setImageWithAuthHeaders(with: url, placeholder: placeholderImage)
+                }
+                
+                owner.nicknameLabel.text = myProfile.nick
+                owner.followerFollowingStackView.followerNumberLabel.text = myProfile.followers.count.description
+                owner.followerFollowingStackView.followingNumberLabel.text = myProfile.following.count.description
+            }
+            .disposed(by: disposeBag)
     }
 }

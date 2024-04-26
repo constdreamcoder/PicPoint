@@ -9,14 +9,22 @@ import Foundation
 import RxSwift
 import RxCocoa
 
+protocol ProfileViewModelDelegate: AnyObject {
+    func sendMyPosts(_ posts: [String])
+}
+
 final class ProfileViewModel: ViewModelType {
     var disposeBag = DisposeBag()
     
     let segmentControlSelectedIndexRelay = BehaviorRelay<Int>(value: 0)
+    let myProfile = BehaviorRelay<FetchMyProfileModel?>(value: nil)
+    let myPosts = BehaviorRelay<[String]>(value: [])
     private let updateContentSizeRelay = PublishRelay<CGFloat>()
+    
+    weak var delegate: ProfileViewModelDelegate?
 
     struct Input {
-        
+        let viewDidLoad: Observable<Void>
     }
     
     struct Output {
@@ -39,6 +47,17 @@ final class ProfileViewModel: ViewModelType {
         ]
         
         let sectionsObservable = Observable<[SectionModelWrapper]>.just(sections)
+        
+        input.viewDidLoad
+            .flatMap { _ in
+                ProfileManager.fetchMyProfile()
+            }
+            .subscribe(with: self) { owner, myProfileModel in
+                owner.myProfile.accept(myProfileModel)
+                owner.myPosts.accept(myProfileModel.posts)
+                owner.delegate?.sendMyPosts(myProfileModel.posts)
+            }
+            .disposed(by: disposeBag)
 
         return Output(
             sections: sectionsObservable.asDriver(onErrorJustReturn: []),

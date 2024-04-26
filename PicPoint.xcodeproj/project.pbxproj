@@ -32,6 +32,9 @@
 		001041632BDBE9F600E5FDA1 /* MyLikeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001041622BDBE9F600E5FDA1 /* MyLikeViewController.swift */; };
 		001041662BDBEB4D00E5FDA1 /* MyLikeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001041652BDBEB4D00E5FDA1 /* MyLikeViewModel.swift */; };
 		001041682BDBEF8800E5FDA1 /* MyLikeCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001041672BDBEF8800E5FDA1 /* MyLikeCollectionViewCell.swift */; };
+		0010416A2BDBF59A00E5FDA1 /* ProfileRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001041692BDBF59A00E5FDA1 /* ProfileRouter.swift */; };
+		0010416C2BDBF66100E5FDA1 /* ProfileManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0010416B2BDBF66100E5FDA1 /* ProfileManager.swift */; };
+		0010416F2BDBF6D000E5FDA1 /* FetchMyProfileModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0010416E2BDBF6D000E5FDA1 /* FetchMyProfileModel.swift */; };
 		001253E52BD373E50065F1E6 /* CommentViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001253E42BD373E50065F1E6 /* CommentViewModel.swift */; };
 		001253E72BD3A00B0065F1E6 /* CommentTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001253E62BD3A00B0065F1E6 /* CommentTableViewCell.swift */; };
 		001253EA2BD3B1360065F1E6 /* CommentProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001253E92BD3B1360065F1E6 /* CommentProfileView.swift */; };
@@ -171,6 +174,9 @@
 		001041622BDBE9F600E5FDA1 /* MyLikeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyLikeViewController.swift; sourceTree = "<group>"; };
 		001041652BDBEB4D00E5FDA1 /* MyLikeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyLikeViewModel.swift; sourceTree = "<group>"; };
 		001041672BDBEF8800E5FDA1 /* MyLikeCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyLikeCollectionViewCell.swift; sourceTree = "<group>"; };
+		001041692BDBF59A00E5FDA1 /* ProfileRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileRouter.swift; sourceTree = "<group>"; };
+		0010416B2BDBF66100E5FDA1 /* ProfileManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileManager.swift; sourceTree = "<group>"; };
+		0010416E2BDBF6D000E5FDA1 /* FetchMyProfileModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchMyProfileModel.swift; sourceTree = "<group>"; };
 		001253E42BD373E50065F1E6 /* CommentViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentViewModel.swift; sourceTree = "<group>"; };
 		001253E62BD3A00B0065F1E6 /* CommentTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentTableViewCell.swift; sourceTree = "<group>"; };
 		001253E92BD3B1360065F1E6 /* CommentProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentProfileView.swift; sourceTree = "<group>"; };
@@ -448,6 +454,31 @@
 				001041672BDBEF8800E5FDA1 /* MyLikeCollectionViewCell.swift */,
 			);
 			path = MyLikeViewController;
+			sourceTree = "<group>";
+		};
+		0010416D2BDBF6B600E5FDA1 /* Profile */ = {
+			isa = PBXGroup;
+			children = (
+				0010416E2BDBF6D000E5FDA1 /* FetchMyProfileModel.swift */,
+			);
+			path = Profile;
+			sourceTree = "<group>";
+		};
+		001041702BDBFEBD00E5FDA1 /* SubViews */ = {
+			isa = PBXGroup;
+			children = (
+				001041562BDB8A5500E5FDA1 /* UnderlineSegmentedControl.swift */,
+			);
+			path = SubViews;
+			sourceTree = "<group>";
+		};
+		001041712BDBFEC500E5FDA1 /* ContentsCollectionHeaderView */ = {
+			isa = PBXGroup;
+			children = (
+				009AFAEF2BDA75C7003A45BF /* ContentsCollectionHeaderView.swift */,
+				001041702BDBFEBD00E5FDA1 /* SubViews */,
+			);
+			path = ContentsCollectionHeaderView;
 			sourceTree = "<group>";
 		};
 		001253E22BD373C20065F1E6 /* Views */ = {
@@ -854,8 +885,7 @@
 		009AFAEE2BDA75AC003A45BF /* HeaderViews */ = {
 			isa = PBXGroup;
 			children = (
-				009AFAEF2BDA75C7003A45BF /* ContentsCollectionHeaderView.swift */,
-				001041562BDB8A5500E5FDA1 /* UnderlineSegmentedControl.swift */,
+				001041712BDBFEC500E5FDA1 /* ContentsCollectionHeaderView */,
 			);
 			path = HeaderViews;
 			sourceTree = "<group>";
@@ -1007,6 +1037,7 @@
 				00B7C4102BCA6BB7009AC333 /* UserManager.swift */,
 				00FE92AB2BCE53EA00554D0F /* PostManager.swift */,
 				001253FF2BD4190D0065F1E6 /* CommentManager.swift */,
+				0010416B2BDBF66100E5FDA1 /* ProfileManager.swift */,
 			);
 			path = Managers;
 			sourceTree = "<group>";
@@ -1016,6 +1047,7 @@
 			children = (
 				00FE92B52BCE59DF00554D0F /* Post */,
 				00FE92B42BCE59DA00554D0F /* User */,
+				0010416D2BDBF6B600E5FDA1 /* Profile */,
 			);
 			path = Responses;
 			sourceTree = "<group>";
@@ -1135,6 +1167,7 @@
 				00B7C3F02BCA5BE2009AC333 /* UserRouter.swift */,
 				00FE92AE2BCE54F000554D0F /* PostRouter.swift */,
 				001253F52BD4155B0065F1E6 /* CommentRouter.swift */,
+				001041692BDBF59A00E5FDA1 /* ProfileRouter.swift */,
 			);
 			path = Routers;
 			sourceTree = "<group>";
@@ -1279,12 +1312,14 @@
 				000AD25A2BD258EA00FC7768 /* DetailDisplayInnerCollectionViewCell.swift in Sources */,
 				0002C12B2BD99A1900AE36EC /* MapPreviewViewController.swift in Sources */,
 				00760E4D2BD512C800741C40 /* AddPostCollectionViewCellType.swift in Sources */,
+				0010416F2BDBF6D000E5FDA1 /* FetchMyProfileModel.swift in Sources */,
 				00760E572BD531EA00741C40 /* TitleTableViewCell.swift in Sources */,
 				00760E422BD4FD3D00741C40 /* AddPostViewController.swift in Sources */,
 				001041682BDBEF8800E5FDA1 /* MyLikeCollectionViewCell.swift in Sources */,
 				001041632BDBE9F600E5FDA1 /* MyLikeViewController.swift in Sources */,
 				00760E532BD5308F00741C40 /* RecommendedVisitTimeTableViewCell.swift in Sources */,
 				00B7C4142BCA6C7F009AC333 /* LoginModel.swift in Sources */,
+				0010416A2BDBF59A00E5FDA1 /* ProfileRouter.swift in Sources */,
 				0010415C2BDBBF2000E5FDA1 /* MyPostViewModel.swift in Sources */,
 				00760E5C2BD53B5900741C40 /* InnerContainerView.swift in Sources */,
 				00321C9A2BCD79B800BE2407 /* RxSwift+Extensions.swift in Sources */,
@@ -1380,6 +1415,7 @@
 				001041662BDBEB4D00E5FDA1 /* MyLikeViewModel.swift in Sources */,
 				001254022BD427840065F1E6 /* DeleteCommentParams.swift in Sources */,
 				002F01C02BD8822200992674 /* SelectLocationViewModel.swift in Sources */,
+				0010416C2BDBF66100E5FDA1 /* ProfileManager.swift in Sources */,
 				001041572BDB8A5500E5FDA1 /* UnderlineSegmentedControl.swift in Sources */,
 				00242C552BD7805600B4C96E /* Date+Extensions.swift in Sources */,
 				00AFF6042BCD155E006D319A /* UICollectionReusableView+Extensions.swift in Sources */,

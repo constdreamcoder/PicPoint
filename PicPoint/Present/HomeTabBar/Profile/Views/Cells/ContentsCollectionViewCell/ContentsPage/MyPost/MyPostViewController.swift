@@ -15,6 +15,7 @@ final class MyPostViewController: BaseViewController {
     lazy var collectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: createCollectionViewLayout())
         collectionView.backgroundColor = .white
+        collectionView.isScrollEnabled = false
         
         collectionView.register(MyPostCollectionViewCell.self, forCellWithReuseIdentifier: MyPostCollectionViewCell.identifier)
         
@@ -57,13 +58,15 @@ extension MyPostViewController: UIViewControllerConfiguration {
     }
     
     func bind() {
-        let input = MyPostViewModel.Input()
+        let input = MyPostViewModel.Input(
+            viewDidLoad: Observable.just(())
+        )
         
         let output = viewModel.transform(input: input)
         
-        Observable.just([1,2,3,4,5,6,7,8,9,10])
-            .bind(to: collectionView.rx.items(cellIdentifier: MyPostCollectionViewCell.identifier, cellType: MyPostCollectionViewCell.self)) { item, element, cell in
-                
+        output.myPostsList
+            .drive(collectionView.rx.items(cellIdentifier: MyPostCollectionViewCell.identifier, cellType: MyPostCollectionViewCell.self)) { item, element, cell in
+                cell.updateCellData(element)
             }
             .disposed(by: disposeBag)
         
@@ -89,7 +92,7 @@ extension MyPostViewController: UICollectionViewConfiguration {
         
         let groupSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1.0),
-            heightDimension: .estimated(250)
+            heightDimension: .estimated(230)
         )
         let group = NSCollectionLayoutGroup.horizontal(
             layoutSize: groupSize,

@@ -12,6 +12,8 @@ struct LoginModel: Decodable {
     let email: String
     let nick: String
     let profileImage: String?
+    let birthday: String?
+    let phoneNum: String?
     let accessToken: String
     let refreshToken: String
     
@@ -20,6 +22,8 @@ struct LoginModel: Decodable {
         case email
         case nick
         case profileImage
+        case birthday
+        case phoneNum
         case accessToken
         case refreshToken
     }
@@ -29,7 +33,9 @@ struct LoginModel: Decodable {
         self.userId = try container.decode(String.self, forKey: .userId)
         self.email = try container.decode(String.self, forKey: .email)
         self.nick = try container.decode(String.self, forKey: .nick)
-        self.profileImage = try container.decodeIfPresent(String.self, forKey: .profileImage) ?? ""
+        self.profileImage = try container.decodeIfPresent(String.self, forKey: .profileImage)
+        self.birthday = try container.decodeIfPresent(String.self, forKey: .birthday) ?? ""
+        self.phoneNum = try container.decodeIfPresent(String.self, forKey: .phoneNum) ?? ""
         self.accessToken = try container.decode(String.self, forKey: .accessToken)
         self.refreshToken = try container.decode(String.self, forKey: .refreshToken)
     }

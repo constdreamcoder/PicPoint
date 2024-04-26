@@ -36,6 +36,7 @@ struct PostManager {
     
     static func fetchPost(params: FetchPostParams) -> Single<Post> {
         return Single<Post>.create { singleObserver in
+            
             do {
                 let urlRequest = try PostRouter.fetchPost(params: params).asURLRequest()
                 

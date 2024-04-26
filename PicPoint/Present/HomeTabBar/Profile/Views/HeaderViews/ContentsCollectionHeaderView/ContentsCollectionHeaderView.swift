@@ -74,5 +74,11 @@ extension ContentsCollectionHeaderView: UIViewConfiguration {
                 profileViewModel.segmentControlSelectedIndexRelay.accept($0)
             }
             .disposed(by: disposeBag)
+        
+        profileViewModel.myPosts.asDriver()
+            .drive(with: self) { owner, posts in
+                owner.menuSegmentControl.setTitle("포스팅 \(posts.count)", forSegmentAt: 0)
+            }
+            .disposed(by: disposeBag)
     }
 }

@@ -55,5 +55,7 @@ extension ContentsCollectionViewCell {
         
         contentsPageVC.myPostVC.viewModel.delegate = profileViewModel
         contentsPageVC.MyLikeVC.viewModel.delegate = profileViewModel
+        
+        profileViewModel.delegate = contentsPageVC.myPostVC.viewModel
     }
 }
