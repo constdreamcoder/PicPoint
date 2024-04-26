@@ -111,12 +111,6 @@ final class DetailViewModel: ViewModelType {
         tap
             .subscribe { _ in
                 print("눌림")
-            } onError: { error in
-                print("onError")
-            } onCompleted: {
-                print("onCompleted")
-            } onDisposed: {
-                print("onDisposed")
             }
             .disposed(by: disposeBag)
 

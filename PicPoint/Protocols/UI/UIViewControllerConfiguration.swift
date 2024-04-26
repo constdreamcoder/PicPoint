@@ -12,5 +12,5 @@ import Foundation
     func configureConstraints()
     func configureUI()
     @objc optional func configureOtherSettings()
-    func bind()
+    @objc optional func bind()
 }

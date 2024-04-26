@@ -10,15 +10,7 @@ import SnapKit
 
 final class HomeCollectionViewCellTopView: UIView {
     
-    lazy var profileImageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.image = UIImage(systemName: "person.circle")
-        imageView.tintColor = .black
-        imageView.contentMode = .scaleToFill
-        imageView.layer.cornerRadius = profileImageViewWidth / 2
-        imageView.clipsToBounds = true
-        return imageView
-    }()
+    lazy var profileImageView = ProfileImageView(frame: .zero)
     
     let userNicknameLabel: UILabel = {
         let label = UILabel()
