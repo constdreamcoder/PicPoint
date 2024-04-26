@@ -19,14 +19,22 @@ final class MyLikeViewModel: ViewModelType {
     weak var delegate: MyLikeViewModelDelegate?
 
     struct Input {
-        
+        let viewDidLoad: Observable<Void>
     }
     
     struct Output {
-        
+        let viewDidLoadTrigger: Driver<[Post]>
     }
     
     func transform(input: Input) -> Output {
-        return Output()
+        
+        let viewDidLoadTrigger = input.viewDidLoad
+            .flatMap { _ in
+                LikeManager.fetchMyLikes()
+            }
+            
+        return Output(
+            viewDidLoadTrigger: viewDidLoadTrigger.asDriver(onErrorJustReturn: [])
+        )
     }
 }

@@ -35,6 +35,9 @@
 		0010416A2BDBF59A00E5FDA1 /* ProfileRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001041692BDBF59A00E5FDA1 /* ProfileRouter.swift */; };
 		0010416C2BDBF66100E5FDA1 /* ProfileManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0010416B2BDBF66100E5FDA1 /* ProfileManager.swift */; };
 		0010416F2BDBF6D000E5FDA1 /* FetchMyProfileModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0010416E2BDBF6D000E5FDA1 /* FetchMyProfileModel.swift */; };
+		001041752BDC2ADE00E5FDA1 /* LikeRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001041742BDC2ADE00E5FDA1 /* LikeRouter.swift */; };
+		001041772BDC2BD100E5FDA1 /* LikeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001041762BDC2BD100E5FDA1 /* LikeManager.swift */; };
+		0010417A2BDC2C4600E5FDA1 /* FetchMyLikesModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001041792BDC2C4600E5FDA1 /* FetchMyLikesModel.swift */; };
 		001253E52BD373E50065F1E6 /* CommentViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001253E42BD373E50065F1E6 /* CommentViewModel.swift */; };
 		001253E72BD3A00B0065F1E6 /* CommentTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001253E62BD3A00B0065F1E6 /* CommentTableViewCell.swift */; };
 		001253EA2BD3B1360065F1E6 /* CommentProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001253E92BD3B1360065F1E6 /* CommentProfileView.swift */; };
@@ -177,6 +180,9 @@
 		001041692BDBF59A00E5FDA1 /* ProfileRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileRouter.swift; sourceTree = "<group>"; };
 		0010416B2BDBF66100E5FDA1 /* ProfileManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileManager.swift; sourceTree = "<group>"; };
 		0010416E2BDBF6D000E5FDA1 /* FetchMyProfileModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchMyProfileModel.swift; sourceTree = "<group>"; };
+		001041742BDC2ADE00E5FDA1 /* LikeRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikeRouter.swift; sourceTree = "<group>"; };
+		001041762BDC2BD100E5FDA1 /* LikeManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikeManager.swift; sourceTree = "<group>"; };
+		001041792BDC2C4600E5FDA1 /* FetchMyLikesModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchMyLikesModel.swift; sourceTree = "<group>"; };
 		001253E42BD373E50065F1E6 /* CommentViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentViewModel.swift; sourceTree = "<group>"; };
 		001253E62BD3A00B0065F1E6 /* CommentTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentTableViewCell.swift; sourceTree = "<group>"; };
 		001253E92BD3B1360065F1E6 /* CommentProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentProfileView.swift; sourceTree = "<group>"; };
@@ -479,6 +485,14 @@
 				001041702BDBFEBD00E5FDA1 /* SubViews */,
 			);
 			path = ContentsCollectionHeaderView;
+			sourceTree = "<group>";
+		};
+		001041782BDC2BFD00E5FDA1 /* Like */ = {
+			isa = PBXGroup;
+			children = (
+				001041792BDC2C4600E5FDA1 /* FetchMyLikesModel.swift */,
+			);
+			path = Like;
 			sourceTree = "<group>";
 		};
 		001253E22BD373C20065F1E6 /* Views */ = {
@@ -1038,6 +1052,7 @@
 				00FE92AB2BCE53EA00554D0F /* PostManager.swift */,
 				001253FF2BD4190D0065F1E6 /* CommentManager.swift */,
 				0010416B2BDBF66100E5FDA1 /* ProfileManager.swift */,
+				001041762BDC2BD100E5FDA1 /* LikeManager.swift */,
 			);
 			path = Managers;
 			sourceTree = "<group>";
@@ -1045,6 +1060,7 @@
 		00B7C4122BCA6C5D009AC333 /* Responses */ = {
 			isa = PBXGroup;
 			children = (
+				001041782BDC2BFD00E5FDA1 /* Like */,
 				00FE92B52BCE59DF00554D0F /* Post */,
 				00FE92B42BCE59DA00554D0F /* User */,
 				0010416D2BDBF6B600E5FDA1 /* Profile */,
@@ -1168,6 +1184,7 @@
 				00FE92AE2BCE54F000554D0F /* PostRouter.swift */,
 				001253F52BD4155B0065F1E6 /* CommentRouter.swift */,
 				001041692BDBF59A00E5FDA1 /* ProfileRouter.swift */,
+				001041742BDC2ADE00E5FDA1 /* LikeRouter.swift */,
 			);
 			path = Routers;
 			sourceTree = "<group>";
@@ -1350,6 +1367,7 @@
 				0035401A2BCFBA2600A71415 /* DetailCollectionViewSectionDataModels.swift in Sources */,
 				001253F62BD4155B0065F1E6 /* CommentRouter.swift in Sources */,
 				00B7C40C2BCA6A6E009AC333 /* LoginViewModel.swift in Sources */,
+				0010417A2BDC2C4600E5FDA1 /* FetchMyLikesModel.swift in Sources */,
 				0003E9392BD57ECF00695D40 /* SelectImageViewModel.swift in Sources */,
 				00760E4A2BD5128600741C40 /* AddPostCollectionViewSectionDataModel.swift in Sources */,
 				00B67D822BD8102F0097ACDE /* RecommendedVisitTimeViewController.swift in Sources */,
@@ -1361,6 +1379,7 @@
 				00AFF5FC2BCD1274006D319A /* HomeViewModel.swift in Sources */,
 				001C92082BD6D37D0028E67B /* SelectedVisitDateViewController.swift in Sources */,
 				00B7C3F32BCA5C42009AC333 /* TargetType.swift in Sources */,
+				001041772BDC2BD100E5FDA1 /* LikeManager.swift in Sources */,
 				000220222BD178B20051F04B /* DetailDisplayCollectionViewCell.swift in Sources */,
 				000AD2512BD21C1900FC7768 /* DetailRelatedContentsCollectionViewCell.swift in Sources */,
 				001253EA2BD3B1360065F1E6 /* CommentProfileView.swift in Sources */,
@@ -1412,6 +1431,7 @@
 				002023162BDA819C004CA12F /* ProfileImageView.swift in Sources */,
 				003540252BCFCC2D00A71415 /* BaseTableViewCell.swift in Sources */,
 				00760E502BD52EF000741C40 /* SelectLocationTableViewCell.swift in Sources */,
+				001041752BDC2ADE00E5FDA1 /* LikeRouter.swift in Sources */,
 				001041662BDBEB4D00E5FDA1 /* MyLikeViewModel.swift in Sources */,
 				001254022BD427840065F1E6 /* DeleteCommentParams.swift in Sources */,
 				002F01C02BD8822200992674 /* SelectLocationViewModel.swift in Sources */,

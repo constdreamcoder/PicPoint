@@ -34,7 +34,7 @@ final class MyPostCollectionViewCell: BaseCollectionViewCell {
         
         postCustomView.titleLabel.text = post.title
         if let shortAddress = post.content1?.components(separatedBy: "/")[3] {
-            postCustomView.addressLabel.text = "서울 도동구"
+            postCustomView.addressLabel.text = shortAddress
         }
     }
 }

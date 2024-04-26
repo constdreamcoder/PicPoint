@@ -59,13 +59,15 @@ extension MyLikeViewController: UIViewControllerConfiguration {
     }
     
     func bind() {
-        let input = MyLikeViewModel.Input()
+        let input = MyLikeViewModel.Input(
+            viewDidLoad: Observable.just(())
+        )
         
         let output = viewModel.transform(input: input)
         
-        Observable.just([1,2,3,3])
-            .bind(to: collectionView.rx.items(cellIdentifier: MyLikeCollectionViewCell.identifier, cellType: MyLikeCollectionViewCell.self)) { item, element, cell in
-
+        output.viewDidLoadTrigger
+            .drive(collectionView.rx.items(cellIdentifier: MyLikeCollectionViewCell.identifier, cellType: MyLikeCollectionViewCell.self)) { item, element, cell in
+                
             }
             .disposed(by: disposeBag)
         
