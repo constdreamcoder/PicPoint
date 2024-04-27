@@ -131,8 +131,11 @@ extension ProfileViewController: UIViewControllerConfiguration {
             .disposed(by: disposeBag)
         
         output.editProfileButtonTapTrigger
-            .drive(with: self) { owner, _ in
-                let editProfileVC = EditProfileViewController()
+            .drive(with: self) { owner, myProfile in
+                guard let myProfile else { return }
+                let editViewModel = EditViewModel(myProfile: myProfile)
+                editViewModel.delegate = owner.viewModel
+                let editProfileVC = EditProfileViewController(editViewModel: editViewModel)
                 let editProfileNav = UINavigationController(rootViewController: editProfileVC)
                 editProfileNav.modalPresentationStyle = .fullScreen
                 owner.present(editProfileNav, animated: true)

@@ -44,7 +44,7 @@ final class CustomInputView: UIView {
     
     private var charactersLimit: Int = 0
     
-    private var textViewPlaceHolder: String?
+    var textViewPlaceHolder: String?
     
     init(_ textViewPlaceHolder: String, charLimit: Int = 0) {
         super.init(frame: .zero)
@@ -59,7 +59,7 @@ final class CustomInputView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    private func updateCountLabel(characterCount: Int) {
+    func updateCountLabel(characterCount: Int) {
         remainCountLabel.text = "\(characterCount)/\(charactersLimit)"
         remainCountLabel.asColor(targetString: "\(characterCount)", color: characterCount == 0 ? .lightGray : .black)
     }

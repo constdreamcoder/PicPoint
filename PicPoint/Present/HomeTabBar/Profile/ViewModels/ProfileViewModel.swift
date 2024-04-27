@@ -31,7 +31,7 @@ final class ProfileViewModel: ViewModelType {
     struct Output {
         let sections: Driver<[SectionModelWrapper]>
         let updateContentSize: Driver<CGFloat>
-        let editProfileButtonTapTrigger: Driver<Void>
+        let editProfileButtonTapTrigger: Driver<FetchMyProfileModel?>
     }
     
     func transform(input: Input) -> Output {
@@ -60,11 +60,15 @@ final class ProfileViewModel: ViewModelType {
                 owner.delegate?.sendMyPosts(myProfileModel.posts)
             }
             .disposed(by: disposeBag)
+        
+        let editProfileButtonTapTrigger = editProfileButtonTap
+            .withLatestFrom(myProfile)
+            
 
         return Output(
             sections: sectionsObservable.asDriver(onErrorJustReturn: []),
             updateContentSize: updateContentSizeRelay.asDriver(onErrorJustReturn: 0),
-            editProfileButtonTapTrigger: editProfileButtonTap.asDriver(onErrorJustReturn: ())
+            editProfileButtonTapTrigger: editProfileButtonTapTrigger.asDriver(onErrorJustReturn: nil)
         )
     }
 }
@@ -84,6 +88,16 @@ extension ProfileViewModel: MyLikeViewModelDelegate {
         Observable.just(contentHeight)
             .subscribe(with: self) { owner, contentHeight in
                 owner.updateContentSizeRelay.accept(contentHeight)
+            }
+            .disposed(by: disposeBag)
+    }
+}
+
+extension ProfileViewModel: EditViewModelDelegate {
+    func sendUpdatedProfileInfos(_ myNewProfile: FetchMyProfileModel) {        
+        Observable.just(myNewProfile)
+            .subscribe(with: self) { owner, newMyProfile in
+                owner.myProfile.accept(newMyProfile)
             }
             .disposed(by: disposeBag)
     }

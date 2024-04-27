@@ -66,6 +66,7 @@ struct PostManager {
                 
                 guard let url = urlRequest.url else { return Disposables.create() }
                 print("url", url)
+                guard let method = urlRequest.method else { return Disposables.create() }
                 
                 let headers = urlRequest.headers
                 
@@ -78,7 +79,7 @@ struct PostManager {
                             mimeType: imageFile.mimeType.rawValue
                         )
                     }
-                }, to: url, headers: headers)
+                }, to: url, method: method, headers: headers)
                     .validate(statusCode: 200...500)
                     .responseDecodable(of: ImageFileListModel.self) { response in
                         switch response.result {
