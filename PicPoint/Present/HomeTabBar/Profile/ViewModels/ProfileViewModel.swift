@@ -16,6 +16,7 @@ protocol ProfileViewModelDelegate: AnyObject {
 final class ProfileViewModel: ViewModelType {
     var disposeBag = DisposeBag()
     
+    let editProfileButtonTap = PublishRelay<Void>()
     let segmentControlSelectedIndexRelay = BehaviorRelay<Int>(value: 0)
     let myProfile = BehaviorRelay<FetchMyProfileModel?>(value: nil)
     let myPosts = BehaviorRelay<[String]>(value: [])
@@ -30,18 +31,19 @@ final class ProfileViewModel: ViewModelType {
     struct Output {
         let sections: Driver<[SectionModelWrapper]>
         let updateContentSize: Driver<CGFloat>
+        let editProfileButtonTapTrigger: Driver<Void>
     }
     
     func transform(input: Input) -> Output {
         let sections: [SectionModelWrapper] = [
             SectionModelWrapper(
                 ProfileCollectionViewFirstSectionDataModel(
-                    items: ["fgdsfg"]
+                    items: ["fgdsfg"] // TODO: - 열거형으로 빼기
                 )
             ),
             SectionModelWrapper(
                 ProfileCollectionViewSecondSectionDataModel(
-                    items: ["1"]
+                    items: ["1"] // TODO: - 열거형으로 빼기
                 )
             )
         ]
@@ -61,7 +63,8 @@ final class ProfileViewModel: ViewModelType {
 
         return Output(
             sections: sectionsObservable.asDriver(onErrorJustReturn: []),
-            updateContentSize: updateContentSizeRelay.asDriver(onErrorJustReturn: 0)
+            updateContentSize: updateContentSizeRelay.asDriver(onErrorJustReturn: 0),
+            editProfileButtonTapTrigger: editProfileButtonTap.asDriver(onErrorJustReturn: ())
         )
     }
 }

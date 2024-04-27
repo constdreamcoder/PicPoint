@@ -129,6 +129,15 @@ extension ProfileViewController: UIViewControllerConfiguration {
                 owner.updateCellHeight(height: newContentHeight)
             }
             .disposed(by: disposeBag)
+        
+        output.editProfileButtonTapTrigger
+            .drive(with: self) { owner, _ in
+                let editProfileVC = EditProfileViewController()
+                let editProfileNav = UINavigationController(rootViewController: editProfileVC)
+                editProfileNav.modalPresentationStyle = .fullScreen
+                owner.present(editProfileNav, animated: true)
+            }
+            .disposed(by: disposeBag)
     }
 }
 

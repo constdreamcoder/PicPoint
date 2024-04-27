@@ -72,6 +72,9 @@
 		003540252BCFCC2D00A71415 /* BaseTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 003540242BCFCC2D00A71415 /* BaseTableViewCell.swift */; };
 		003540272BCFCC7500A71415 /* BaseCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 003540262BCFCC7500A71415 /* BaseCollectionViewCell.swift */; };
 		0035402B2BD0212800A71415 /* String+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0035402A2BD0212800A71415 /* String+Extensions.swift */; };
+		003C82C22BDCD5AF003315E1 /* EditProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 003C82C12BDCD5AF003315E1 /* EditProfileViewController.swift */; };
+		003C82C62BDCE9EA003315E1 /* EditViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 003C82C52BDCE9EA003315E1 /* EditViewModel.swift */; };
+		003C82C82BDCECFE003315E1 /* CustomInputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 003C82C72BDCECFE003315E1 /* CustomInputView.swift */; };
 		0049D87F2BC96B4800F59852 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0049D87E2BC96B4800F59852 /* AppDelegate.swift */; };
 		0049D8812BC96B4800F59852 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0049D8802BC96B4800F59852 /* SceneDelegate.swift */; };
 		0049D8882BC96B4900F59852 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0049D8872BC96B4900F59852 /* Assets.xcassets */; };
@@ -215,6 +218,9 @@
 		003540242BCFCC2D00A71415 /* BaseTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseTableViewCell.swift; sourceTree = "<group>"; };
 		003540262BCFCC7500A71415 /* BaseCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseCollectionViewCell.swift; sourceTree = "<group>"; };
 		0035402A2BD0212800A71415 /* String+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Extensions.swift"; sourceTree = "<group>"; };
+		003C82C12BDCD5AF003315E1 /* EditProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileViewController.swift; sourceTree = "<group>"; };
+		003C82C52BDCE9EA003315E1 /* EditViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditViewModel.swift; sourceTree = "<group>"; };
+		003C82C72BDCECFE003315E1 /* CustomInputView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomInputView.swift; sourceTree = "<group>"; };
 		0049D87B2BC96B4800F59852 /* PicPoint.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PicPoint.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0049D87E2BC96B4800F59852 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		0049D8802BC96B4800F59852 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -368,6 +374,7 @@
 				000AD2662BD2849900FC7768 /* SeparatorView.swift */,
 				002023152BDA819C004CA12F /* ProfileImageView.swift */,
 				0010414A2BDB25D400E5FDA1 /* PostCustomView.swift */,
+				003C82C72BDCECFE003315E1 /* CustomInputView.swift */,
 			);
 			path = CusomView;
 			sourceTree = "<group>";
@@ -435,13 +442,6 @@
 				001041612BDBE9BF00E5FDA1 /* MyLikeViewController */,
 			);
 			path = ContentsPage;
-			sourceTree = "<group>";
-		};
-		0010415A2BDBBD4A00E5FDA1 /* Enums */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Enums;
 			sourceTree = "<group>";
 		};
 		0010415F2BDBC04900E5FDA1 /* MyPost */ = {
@@ -690,10 +690,10 @@
 		0034FAEB2BCC9A7700D932F3 /* Profile */ = {
 			isa = PBXGroup;
 			children = (
-				0010415A2BDBBD4A00E5FDA1 /* Enums */,
 				0034FAEC2BCC9A8800D932F3 /* Views */,
 				0034FAED2BCC9A8D00D932F3 /* ViewModels */,
 				0034FAF22BCC9EF400D932F3 /* Settings */,
+				003C82C02BDCD59A003315E1 /* EditProfile */,
 			);
 			path = Profile;
 			sourceTree = "<group>";
@@ -769,6 +769,31 @@
 			children = (
 				003540172BCFB99F00A71415 /* DetailViewModel.swift */,
 				003540192BCFBA2600A71415 /* DetailCollectionViewSectionDataModels.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		003C82C02BDCD59A003315E1 /* EditProfile */ = {
+			isa = PBXGroup;
+			children = (
+				003C82C32BDCE9C2003315E1 /* Views */,
+				003C82C42BDCE9C7003315E1 /* ViewModels */,
+			);
+			path = EditProfile;
+			sourceTree = "<group>";
+		};
+		003C82C32BDCE9C2003315E1 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				003C82C12BDCD5AF003315E1 /* EditProfileViewController.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		003C82C42BDCE9C7003315E1 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				003C82C52BDCE9EA003315E1 /* EditViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -1388,6 +1413,7 @@
 				00FE92AC2BCE53EA00554D0F /* PostManager.swift in Sources */,
 				001253F32BD3DC8C0065F1E6 /* CommentWritingSectionView.swift in Sources */,
 				00FE92B32BCE56F600554D0F /* FetchPostsQuery.swift in Sources */,
+				003C82C22BDCD5AF003315E1 /* EditProfileViewController.swift in Sources */,
 				009AFAF22BDA7629003A45BF /* ContentsCollectionViewCell.swift in Sources */,
 				00E414EE2BD91CAD00C76BE4 /* NSObject+Extensions.swift in Sources */,
 				00760E592BD5321500741C40 /* ContentTableViewCell.swift in Sources */,
@@ -1411,6 +1437,7 @@
 				0035402B2BD0212800A71415 /* String+Extensions.swift in Sources */,
 				0055FB3C2BDA773E0053781D /* ProfileCollectionViewSectionDataModels.swift in Sources */,
 				00B7C3FE2BCA6142009AC333 /* BaseViewController.swift in Sources */,
+				003C82C62BDCE9EA003315E1 /* EditViewModel.swift in Sources */,
 				009AFAEA2BDA3050003A45BF /* FetchPostWithHashTagQuery.swift in Sources */,
 				000AD2652BD27E0B00FC7768 /* DetailRelatedContentCollectionHeaderView.swift in Sources */,
 				00E414F02BD93C5500C76BE4 /* WritePostBody.swift in Sources */,
@@ -1446,6 +1473,7 @@
 				001041532BDB692100E5FDA1 /* ContentsPageViewController.swift in Sources */,
 				0035401E2BCFBAED00A71415 /* UITableViewCellConfiguration.swift in Sources */,
 				00AFF6062BCD15B7006D319A /* UICollectionViewCellConfiguration.swift in Sources */,
+				003C82C82BDCECFE003315E1 /* CustomInputView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

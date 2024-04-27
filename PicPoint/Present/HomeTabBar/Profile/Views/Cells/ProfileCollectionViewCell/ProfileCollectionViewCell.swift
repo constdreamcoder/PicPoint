@@ -104,6 +104,7 @@ extension ProfileCollectionViewCell {
     
     func bind() {
         guard let profileViewModel else { return }
+        
         profileViewModel.myProfile.asDriver()
             .drive(with: self) { owner, myProfile in
                 guard let myProfile else { return }
@@ -117,6 +118,13 @@ extension ProfileCollectionViewCell {
                 owner.nicknameLabel.text = myProfile.nick
                 owner.followerFollowingStackView.followerNumberLabel.text = myProfile.followers.count.description
                 owner.followerFollowingStackView.followingNumberLabel.text = myProfile.following.count.description
+            }
+            .disposed(by: disposeBag)
+        
+        bottomButton.rx.tap
+            .bind(with: self) { owner, _ in
+                guard let profileViewModel = owner.profileViewModel else { return }
+                profileViewModel.editProfileButtonTap.accept(())
             }
             .disposed(by: disposeBag)
     }
