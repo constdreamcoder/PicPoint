@@ -18,7 +18,7 @@ final class NicknameSignUpViewController: BaseSignUpViewController {
         return textView
     }()
     
-    let viewModel = NicknameViewModel()
+    private let viewModel = NicknameViewModel()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -52,11 +52,25 @@ extension NicknameSignUpViewController {
     override func bind() {
         super.bind()
         
+        let nicknameText = nicknameInputTextView.inputTextView.rx.text.orEmpty
+            .withUnretained(self)
+            .map { owner, nicknameText in
+                nicknameText == owner.nicknameInputTextView.textViewPlaceHolder ? "" : nicknameText
+            }
+        
         let input = NicknameViewModel.Input(
+            nicknameText: nicknameText,
             bottomButtonTap: bottomButton.rx.tap
         )
         
         let output = viewModel.transform(input: input)
+        
+        output.nicknameValid
+            .drive(with: self) { owner, isValid in
+                owner.bottomButton.backgroundColor = isValid ? .black : .systemGray5
+                owner.bottomButton.isEnabled = isValid
+            }
+            .disposed(by: disposeBag)
         
         output.bottomButtonTapTrigger
             .drive(with: self) { owner, _ in

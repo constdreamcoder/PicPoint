@@ -14,12 +14,12 @@ final class PhoneNumberSignUpViewController: BaseSignUpViewController {
     
     let phoneNumberInputTextView: CustomInputView = {
         let textView = CustomInputView("전화번호를 입력해주세요 (예) 01012345678", charLimit: 11)
-        textView.titleLabel.text = "전화번호"
+        textView.titleLabel.text = "전화번호(옵션)"
         textView.inputTextView.keyboardType = .numberPad
         return textView
     }()
     
-    let viewModel = PhoneNumberSignUpViewModel()
+    private let viewModel = PhoneNumberSignUpViewModel()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -53,16 +53,27 @@ extension PhoneNumberSignUpViewController {
     override func bind() {
         super.bind()
         
+        let phoneNumberText = phoneNumberInputTextView.inputTextView.rx.text.orEmpty
+            .withUnretained(self)
+            .map { onwer, phoneNumberText in
+                phoneNumberText == onwer.phoneNumberInputTextView.textViewPlaceHolder ? "" : phoneNumberText
+            }
+        
         let input = PhoneNumberSignUpViewModel.Input(
+            phoneNumberText: phoneNumberText,
             bottomButtonTap: bottomButton.rx.tap
         )
         
         let output = viewModel.transform(input: input)
         
         output.bottomButtonTapTrigger
-            .drive(with: self) { owner, _ in
-                let birthdaySignUpVC = BirthDaySignUpViewController()
-                owner.navigationController?.pushViewController(birthdaySignUpVC, animated: true)
+            .drive(with: self) { owner, isValid in
+                if isValid {
+                    let birthdaySignUpVC = BirthDaySignUpViewController()
+                    owner.navigationController?.pushViewController(birthdaySignUpVC, animated: true)
+                } else {
+                    owner.makeErrorAlert(title: "전화번호 형식 확인", message: "유효하지 않은 전화번호입니다.")
+                }
             }
             .disposed(by: disposeBag)
     }

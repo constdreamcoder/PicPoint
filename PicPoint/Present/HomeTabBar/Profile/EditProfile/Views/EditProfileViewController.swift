@@ -134,7 +134,6 @@ extension EditProfileViewController: UIViewControllerConfiguration {
         editButton.snp.makeConstraints {
             $0.horizontalEdges.equalToSuperview().inset(16.0)
             $0.bottom.equalToSuperview()
-            $0.height.equalTo(50.0)
         }
         
         view.addSubview(baseView)

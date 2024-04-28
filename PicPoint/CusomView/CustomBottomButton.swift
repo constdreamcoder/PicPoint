@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SnapKit
 
 final class CustomBottomButton: UIButton {
     
@@ -29,5 +30,9 @@ final class CustomBottomButton: UIButton {
         super.layoutSubviews()
         
         titleLabel?.font = .systemFont(ofSize: 18.0, weight: .bold)
+        
+        self.snp.makeConstraints {
+            $0.height.equalTo(50.0)
+        }
     }
 }

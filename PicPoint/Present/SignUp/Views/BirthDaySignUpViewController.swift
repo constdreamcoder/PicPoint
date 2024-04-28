@@ -14,12 +14,12 @@ final class BirthDaySignUpViewController: BaseSignUpViewController {
     
     let birthdayInputTextView: CustomInputView = {
         let textView = CustomInputView("생년월일을 입력해주세요 (예) 20241225", charLimit: 8)
-        textView.titleLabel.text = "생년월일"
+        textView.titleLabel.text = "생년월일(옵션)"
         textView.inputTextView.keyboardType = .numberPad
         return textView
     }()
     
-    let viewModel = BirthDaySignUpViewModel()
+   private let viewModel = BirthDaySignUpViewModel()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -52,14 +52,29 @@ extension BirthDaySignUpViewController {
     
     override func bind() {
         super.bind()
+                
+        let birthdayText = birthdayInputTextView.inputTextView.rx.text.orEmpty
+            .withUnretained(self)
+            .map { onwer, birthdayText in
+                birthdayText == onwer.birthdayInputTextView.textViewPlaceHolder ? "" : birthdayText
+            }
         
         let input = BirthDaySignUpViewModel.Input(
+            birthdayText: birthdayText,
             bottomButtonTap: bottomButton.rx.tap
         )
         
         let output = viewModel.transform(input: input)
         
-        output.bottomButtonTapTrigger
+        output.birthdayValid
+            .drive(with: self) { owner, isValid in
+                if !isValid {
+                    owner.makeErrorAlert(title: "생년월일 형식 확인", message: "유효하지 않은 생년월일입니다.")
+                }
+            }
+            .disposed(by: disposeBag)
+        
+        output.signUpButtonTapTrigger
             .drive(with: self) { owner, _ in
                 owner.navigationController?.popToRootViewController(animated: true)
             }

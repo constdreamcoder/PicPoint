@@ -78,13 +78,11 @@ extension SignInViewController: UIViewControllerConfiguration {
         signInButton.snp.makeConstraints {
             $0.top.equalTo(passwordInputTextField.snp.bottom).offset(36.0)
             $0.horizontalEdges.equalTo(view.safeAreaLayoutGuide).inset(16.0)
-            $0.height.equalTo(50.0)
         }
         
         goToSignUpButton.snp.makeConstraints {
             $0.top.equalTo(signInButton.snp.bottom).offset(16.0)
             $0.horizontalEdges.equalTo(view.safeAreaLayoutGuide).inset(16.0)
-            $0.height.equalTo(50.0)
         }
     }
     

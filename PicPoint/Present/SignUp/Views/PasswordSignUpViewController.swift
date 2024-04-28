@@ -23,8 +23,34 @@ final class PasswordSignUpViewController: BaseSignUpViewController {
         textView.titleLabel.text = "비밀번호 확인"
         return textView
     }()
+    
+    let passwordValidLabel: UILabel = {
+        let label = UILabel()
+        label.textColor = .systemGreen
+        label.numberOfLines = 2
+        return label
+    }()
+    
+    let passwordConfirmValidLabel: UILabel = {
+        let label = UILabel()
+        label.textColor = .systemGreen
+        return label
+    }()
+    
+    private let passwordInputGuideMessageLabel: UILabel = {
+        let label = UILabel()
+        label.numberOfLines = 0
+        label.text = """
+                     <비밀번호 입력조건>
+                     비밀번호는 최소 8자 이상, 15자 이하, 
+                     문자, 숫자, 특수문자($@$!%*?&)를
+                     모두 포함되어야 합니다.
+                     """
+        label.textColor = .black
+        return label
+    }()
 
-    let viewModel = PasswordSignUpViewModel()
+    private let viewModel = PasswordSignUpViewModel()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -44,16 +70,34 @@ extension PasswordSignUpViewController {
         
         [
             passwordInputTextView,
-            passwordConfirmInputTextView
+            passwordValidLabel,
+            passwordConfirmInputTextView,
+            passwordConfirmValidLabel,
+            passwordInputGuideMessageLabel
         ].forEach { baseView.addSubview($0) }
         
         passwordInputTextView.snp.makeConstraints {
             $0.top.horizontalEdges.equalToSuperview().inset(16.0)
         }
         
-        passwordConfirmInputTextView.snp.makeConstraints {
+        passwordValidLabel.snp.makeConstraints {
             $0.top.equalTo(passwordInputTextView.snp.bottom).offset(16.0)
+            $0.horizontalEdges.equalTo(view.safeAreaLayoutGuide).inset(16.0)
+        }
+        
+        passwordConfirmInputTextView.snp.makeConstraints {
+            $0.top.equalTo(passwordValidLabel.snp.bottom).offset(24.0)
             $0.horizontalEdges.equalToSuperview().inset(16.0)
+        }
+        
+        passwordConfirmValidLabel.snp.makeConstraints {
+            $0.top.equalTo(passwordConfirmInputTextView.snp.bottom).offset(16.0)
+            $0.horizontalEdges.equalTo(view.safeAreaLayoutGuide).inset(16.0)
+        }
+        
+        passwordInputGuideMessageLabel.snp.makeConstraints {
+            $0.top.equalTo(passwordConfirmValidLabel.snp.bottom).offset(32.0)
+            $0.centerX.equalToSuperview()
         }
 
     }
@@ -68,10 +112,43 @@ extension PasswordSignUpViewController {
         super.bind()
         
         let input = PasswordSignUpViewModel.Input(
+            passwordText: passwordInputTextView.inputTextView.rx.text.orEmpty,
+            passwordConfirmText: passwordConfirmInputTextView.inputTextView.rx.text.orEmpty,
             bottomButtonTap: bottomButton.rx.tap
         )
         
         let output = viewModel.transform(input: input)
+        
+        output.passwordValidation
+            .drive(with: self) { owner, validMessage in
+                if Int(validMessage) != 200 {
+                    owner.passwordValidLabel.text = validMessage
+                    owner.passwordValidLabel.textColor = .systemRed
+                } else {
+                    owner.passwordValidLabel.text = "비밀번호를 올바르게 입력하였습니다"
+                    owner.passwordValidLabel.textColor = .systemGreen
+                }
+            }
+            .disposed(by: disposeBag)
+        
+        output.passwordConfirmValid
+            .drive(with: self) { owner, validMessage in
+                if Int(validMessage) != 200 {
+                    owner.passwordConfirmValidLabel.text = validMessage
+                    owner.passwordConfirmValidLabel.textColor = .systemRed
+                } else {
+                    owner.passwordConfirmValidLabel.text = "비밀번호가 일치합니다"
+                    owner.passwordConfirmValidLabel.textColor = .systemGreen
+                }
+            }
+            .disposed(by: disposeBag)
+        
+        output.bottomButtonValid
+            .drive(with: self) { owner, isValid in
+                owner.bottomButton.isEnabled = isValid
+                owner.bottomButton.backgroundColor = isValid ? .black : .systemGray5
+            }
+            .disposed(by: disposeBag)
         
         output.bottomButtonTapTrigger
             .drive(with: self) { owner, _ in

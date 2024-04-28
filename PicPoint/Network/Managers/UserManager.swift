@@ -77,6 +77,34 @@ struct UserManager {
             }
             return Disposables.create()
         }
+    }
+    
+    static func validateEmail(body: ValidateEmailBody) -> Single<ValidateEmailModel> {
+        return Single<ValidateEmailModel>.create { singleObserver in
+            do {
+                let urlRequest = try UserRouter.validateEmail(body: body).asURLRequest()
+                
+                AF.request(urlRequest)
+                    .validate(statusCode: 200...500)
+                    .responseDecodable(of: ValidateEmailModel.self) { response in
+                        switch response.result {
+                        case .success(let withdrawalModel):
+                            print(response.response?.statusCode)
+                            if response.response?.statusCode == 200 {
+                                singleObserver(.success(ValidateEmailModel(message: "200")))
+                            } else {
+                                singleObserver(.success(withdrawalModel))
+                            }
+                        case .failure(let AFError):
+                            print(response.response?.statusCode)
+                            singleObserver(.failure(AFError))
+                        }
+                    }
+            } catch {
+                singleObserver(.failure(error))
+            }
+            return Disposables.create()
+        }
         
     }
 }
