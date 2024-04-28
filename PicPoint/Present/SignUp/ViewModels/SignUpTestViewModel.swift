@@ -1,5 +1,5 @@
 //
-//  SignUpViewModel.swift
+//  SignUpTestViewModel.swift
 //  PicPoint
 //
 //  Created by SUCHAN CHANG on 4/14/24.
@@ -9,7 +9,7 @@ import Foundation
 import RxSwift
 import RxCocoa
 
-final class SignUpViewModel: ViewModelType {
+final class SignUpTestViewModel: ViewModelType {
     
     var disposeBag = DisposeBag()
     

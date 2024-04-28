@@ -122,8 +122,8 @@ extension SignInViewController: UIViewControllerConfiguration {
         
         output.moveToSignUpVC
             .drive(with: self) { owner, _ in
-                let signUpVC = SignUpViewController()
-                owner.navigationController?.pushViewController(signUpVC, animated: true)
+                let emailSignUpVC = EmailSignUpViewController()
+                owner.navigationController?.pushViewController(emailSignUpVC, animated: true)
             }
             .disposed(by: disposeBag)
         

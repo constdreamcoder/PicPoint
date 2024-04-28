@@ -1,5 +1,5 @@
 //
-//  SignUpViewController.swift
+//  SignUpTestViewController.swift
 //  PicPoint
 //
 //  Created by SUCHAN CHANG on 4/14/24.
@@ -10,7 +10,7 @@ import SnapKit
 import RxSwift
 import RxCocoa
 
-final class SignUpViewController: BaseViewController {
+final class SignUpTestViewController: BaseViewController {
     
     let emailTextField: UITextField = {
         let textField = UITextField()
@@ -76,7 +76,7 @@ final class SignUpViewController: BaseViewController {
         return button
     }()
     
-    private let viewModel = SignUpViewModel()
+    private let viewModel = SignUpTestViewModel()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -89,7 +89,7 @@ final class SignUpViewController: BaseViewController {
 
 }
 
-extension SignUpViewController: UIViewControllerConfiguration {
+extension SignUpTestViewController: UIViewControllerConfiguration {
     func configureNavigationBar() {
         
     }
@@ -130,7 +130,7 @@ extension SignUpViewController: UIViewControllerConfiguration {
     
     func bind() {
         
-        let input = SignUpViewModel.Input(
+        let input = SignUpTestViewModel.Input(
             emailText: emailTextField.rx.text.orEmpty,
             passwordText: passwordTextField.rx.text.orEmpty,
             nickText: nickTextField.rx.text.orEmpty,
