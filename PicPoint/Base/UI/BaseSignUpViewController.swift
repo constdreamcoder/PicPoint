@@ -17,15 +17,8 @@ class BaseSignUpViewController: BaseViewController {
         view.backgroundColor = .white
         return view
     }()
-    
-    let bottomButton: UIButton = {
-        let button = UIButton(type: .system)
-        button.backgroundColor = .black
-        button.setTitleColor(.white, for: .normal)
-        button.titleLabel?.font = .systemFont(ofSize: 18, weight: .bold)
-        button.layer.cornerRadius = 16.0
-        return button
-    }()
+
+    let bottomButton = CustomBottomButton(type: .system)
     
     private let nextButtonBottonConstraintsDefaultConstant = -8.0
     

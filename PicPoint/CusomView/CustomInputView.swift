@@ -84,7 +84,7 @@ extension CustomInputView: UIViewConfiguration {
         }
         
         inputTextView.snp.makeConstraints {
-            $0.top.equalTo(titleLabel.snp.bottom).offset(16.0)
+            $0.top.equalTo(titleLabel.snp.bottom).offset(8.0)
             $0.leading.equalTo(titleLabel)
             $0.trailing.equalTo(remainCountLabel)
             $0.height.lessThanOrEqualTo(60.0)

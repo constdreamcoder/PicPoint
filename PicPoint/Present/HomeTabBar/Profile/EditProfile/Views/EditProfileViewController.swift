@@ -49,13 +49,9 @@ final class EditProfileViewController: BaseViewController {
         return textView
     }()
 
-    lazy var editButton: UIButton = {
-        let button = UIButton(type: .system)
+    let editButton: CustomBottomButton = {
+        let button = CustomBottomButton(type: .system)
         button.setTitle("프로필 수정하기", for: .normal)
-        button.backgroundColor = .black
-        button.setTitleColor(.white, for: .normal)
-        button.titleLabel?.font = .systemFont(ofSize: 18, weight: .bold)
-        button.layer.cornerRadius = 16.0
         return button
     }()
     

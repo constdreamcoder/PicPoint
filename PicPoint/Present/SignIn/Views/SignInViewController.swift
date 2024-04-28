@@ -12,33 +12,28 @@ import RxCocoa
 
 final class SignInViewController: BaseViewController {
     
-    let emailTextField: UITextField = {
-        let textField = UITextField()
-        textField.placeholder = "이메일을 입력해주세요"
-        textField.font = .systemFont(ofSize: 20.0)
-        textField.backgroundColor = .white
-        return textField
+    let emailInputTextView: CustomInputView = {
+        let textView = CustomInputView("이메일을 입력해주세요", charLimit: 30)
+        textView.titleLabel.text = "이메일"
+        textView.inputTextView.keyboardType = .emailAddress
+        return textView
     }()
     
-    let passwordTextField: UITextField = {
-        let textField = UITextField()
-        textField.placeholder = "비밀번호를 입력해주세요"
-        textField.font = .systemFont(ofSize: 20.0)
-        textField.backgroundColor = .white
-        return textField
+    let passwordInputTextField: CustomInputView = {
+        let textView = CustomInputView("비밀번호를 입력해주세요", charLimit: 15)
+        textView.titleLabel.text = "비밀번호"
+        return textView
     }()
     
-    let signInButton: UIButton = {
-        let button = UIButton()
+    let signInButton: CustomBottomButton = {
+        let button = CustomBottomButton(type: .system)
         button.setTitle("로그인", for: .normal)
-        button.backgroundColor = .systemBlue
         return button
     }()
     
-    let goToSignUpButton: UIButton = {
-        let button = UIButton()
+    let goToSignUpButton: CustomBottomButton = {
+        let button = CustomBottomButton(type: .system)
         button.setTitle("회원가입하러 가기", for: .normal)
-        button.backgroundColor = .systemBlue
         return button
     }()
     
@@ -52,51 +47,55 @@ final class SignInViewController: BaseViewController {
         configureUI()
         bind()
     }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        view.endEditing(true)
+    }
 }
 
 extension SignInViewController: UIViewControllerConfiguration {
     func configureNavigationBar() {
-        
+        navigationItem.backButtonTitle = "뒤로가기"
     }
     
     func configureConstraints() {
         [
-            emailTextField,
-            passwordTextField,
+            emailInputTextView,
+            passwordInputTextField,
             signInButton,
             goToSignUpButton
         ].forEach { view.addSubview($0) }
         
-        emailTextField.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide)
-            $0.horizontalEdges.equalTo(view.safeAreaLayoutGuide).inset(16.0)
+        emailInputTextView.snp.makeConstraints {
+            $0.top.horizontalEdges.equalTo(view.safeAreaLayoutGuide).inset(16.0)
         }
         
-        passwordTextField.snp.makeConstraints {
-            $0.top.equalTo(emailTextField.snp.bottom).offset(8.0)
+        passwordInputTextField.snp.makeConstraints {
+            $0.top.equalTo(emailInputTextView.snp.bottom).offset(24.0)
             $0.horizontalEdges.equalTo(view.safeAreaLayoutGuide).inset(16.0)
         }
         
         signInButton.snp.makeConstraints {
-            $0.top.equalTo(passwordTextField.snp.bottom).offset(16.0)
+            $0.top.equalTo(passwordInputTextField.snp.bottom).offset(36.0)
             $0.horizontalEdges.equalTo(view.safeAreaLayoutGuide).inset(16.0)
+            $0.height.equalTo(50.0)
         }
         
         goToSignUpButton.snp.makeConstraints {
             $0.top.equalTo(signInButton.snp.bottom).offset(16.0)
             $0.horizontalEdges.equalTo(view.safeAreaLayoutGuide).inset(16.0)
+            $0.height.equalTo(50.0)
         }
     }
     
     func configureUI() {
-        view.backgroundColor = .green
+        
     }
     
     func bind() {
-        
         let input = LoginViewModel.Input(
-            emailText: emailTextField.rx.text.orEmpty,
-            passwordText: passwordTextField.rx.text.orEmpty,
+            emailText: emailInputTextView.inputTextView.rx.text.orEmpty,
+            passwordText: passwordInputTextField.inputTextView.rx.text.orEmpty,
             loginButtonTapped: signInButton.rx.tap,
             goToSignUpButtonTapped: goToSignUpButton.rx.tap
         )
