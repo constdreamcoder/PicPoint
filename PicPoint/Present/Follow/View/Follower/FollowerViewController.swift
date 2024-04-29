@@ -19,6 +19,8 @@ final class FollowerViewController: BaseViewController {
         
         return tableView
     }()
+    
+    let viewModel = FollowerViewModel()
 
     override func viewDidLoad() {
         super.viewDidLoad()

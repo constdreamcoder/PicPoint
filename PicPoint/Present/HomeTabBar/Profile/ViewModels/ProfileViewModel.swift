@@ -33,7 +33,7 @@ final class ProfileViewModel: ViewModelType {
         let sections: Driver<[SectionModelWrapper]>
         let updateContentSize: Driver<CGFloat>
         let editProfileButtonTapTrigger: Driver<FetchMyProfileModel?>
-        let moveToFollowTapTrigger: Driver<Void>
+        let moveToFollowTapTrigger: Driver<FetchMyProfileModel?>
         let userNickname: Driver<String>
     }
     
@@ -72,12 +72,15 @@ final class ProfileViewModel: ViewModelType {
                 guard let fetchMyProfileModel else { return "" }
                 return fetchMyProfileModel.nick
             }
+        
+        let moveToFollowTapTrigger = moveToFollowTap
+            .withLatestFrom(myProfile)
 
         return Output(
             sections: sectionsObservable.asDriver(onErrorJustReturn: []),
             updateContentSize: updateContentSizeRelay.asDriver(onErrorJustReturn: 0),
             editProfileButtonTapTrigger: editProfileButtonTapTrigger.asDriver(onErrorJustReturn: nil),
-            moveToFollowTapTrigger: moveToFollowTap.asDriver(onErrorJustReturn: ()),
+            moveToFollowTapTrigger: moveToFollowTapTrigger.asDriver(onErrorJustReturn: nil),
             userNickname: userNickname.asDriver(onErrorJustReturn: "")
         )
     }

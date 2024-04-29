@@ -13,7 +13,8 @@ import CoreLocation
 
 final class DetailViewModel: ViewModelType {
     
-    let tap = PublishRelay<Void>()
+    let followButtonTapTriggerRelay = BehaviorRelay<Bool>(value: false)
+    let followButtonTapRelay = PublishRelay<Void>()
     let mapViewTapRelay = PublishRelay<CLLocationCoordinate2D>()
     private let sectionsRelay = BehaviorRelay<[SectionModelWrapper]>(value: [])
     private let postRelay = BehaviorRelay<Post?>(value: nil)
@@ -107,13 +108,31 @@ final class DetailViewModel: ViewModelType {
     func transform(input: Input) -> Output {
         let postIdRelay = PublishRelay<String>()
         let itemTapTrigger = PublishRelay<Post?>()
+        let followButtonTapTrigger = PublishRelay<Post>()
         
-        tap
-            .subscribe { _ in
-                print("눌림")
+        followButtonTapRelay
+            .debounce(.seconds(1), scheduler: MainScheduler.instance)
+            .withLatestFrom(postRelay)
+            .subscribe{ post in
+                guard let post else { return }
+                followButtonTapTrigger.accept(post)
             }
             .disposed(by: disposeBag)
-
+            
+        
+        followButtonTapTrigger
+            .flatMap {
+                FollowManager.follow(
+                    params: FollowParams(
+                        userId: $0.creator.userId
+                    )
+                )
+            }
+            .subscribe(with: self) { owner, followModel in
+                print("followModel", followModel)
+                owner.followButtonTapTriggerRelay.accept(followModel.followingStatus)
+            }
+            .disposed(by: disposeBag)
         
         input.commentButtonTap
             .withLatestFrom(postRelay)

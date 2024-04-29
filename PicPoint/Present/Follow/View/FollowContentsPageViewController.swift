@@ -13,7 +13,6 @@ import RxCocoa
 final class FollowContentsPageViewController: UIPageViewController {
     
     let followerVC = FollowerViewController()
-    
     let followingVC = FollowingViewController()
     
     lazy var dataViewControllers: [UIViewController] = [followerVC, followingVC]
@@ -58,9 +57,5 @@ extension FollowContentsPageViewController: UIViewControllerConfiguration {
     
     func configureUI() {
         view.backgroundColor = .white
-    }
-    
-    func configureOtherSettings() {
-        
     }
 }

@@ -19,6 +19,8 @@ final class FollowingViewController: BaseViewController {
         
         return tableView
     }()
+    
+    let viewModel = FollowingViewModel()
 
     override func viewDidLoad() {
         super.viewDidLoad()

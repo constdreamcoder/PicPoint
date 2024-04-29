@@ -145,9 +145,12 @@ extension ProfileViewController: UIViewControllerConfiguration {
             .disposed(by: disposeBag)
         
         output.moveToFollowTapTrigger
-            .drive(with: self) { onwer, _ in
-                let followVC = FollowViewController()
-                onwer.navigationController?.pushViewController(followVC, animated: true)
+            .drive(with: self) { onwer, myProfile in
+                if let myProfile {
+                    let followViewModel = FollowViewModel(myProfile: myProfile)
+                    let followVC = FollowViewController(followViewModel: followViewModel)
+                    onwer.navigationController?.pushViewController(followVC, animated: true)
+                }
             }
             .disposed(by: disposeBag)
         

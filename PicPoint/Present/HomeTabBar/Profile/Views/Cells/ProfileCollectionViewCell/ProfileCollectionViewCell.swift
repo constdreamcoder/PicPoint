@@ -132,7 +132,7 @@ extension ProfileCollectionViewCell {
                 
                 owner.nicknameLabel.text = myProfile.nick
                 owner.followerFollowingStackView.followerNumberLabel.text = myProfile.followers.count.description
-                owner.followerFollowingStackView.followingNumberLabel.text = myProfile.following.count.description
+                owner.followerFollowingStackView.followingNumberLabel.text = myProfile.followings.count.description
             }
             .disposed(by: disposeBag)
         

@@ -66,6 +66,7 @@ final class DetailViewController: BaseViewController {
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: DetailIntroductionCollectionViewCell.identifier, for: indexPath) as? DetailIntroductionCollectionViewCell else { return UICollectionViewCell() }
             
             cell.detailViewModel = viewModel
+            cell.bind()
             
             if let cellData = item as? SecondSectionCellData {
                 cell.updateSecondSectionDatas(cellData)

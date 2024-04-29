@@ -15,7 +15,7 @@ struct FetchMyProfileModel: Decodable {
     let birthday: String?
     let phoneNum: String?
     let followers: [Follower]
-    let following: [Following]
+    let followings: [Following]
     let posts: [String]
     
     enum CodingKeys: String, CodingKey {
@@ -39,7 +39,7 @@ struct FetchMyProfileModel: Decodable {
         self.birthday = try container.decodeIfPresent(String.self, forKey: .birthday) ?? ""
         self.phoneNum = try container.decodeIfPresent(String.self, forKey: .phoneNum) ?? ""
         self.followers = try container.decode([Follower].self, forKey: .followers)
-        self.following = try container.decode([Following].self, forKey: .following)
+        self.followings = try container.decode([Following].self, forKey: .following)
         self.posts = try container.decode([String].self, forKey: .posts)
     }
 }

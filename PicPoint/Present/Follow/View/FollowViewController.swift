@@ -41,10 +41,19 @@ final class FollowViewController: BaseViewController {
         pageVC.dataSource = self
         return pageVC
     }()
-       
     
-    private let viewModel = FollowViewModel()
+    private let viewModel: FollowViewModel?
 
+    init(followViewModel: FollowViewModel?) {
+        self.viewModel = followViewModel
+        
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -82,6 +91,11 @@ extension FollowViewController: UIViewControllerConfiguration {
     }
     
     func bind() {
+        
+        guard let viewModel else { return }
+        viewModel.delegateForFollower = followContentsPageVC.followerVC.viewModel
+        viewModel.delegateForFollowing = followContentsPageVC.followingVC.viewModel
+        
         let input = FollowViewModel.Input()
         
         let output = viewModel.transform(input: input)

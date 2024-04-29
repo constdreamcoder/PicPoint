@@ -46,6 +46,12 @@ final class DetailIntroductionCollectionViewCell: BaseCollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        
+        disposeBag = DisposeBag()
+    }
+    
     func updateSecondSectionDatas(_ cellData: SecondSectionCellData) {
         if let profileImage = cellData.creator.profileImage, !profileImage.isEmpty {
             let url = URL(string: APIKeys.baseURL + "/\(profileImage)")
@@ -80,11 +86,40 @@ extension DetailIntroductionCollectionViewCell {
     
     override func configureUI() {
         super.configureUI()
-                
-        topView.rightButton.rx.tap
-            .subscribe(with: self, onNext: { owner, trigger in
-                owner.detailViewModel?.tap.accept(trigger)
-            })
+
+    }
+    
+    func bind() {
+        detailViewModel?.followButtonTapTriggerRelay.asDriver()
+            .drive(with: self) { owner, followingStatus in
+                print("followingStatus", followingStatus)
+                owner.reconfigureFollowButtonUI(owner.topView.rightButton, with: followingStatus)
+            }
             .disposed(by: disposeBag)
+        
+        topView.rightButton.rx.tap
+            .subscribe(with: self) { owner, trigger in
+                owner.detailViewModel?.followButtonTapRelay.accept(trigger)
+            }
+            .disposed(by: disposeBag)
+    }
+    
+    func reconfigureFollowButtonUI(_ button: UIButton, with followingStatus: Bool) {
+        
+        if followingStatus {
+            button.configuration?.baseBackgroundColor = .white
+            button.configuration?.baseForegroundColor = .black
+            button.configuration?.title = "언팔로우"
+            button.layer.borderWidth = 1.0
+            button.layer.borderColor = UIColor.black.cgColor
+            button.layer.cornerRadius = 16
+        } else {
+            button.configuration?.baseBackgroundColor = .black
+            button.configuration?.baseForegroundColor = .white
+            button.configuration?.title = "팔로우"
+            button.layer.borderWidth = 0.0
+            button.layer.borderColor = UIColor.black.cgColor
+            button.layer.cornerRadius = 16
+        }
     }
 }
