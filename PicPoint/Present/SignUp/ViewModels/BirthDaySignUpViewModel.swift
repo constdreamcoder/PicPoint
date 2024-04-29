@@ -27,6 +27,7 @@ final class BirthDaySignUpViewModel: ViewModelType {
         let startSignUpTrigger = PublishSubject<Void>()
         
         input.bottomButtonTap
+            .debounce(.seconds(1), scheduler: MainScheduler.instance)
             .withLatestFrom(input.birthdayText)
             .subscribe(with: self) { owner, birthdayText in
                 if birthdayText == "" || owner.isValidBirthday(birthdayText) {
@@ -53,24 +54,10 @@ final class BirthDaySignUpViewModel: ViewModelType {
                 UserManager.signUp(body: signUpBody)
             }
             .map { signUpModel in
-                print("email", SignUpStorage.shared.email)
-                print("password", SignUpStorage.shared.password)
-                print("nickname", SignUpStorage.shared.nickname)
-                print("phoneNumber", SignUpStorage.shared.phoneNumber)
-                print("birthday", SignUpStorage.shared.birthday)
-                print("signUpModel", signUpModel)
                 SignUpStorage.shared.clearAll()
-                print("------------------------------")
-                print("email", SignUpStorage.shared.email)
-                print("password", SignUpStorage.shared.password)
-                print("nickname", SignUpStorage.shared.nickname)
-                print("phoneNumber", SignUpStorage.shared.phoneNumber)
-                print("birthday", SignUpStorage.shared.birthday)
                 return ()
             }
             
-            
-        
         return Output(
             birthdayValid: birthdayValidation.asDriver(onErrorJustReturn: false),
             signUpButtonTapTrigger: signUpButtonTapTrigger.asDriver(onErrorJustReturn: ())

@@ -21,6 +21,9 @@ final class HomeCollectionViewCell: BaseCollectionViewCell {
     
     let topView: HomeCollectionViewCellTopView = {
         let topView = HomeCollectionViewCellTopView()
+        
+        topView.profileImageView.profileImageViewWidth = 40
+        
         let rightButton = topView.rightButton
         rightButton.tintColor = .black
         let image = UIImage(systemName: "ellipsis")

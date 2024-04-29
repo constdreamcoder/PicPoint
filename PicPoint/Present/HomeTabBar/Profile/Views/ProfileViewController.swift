@@ -97,6 +97,8 @@ extension ProfileViewController {
 
 extension ProfileViewController: UIViewControllerConfiguration {
     func configureNavigationBar() {
+        navigationController?.navigationBar.tintColor = .black
+        
         let rightBarButtonImage = UIImage(systemName: "gearshape")
         navigationItem.rightBarButtonItem = UIBarButtonItem(image: rightBarButtonImage, style: .plain, target: self, action: #selector(rightBarButtonTapped))
     }
@@ -140,6 +142,17 @@ extension ProfileViewController: UIViewControllerConfiguration {
                 editProfileNav.modalPresentationStyle = .fullScreen
                 owner.present(editProfileNav, animated: true)
             }
+            .disposed(by: disposeBag)
+        
+        output.moveToFollowTapTrigger
+            .drive(with: self) { onwer, _ in
+                let followVC = FollowViewController()
+                onwer.navigationController?.pushViewController(followVC, animated: true)
+            }
+            .disposed(by: disposeBag)
+        
+        output.userNickname
+            .drive(navigationItem.rx.backButtonTitle)
             .disposed(by: disposeBag)
     }
 }

@@ -20,6 +20,7 @@ final class ProfileViewModel: ViewModelType {
     let segmentControlSelectedIndexRelay = BehaviorRelay<Int>(value: 0)
     let myProfile = BehaviorRelay<FetchMyProfileModel?>(value: nil)
     let myPosts = BehaviorRelay<[String]>(value: [])
+    let moveToFollowTap = PublishSubject<Void>()
     private let updateContentSizeRelay = PublishRelay<CGFloat>()
     
     weak var delegate: ProfileViewModelDelegate?
@@ -32,6 +33,8 @@ final class ProfileViewModel: ViewModelType {
         let sections: Driver<[SectionModelWrapper]>
         let updateContentSize: Driver<CGFloat>
         let editProfileButtonTapTrigger: Driver<FetchMyProfileModel?>
+        let moveToFollowTapTrigger: Driver<Void>
+        let userNickname: Driver<String>
     }
     
     func transform(input: Input) -> Output {
@@ -63,12 +66,19 @@ final class ProfileViewModel: ViewModelType {
         
         let editProfileButtonTapTrigger = editProfileButtonTap
             .withLatestFrom(myProfile)
-            
+                
+        let userNickname = myProfile
+            .map { fetchMyProfileModel in
+                guard let fetchMyProfileModel else { return "" }
+                return fetchMyProfileModel.nick
+            }
 
         return Output(
             sections: sectionsObservable.asDriver(onErrorJustReturn: []),
             updateContentSize: updateContentSizeRelay.asDriver(onErrorJustReturn: 0),
-            editProfileButtonTapTrigger: editProfileButtonTapTrigger.asDriver(onErrorJustReturn: nil)
+            editProfileButtonTapTrigger: editProfileButtonTapTrigger.asDriver(onErrorJustReturn: nil),
+            moveToFollowTapTrigger: moveToFollowTap.asDriver(onErrorJustReturn: ()),
+            userNickname: userNickname.asDriver(onErrorJustReturn: "")
         )
     }
 }

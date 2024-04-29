@@ -55,6 +55,13 @@
 		0020231A2BDA82F1004CA12F /* FollowerFollowingStackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 002023192BDA82F1004CA12F /* FollowerFollowingStackView.swift */; };
 		00242C552BD7805600B4C96E /* Date+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00242C542BD7805600B4C96E /* Date+Extensions.swift */; };
 		00242C592BD7C7CA00B4C96E /* BaseBottomViewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00242C582BD7C7CA00B4C96E /* BaseBottomViewViewController.swift */; };
+		002720862BDF87A3004ADC5C /* FollowViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 002720852BDF87A3004ADC5C /* FollowViewController.swift */; };
+		002720882BDF87EB004ADC5C /* FollowViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 002720872BDF87EB004ADC5C /* FollowViewModel.swift */; };
+		0027208C2BDF9B30004ADC5C /* FollowContentsPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0027208B2BDF9B30004ADC5C /* FollowContentsPageViewController.swift */; };
+		0027208E2BDFA872004ADC5C /* FollowerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0027208D2BDFA872004ADC5C /* FollowerViewController.swift */; };
+		002720902BDFA8F8004ADC5C /* FollowerTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0027208F2BDFA8F8004ADC5C /* FollowerTableViewCell.swift */; };
+		002720942BDFC033004ADC5C /* FollowingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 002720932BDFC033004ADC5C /* FollowingViewController.swift */; };
+		002720962BDFC058004ADC5C /* FollowingTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 002720952BDFC058004ADC5C /* FollowingTableViewCell.swift */; };
 		002F01C02BD8822200992674 /* SelectLocationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 002F01BF2BD8822200992674 /* SelectLocationViewModel.swift */; };
 		00321C9A2BCD79B800BE2407 /* RxSwift+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00321C992BCD79B800BE2407 /* RxSwift+Extensions.swift */; };
 		0034FAEF2BCC9AA200D932F3 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0034FAEE2BCC9AA200D932F3 /* ProfileViewController.swift */; };
@@ -217,6 +224,13 @@
 		002023192BDA82F1004CA12F /* FollowerFollowingStackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowerFollowingStackView.swift; sourceTree = "<group>"; };
 		00242C542BD7805600B4C96E /* Date+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Extensions.swift"; sourceTree = "<group>"; };
 		00242C582BD7C7CA00B4C96E /* BaseBottomViewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseBottomViewViewController.swift; sourceTree = "<group>"; };
+		002720852BDF87A3004ADC5C /* FollowViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowViewController.swift; sourceTree = "<group>"; };
+		002720872BDF87EB004ADC5C /* FollowViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowViewModel.swift; sourceTree = "<group>"; };
+		0027208B2BDF9B30004ADC5C /* FollowContentsPageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowContentsPageViewController.swift; sourceTree = "<group>"; };
+		0027208D2BDFA872004ADC5C /* FollowerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowerViewController.swift; sourceTree = "<group>"; };
+		0027208F2BDFA8F8004ADC5C /* FollowerTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowerTableViewCell.swift; sourceTree = "<group>"; };
+		002720932BDFC033004ADC5C /* FollowingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowingViewController.swift; sourceTree = "<group>"; };
+		002720952BDFC058004ADC5C /* FollowingTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowingTableViewCell.swift; sourceTree = "<group>"; };
 		002F01BF2BD8822200992674 /* SelectLocationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectLocationViewModel.swift; sourceTree = "<group>"; };
 		00321C992BCD79B800BE2407 /* RxSwift+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RxSwift+Extensions.swift"; sourceTree = "<group>"; };
 		0034FAEE2BCC9AA200D932F3 /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
@@ -698,6 +712,52 @@
 				00B67D832BD810570097ACDE /* RecommendedVisitTimeViewModel.swift */,
 			);
 			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		002720822BDF8765004ADC5C /* Follow */ = {
+			isa = PBXGroup;
+			children = (
+				002720832BDF877C004ADC5C /* View */,
+				002720842BDF8796004ADC5C /* ViewModel */,
+			);
+			path = Follow;
+			sourceTree = "<group>";
+		};
+		002720832BDF877C004ADC5C /* View */ = {
+			isa = PBXGroup;
+			children = (
+				002720852BDF87A3004ADC5C /* FollowViewController.swift */,
+				0027208B2BDF9B30004ADC5C /* FollowContentsPageViewController.swift */,
+				002720912BDFC00E004ADC5C /* Follower */,
+				002720922BDFC01B004ADC5C /* Following */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		002720842BDF8796004ADC5C /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				002720872BDF87EB004ADC5C /* FollowViewModel.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		002720912BDFC00E004ADC5C /* Follower */ = {
+			isa = PBXGroup;
+			children = (
+				0027208D2BDFA872004ADC5C /* FollowerViewController.swift */,
+				0027208F2BDFA8F8004ADC5C /* FollowerTableViewCell.swift */,
+			);
+			path = Follower;
+			sourceTree = "<group>";
+		};
+		002720922BDFC01B004ADC5C /* Following */ = {
+			isa = PBXGroup;
+			children = (
+				002720932BDFC033004ADC5C /* FollowingViewController.swift */,
+				002720952BDFC058004ADC5C /* FollowingTableViewCell.swift */,
+			);
+			path = Following;
 			sourceTree = "<group>";
 		};
 		002F01BD2BD8820600992674 /* Views */ = {
@@ -1201,6 +1261,7 @@
 				00353FDC2BCFAA4B00A71415 /* Detail */,
 				00B7C3F52BCA5F01009AC333 /* SignUp */,
 				00B7C3F42BCA5EE9009AC333 /* SignIn */,
+				002720822BDF8765004ADC5C /* Follow */,
 			);
 			path = Present;
 			sourceTree = "<group>";
@@ -1443,6 +1504,7 @@
 				0035401A2BCFBA2600A71415 /* DetailCollectionViewSectionDataModels.swift in Sources */,
 				001253F62BD4155B0065F1E6 /* CommentRouter.swift in Sources */,
 				00B7C40C2BCA6A6E009AC333 /* LoginViewModel.swift in Sources */,
+				002720942BDFC033004ADC5C /* FollowingViewController.swift in Sources */,
 				0010417A2BDC2C4600E5FDA1 /* FetchMyLikesModel.swift in Sources */,
 				0003E9392BD57ECF00695D40 /* SelectImageViewModel.swift in Sources */,
 				00760E4A2BD5128600741C40 /* AddPostCollectionViewSectionDataModel.swift in Sources */,
@@ -1458,6 +1520,7 @@
 				001C92082BD6D37D0028E67B /* SelectedVisitDateViewController.swift in Sources */,
 				00B7C3F32BCA5C42009AC333 /* TargetType.swift in Sources */,
 				00EA27662BDE106A00EE3F9C /* BaseSignUpViewController.swift in Sources */,
+				002720902BDFA8F8004ADC5C /* FollowerTableViewCell.swift in Sources */,
 				001041772BDC2BD100E5FDA1 /* LikeManager.swift in Sources */,
 				000220222BD178B20051F04B /* DetailDisplayCollectionViewCell.swift in Sources */,
 				000AD2512BD21C1900FC7768 /* DetailRelatedContentsCollectionViewCell.swift in Sources */,
@@ -1482,12 +1545,14 @@
 				00EA27782BDE3E1A00EE3F9C /* PhoneNumberSignUpViewController.swift in Sources */,
 				0034FAF12BCC9DBC00D932F3 /* ProfileViewModel.swift in Sources */,
 				00E414F22BD94FFC00C76BE4 /* CLPlacemark+Extensions.swift in Sources */,
+				002720862BDF87A3004ADC5C /* FollowViewController.swift in Sources */,
 				0003E93B2BD584AF00695D40 /* SelectImageCollectionViewCell.swift in Sources */,
 				00E414EC2BD9186400C76BE4 /* ImageFileListModel.swift in Sources */,
 				00B7C3F72BCA5F38009AC333 /* SignInViewController.swift in Sources */,
 				00FE92B72BCE59FF00554D0F /* PostListModel.swift in Sources */,
 				000AD24B2BD1FF2000FC7768 /* DetailIntroductionCollectionViewCell.swift in Sources */,
 				00B7C3EF2BCA5A42009AC333 /* APIKeys.swift in Sources */,
+				0027208C2BDF9B30004ADC5C /* FollowContentsPageViewController.swift in Sources */,
 				00EA276A2BDE352500EE3F9C /* EmailSignUpViewModel.swift in Sources */,
 				003540272BCFCC7500A71415 /* BaseCollectionViewCell.swift in Sources */,
 				00760E552BD531BB00741C40 /* VisitDateTableViewCell.swift in Sources */,
@@ -1498,6 +1563,7 @@
 				0055FB3C2BDA773E0053781D /* ProfileCollectionViewSectionDataModels.swift in Sources */,
 				00B7C3FE2BCA6142009AC333 /* BaseViewController.swift in Sources */,
 				003C82C62BDCE9EA003315E1 /* EditViewModel.swift in Sources */,
+				002720962BDFC058004ADC5C /* FollowingTableViewCell.swift in Sources */,
 				009AFAEA2BDA3050003A45BF /* FetchPostWithHashTagQuery.swift in Sources */,
 				000AD2652BD27E0B00FC7768 /* DetailRelatedContentCollectionHeaderView.swift in Sources */,
 				00E414F02BD93C5500C76BE4 /* WritePostBody.swift in Sources */,
@@ -1514,6 +1580,7 @@
 				00FE92AF2BCE54F000554D0F /* PostRouter.swift in Sources */,
 				00760E442BD4FE0700741C40 /* AddPostViewModel.swift in Sources */,
 				00C71D672BCC0FDA00D933FD /* SignUpBody.swift in Sources */,
+				0027208E2BDFA872004ADC5C /* FollowerViewController.swift in Sources */,
 				000AD2542BD234E800FC7768 /* PhotoImageView.swift in Sources */,
 				0049D8812BC96B4800F59852 /* SceneDelegate.swift in Sources */,
 				002023162BDA819C004CA12F /* ProfileImageView.swift in Sources */,
@@ -1530,6 +1597,7 @@
 				00AFF6042BCD155E006D319A /* UICollectionReusableView+Extensions.swift in Sources */,
 				0034FAF62BCC9F1200D932F3 /* SettingsViewController.swift in Sources */,
 				001041552BDB6C8500E5FDA1 /* MyPostViewController.swift in Sources */,
+				002720882BDF87EB004ADC5C /* FollowViewModel.swift in Sources */,
 				0003E9342BD57DA400695D40 /* SelectImageViewController.swift in Sources */,
 				00EA27832BDEA5ED00EE3F9C /* SignUpStorage.swift in Sources */,
 				001254002BD4190D0065F1E6 /* CommentManager.swift in Sources */,

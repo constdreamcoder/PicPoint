@@ -15,6 +15,8 @@ final class DetailIntroductionCollectionViewCell: BaseCollectionViewCell {
     let topView: HomeCollectionViewCellTopView = {
         let topView = HomeCollectionViewCellTopView()
         
+        topView.profileImageView.profileImageViewWidth = 40
+
         let rightButton = topView.rightButton
         var buttonConfiguration = UIButton.Configuration.filled()
         buttonConfiguration.baseBackgroundColor = .black

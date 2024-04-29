@@ -52,15 +52,30 @@ final class ProfileCollectionViewCell: BaseCollectionViewCell {
         return button
     }()
     
+    private lazy var moveToFollowTap: UITapGestureRecognizer = {
+        let tap = UITapGestureRecognizer(target: self, action: nil)
+        followerFollowingStackView.addGestureRecognizer(tap)
+        return tap
+    }()
+    
     weak var profileViewModel: ProfileViewModel?
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        
+        disposeBag = DisposeBag()
+    }
+    
+    deinit {
+        followerFollowingStackView.removeGestureRecognizer(moveToFollowTap)
     }
     
 }
@@ -125,6 +140,12 @@ extension ProfileCollectionViewCell {
             .bind(with: self) { owner, _ in
                 guard let profileViewModel = owner.profileViewModel else { return }
                 profileViewModel.editProfileButtonTap.accept(())
+            }
+            .disposed(by: disposeBag)
+        
+        moveToFollowTap.rx.event
+            .bind(with: self) { owner, gesture in
+                profileViewModel.moveToFollowTap.onNext(())
             }
             .disposed(by: disposeBag)
     }

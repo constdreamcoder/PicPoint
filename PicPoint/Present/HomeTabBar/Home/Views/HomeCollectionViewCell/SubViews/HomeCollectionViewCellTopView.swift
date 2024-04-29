@@ -10,7 +10,7 @@ import SnapKit
 
 final class HomeCollectionViewCellTopView: UIView {
     
-    lazy var profileImageView = ProfileImageView(frame: .zero)
+    let profileImageView = ProfileImageView(frame: .zero)
     
     let userNicknameLabel: UILabel = {
         let label = UILabel()

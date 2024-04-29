@@ -76,10 +76,11 @@ final class DetailLocationCollectionViewCell: BaseCollectionViewCell {
     override func prepareForReuse() {
         super.prepareForReuse()
         
-        mapViewCoverView.removeGestureRecognizer(tap)
-        mapViewCoverView.addGestureRecognizer(tap)
-
         disposeBag = DisposeBag()
+    }
+    
+    deinit {
+        mapViewCoverView.removeGestureRecognizer(tap)
     }
     
     func updateThirdSectionDatas(_ cellData: ThirdSectionCellData) {

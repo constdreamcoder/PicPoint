@@ -26,7 +26,7 @@ final class MyPostViewController: BaseViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        print("dd")
+        
         configureNavigationBar()
         configureConstraints()
         configureUI()
