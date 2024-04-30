@@ -14,7 +14,7 @@ import CoreLocation
 final class DetailViewModel: ViewModelType {
     
     let followButtonTapTriggerRelay = BehaviorRelay<Bool>(value: false)
-    let followButtonTapRelay = PublishRelay<Void>()
+    let followButtonTapSubject = PublishSubject<CustomButtonWithFollowType.FollowType>()
     let mapViewTapRelay = PublishRelay<CLLocationCoordinate2D>()
     private let sectionsRelay = BehaviorRelay<[SectionModelWrapper]>(value: [])
     private let postRelay = BehaviorRelay<Post?>(value: nil)
@@ -108,29 +108,61 @@ final class DetailViewModel: ViewModelType {
     func transform(input: Input) -> Output {
         let postIdRelay = PublishRelay<String>()
         let itemTapTrigger = PublishRelay<Post?>()
-        let followButtonTapTrigger = PublishRelay<Post>()
+        let followTrigger = PublishSubject<Post>()
+        let unFollowTrigger = PublishSubject<Post>()
         
-        followButtonTapRelay
-            .debounce(.seconds(1), scheduler: MainScheduler.instance)
-            .withLatestFrom(postRelay)
-            .subscribe{ post in
-                guard let post else { return }
-                followButtonTapTrigger.accept(post)
+        postRelay
+            .bind(with: self) { owner, post in
+                if let post {
+                    if UserDefaults.standard.followings.contains(where: { $0.userId == post.creator.userId}) {
+                        owner.followButtonTapTriggerRelay.accept(true)
+                    } else {
+                        owner.followButtonTapTriggerRelay.accept(false)
+                    }
+                }
             }
             .disposed(by: disposeBag)
-            
         
-        followButtonTapTrigger
+        followTrigger
             .flatMap {
-                FollowManager.follow(
-                    params: FollowParams(
-                        userId: $0.creator.userId
-                    )
+                let newFollowing = Following(
+                    userId: $0.creator.userId,
+                    nick: $0.creator.nick,
+                    profileImage: $0.creator.profileImage
                 )
+                UserDefaults.standard.followings.append(newFollowing)
+                return FollowManager.follow(params: FollowParams(userId: $0.creator.userId))
             }
             .subscribe(with: self) { owner, followModel in
-                print("followModel", followModel)
+                print("followings", UserDefaults.standard.followings)
                 owner.followButtonTapTriggerRelay.accept(followModel.followingStatus)
+            }
+            .disposed(by: disposeBag)
+        
+        unFollowTrigger
+            .flatMap { post in
+                UserDefaults.standard.followings.removeAll(where: { $0.userId == post.creator.userId })
+                return FollowManager.unfollow(params: UnFollowParams(userId: post.creator.userId))
+            }
+            .subscribe(with: self) { owner, followModel in
+                print("followings", UserDefaults.standard.followings)
+                owner.followButtonTapTriggerRelay.accept(followModel.followingStatus)
+            }
+            .disposed(by: disposeBag)
+        
+        followButtonTapSubject
+            .debounce(.seconds(1), scheduler: MainScheduler.instance)
+            .withLatestFrom(postRelay) { ($0, $1) }
+            .subscribe { followType, post in
+                if let post {
+                    switch followType {
+                    case .following:
+                        unFollowTrigger.onNext(post)
+                    case .unfollowing:
+                        followTrigger.onNext(post)
+                    case .none: break
+                    }
+                }
             }
             .disposed(by: disposeBag)
         

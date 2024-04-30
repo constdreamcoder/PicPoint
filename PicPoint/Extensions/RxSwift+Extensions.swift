@@ -9,9 +9,9 @@ import UIKit
 import RxSwift
 import RxCocoa
 
-extension Reactive where Base: UIViewController{
-    var viewDidLoad: ControlEvent<Void> {
-        let source = self.methodInvoked(#selector(Base.viewDidLoad)).map { _ in }
-        return ControlEvent(events: source)
+extension RxSwift.Reactive where Base: UIViewController {
+    var viewWillAppear: Observable<Bool> {
+        return methodInvoked(#selector(UIViewController.viewWillAppear))
+            .map { $0.first as? Bool ?? false }
     }
 }

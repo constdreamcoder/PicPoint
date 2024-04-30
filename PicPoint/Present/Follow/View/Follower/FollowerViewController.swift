@@ -51,9 +51,15 @@ extension FollowerViewController: UIViewControllerConfiguration {
     }
     
     func bind() {
-        Observable.just([1,2,3,4,45])
-            .bind(to: tableView.rx.items(cellIdentifier: FollowerTableViewCell.identifier, cellType: FollowerTableViewCell.self)) { row, element, cell in
+        
+        let input = FollowerViewModel.Input()
+        
+        let output = viewModel.transform(input: input)
+        
+        output.followers
+            .drive(tableView.rx.items(cellIdentifier: FollowerTableViewCell.identifier, cellType: FollowerTableViewCell.self)) { row, element, cell in
                 
+                cell.updateCellData(element)
             }
             .disposed(by: disposeBag)
     }

@@ -16,7 +16,7 @@ protocol EditViewModelDelegate: AnyObject {
 
 final class EditViewModel: ViewModelType {
     
-    let profileImageSubject = PublishSubject<Data>()
+    let profileImageSubject = BehaviorSubject<Data>(value: Data())
     let myProfileRelay = BehaviorRelay<FetchMyProfileModel?>(value: nil)
 
     var disposeBag = DisposeBag()
@@ -49,6 +49,7 @@ final class EditViewModel: ViewModelType {
 
     func transform(input: Input) -> Output {
         let editButtonValidation = BehaviorRelay<Bool>(value: false)
+        let editButtonTapTrigger = PublishRelay<Void>()
         
         input.editButtonObservable
             .subscribe { nicknameText, phoneNumText, birthDayText in
@@ -61,14 +62,14 @@ final class EditViewModel: ViewModelType {
                 }
             }
             .disposed(by: disposeBag)
-        
-        let editButtonTapTrigger = input.editButtonTap
+    
+        input.editButtonTap
             .withLatestFrom(input.editButtonObservable)
             .withLatestFrom(profileImageSubject) { textDatas, profileImage in
-                (textDatas.0, textDatas.1, textDatas.2, profileImage)
+                return (textDatas.0, textDatas.1, textDatas.2, profileImage)
             }
             .map { nicknameText, phoneNumText, birthdayText, profileImage in
-                EditMyProfileBody(
+                return EditMyProfileBody(
                     nick: nicknameText,
                     phoneNum: phoneNumText,
                     birthDay: birthdayText,
@@ -81,11 +82,11 @@ final class EditViewModel: ViewModelType {
             .flatMap {
                 ProfileManager.editMyProfile(body: $0)
             }
-            .withUnretained(self)
-            .map { owner, newProfileModel in
+            .subscribe(with: self) { owner, newProfileModel in
                 owner.delegate?.sendUpdatedProfileInfos(newProfileModel)
-                return ()
+                editButtonTapTrigger.accept(())
             }
+            .disposed(by: disposeBag)
             
         return Output(
             leftBarButtonItemTapTrigger: input.leftBarButtonItemTap.asDriver(),

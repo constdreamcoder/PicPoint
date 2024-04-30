@@ -164,7 +164,7 @@ extension EditProfileViewController: UIViewControllerConfiguration {
                     return ("", "", "")
                 }
             }
-        
+
         guard let leftBarButtonItem = navigationItem.leftBarButtonItem else { return }
         let input = EditViewModel.Input(
             leftBarButtonItemTap: leftBarButtonItem.rx.tap, 
@@ -172,6 +172,7 @@ extension EditProfileViewController: UIViewControllerConfiguration {
             profileImageTap: profileImageTap.rx.event,
             editButtonTap: editButton.rx.tap
         )
+        
         
         guard let viewModel else { return }
         let output = viewModel.transform(input: input)
@@ -193,7 +194,7 @@ extension EditProfileViewController: UIViewControllerConfiguration {
                 
                 owner.nicknameTextView.inputTextView.text = myProfile.nick
                 owner.phoneNumTextView.inputTextView.text = myProfile.phoneNum
-                owner.birthDayTextView.inputTextView.text = myProfile.birthday
+                owner.birthDayTextView.inputTextView.text = myProfile.birthDay
                 
                 [
                     owner.nicknameTextView,

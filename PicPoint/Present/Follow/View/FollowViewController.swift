@@ -95,14 +95,27 @@ extension FollowViewController: UIViewControllerConfiguration {
         guard let viewModel else { return }
         viewModel.delegateForFollower = followContentsPageVC.followerVC.viewModel
         viewModel.delegateForFollowing = followContentsPageVC.followingVC.viewModel
+        followContentsPageVC.followingVC.viewModel.delegate = viewModel
         
-        let input = FollowViewModel.Input()
+        let input = FollowViewModel.Input(viewWillAppear: rx.viewWillAppear)
         
         let output = viewModel.transform(input: input)
         
         menuSegmentControl.rx.selectedSegmentIndex
             .bind(with: self) { owner, selectedIndex in
                 owner.followContentsPageVC.currentPage = selectedIndex
+            }
+            .disposed(by: disposeBag)
+        
+        output.followersCount
+            .drive(with: self) { owner, followersCount in
+                owner.menuSegmentControl.setTitle("\(followersCount) 팔로우", forSegmentAt: 0)
+            }
+            .disposed(by: disposeBag)
+        
+        output.followingsCount
+            .drive(with: self) { owner, followingsCount in
+                owner.menuSegmentControl.setTitle("\(followingsCount) 팔로잉", forSegmentAt: 1)
             }
             .disposed(by: disposeBag)
     }

@@ -12,7 +12,7 @@ struct FetchMyProfileModel: Decodable {
     let email: String
     let nick: String
     let profileImage: String?
-    let birthday: String?
+    let birthDay: String?
     let phoneNum: String?
     let followers: [Follower]
     let followings: [Following]
@@ -23,7 +23,7 @@ struct FetchMyProfileModel: Decodable {
         case email
         case nick
         case profileImage
-        case birthday
+        case birthDay
         case phoneNum
         case followers
         case following
@@ -36,7 +36,7 @@ struct FetchMyProfileModel: Decodable {
         self.email = try container.decode(String.self, forKey: .email)
         self.nick = try container.decode(String.self, forKey: .nick)
         self.profileImage = try container.decodeIfPresent(String.self, forKey: .profileImage) ?? ""
-        self.birthday = try container.decodeIfPresent(String.self, forKey: .birthday) ?? ""
+        self.birthDay = try container.decodeIfPresent(String.self, forKey: .birthDay) ?? ""
         self.phoneNum = try container.decodeIfPresent(String.self, forKey: .phoneNum) ?? ""
         self.followers = try container.decode([Follower].self, forKey: .followers)
         self.followings = try container.decode([Following].self, forKey: .following)
@@ -44,7 +44,7 @@ struct FetchMyProfileModel: Decodable {
     }
 }
 
-struct Follower: Decodable {
+struct Follower: Codable {
     let userId: String
     let nick: String
     let profileImage: String?
@@ -63,7 +63,7 @@ struct Follower: Decodable {
     }
 }
 
-struct Following: Decodable {
+struct Following: Codable {
     let userId: String
     let nick: String
     let profileImage: String?
@@ -79,5 +79,11 @@ struct Following: Decodable {
         self.userId = try container.decode(String.self, forKey: .userId)
         self.nick = try container.decode(String.self, forKey: .nick)
         self.profileImage = try container.decodeIfPresent(String.self, forKey: .profileImage) ?? ""
+    }
+    
+    init(userId: String, nick: String, profileImage: String?) {
+        self.userId = userId
+        self.nick = nick
+        self.profileImage = profileImage
     }
 }

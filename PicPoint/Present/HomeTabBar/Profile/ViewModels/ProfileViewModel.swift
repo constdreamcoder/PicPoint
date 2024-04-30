@@ -21,19 +21,21 @@ final class ProfileViewModel: ViewModelType {
     let myProfile = BehaviorRelay<FetchMyProfileModel?>(value: nil)
     let myPosts = BehaviorRelay<[String]>(value: [])
     let moveToFollowTap = PublishSubject<Void>()
+    let updateFollowingsCountRelay = PublishRelay<Int>()
     private let updateContentSizeRelay = PublishRelay<CGFloat>()
     
     weak var delegate: ProfileViewModelDelegate?
 
     struct Input {
         let viewDidLoad: Observable<Void>
+        let viewWillAppear: Observable<Bool>
     }
     
     struct Output {
         let sections: Driver<[SectionModelWrapper]>
         let updateContentSize: Driver<CGFloat>
         let editProfileButtonTapTrigger: Driver<FetchMyProfileModel?>
-        let moveToFollowTapTrigger: Driver<FetchMyProfileModel?>
+        let moveToFollowTapTrigger: Driver<Void>
         let userNickname: Driver<String>
     }
     
@@ -64,6 +66,12 @@ final class ProfileViewModel: ViewModelType {
             }
             .disposed(by: disposeBag)
         
+        input.viewWillAppear
+            .subscribe(with: self) { owner, _ in
+                owner.updateFollowingsCountRelay.accept(UserDefaults.standard.followings.count)
+            }
+            .disposed(by: disposeBag)
+        
         let editProfileButtonTapTrigger = editProfileButtonTap
             .withLatestFrom(myProfile)
                 
@@ -73,14 +81,11 @@ final class ProfileViewModel: ViewModelType {
                 return fetchMyProfileModel.nick
             }
         
-        let moveToFollowTapTrigger = moveToFollowTap
-            .withLatestFrom(myProfile)
-
         return Output(
             sections: sectionsObservable.asDriver(onErrorJustReturn: []),
             updateContentSize: updateContentSizeRelay.asDriver(onErrorJustReturn: 0),
             editProfileButtonTapTrigger: editProfileButtonTapTrigger.asDriver(onErrorJustReturn: nil),
-            moveToFollowTapTrigger: moveToFollowTapTrigger.asDriver(onErrorJustReturn: nil),
+            moveToFollowTapTrigger: moveToFollowTap.asDriver(onErrorJustReturn: ()),
             userNickname: userNickname.asDriver(onErrorJustReturn: "")
         )
     }

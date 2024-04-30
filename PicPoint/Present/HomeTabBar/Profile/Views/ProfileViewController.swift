@@ -116,8 +116,10 @@ extension ProfileViewController: UIViewControllerConfiguration {
     }
     
     func bind() {
+        
         let input = ProfileViewModel.Input(
-            viewDidLoad: Observable.just(())
+            viewDidLoad: Observable.just(()), 
+            viewWillAppear: rx.viewWillAppear
         )
         
         let output = viewModel.transform(input: input)
@@ -145,12 +147,10 @@ extension ProfileViewController: UIViewControllerConfiguration {
             .disposed(by: disposeBag)
         
         output.moveToFollowTapTrigger
-            .drive(with: self) { onwer, myProfile in
-                if let myProfile {
-                    let followViewModel = FollowViewModel(myProfile: myProfile)
-                    let followVC = FollowViewController(followViewModel: followViewModel)
-                    onwer.navigationController?.pushViewController(followVC, animated: true)
-                }
+            .drive(with: self) { owner, _ in
+                let followViewModel = FollowViewModel()
+                let followVC = FollowViewController(followViewModel: followViewModel)
+                owner.navigationController?.pushViewController(followVC, animated: true)
             }
             .disposed(by: disposeBag)
         

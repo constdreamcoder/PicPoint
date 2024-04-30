@@ -155,6 +155,7 @@ extension CommentViewController: UIViewControllerConfiguration {
                 owner.commentWritingSectionView.commentTextView.text = nil
             }
             .disposed(by: disposeBag)
+        
         output.commentSendingValid
             .drive(commentWritingSectionView.sendButton.rx.isEnabled)
             .disposed(by: disposeBag)

@@ -51,9 +51,17 @@ extension FollowingViewController: UIViewControllerConfiguration {
     }
     
     func bind() {
-        Observable.just([1,2,3,4,45])
-            .bind(to: tableView.rx.items(cellIdentifier: FollowingTableViewCell.identifier, cellType: FollowingTableViewCell.self)) { row, element, cell in
-                
+        
+        let input = FollowingViewModel.Input()
+        
+        let output = viewModel.transform(input: input)
+        
+        output.followings
+            .drive(tableView.rx.items(cellIdentifier: FollowingTableViewCell.identifier, cellType: FollowingTableViewCell.self)) { [weak self] row, element, cell in
+                guard let self else { return }
+                cell.followingViewModel = self.viewModel
+                cell.updateCellData(element)
+                cell.bind(element)
             }
             .disposed(by: disposeBag)
     }

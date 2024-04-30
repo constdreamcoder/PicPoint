@@ -9,13 +9,15 @@ import Foundation
 
 extension UserDefaults {
     enum Keys: String, CaseIterable {
-        case userId = "userId"
-        case email = "email"
-        case nick = "nick"
-        case accessToken = "accessToken"
-        case refreshToken = "refreshToken"
-        case accessTokenDueDate = "accessTokenDueDate"
-        case refreshTokenDueDate = "refreshTokenDueDate"
+        case userId
+        case email
+        case nick
+        case accessToken
+        case refreshToken
+        case accessTokenDueDate
+        case refreshTokenDueDate
+        case followers
+        case followings
     }
     
     func clearAllData() {
@@ -111,5 +113,41 @@ extension UserDefaults {
             )
         }
     }
+}
+
+// MARK: - Following-Related Methods
+extension UserDefaults {
+    var followers: [Follower] {
+        get {
+            guard let data = UserDefaults.standard.data(forKey: UserDefaults.Keys.followers.rawValue),
+                  let historyList = try? PropertyListDecoder().decode([Follower].self, from: data) else {
+                return []
+            }
+            return historyList
+        }
+        set {
+            UserDefaults.standard.set(
+                try? PropertyListEncoder().encode(newValue),
+                forKey: UserDefaults.Keys.followers.rawValue
+            )
+        }
+    }
+    
+    var followings: [Following] {
+        get {
+            guard let data = UserDefaults.standard.data(forKey: UserDefaults.Keys.followings.rawValue),
+                  let historyList = try? PropertyListDecoder().decode([Following].self, from: data) else {
+                return []
+            }
+            return historyList
+        }
+        set {
+            UserDefaults.standard.set(
+                try? PropertyListEncoder().encode(newValue),
+                forKey: UserDefaults.Keys.followings.rawValue
+            )
+        }
+    }
+    
 }
 

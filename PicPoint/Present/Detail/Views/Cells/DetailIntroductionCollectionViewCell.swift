@@ -9,6 +9,7 @@ import UIKit
 import SnapKit
 import RxSwift
 import RxCocoa
+import Kingfisher
 
 final class DetailIntroductionCollectionViewCell: BaseCollectionViewCell {
     
@@ -61,6 +62,12 @@ final class DetailIntroductionCollectionViewCell: BaseCollectionViewCell {
         topView.userNicknameLabel.text = cellData.creator.nick
         topView.subTitleLabel.text = cellData.visitDate
         contentLabel.text = cellData.content
+        
+        if cellData.creator.userId == UserDefaults.standard.userId {
+            topView.rightButton.isHidden = true
+        } else {
+            topView.rightButton.isHidden = false
+        }
     }
 }
 
@@ -90,36 +97,22 @@ extension DetailIntroductionCollectionViewCell {
     }
     
     func bind() {
-        detailViewModel?.followButtonTapTriggerRelay.asDriver()
+        
+        let followButton = topView.rightButton
+        
+        guard let detailViewModel else { return }
+        
+        detailViewModel.followButtonTapTriggerRelay.asDriver()
             .drive(with: self) { owner, followingStatus in
-                print("followingStatus", followingStatus)
-                owner.reconfigureFollowButtonUI(owner.topView.rightButton, with: followingStatus)
+                owner.updateFollowButtonUI(followButton, with: followingStatus)
             }
             .disposed(by: disposeBag)
         
-        topView.rightButton.rx.tap
-            .subscribe(with: self) { owner, trigger in
-                owner.detailViewModel?.followButtonTapRelay.accept(trigger)
+        followButton.rx.tap
+            .subscribe(with: self) { owner, _ in
+                guard let detailViewModel = owner.detailViewModel else { return }
+                detailViewModel.followButtonTapSubject.onNext(followButton.followType)
             }
             .disposed(by: disposeBag)
-    }
-    
-    func reconfigureFollowButtonUI(_ button: UIButton, with followingStatus: Bool) {
-        
-        if followingStatus {
-            button.configuration?.baseBackgroundColor = .white
-            button.configuration?.baseForegroundColor = .black
-            button.configuration?.title = "언팔로우"
-            button.layer.borderWidth = 1.0
-            button.layer.borderColor = UIColor.black.cgColor
-            button.layer.cornerRadius = 16
-        } else {
-            button.configuration?.baseBackgroundColor = .black
-            button.configuration?.baseForegroundColor = .white
-            button.configuration?.title = "팔로우"
-            button.layer.borderWidth = 0.0
-            button.layer.borderColor = UIColor.black.cgColor
-            button.layer.cornerRadius = 16
-        }
     }
 }

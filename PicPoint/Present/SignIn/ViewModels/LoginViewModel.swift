@@ -26,7 +26,8 @@ final class LoginViewModel: ViewModelType {
     }
     
     func transform(input: Input) -> Output {
-        let loginValid = BehaviorRelay(value: false)
+        let loginValid = BehaviorRelay<Bool>(value: false)
+        let fetchUserProfileTrigger = PublishSubject<Void>()
         let loginSuccessTrigger = PublishRelay<Void>()
         
         let loginObservable = Observable.combineLatest(
@@ -45,6 +46,17 @@ final class LoginViewModel: ViewModelType {
                 } else {
                     loginValid.accept(false)
                 }
+            }
+            .disposed(by: disposeBag)
+        
+        fetchUserProfileTrigger
+            .flatMap {
+                ProfileManager.fetchMyProfile()
+            }
+            .subscribe { fetchMyProfileModel in
+                UserDefaults.standard.followers = fetchMyProfileModel.followers
+                UserDefaults.standard.followings = fetchMyProfileModel.followings
+                loginSuccessTrigger.accept(())
             }
             .disposed(by: disposeBag)
         
@@ -67,7 +79,7 @@ final class LoginViewModel: ViewModelType {
                 let refreshTokenDueDate = Date().addingTimeInterval(1200 * 60)
 //                let testRefreshTokenDueDate = Date().addingTimeInterval(5 * 60)
                 UserDefaults.standard.refreshTokenDueDate = refreshTokenDueDate
-                loginSuccessTrigger.accept(())
+                fetchUserProfileTrigger.onNext(())
             } onError: { owner, error in
                 print("로그인 오류 발생, \(error)")
             }

@@ -136,6 +136,12 @@ extension ProfileCollectionViewCell {
             }
             .disposed(by: disposeBag)
         
+        profileViewModel.updateFollowingsCountRelay.asDriver(onErrorJustReturn: 0)
+            .drive(with: self) { owner, updatedFollowingsCount in
+                owner.followerFollowingStackView.followingNumberLabel.text = updatedFollowingsCount.description
+            }
+            .disposed(by: disposeBag)
+        
         bottomButton.rx.tap
             .bind(with: self) { owner, _ in
                 guard let profileViewModel = owner.profileViewModel else { return }

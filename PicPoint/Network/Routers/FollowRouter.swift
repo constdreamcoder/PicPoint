@@ -10,6 +10,7 @@ import Alamofire
 
 enum FollowRouter {
     case follow(params: FollowParams)
+    case unfollow(params: UnFollowParams)
 }
 
 extension FollowRouter: TargetType {
@@ -22,19 +23,21 @@ extension FollowRouter: TargetType {
         switch self {
         case .follow:
             return .post
+        case .unfollow:
+            return .delete
         }
     }
     
     var path: String {
         switch self {
-        case .follow:
+        case .follow, .unfollow:
             return "/follow"
         }
     }
     
     var header: [String : String] {
         switch self {
-        case .follow:
+        case .follow, .unfollow:
             return [
                 HTTPHeader.authorization.rawValue: UserDefaults.standard.accessToken,
                 HTTPHeader.sesacKey.rawValue: APIKeys.sesacKey
@@ -46,6 +49,8 @@ extension FollowRouter: TargetType {
         switch self {
         case .follow(let params):
             return "/\(params.userId)"
+        case .unfollow(let params):
+            return "/\(params.userId)"
         }
     }
     
@@ -55,7 +60,7 @@ extension FollowRouter: TargetType {
     
     var body: Data? {
         switch self {
-        case .follow:
+        case .follow, .unfollow:
             return nil
         }
     }
