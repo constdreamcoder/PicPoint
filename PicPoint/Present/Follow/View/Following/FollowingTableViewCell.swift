@@ -40,7 +40,7 @@ final class FollowingTableViewCell: CustomFollowTableViewCell {
 
         updateFollowButtonUI(
             profileContainerView.rightButton,
-            with: followingCellData.followingStatus
+            with: followingCellData.followType == .following ? true : false
         )
     }
 }
@@ -66,20 +66,7 @@ extension FollowingTableViewCell {
         followButton.rx.tap
             .bind(with: self) { owner, _ in
                 guard let followingViewModel = owner.followingViewModel else { return }
-                followingViewModel.selectedFollowingSubject.onNext(followingCellData.following)
-                followingViewModel.selectedFollowingFollowTypeSubject.onNext(followButton.followType)
-            }
-            .disposed(by: disposeBag)
-
-        
-        guard let followingViewModel else { return }
-        
-        followingViewModel.followButtonTapTriggerRelay.asDriver(onErrorJustReturn: false)
-            .drive(with: self) { owner, followingStatus in
-                owner.updateFollowButtonUI(
-                    followButton,
-                    with: followingStatus
-                )
+                followingViewModel.selectedFollowingSubject.onNext(followingCellData)
             }
             .disposed(by: disposeBag)
     }

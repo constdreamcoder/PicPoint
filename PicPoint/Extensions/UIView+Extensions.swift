@@ -8,7 +8,7 @@
 import UIKit
 
 extension UIView {
-    func updateFollowButtonUI(_ button: CustomButtonWithFollowType, with followingStatus: Bool) {
+    func updateFollowButtonUI(_ button: UIButton, with followingStatus: Bool) {
         
         if followingStatus {
             button.configuration?.baseBackgroundColor = .white
@@ -17,7 +17,6 @@ extension UIView {
             button.layer.borderWidth = 1.0
             button.layer.borderColor = UIColor.black.cgColor
             button.layer.cornerRadius = 16
-            button.followType = .following
         } else {
             button.configuration?.baseBackgroundColor = .black
             button.configuration?.baseForegroundColor = .white
@@ -25,7 +24,6 @@ extension UIView {
             button.layer.borderWidth = 0.0
             button.layer.borderColor = UIColor.black.cgColor
             button.layer.cornerRadius = 16
-            button.followType = .unfollowing
         }
     }
 }

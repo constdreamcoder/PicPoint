@@ -18,7 +18,7 @@ protocol DetailViewModelDelegate: AnyObject {
 final class DetailViewModel: ViewModelType {
     
     let followButtonTapTriggerRelay = BehaviorRelay<Bool>(value: false)
-    let followButtonTapSubject = PublishSubject<CustomButtonWithFollowType.FollowType>()
+    let followButtonTapSubject = PublishSubject<Creator>()
     let mapViewTapRelay = PublishRelay<CLLocationCoordinate2D>()
     private let sectionsRelay = BehaviorRelay<[SectionModelWrapper]>(value: [])
     private let postRelay = BehaviorRelay<PostLikeType?>(value: nil)
@@ -211,9 +211,8 @@ final class DetailViewModel: ViewModelType {
                 UserDefaults.standard.followings.append(newFollowing)
                 return FollowManager.follow(params: FollowParams(userId: $0.creator.userId))
             }
-            .subscribe(with: self) { owner, followModel in
-                print("followings", UserDefaults.standard.followings)
-                owner.followButtonTapTriggerRelay.accept(followModel.followingStatus)
+            .subscribe(with: self) { owner, _ in
+                owner.followButtonTapTriggerRelay.accept(true)
             }
             .disposed(by: disposeBag)
         
@@ -222,24 +221,20 @@ final class DetailViewModel: ViewModelType {
                 UserDefaults.standard.followings.removeAll(where: { $0.userId == post.creator.userId })
                 return FollowManager.unfollow(params: UnFollowParams(userId: post.creator.userId))
             }
-            .subscribe(with: self) { owner, followModel in
-                print("followings", UserDefaults.standard.followings)
-                owner.followButtonTapTriggerRelay.accept(followModel.followingStatus)
+            .subscribe(with: self) { owner, _ in
+                owner.followButtonTapTriggerRelay.accept(false)
             }
             .disposed(by: disposeBag)
         
         followButtonTapSubject
             .debounce(.seconds(1), scheduler: MainScheduler.instance)
             .withLatestFrom(postRelay) { ($0, $1) }
-            .subscribe { followType, post in
-                if let post {
-                    switch followType {
-                    case .following:
-                        unFollowTrigger.onNext(post.post)
-                    case .unfollowing:
-                        followTrigger.onNext(post.post)
-                    case .none: break
-                    }
+            .subscribe { creator, post in
+                guard let post else { return }
+                if UserDefaults.standard.followings.contains(where: { $0.userId == creator.userId }) {
+                    unFollowTrigger.onNext(post.post)
+                } else {
+                    followTrigger.onNext(post.post)
                 }
             }
             .disposed(by: disposeBag)

@@ -70,7 +70,6 @@
 		002720A32BDFD702004ADC5C /* FollowManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 002720A22BDFD702004ADC5C /* FollowManager.swift */; };
 		002720A62BDFD7C1004ADC5C /* FollowModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 002720A52BDFD7C1004ADC5C /* FollowModel.swift */; };
 		002720A82BDFF2F2004ADC5C /* UIView+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 002720A72BDFF2F2004ADC5C /* UIView+Extensions.swift */; };
-		002720AA2BE01117004ADC5C /* CustomButtonWithFollowType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 002720A92BE01117004ADC5C /* CustomButtonWithFollowType.swift */; };
 		002720AC2BE0151F004ADC5C /* UnFollowParams.swift in Sources */ = {isa = PBXBuildFile; fileRef = 002720AB2BE0151F004ADC5C /* UnFollowParams.swift */; };
 		002F01C02BD8822200992674 /* SelectLocationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 002F01BF2BD8822200992674 /* SelectLocationViewModel.swift */; };
 		00321C9A2BCD79B800BE2407 /* RxSwift+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00321C992BCD79B800BE2407 /* RxSwift+Extensions.swift */; };
@@ -154,6 +153,7 @@
 		00C71D672BCC0FDA00D933FD /* SignUpBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00C71D662BCC0FDA00D933FD /* SignUpBody.swift */; };
 		00C71D692BCC11C900D933FD /* SignUpModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00C71D682BCC11C900D933FD /* SignUpModel.swift */; };
 		00C71D6E2BCC22E200D933FD /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00C71D6D2BCC22E200D933FD /* HomeViewController.swift */; };
+		00DD46852BE268A3001B3ADA /* FollowType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00DD46842BE268A3001B3ADA /* FollowType.swift */; };
 		00E414EA2BD915AF00C76BE4 /* UploadImagesBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E414E92BD915AF00C76BE4 /* UploadImagesBody.swift */; };
 		00E414EC2BD9186400C76BE4 /* ImageFileListModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E414EB2BD9186400C76BE4 /* ImageFileListModel.swift */; };
 		00E414EE2BD91CAD00C76BE4 /* NSObject+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E414ED2BD91CAD00C76BE4 /* NSObject+Extensions.swift */; };
@@ -253,7 +253,6 @@
 		002720A22BDFD702004ADC5C /* FollowManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowManager.swift; sourceTree = "<group>"; };
 		002720A52BDFD7C1004ADC5C /* FollowModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowModel.swift; sourceTree = "<group>"; };
 		002720A72BDFF2F2004ADC5C /* UIView+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Extensions.swift"; sourceTree = "<group>"; };
-		002720A92BE01117004ADC5C /* CustomButtonWithFollowType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomButtonWithFollowType.swift; sourceTree = "<group>"; };
 		002720AB2BE0151F004ADC5C /* UnFollowParams.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnFollowParams.swift; sourceTree = "<group>"; };
 		002F01BF2BD8822200992674 /* SelectLocationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectLocationViewModel.swift; sourceTree = "<group>"; };
 		00321C992BCD79B800BE2407 /* RxSwift+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RxSwift+Extensions.swift"; sourceTree = "<group>"; };
@@ -337,6 +336,7 @@
 		00C71D662BCC0FDA00D933FD /* SignUpBody.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpBody.swift; sourceTree = "<group>"; };
 		00C71D682BCC11C900D933FD /* SignUpModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpModel.swift; sourceTree = "<group>"; };
 		00C71D6D2BCC22E200D933FD /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
+		00DD46842BE268A3001B3ADA /* FollowType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowType.swift; sourceTree = "<group>"; };
 		00E414E92BD915AF00C76BE4 /* UploadImagesBody.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadImagesBody.swift; sourceTree = "<group>"; };
 		00E414EB2BD9186400C76BE4 /* ImageFileListModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageFileListModel.swift; sourceTree = "<group>"; };
 		00E414ED2BD91CAD00C76BE4 /* NSObject+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSObject+Extensions.swift"; sourceTree = "<group>"; };
@@ -447,7 +447,6 @@
 				0010414A2BDB25D400E5FDA1 /* PostCustomView.swift */,
 				003C82C72BDCECFE003315E1 /* CustomInputView.swift */,
 				00EA277B2BDE479400EE3F9C /* CustomBottomButton.swift */,
-				002720A92BE01117004ADC5C /* CustomButtonWithFollowType.swift */,
 			);
 			path = CusomView;
 			sourceTree = "<group>";
@@ -1006,6 +1005,7 @@
 			isa = PBXGroup;
 			children = (
 				0062202A2BE1EAED0020BB78 /* LikeType.swift */,
+				00DD46842BE268A3001B3ADA /* FollowType.swift */,
 			);
 			path = Enums;
 			sourceTree = "<group>";
@@ -1648,7 +1648,6 @@
 				002720AC2BE0151F004ADC5C /* UnFollowParams.swift in Sources */,
 				00760E552BD531BB00741C40 /* VisitDateTableViewCell.swift in Sources */,
 				00B7C40E2BCA6A93009AC333 /* ViewModelType.swift in Sources */,
-				002720AA2BE01117004ADC5C /* CustomButtonWithFollowType.swift in Sources */,
 				00EA277C2BDE479400EE3F9C /* CustomBottomButton.swift in Sources */,
 				00B67D8A2BD827160097ACDE /* DismissButton.swift in Sources */,
 				0035402B2BD0212800A71415 /* String+Extensions.swift in Sources */,
@@ -1668,6 +1667,7 @@
 				00B67D842BD810570097ACDE /* RecommendedVisitTimeViewModel.swift in Sources */,
 				001253F82BD415A90065F1E6 /* WriteCommentParams.swift in Sources */,
 				001253E52BD373E50065F1E6 /* CommentViewModel.swift in Sources */,
+				00DD46852BE268A3001B3ADA /* FollowType.swift in Sources */,
 				00760E5E2BD540C200741C40 /* InnerTextViewContainerView.swift in Sources */,
 				0049D87F2BC96B4800F59852 /* AppDelegate.swift in Sources */,
 				0062202B2BE1EAED0020BB78 /* LikeType.swift in Sources */,

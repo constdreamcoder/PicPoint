@@ -96,7 +96,7 @@ extension DetailIntroductionCollectionViewCell {
 
     }
     
-    func bind() {
+    func bind(_ cellData: SecondSectionCellData) {
         
         let followButton = topView.rightButton
         
@@ -109,9 +109,18 @@ extension DetailIntroductionCollectionViewCell {
             .disposed(by: disposeBag)
         
         followButton.rx.tap
-            .subscribe(with: self) { owner, _ in
+            .bind(with: self) { owner, _ in
                 guard let detailViewModel = owner.detailViewModel else { return }
-                detailViewModel.followButtonTapSubject.onNext(followButton.followType)
+                detailViewModel.followButtonTapSubject.onNext(cellData.creator)
+            }
+            .disposed(by: disposeBag)
+        
+        detailViewModel.followButtonTapTriggerRelay.asDriver()
+            .drive(with: self) { owner, followingStatus in
+                owner.updateFollowButtonUI(
+                    owner.topView.rightButton,
+                    with: followingStatus
+                )
             }
             .disposed(by: disposeBag)
     }
