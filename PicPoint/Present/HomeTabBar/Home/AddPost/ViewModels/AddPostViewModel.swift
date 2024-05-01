@@ -191,6 +191,7 @@ final class AddPostViewModel: NSObject, ViewModelType {
                 print(post)
                 owner.delegate?.sendNewPost(post)
                 rightBarButtonItemTapTrigger.accept(())
+                NotificationCenter.default.post(name: .sendNewPost, object: nil, userInfo: ["newPost": post])
             }
             .disposed(by: disposeBag)
         

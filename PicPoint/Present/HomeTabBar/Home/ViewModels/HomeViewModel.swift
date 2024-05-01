@@ -76,13 +76,13 @@ final class HomeViewModel: ViewModelType {
                 PostManager.deletePost(params: DeletePostParams(postId: $0))
             }
             .withLatestFrom(postList) { deletedPostId, postList in
-                var tempPostList = postList
-                return tempPostList.filter { post, likeType, likes, comments in
-                    post.postId != deletedPostId
+                NotificationCenter.default.post(name: .sendDeletedPostId, object: nil, userInfo: ["deletedPostId": deletedPostId])
+                return postList.filter { post in
+                    post.post.postId != deletedPostId
                 }
             }
-            .subscribe(with: self) { onwer, filteredPostList in
-                onwer.postList.accept(filteredPostList)
+            .subscribe(with: self) { owner, filteredPostList in
+                owner.postList.accept(filteredPostList)
             }
             .disposed(by: disposeBag)
         
@@ -106,7 +106,7 @@ final class HomeViewModel: ViewModelType {
             .withLatestFrom(postList) { postId, postList -> [PostLikeType] in
                 let newPostList: [PostLikeType] = postList.map { post in
                     if post.post.postId == postId {
-                        var likes = [UserDefaults.standard.userId] + post.likes
+                        let likes = [UserDefaults.standard.userId] + post.likes
                         return (post.post, .like, likes, post.comments)
                     } else {
                         return post
@@ -130,7 +130,7 @@ final class HomeViewModel: ViewModelType {
             .withLatestFrom(postList) { postId, postList -> [PostLikeType] in
                 let newPostList: [PostLikeType] = postList.map { post in
                     if post.post.postId == postId {
-                        var likes = post.likes.filter { $0 != UserDefaults.standard.userId }
+                        let likes = post.likes.filter { $0 != UserDefaults.standard.userId }
                         return (post.post, .unlike, likes, post.comments)
                     } else {
                         return post

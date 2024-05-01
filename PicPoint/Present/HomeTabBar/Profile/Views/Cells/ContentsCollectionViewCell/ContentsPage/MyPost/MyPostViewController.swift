@@ -78,7 +78,6 @@ extension MyPostViewController: UIViewControllerConfiguration {
                 }
             }
             .disposed(by: disposeBag)
-           
     }
 }
 

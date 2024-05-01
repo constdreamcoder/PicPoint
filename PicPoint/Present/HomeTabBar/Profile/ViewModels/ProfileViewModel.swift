@@ -99,6 +99,24 @@ extension ProfileViewModel: MyPostViewModelDelegate {
             }
             .disposed(by: disposeBag)
     }
+    
+    func sendNewPostId(_ postId: String) {
+        Observable<String>.just(postId)
+            .withLatestFrom(myPosts)
+            .subscribe(with: self) { owner, myPosts in
+                owner.myPosts.accept(myPosts + [postId])
+            }
+            .disposed(by: disposeBag)
+    }
+    
+    func sendUpdatedPostIdList(_ postIdList: [String]) {
+        Observable<[String]>.just(postIdList)
+            .subscribe(with: self) { owner, postIdList in
+                owner.myPosts.accept(postIdList)
+            }
+            .disposed(by: disposeBag)
+    }
+    
 }
 
 extension ProfileViewModel: MyLikeViewModelDelegate {

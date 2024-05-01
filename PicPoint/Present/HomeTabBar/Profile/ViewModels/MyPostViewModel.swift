@@ -11,6 +11,8 @@ import RxCocoa
 
 protocol MyPostViewModelDelegate: AnyObject {
     func sendMyPostCollectionViewContentHeight(_ contentHeight: CGFloat)
+    func sendNewPostId(_ postId: String)
+    func sendUpdatedPostIdList(_ postIdList: [String])
 }
 
 final class MyPostViewModel: ViewModelType {
@@ -21,6 +23,16 @@ final class MyPostViewModel: ViewModelType {
     
     weak var delegate: MyPostViewModelDelegate?
     
+    init() {
+        NotificationCenter.default.addObserver(self, selector: #selector(handleNewPost), name: .sendNewPost, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(handleUpdatedPostList), name: .sendDeletedPostId, object: nil)
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self, name: .sendNewPost, object: nil)
+        NotificationCenter.default.removeObserver(self, name: .sendDeletedPostId, object: nil)
+    }
+    
     struct Input {
         let viewDidLoad: Observable<Void>
     }
@@ -30,9 +42,7 @@ final class MyPostViewModel: ViewModelType {
     }
     
     func transform(input: Input) -> Output {
-        
-        
-        
+    
         return Output(myPostsList: myPostsList.asDriver())
     }
     
@@ -40,13 +50,6 @@ final class MyPostViewModel: ViewModelType {
 
 extension MyPostViewModel: ProfileViewModelDelegate {
     func sendMyPosts(_ posts: [String]) {
-        print("posts", posts)
-        //        Observable.just(posts)
-        //            .subscribe(with: self) { owner, posts in
-        //                owner.myPostsIdList.onNext(posts)
-        //            }
-        //            .disposed(by: disposeBag)
-        
         let observables = posts.map { id in
             return Observable.just(id)
                 .observe(on: ConcurrentDispatchQueueScheduler(queue: .global()))
@@ -61,4 +64,37 @@ extension MyPostViewModel: ProfileViewModelDelegate {
             }
             .disposed(by: disposeBag)
     }
+}
+
+extension MyPostViewModel {
+    @objc func handleNewPost(notification: Notification) {
+        if let userInfo = notification.userInfo,
+           let newPost = userInfo["newPost"] as? Post {
+            
+            Observable<Post>.just(newPost)
+                .withLatestFrom(myPostsList)
+                .subscribe(with: self) { owner, postList in
+                    owner.myPostsList.accept(postList + [newPost])
+                    owner.delegate?.sendNewPostId(newPost.postId)
+                }
+                .disposed(by: disposeBag)
+        }
+    }
+    
+    @objc func handleUpdatedPostList(notification: Notification) {
+        if let userInfo = notification.userInfo,
+           let deletedPostId = userInfo["deletedPostId"] as? String {
+            print("deletedPostId", deletedPostId)
+            Observable<String>.just(deletedPostId)
+                .withLatestFrom(myPostsList) { deletedPostId, myPostList in
+                    myPostList.filter { $0.postId !=  deletedPostId }
+                }
+                .subscribe(with: self) { owner, updatedPostList in
+                    owner.myPostsList.accept(updatedPostList)
+                    owner.delegate?.sendUpdatedPostIdList(updatedPostList.map { $0.postId })
+                }
+                .disposed(by: disposeBag)
+        }
+    }
+        
 }

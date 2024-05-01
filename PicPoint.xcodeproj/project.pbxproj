@@ -154,6 +154,7 @@
 		00C71D692BCC11C900D933FD /* SignUpModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00C71D682BCC11C900D933FD /* SignUpModel.swift */; };
 		00C71D6E2BCC22E200D933FD /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00C71D6D2BCC22E200D933FD /* HomeViewController.swift */; };
 		00DD46852BE268A3001B3ADA /* FollowType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00DD46842BE268A3001B3ADA /* FollowType.swift */; };
+		00DD46872BE27A86001B3ADA /* NotificationCenter+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00DD46862BE27A86001B3ADA /* NotificationCenter+Extensions.swift */; };
 		00E414EA2BD915AF00C76BE4 /* UploadImagesBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E414E92BD915AF00C76BE4 /* UploadImagesBody.swift */; };
 		00E414EC2BD9186400C76BE4 /* ImageFileListModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E414EB2BD9186400C76BE4 /* ImageFileListModel.swift */; };
 		00E414EE2BD91CAD00C76BE4 /* NSObject+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E414ED2BD91CAD00C76BE4 /* NSObject+Extensions.swift */; };
@@ -337,6 +338,7 @@
 		00C71D682BCC11C900D933FD /* SignUpModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpModel.swift; sourceTree = "<group>"; };
 		00C71D6D2BCC22E200D933FD /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		00DD46842BE268A3001B3ADA /* FollowType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowType.swift; sourceTree = "<group>"; };
+		00DD46862BE27A86001B3ADA /* NotificationCenter+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NotificationCenter+Extensions.swift"; sourceTree = "<group>"; };
 		00E414E92BD915AF00C76BE4 /* UploadImagesBody.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadImagesBody.swift; sourceTree = "<group>"; };
 		00E414EB2BD9186400C76BE4 /* ImageFileListModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageFileListModel.swift; sourceTree = "<group>"; };
 		00E414ED2BD91CAD00C76BE4 /* NSObject+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSObject+Extensions.swift"; sourceTree = "<group>"; };
@@ -1373,6 +1375,7 @@
 				00E414ED2BD91CAD00C76BE4 /* NSObject+Extensions.swift */,
 				00E414F12BD94FFC00C76BE4 /* CLPlacemark+Extensions.swift */,
 				002720A72BDFF2F2004ADC5C /* UIView+Extensions.swift */,
+				00DD46862BE27A86001B3ADA /* NotificationCenter+Extensions.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -1595,6 +1598,7 @@
 				0010417A2BDC2C4600E5FDA1 /* FetchMyLikesModel.swift in Sources */,
 				0003E9392BD57ECF00695D40 /* SelectImageViewModel.swift in Sources */,
 				00760E4A2BD5128600741C40 /* AddPostCollectionViewSectionDataModel.swift in Sources */,
+				00DD46872BE27A86001B3ADA /* NotificationCenter+Extensions.swift in Sources */,
 				0027209A2BDFCE39004ADC5C /* FollowerViewModel.swift in Sources */,
 				002720A32BDFD702004ADC5C /* FollowManager.swift in Sources */,
 				00B67D822BD8102F0097ACDE /* RecommendedVisitTimeViewController.swift in Sources */,
