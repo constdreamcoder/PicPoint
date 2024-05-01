@@ -12,14 +12,15 @@ class PostCustomView: UIView {
     
     let photoImageView = PhotoImageView(frame: .zero)
     
-    let bookmarkButton: UIButton = {
+    let heartButton: UIButton = {
         let button = UIButton()
-        let image = UIImage(systemName: "bookmark")
+        let image = UIImage(systemName: "heart")
         button.setImage(image, for: .normal)
         button.tintColor = .white
         button.backgroundColor = .clear
         let symbolConfig = UIImage.SymbolConfiguration(pointSize: 32)
         button.setPreferredSymbolConfiguration(symbolConfig, forImageIn: .normal)
+        button.isHidden = true
         return button
     }()
     
@@ -79,7 +80,7 @@ extension PostCustomView: UIViewConfiguration {
         
         [
             photoImageView,
-            bookmarkButton,
+            heartButton,
             bottomContainerView
         ].forEach { addSubview($0) }
         
@@ -88,7 +89,7 @@ extension PostCustomView: UIViewConfiguration {
             $0.height.equalTo(300)
         }
         
-        bookmarkButton.snp.makeConstraints {
+        heartButton.snp.makeConstraints {
             $0.top.trailing.equalTo(photoImageView).inset(16.0)
         }
         

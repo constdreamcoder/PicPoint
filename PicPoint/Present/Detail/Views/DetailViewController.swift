@@ -175,8 +175,9 @@ extension DetailViewController: UIViewControllerConfiguration {
     func bind() {
         
         let itemTapSubject = PublishSubject<Int>()
-    
+        
         let input = DetailViewModel.Input(
+            heartButtonTap: iconView.heartStackView.button.rx.tap,
             commentButtonTap: iconView.commentStackView.button.rx.tap, 
             itemTap: itemTapSubject
         )
@@ -194,6 +195,10 @@ extension DetailViewController: UIViewControllerConfiguration {
                 
                 owner.iconView.heartStackView.label.text = "\(post.likes.count)"
                 owner.iconView.commentStackView.label.text = "\(post.comments.count)"
+                owner.updateHeartButtonUI(
+                    owner.iconView.heartStackView.button,
+                    isLike: post.likeType == .like ? true : false
+                )
             }
             .disposed(by: disposeBag)
         
@@ -217,7 +222,8 @@ extension DetailViewController: UIViewControllerConfiguration {
         collectionView.rx.itemSelected
             .bind { indexPath in
                 if indexPath.section == 3 {
-                    itemTapSubject.onNext(indexPath.row)
+                    print("item", indexPath.item)
+                    itemTapSubject.onNext(indexPath.item)
                 }
             }
             .disposed(by: disposeBag)
@@ -226,6 +232,7 @@ extension DetailViewController: UIViewControllerConfiguration {
             .drive(with: self) { owner, post in
                 if let post {
                     let detailVM = DetailViewModel(post: post)
+                    detailVM.delegate = viewModel.delegate
                     let detailVC = DetailViewController(detailViewModel: detailVM)
                     owner.navigationController?.pushViewController(detailVC, animated: true)
                 }

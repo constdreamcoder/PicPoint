@@ -20,7 +20,6 @@ final class HomeViewModel: ViewModelType {
     let otherOptionsButtonTapRelay = PublishRelay<String>()
     let commentButtonTapRelay = PublishRelay<String>()
     let heartButtonTapSubject = PublishSubject<PostLikeType>()
-    let updateHeartButtonUIRelay = PublishRelay<LikeReturnType>()
     
     let postLikesList = BehaviorRelay<[(String, [String])]>(value: [])
     private let postList = BehaviorRelay<[PostLikeType]>(value: [])
@@ -104,21 +103,20 @@ final class HomeViewModel: ViewModelType {
                     body: LikeBody(like_status: true)
                 )
             }
-            .withLatestFrom(postList) { likeReturn, postList -> (LikeReturnType, [PostLikeType]) in
+            .withLatestFrom(postList) { postId, postList -> [PostLikeType] in
                 let newPostList: [PostLikeType] = postList.map { post in
-                    if post.post.postId == likeReturn.postId {
+                    if post.post.postId == postId {
                         var likes = [UserDefaults.standard.userId] + post.likes
                         return (post.post, .like, likes, post.comments)
                     } else {
                         return post
                     }
                 }
-                return (likeReturn, newPostList)
+                return newPostList
             }
-            .subscribe(with: self) { owner, value in
-                print("like", value.0)
-                owner.updateHeartButtonUIRelay.accept(value.0)
-                owner.postList.accept(value.1)
+            .subscribe(with: self) { owner, newPostList in
+                print("like")
+                owner.postList.accept(newPostList)
             }
             .disposed(by: disposeBag)
         
@@ -129,26 +127,25 @@ final class HomeViewModel: ViewModelType {
                     body: LikeBody(like_status: false)
                 )
             }
-            .withLatestFrom(postList) { likeReturn, postList -> (LikeReturnType, [PostLikeType]) in
+            .withLatestFrom(postList) { postId, postList -> [PostLikeType] in
                 let newPostList: [PostLikeType] = postList.map { post in
-                    if post.post.postId == likeReturn.postId {
+                    if post.post.postId == postId {
                         var likes = post.likes.filter { $0 != UserDefaults.standard.userId }
                         return (post.post, .unlike, likes, post.comments)
                     } else {
                         return post
                     }
                 }
-                return (likeReturn, newPostList)
+                return newPostList
             }
-            .subscribe(with: self) { owner, value in
-                print("unlike", value.0)
-                owner.updateHeartButtonUIRelay.accept(value.0)
-                owner.postList.accept(value.1)
+            .subscribe(with: self) { owner, newPostList in
+                print("unlike")
+                owner.postList.accept(newPostList)
             }
             .disposed(by: disposeBag)
         
         heartButtonTapSubject
-            .debounce(.seconds(1), scheduler: MainScheduler.instance)
+            .debounce(.milliseconds(500), scheduler: MainScheduler.instance)
             .subscribe { post in
                 switch post.likeType {
                 case .like:
@@ -180,6 +177,26 @@ extension HomeViewModel: AddPostViewModelDelegate {
             }
             .subscribe(with: self) { owner, newPostList in
                 owner.postList.accept(newPostList)
+            }
+            .disposed(by: disposeBag)
+    }
+}
+
+extension HomeViewModel: DetailViewModelDelegate {
+    func sendLikeUpdateTrigger(_ post: PostLikeType?) {
+        guard let updatedPost = post else { return }
+            Observable.just(updatedPost)
+            .withLatestFrom(postList) { updatedPost, postList in
+                postList.map { post in
+                    if post.post.postId == updatedPost.post.postId {
+                        return updatedPost
+                    } else {
+                         return post
+                    }
+                }
+            }
+            .subscribe(with: self) { owner, updatePostList in
+                owner.postList.accept(updatePostList)
             }
             .disposed(by: disposeBag)
     }

@@ -9,8 +9,6 @@ import Foundation
 import RxSwift
 import Alamofire
 
-typealias LikeReturnType = (likeModel: LikeModel?, postId: String)
-
 struct LikeManager {
     static func fetchMyLikes() -> Single<[Post]> {
         return Single<[Post]>.create { singleObserver in
@@ -35,8 +33,8 @@ struct LikeManager {
         }
     }
     
-    static func like(params: LikeParams, body: LikeBody) -> Single<LikeReturnType> {
-        return Single<LikeReturnType>.create { singleObserver in
+    static func like(params: LikeParams, body: LikeBody) -> Single<String> {
+        return Single<String>.create { singleObserver in
             do {
                 let urlRequest = try LikeRouter.like(params: params, body: body).asURLRequest()
                 
@@ -44,8 +42,8 @@ struct LikeManager {
                     .validate(statusCode: 200...500)
                     .responseDecodable(of: LikeModel.self) { response in
                         switch response.result {
-                        case .success(let likeModel):
-                            singleObserver(.success((likeModel, params.postId)))
+                        case .success(_):
+                            singleObserver(.success(params.postId))
                         case .failure(let AFError):
                             print(response.response?.statusCode)
                             singleObserver(.failure(AFError))
@@ -58,8 +56,8 @@ struct LikeManager {
         }
     }
     
-    static func unlike(params: LikeParams, body: LikeBody) -> Single<LikeReturnType> {
-        return Single<LikeReturnType>.create { singleObserver in
+    static func unlike(params: LikeParams, body: LikeBody) -> Single<String> {
+        return Single<String>.create { singleObserver in
             do {
                 let urlRequest = try LikeRouter.unlike(params: params, body: body).asURLRequest()
                 
@@ -67,8 +65,8 @@ struct LikeManager {
                     .validate(statusCode: 200...500)
                     .responseDecodable(of: LikeModel.self) { response in
                         switch response.result {
-                        case .success(let likeModel):
-                            singleObserver(.success((likeModel, params.postId)))
+                        case .success(_):
+                            singleObserver(.success(params.postId))
                         case .failure(let AFError):
                             print(response.response?.statusCode)
                             singleObserver(.failure(AFError))

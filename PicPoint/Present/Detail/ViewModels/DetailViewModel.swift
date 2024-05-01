@@ -11,26 +11,33 @@ import RxCocoa
 import Differentiator
 import CoreLocation
 
+protocol DetailViewModelDelegate: AnyObject {
+    func sendLikeUpdateTrigger(_ post: PostLikeType?)
+}
+
 final class DetailViewModel: ViewModelType {
     
     let followButtonTapTriggerRelay = BehaviorRelay<Bool>(value: false)
     let followButtonTapSubject = PublishSubject<CustomButtonWithFollowType.FollowType>()
     let mapViewTapRelay = PublishRelay<CLLocationCoordinate2D>()
     private let sectionsRelay = BehaviorRelay<[SectionModelWrapper]>(value: [])
-    private let postRelay = BehaviorRelay<Post?>(value: nil)
+    private let postRelay = BehaviorRelay<PostLikeType?>(value: nil)
     private let hashTagsSubject = BehaviorSubject<[String]>(value: [])
     private let relatedPostList = BehaviorSubject<[Post]>(value: [])
+    
+    weak var delegate: DetailViewModelDelegate?
     
     var disposeBag = DisposeBag()
 
     struct Input {
+        let heartButtonTap: ControlEvent<Void>
         let commentButtonTap: ControlEvent<Void>
         let itemTap: PublishSubject<Int>
     }
     
     struct Output {
         let sections: Driver<[SectionModelWrapper]>
-        let post: Driver<Post?>
+        let post: Driver<PostLikeType?>
         let postId: Driver<String>
         let mapViewTapTrigger: Driver<CLLocationCoordinate2D>
         let itemTapTrigger: Driver<Post?>
@@ -38,6 +45,17 @@ final class DetailViewModel: ViewModelType {
     
     init(post: Post) {
         Observable.just(post)
+            .withUnretained(self)
+            .map { owner, post in
+                if post.likes.contains(where: { $0 == UserDefaults.standard.userId }) {
+                    let postLike: PostLikeType = (post, .like, post.likes, post.comments)
+                    owner.postRelay.accept(postLike)
+                } else {
+                    let postLike: PostLikeType = (post, .unlike, post.likes, post.comments)
+                    owner.postRelay.accept(postLike)
+                }
+                return post
+            }
             .withUnretained(self)
             .map { owner, post -> FetchPostWithHashTagQuery in
                 owner.hashTagsSubject.onNext(post.hashTags)
@@ -99,8 +117,7 @@ final class DetailViewModel: ViewModelType {
                     )
                 ]
                 owner.sectionsRelay.accept(sections)
-                owner.postRelay.accept(post)
-                owner.relatedPostList.onNext(postList)
+                owner.relatedPostList.onNext(postList.filter { $0.postId != post.postId })
             }
             .disposed(by: disposeBag)
     }
@@ -108,13 +125,74 @@ final class DetailViewModel: ViewModelType {
     func transform(input: Input) -> Output {
         let postIdRelay = PublishRelay<String>()
         let itemTapTrigger = PublishRelay<Post?>()
+        let likeTrigger = PublishSubject<String>()
+        let unlikeTrigger = PublishSubject<String>()
         let followTrigger = PublishSubject<Post>()
         let unFollowTrigger = PublishSubject<Post>()
+        
+        likeTrigger
+            .flatMap {
+                LikeManager.like(
+                    params: LikeParams(postId: $0),
+                    body: LikeBody(like_status: true)
+                )
+            }
+            .withLatestFrom(postRelay)
+            .map { post -> PostLikeType? in
+                if let post {
+                    let likes = [UserDefaults.standard.userId] + post.likes
+                    return (post.post, .like, likes, post.comments)
+                } else {
+                    return post
+                }
+            }
+            .subscribe(with: self) { owner, updatedPost in
+                owner.postRelay.accept(updatedPost)
+                owner.delegate?.sendLikeUpdateTrigger(updatedPost)
+            }
+            .disposed(by: disposeBag)
+        
+        unlikeTrigger
+            .flatMap {
+                LikeManager.unlike(
+                    params: LikeParams(postId: $0),
+                    body: LikeBody(like_status: false)
+                )
+            }
+            .withLatestFrom(postRelay)
+            .map { post -> PostLikeType? in
+                if let post {
+                    let likes = post.likes.filter { $0 != UserDefaults.standard.userId }
+                    return (post.post, .unlike, likes, post.comments)
+                } else {
+                    return post
+                }
+            }
+            .subscribe(with: self) { owner, updatedPost in
+                owner.postRelay.accept(updatedPost)
+                owner.delegate?.sendLikeUpdateTrigger(updatedPost)
+            }
+            .disposed(by: disposeBag)
+        
+        input.heartButtonTap
+            .debounce(.milliseconds(500), scheduler: MainScheduler.instance)
+            .withLatestFrom(postRelay)
+            .subscribe { post in
+                guard let post else { return }
+                switch post.likeType {
+                case .like:
+                    unlikeTrigger.onNext(post.post.postId)
+                case .unlike:
+                    likeTrigger.onNext(post.post.postId)
+                case .none: break
+                }
+            }
+            .disposed(by: disposeBag)
         
         postRelay
             .bind(with: self) { owner, post in
                 if let post {
-                    if UserDefaults.standard.followings.contains(where: { $0.userId == post.creator.userId}) {
+                    if UserDefaults.standard.followings.contains(where: { $0.userId == post.post.creator.userId }) {
                         owner.followButtonTapTriggerRelay.accept(true)
                     } else {
                         owner.followButtonTapTriggerRelay.accept(false)
@@ -157,9 +235,9 @@ final class DetailViewModel: ViewModelType {
                 if let post {
                     switch followType {
                     case .following:
-                        unFollowTrigger.onNext(post)
+                        unFollowTrigger.onNext(post.post)
                     case .unfollowing:
-                        followTrigger.onNext(post)
+                        followTrigger.onNext(post.post)
                     case .none: break
                     }
                 }
@@ -170,7 +248,7 @@ final class DetailViewModel: ViewModelType {
             .withLatestFrom(postRelay)
             .subscribe { post in
                 guard let post else { return }
-                postIdRelay.accept(post.postId)
+                postIdRelay.accept(post.post.postId)
             }
             .disposed(by: disposeBag)
         

@@ -167,17 +167,5 @@ extension HomeCollectionViewCell {
                 homeViewModel.heartButtonTapSubject.onNext(post)
             }
             .disposed(by: disposeBag)
-        
-        homeViewModel.updateHeartButtonUIRelay.asDriver(onErrorJustReturn: (nil, ""))
-            .drive(with: self) { owner, likeReturn in
-                if likeReturn.postId == post.post.postId {
-                    guard let likeModel = likeReturn.likeModel else { return }
-                    owner.updateHeartButtonUI(
-                        heartButton,
-                        isLike: likeModel.likeStatus
-                    )
-                }
-            }
-            .disposed(by: disposeBag)
     }
 }

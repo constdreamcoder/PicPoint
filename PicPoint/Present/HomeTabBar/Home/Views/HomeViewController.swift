@@ -134,6 +134,7 @@ extension HomeViewController: UIViewControllerConfiguration {
             .drive(with: self) { owner, post in
                 if let post {
                     let detailVM = DetailViewModel(post: post)
+                    detailVM.delegate = owner.viewModel
                     let detailVC = DetailViewController(detailViewModel: detailVM)
                     owner.navigationController?.pushViewController(detailVC, animated: true)
                 }
