@@ -80,6 +80,6 @@ extension HomeCollectionViewCellIconView: UIViewConfiguration {
     }
     
     func configureUI() {
-        
+        bookmarkButton.isHidden = true
     }
 }

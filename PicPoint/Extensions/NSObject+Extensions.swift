@@ -31,4 +31,16 @@ extension NSObject {
         
         return thumnail
     }
+    
+    func updateHeartButtonUI(_ button: UIButton, isLike: Bool) {
+        if isLike {
+            let buttonImage = UIImage(systemName: "heart.fill")
+            button.tintColor = .systemRed
+            button.setImage(buttonImage, for: .normal)
+        } else {
+            let buttonImage = UIImage(systemName: "heart")
+            button.tintColor = .black
+            button.setImage(buttonImage, for: .normal)
+        }
+    }
 }

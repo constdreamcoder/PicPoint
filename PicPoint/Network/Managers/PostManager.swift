@@ -40,6 +40,8 @@ struct PostManager {
             do {
                 let urlRequest = try PostRouter.fetchPost(params: params).asURLRequest()
                 
+                urlRequest.url
+                
                 AF.request(urlRequest)
                     .validate(statusCode: 200...500)
                     .responseDecodable(of: Post.self) { response in

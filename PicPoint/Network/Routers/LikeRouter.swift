@@ -10,6 +10,8 @@ import Alamofire
 
 enum LikeRouter {
     case fetchMyLikes
+    case like(params: LikeParams, body: LikeBody)
+    case unlike(params: LikeParams, body: LikeBody)
 }
 
 extension LikeRouter: TargetType {
@@ -22,6 +24,8 @@ extension LikeRouter: TargetType {
         switch self {
         case .fetchMyLikes:
             return .get
+        case .like, .unlike:
+            return .post
         }
     }
     
@@ -29,6 +33,8 @@ extension LikeRouter: TargetType {
         switch self {
         case .fetchMyLikes:
             return "/posts/likes/me"
+        case .like, .unlike:
+            return "/posts"
         }
     }
     
@@ -37,13 +43,26 @@ extension LikeRouter: TargetType {
         case .fetchMyLikes:
             return [
                 HTTPHeader.authorization.rawValue: UserDefaults.standard.accessToken,
-                HTTPHeader.sesacKey.rawValue: APIKeys.sesacKey
+                HTTPHeader.sesacKey.rawValue: APIKeys.sesacKey,
+            ]
+        case .like, .unlike:
+            return [
+                HTTPHeader.authorization.rawValue: UserDefaults.standard.accessToken,
+                HTTPHeader.sesacKey.rawValue: APIKeys.sesacKey,
+                HTTPHeader.contentType.rawValue: HTTPHeader.json.rawValue
             ]
         }
     }
     
     var parameters: String? {
-        return nil
+        switch self {
+        case .fetchMyLikes:
+            return nil
+        case .like(let params, _):
+            return "/\(params.postId)/like"
+        case .unlike(let params, _):
+            return "/\(params.postId)/like"
+        }
     }
     
     var queryItems: [URLQueryItem]? {
@@ -54,6 +73,12 @@ extension LikeRouter: TargetType {
         switch self {
         case .fetchMyLikes:
             return nil
+        case .like(_, let body):
+            let encoder = JSONEncoder()
+            return try? encoder.encode(body)
+        case .unlike(_, let body):
+            let encoder = JSONEncoder()
+            return try? encoder.encode(body)
         }
     }
 }

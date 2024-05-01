@@ -11,6 +11,10 @@ import RxCocoa
 import Photos
 import CoreLocation
 
+protocol AddPostViewModelDelegate: AnyObject {
+    func sendNewPost(_ post: Post)
+}
+
 final class AddPostViewModel: NSObject, ViewModelType {
     
     typealias PrepareForRegisteringPostType = (
@@ -42,6 +46,8 @@ final class AddPostViewModel: NSObject, ViewModelType {
     private let errorMessageRelay = BehaviorRelay<String>(value: "")
     
     var disposeBag = DisposeBag()
+    
+    weak var delegate: AddPostViewModelDelegate?
     
     struct Input {
         let rightBarButtonItemTap: ControlEvent<Void>
@@ -180,9 +186,10 @@ final class AddPostViewModel: NSObject, ViewModelType {
                 return writePostBody
             }
             .flatMap { PostManager.writePost(body: $0) }
-            .subscribe { post in
+            .subscribe(with: self) { owner, post in
                 print("게시글 업로드됨")
                 print(post)
+                owner.delegate?.sendNewPost(post)
                 rightBarButtonItemTapTrigger.accept(())
             }
             .disposed(by: disposeBag)

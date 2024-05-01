@@ -99,6 +99,10 @@
 		0049D88B2BC96B4900F59852 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0049D8892BC96B4900F59852 /* LaunchScreen.storyboard */; };
 		0055FB3C2BDA773E0053781D /* ProfileCollectionViewSectionDataModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0055FB3B2BDA773E0053781D /* ProfileCollectionViewSectionDataModels.swift */; };
 		0055FB3F2BDA77BA0053781D /* SectionModelWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0055FB3E2BDA77BA0053781D /* SectionModelWrapper.swift */; };
+		005E8F1E2BE0E7DE00B341A5 /* LikeBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = 005E8F1D2BE0E7DE00B341A5 /* LikeBody.swift */; };
+		005E8F212BE0E89E00B341A5 /* LikeParams.swift in Sources */ = {isa = PBXBuildFile; fileRef = 005E8F202BE0E89E00B341A5 /* LikeParams.swift */; };
+		005E8F232BE0F24700B341A5 /* LikeModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 005E8F222BE0F24700B341A5 /* LikeModel.swift */; };
+		0062202B2BE1EAED0020BB78 /* LikeType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0062202A2BE1EAED0020BB78 /* LikeType.swift */; };
 		00760E422BD4FD3D00741C40 /* AddPostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00760E412BD4FD3D00741C40 /* AddPostViewController.swift */; };
 		00760E442BD4FE0700741C40 /* AddPostViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00760E432BD4FE0700741C40 /* AddPostViewModel.swift */; };
 		00760E462BD5072000741C40 /* SelectImageTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00760E452BD5072000741C40 /* SelectImageTableViewCell.swift */; };
@@ -278,6 +282,10 @@
 		0049D88C2BC96B4900F59852 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		0055FB3B2BDA773E0053781D /* ProfileCollectionViewSectionDataModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileCollectionViewSectionDataModels.swift; sourceTree = "<group>"; };
 		0055FB3E2BDA77BA0053781D /* SectionModelWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SectionModelWrapper.swift; sourceTree = "<group>"; };
+		005E8F1D2BE0E7DE00B341A5 /* LikeBody.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikeBody.swift; sourceTree = "<group>"; };
+		005E8F202BE0E89E00B341A5 /* LikeParams.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikeParams.swift; sourceTree = "<group>"; };
+		005E8F222BE0F24700B341A5 /* LikeModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikeModel.swift; sourceTree = "<group>"; };
+		0062202A2BE1EAED0020BB78 /* LikeType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikeType.swift; sourceTree = "<group>"; };
 		00760E412BD4FD3D00741C40 /* AddPostViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddPostViewController.swift; sourceTree = "<group>"; };
 		00760E432BD4FE0700741C40 /* AddPostViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddPostViewModel.swift; sourceTree = "<group>"; };
 		00760E452BD5072000741C40 /* SelectImageTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectImageTableViewCell.swift; sourceTree = "<group>"; };
@@ -556,6 +564,7 @@
 			isa = PBXGroup;
 			children = (
 				001041792BDC2C4600E5FDA1 /* FetchMyLikesModel.swift */,
+				005E8F222BE0F24700B341A5 /* LikeModel.swift */,
 			);
 			path = Like;
 			sourceTree = "<group>";
@@ -589,6 +598,7 @@
 		001253EB2BD3C45A0065F1E6 /* Parameters */ = {
 			isa = PBXGroup;
 			children = (
+				005E8F1F2BE0E89700B341A5 /* Like */,
 				0027209F2BDFD654004ADC5C /* Follow */,
 				001253F92BD415D60065F1E6 /* Post */,
 				001253FA2BD415E00065F1E6 /* Comment */,
@@ -634,6 +644,7 @@
 		001253FB2BD417D20065F1E6 /* Bodies */ = {
 			isa = PBXGroup;
 			children = (
+				005E8F1C2BE0E7A900B341A5 /* Like */,
 				00FE92B02BCE56D000554D0F /* User */,
 				001253FC2BD417FB0065F1E6 /* Comment */,
 				00E414E82BD9158900C76BE4 /* Post */,
@@ -948,6 +959,7 @@
 		0049D87D2BC96B4800F59852 /* PicPoint */ = {
 			isa = PBXGroup;
 			children = (
+				006220292BE1EAE40020BB78 /* Enums */,
 				00F65D492BCA1C8D0027A897 /* Resources */,
 				00F65D482BCA1C5B0027A897 /* Protocols */,
 				00F65D472BCA1C450027A897 /* Extensions */,
@@ -972,6 +984,30 @@
 				0055FB3E2BDA77BA0053781D /* SectionModelWrapper.swift */,
 			);
 			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		005E8F1C2BE0E7A900B341A5 /* Like */ = {
+			isa = PBXGroup;
+			children = (
+				005E8F1D2BE0E7DE00B341A5 /* LikeBody.swift */,
+			);
+			path = Like;
+			sourceTree = "<group>";
+		};
+		005E8F1F2BE0E89700B341A5 /* Like */ = {
+			isa = PBXGroup;
+			children = (
+				005E8F202BE0E89E00B341A5 /* LikeParams.swift */,
+			);
+			path = Like;
+			sourceTree = "<group>";
+		};
+		006220292BE1EAE40020BB78 /* Enums */ = {
+			isa = PBXGroup;
+			children = (
+				0062202A2BE1EAED0020BB78 /* LikeType.swift */,
+			);
+			path = Enums;
 			sourceTree = "<group>";
 		};
 		00760E3E2BD4FD0900741C40 /* AddPost */ = {
@@ -1508,6 +1544,7 @@
 				00EA277E2BDE516900EE3F9C /* ValidateEmailBody.swift in Sources */,
 				0034FAFA2BCCA19E00D932F3 /* WithdrawalModel.swift in Sources */,
 				00B7C4092BCA695C009AC333 /* LoginBody.swift in Sources */,
+				005E8F212BE0E89E00B341A5 /* LikeParams.swift in Sources */,
 				00B67D872BD824710097ACDE /* PreviewViewController.swift in Sources */,
 				000AD25A2BD258EA00FC7768 /* DetailDisplayInnerCollectionViewCell.swift in Sources */,
 				0002C12B2BD99A1900AE36EC /* MapPreviewViewController.swift in Sources */,
@@ -1521,6 +1558,7 @@
 				00B7C4142BCA6C7F009AC333 /* LoginModel.swift in Sources */,
 				0010416A2BDBF59A00E5FDA1 /* ProfileRouter.swift in Sources */,
 				0010415C2BDBBF2000E5FDA1 /* MyPostViewModel.swift in Sources */,
+				005E8F1E2BE0E7DE00B341A5 /* LikeBody.swift in Sources */,
 				00760E5C2BD53B5900741C40 /* InnerContainerView.swift in Sources */,
 				00321C9A2BCD79B800BE2407 /* RxSwift+Extensions.swift in Sources */,
 				00AFF5FE2BCD1418006D319A /* UICollectionViewConfiguration.swift in Sources */,
@@ -1617,6 +1655,7 @@
 				0055FB3C2BDA773E0053781D /* ProfileCollectionViewSectionDataModels.swift in Sources */,
 				00B7C3FE2BCA6142009AC333 /* BaseViewController.swift in Sources */,
 				003C82C62BDCE9EA003315E1 /* EditViewModel.swift in Sources */,
+				005E8F232BE0F24700B341A5 /* LikeModel.swift in Sources */,
 				002720962BDFC058004ADC5C /* FollowingTableViewCell.swift in Sources */,
 				009AFAEA2BDA3050003A45BF /* FetchPostWithHashTagQuery.swift in Sources */,
 				000AD2652BD27E0B00FC7768 /* DetailRelatedContentCollectionHeaderView.swift in Sources */,
@@ -1631,6 +1670,7 @@
 				001253E52BD373E50065F1E6 /* CommentViewModel.swift in Sources */,
 				00760E5E2BD540C200741C40 /* InnerTextViewContainerView.swift in Sources */,
 				0049D87F2BC96B4800F59852 /* AppDelegate.swift in Sources */,
+				0062202B2BE1EAED0020BB78 /* LikeType.swift in Sources */,
 				00AFF6102BCD5868006D319A /* IconLabelStackView.swift in Sources */,
 				00FE92AF2BCE54F000554D0F /* PostRouter.swift in Sources */,
 				00760E442BD4FE0700741C40 /* AddPostViewModel.swift in Sources */,

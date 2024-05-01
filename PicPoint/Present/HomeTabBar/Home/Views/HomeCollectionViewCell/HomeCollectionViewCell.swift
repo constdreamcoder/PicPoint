@@ -44,8 +44,6 @@ final class HomeCollectionViewCell: BaseCollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        configureConstraints()
-        configureUI()
     }
     
     required init?(coder: NSCoder) {
@@ -61,26 +59,33 @@ final class HomeCollectionViewCell: BaseCollectionViewCell {
     }
     
     // MARK: - Custom Methods
-    func updatePostData(_ element: Post) {
-        topView.userNicknameLabel.text = element.creator.nick
+    func updatePostData(_ element: PostLikeType) {
+        topView.userNicknameLabel.text = element.post.creator.nick
         topView.subTitleLabel.text = ""
         
-        if let profileImage = element.creator.profileImage, !profileImage.isEmpty {
+        if let profileImage = element.post.creator.profileImage, !profileImage.isEmpty {
             let url = URL(string: APIKeys.baseURL + "/\(profileImage)")
             let placeholderImage = UIImage(systemName: "person.circle")
             topView.profileImageView.kf.setImageWithAuthHeaders(with: url, placeholder: placeholderImage)
         }
        
-        if element.files.count > 0 {
-            let url = URL(string: APIKeys.baseURL + "/\(element.files[0])")
+        if element.post.files.count > 0 {
+            let url = URL(string: APIKeys.baseURL + "/\(element.post.files[0])")
             let placeholderImage = UIImage(systemName: "photo")
             photoImageView.kf.setImageWithAuthHeaders(with: url, placeholder: placeholderImage)
         }
         
         iconView.heartStackView.label.text = "\(element.likes.count)"
         iconView.commentStackView.label.text = "\(element.comments.count)"
-        bottomView.titleLabel.text = element.title
-        bottomView.contentLabel.text = element.content
+        bottomView.titleLabel.text = element.post.title
+        bottomView.contentLabel.text = element.post.content
+        
+        let heartButton = iconView.heartStackView.button
+        if element.likeType == .like {
+            updateHeartButtonUI(heartButton, isLike: true)
+        } else {
+            updateHeartButtonUI(heartButton, isLike: false)
+        }
     }
 }
 
@@ -140,21 +145,39 @@ extension HomeCollectionViewCell {
         topView.layer.masksToBounds = true
     }
     
-    func bind(_ post: Post) {
+    func bind(_ post: PostLikeType) {
         guard let homeViewModel else { return }
-            
+        
+        let heartButton = iconView.heartStackView.button
+        
         topView.rightButton.rx.tap
             .bind { trigger in
-                homeViewModel.otherOptionsButtonTap.accept(post.postId)
+                homeViewModel.otherOptionsButtonTapRelay.accept(post.post.postId)
             }
             .disposed(by: disposeBag)
         
         iconView.commentStackView.button.rx.tap
             .bind { _ in
-                homeViewModel.commentButtonTap.accept(post.postId)
+                homeViewModel.commentButtonTapRelay.accept(post.post.postId)
+            }
+            .disposed(by: disposeBag)
+        
+        iconView.heartStackView.button.rx.tap
+            .bind { _ in
+                homeViewModel.heartButtonTapSubject.onNext(post)
+            }
+            .disposed(by: disposeBag)
+        
+        homeViewModel.updateHeartButtonUIRelay.asDriver(onErrorJustReturn: (nil, ""))
+            .drive(with: self) { owner, likeReturn in
+                if likeReturn.postId == post.post.postId {
+                    guard let likeModel = likeReturn.likeModel else { return }
+                    owner.updateHeartButtonUI(
+                        heartButton,
+                        isLike: likeModel.likeStatus
+                    )
+                }
             }
             .disposed(by: disposeBag)
     }
 }
-
-

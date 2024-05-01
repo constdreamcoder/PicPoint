@@ -77,7 +77,17 @@ final class AddPostViewController: BaseViewController {
         return UITableViewCell()
     }
     
-    private let viewModel = AddPostViewModel()
+    private var viewModel: AddPostViewModel
+    
+    init(addPostViewModel: AddPostViewModel) {
+        self.viewModel = addPostViewModel
+        
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()

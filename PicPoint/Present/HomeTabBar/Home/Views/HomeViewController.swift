@@ -114,7 +114,7 @@ extension HomeViewController: UIViewControllerConfiguration {
             rightBarButtonItemTapped: rightBarButtonItem.rx.tap, 
             addButtonTap: addPostButton.rx.tap, 
             deletePostTap: deletePostTap,
-            postTap: collectionView.rx.modelSelected(Post.self)
+            postTap: collectionView.rx.modelSelected(PostLikeType.self)
         )
         
         let output = viewModel.transform(input: input)
@@ -142,7 +142,9 @@ extension HomeViewController: UIViewControllerConfiguration {
       
         output.addButtonTapTrigger
             .drive(with: self) { owner, _ in
-                let addPostVC = AddPostViewController()
+                let addPostViewModel = AddPostViewModel()
+                addPostViewModel.delegate = owner.viewModel
+                let addPostVC = AddPostViewController(addPostViewModel: addPostViewModel)
                 let addPostNav = UINavigationController(rootViewController: addPostVC)
                 addPostNav.modalPresentationStyle = .fullScreen
                 owner.present(addPostNav, animated: true)

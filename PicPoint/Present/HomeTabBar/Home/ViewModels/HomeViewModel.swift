@@ -9,9 +9,21 @@ import Foundation
 import RxSwift
 import RxCocoa
 
+typealias PostLikeType = (
+    post: Post,
+    likeType: LikeType,
+    likes: [String],
+    comments: [Comment]
+)
+
 final class HomeViewModel: ViewModelType {
-    let otherOptionsButtonTap = PublishRelay<String>()
-    let commentButtonTap = PublishRelay<String>()
+    let otherOptionsButtonTapRelay = PublishRelay<String>()
+    let commentButtonTapRelay = PublishRelay<String>()
+    let heartButtonTapSubject = PublishSubject<PostLikeType>()
+    let updateHeartButtonUIRelay = PublishRelay<LikeReturnType>()
+    
+    let postLikesList = BehaviorRelay<[(String, [String])]>(value: [])
+    private let postList = BehaviorRelay<[PostLikeType]>(value: [])
 
     var disposeBag = DisposeBag()
     
@@ -20,11 +32,11 @@ final class HomeViewModel: ViewModelType {
         let rightBarButtonItemTapped: ControlEvent<Void>
         let addButtonTap: ControlEvent<Void>
         let deletePostTap: PublishSubject<String>
-        let postTap: ControlEvent<Post>
+        let postTap: ControlEvent<PostLikeType>
     }
     
     struct Output {
-        let postList: Driver<[Post]>
+        let postList: Driver<[PostLikeType]>
         let addButtonTapTrigger: Driver<Void>
         let otherOptionsButtonTapTrigger: Driver<String>
         let postId: Driver<String>
@@ -32,15 +44,25 @@ final class HomeViewModel: ViewModelType {
     }
     
     func transform(input: Input) -> Output {
-        let postList = BehaviorRelay<[Post]>(value: [])
         let postTapTrigger = PublishRelay<Post?>()
+        let likeTrigger = PublishSubject<String>()
+        let unlikeTrigger = PublishSubject<String>()
         
         input.viewDidLoadTrigger
             .flatMap { _ in
                 PostManager.fetchPostList(query: .init(limit: "50", product_id: APIKeys.productId))
             }
-            .subscribe(with: self) { owner, postListModel in
-                postList.accept(postListModel.data)
+            .map { postListModel -> [PostLikeType] in
+                postListModel.data.map { post in
+                    if post.likes.contains(UserDefaults.standard.userId) {
+                        return (post, .like, post.likes, post.comments)
+                    } else {
+                        return (post, .unlike, post.likes, post.comments)
+                    }
+                }
+            }
+            .subscribe(with: self) { owner, newPostList in
+                owner.postList.accept(newPostList)
             }
             .disposed(by: disposeBag)
         
@@ -54,29 +76,111 @@ final class HomeViewModel: ViewModelType {
             .flatMap {
                 PostManager.deletePost(params: DeletePostParams(postId: $0))
             }
-            .subscribe(with: self) { owner, deletedPostId in
-                print("삭제가 완료되었습니다.")
-                print("deletedPostId", deletedPostId)
+            .withLatestFrom(postList) { deletedPostId, postList in
+                var tempPostList = postList
+                return tempPostList.filter { post, likeType, likes, comments in
+                    post.postId != deletedPostId
+                }
+            }
+            .subscribe(with: self) { onwer, filteredPostList in
+                onwer.postList.accept(filteredPostList)
             }
             .disposed(by: disposeBag)
         
         input.postTap
             .flatMap {
-                PostManager.fetchPost(params: FetchPostParams(postId: $0.postId))
+                PostManager.fetchPost(params: FetchPostParams(postId: $0.post.postId))
             }
             .subscribe {
                 print("fetch 완료")
                 postTapTrigger.accept($0)
             }
             .disposed(by: disposeBag)
-            
         
+        likeTrigger
+            .flatMap {
+                LikeManager.like(
+                    params: LikeParams(postId: $0),
+                    body: LikeBody(like_status: true)
+                )
+            }
+            .withLatestFrom(postList) { likeReturn, postList -> (LikeReturnType, [PostLikeType]) in
+                let newPostList: [PostLikeType] = postList.map { post in
+                    if post.post.postId == likeReturn.postId {
+                        var likes = [UserDefaults.standard.userId] + post.likes
+                        return (post.post, .like, likes, post.comments)
+                    } else {
+                        return post
+                    }
+                }
+                return (likeReturn, newPostList)
+            }
+            .subscribe(with: self) { owner, value in
+                print("like", value.0)
+                owner.updateHeartButtonUIRelay.accept(value.0)
+                owner.postList.accept(value.1)
+            }
+            .disposed(by: disposeBag)
+        
+        unlikeTrigger
+            .flatMap {
+                LikeManager.unlike(
+                    params: LikeParams(postId: $0),
+                    body: LikeBody(like_status: false)
+                )
+            }
+            .withLatestFrom(postList) { likeReturn, postList -> (LikeReturnType, [PostLikeType]) in
+                let newPostList: [PostLikeType] = postList.map { post in
+                    if post.post.postId == likeReturn.postId {
+                        var likes = post.likes.filter { $0 != UserDefaults.standard.userId }
+                        return (post.post, .unlike, likes, post.comments)
+                    } else {
+                        return post
+                    }
+                }
+                return (likeReturn, newPostList)
+            }
+            .subscribe(with: self) { owner, value in
+                print("unlike", value.0)
+                owner.updateHeartButtonUIRelay.accept(value.0)
+                owner.postList.accept(value.1)
+            }
+            .disposed(by: disposeBag)
+        
+        heartButtonTapSubject
+            .debounce(.seconds(1), scheduler: MainScheduler.instance)
+            .subscribe { post in
+                switch post.likeType {
+                case .like:
+                    unlikeTrigger.onNext(post.post.postId)
+                case .unlike:
+                    likeTrigger.onNext(post.post.postId)
+                case .none: break
+                }
+            }
+            .disposed(by: disposeBag)
+            
         return Output(
             postList: postList.asDriver(),
             addButtonTapTrigger: input.addButtonTap.asDriver(),
-            otherOptionsButtonTapTrigger: otherOptionsButtonTap.asDriver(onErrorJustReturn: ""),
-            postId: commentButtonTap.asDriver(onErrorJustReturn: ""), 
+            otherOptionsButtonTapTrigger: otherOptionsButtonTapRelay.asDriver(onErrorJustReturn: ""),
+            postId: commentButtonTapRelay.asDriver(onErrorJustReturn: ""), 
             postTapTrigger: postTapTrigger.asDriver(onErrorJustReturn: nil)
         )
+    }
+}
+
+extension HomeViewModel: AddPostViewModelDelegate {
+    func sendNewPost(_ post: Post) {
+        print("new post", post)
+        
+        Observable<Post>.just(post)
+            .withLatestFrom(postList) { newPost, postList in
+                return [(newPost, .unlike, [], [])] + postList
+            }
+            .subscribe(with: self) { owner, newPostList in
+                owner.postList.accept(newPostList)
+            }
+            .disposed(by: disposeBag)
     }
 }
