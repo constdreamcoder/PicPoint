@@ -8,19 +8,27 @@
 import Foundation
 import RxSwift
 import RxCocoa
+import UIKit
+
+protocol CommentViewModelDelegate: AnyObject {
+    func sendUpdatedComments(_ comments: [Comment], postId: String)
+}
 
 final class CommentViewModel: ViewModelType {
     
     private let postIdSubject = BehaviorSubject<String>(value: "")
     
+    weak var delegate: CommentViewModelDelegate?
+    
     var disposeBag = DisposeBag()
     
     struct Input {
-        let commentTextEvent: ControlProperty<String>
+        let commentTextEvent: Observable<String>
         let commentDidBeginEditing: ControlEvent<Void>
         let commentDidEndEditing: ControlEvent<Void>
         let sendButtonTap: ControlEvent<Void>
         let commentDeleteEvent: Observable<(ControlEvent<IndexPath>.Element, ControlEvent<Comment>.Element)>
+        let baseViewTap: ControlEvent<UITapGestureRecognizer>
     }
     
     struct Output {
@@ -30,6 +38,7 @@ final class CommentViewModel: ViewModelType {
         let commentDidEndEditingTrigger: Driver<Void>
         let sendButtonTapTrigger: Driver<Void>
         let commentSendingValid: Driver<Bool>
+        let baseViewTapTrigger: Driver<UITapGestureRecognizer>
     }
     
     init(postId: String) {
@@ -42,7 +51,7 @@ final class CommentViewModel: ViewModelType {
     
     func transform(input: Input) -> Output {
         let commentListRelay = BehaviorRelay<[Comment]>(value: [])
-        let commentSendingValidation = BehaviorRelay(value: false)
+        let commentSendingValidation = BehaviorRelay<Bool>(value: false)
         
         postIdSubject
             .flatMap {
@@ -64,9 +73,13 @@ final class CommentViewModel: ViewModelType {
                 )
             }
             .withLatestFrom(commentListRelay) { [$0] + $1 }
-            .map { commentListRelay.accept($0) }
+            .withLatestFrom(postIdSubject) { ($0, $1) }
+            .withUnretained(self)
+            .map { owner, value in
+                commentListRelay.accept(value.0)
+                owner.delegate?.sendUpdatedComments(value.0, postId: value.1)
+            }
             
-        
         input.commentDeleteEvent
             .map { $1.commentId }
             .withLatestFrom(postIdSubject) { ($1, $0) }
@@ -76,8 +89,10 @@ final class CommentViewModel: ViewModelType {
             .withLatestFrom(commentListRelay) { deletedCommentId, commentList in
                 commentList.filter { $0.commentId != deletedCommentId }
             }
-            .subscribe(with: self) { owner, updatedCommentList in
-                commentListRelay.accept(updatedCommentList)
+            .withLatestFrom(postIdSubject) { ($0, $1) }
+            .subscribe(with: self) { owner, value in
+                commentListRelay.accept(value.0)
+                owner.delegate?.sendUpdatedComments(value.0, postId: value.1)
             }
             .disposed(by: disposeBag)
         
@@ -97,7 +112,8 @@ final class CommentViewModel: ViewModelType {
             commentDidBeginEditingTrigger: input.commentDidBeginEditing.asDriver(),
             commentDidEndEditingTrigger: input.commentDidEndEditing.asDriver(),
             sendButtonTapTrigger: sendButtonTapTrigger.asDriver(onErrorJustReturn: ()),
-            commentSendingValid: commentSendingValidation.asDriver()
+            commentSendingValid: commentSendingValidation.asDriver(),
+            baseViewTapTrigger: input.baseViewTap.asDriver()
         )
     }
 }

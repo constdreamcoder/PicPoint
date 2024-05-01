@@ -36,10 +36,7 @@ class BaseBottomViewViewController: BaseViewController {
         configureConstraints()
         configureUI()
         bind()
-        
-        let dimmedTap = UITapGestureRecognizer(target: self, action: #selector(dimmedViewTapped(_:)))
-        dimmedView.addGestureRecognizer(dimmedTap)
-        dimmedView.isUserInteractionEnabled = true
+        configureOtherSettings()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -119,5 +116,11 @@ extension BaseBottomViewViewController: UIViewControllerConfiguration {
     
     func bind() {
     
+    }
+    
+    func configureOtherSettings() {
+        let dimmedTap = UITapGestureRecognizer(target: self, action: #selector(dimmedViewTapped(_:)))
+        dimmedView.addGestureRecognizer(dimmedTap)
+        dimmedView.isUserInteractionEnabled = true
     }
 }

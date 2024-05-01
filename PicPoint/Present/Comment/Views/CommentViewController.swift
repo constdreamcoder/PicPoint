@@ -13,6 +13,12 @@ import Kingfisher
 
 final class CommentViewController: BaseViewController {
 
+    let baseView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .white
+        return view
+    }()
+    
     let tableView: UITableView = {
         let tableView = UITableView()
         tableView.backgroundColor = .white
@@ -24,6 +30,22 @@ final class CommentViewController: BaseViewController {
     }()
     
     let commentWritingSectionView = CommentWritingSectionView()
+    
+    let bottomSectionView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .white
+        return view
+    }()
+    
+    private let nextButtonBottonConstraintsDefaultConstant: CGFloat = 0.0
+    
+    private lazy var baseViewTap: UITapGestureRecognizer = {
+        let baseTap = UITapGestureRecognizer(target: self, action: nil)
+        baseView.addGestureRecognizer(baseTap)
+        baseView.isUserInteractionEnabled = true
+        return baseTap
+    }()
+    
     
     private let viewModel: CommentViewModel?
     
@@ -42,8 +64,15 @@ final class CommentViewController: BaseViewController {
         
         configureNavigationBar()
         configureConstraints()
-        bind()
         configureUI()
+        bind()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        addKeyboardNotifications()
+    }
+    override func viewWillDisappear(_ animated: Bool) {
+        removeKeyboardNotifications()
     }
 }
 
@@ -53,23 +82,48 @@ extension CommentViewController: UIViewControllerConfiguration {
     }
     
     func configureConstraints() {
+        view.addSubview(baseView)
+        
+        baseView.snp.makeConstraints {
+            $0.edges.equalTo(view.safeAreaLayoutGuide)
+        }
+        
         [
             tableView,
+            bottomSectionView,
             commentWritingSectionView
-        ].forEach { view.addSubview($0) }
+        ].forEach { baseView.addSubview($0) }
         
         tableView.snp.makeConstraints {
-            $0.top.horizontalEdges.equalTo(view.safeAreaLayoutGuide)
-            $0.bottom.equalTo(commentWritingSectionView.snp.top)
+            $0.top.horizontalEdges.equalToSuperview()
+            $0.bottom.equalTo(bottomSectionView.snp.top)
+        }
+        
+        bottomSectionView.snp.makeConstraints {
+            $0.height.equalTo(60.0)
+            $0.horizontalEdges.bottom.equalToSuperview()
         }
         
         commentWritingSectionView.snp.makeConstraints {
-            $0.horizontalEdges.bottom.equalTo(view.safeAreaLayoutGuide)
+            $0.horizontalEdges.equalToSuperview()
+            $0.bottom.equalToSuperview().offset(nextButtonBottonConstraintsDefaultConstant)
         }
+//        [
+//            tableView,
+//            commentWritingSectionView
+//        ].forEach { view.addSubview($0) }
+//        
+//        tableView.snp.makeConstraints {
+//            $0.top.horizontalEdges.equalTo(view.safeAreaLayoutGuide)
+//            $0.bottom.equalTo(commentWritingSectionView.snp.top)
+//        }
+//        
+//        commentWritingSectionView.snp.makeConstraints {
+//            $0.horizontalEdges.bottom.equalTo(view.safeAreaLayoutGuide)
+//        }
     }
     
     func configureUI() {
-        commentWritingSectionView.sendButton.isEnabled = false
     }
     
     func bind() {
@@ -81,12 +135,23 @@ extension CommentViewController: UIViewControllerConfiguration {
             tableView.rx.modelDeleted(Comment.self)
         )
         
+        let commentText = textView.rx.text.orEmpty
+            .withUnretained(self)
+            .map { owner, commentText in
+                if commentText == owner.commentWritingSectionView.textViewPlaceHolder {
+                    return ""
+                } else {
+                    return commentText
+                }
+            }
+        
         let input = CommentViewModel.Input(
-            commentTextEvent: textView.rx.text.orEmpty,
+            commentTextEvent: commentText,
             commentDidBeginEditing: textView.rx.didBeginEditing,
             commentDidEndEditing: textView.rx.didEndEditing, 
             sendButtonTap: commentWritingSectionView.sendButton.rx.tap,
-            commentDeleteEvent: commentDeleteEvent
+            commentDeleteEvent: commentDeleteEvent,
+            baseViewTap: baseViewTap.rx.event
         )
         
         guard let viewModel else { return }
@@ -159,5 +224,56 @@ extension CommentViewController: UIViewControllerConfiguration {
         output.commentSendingValid
             .drive(commentWritingSectionView.sendButton.rx.isEnabled)
             .disposed(by: disposeBag)
+        
+        output.baseViewTapTrigger
+            .drive(with: self) { owner, _ in
+                owner.view.endEditing(true)
+            }
+            .disposed(by: disposeBag)
+    }
+}
+
+// MARK: - Keyboard Control Methods
+extension CommentViewController {
+    func addKeyboardNotifications(){
+        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow(_:)), name: UIResponder.keyboardWillShowNotification , object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide(_:)), name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+    
+    func removeKeyboardNotifications(){
+        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification , object: nil)
+        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+    
+    @objc func keyboardWillShow(_ noti: NSNotification){
+        if let keyboardFrame: NSValue = noti.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
+            let keyboardRectangle = keyboardFrame.cgRectValue
+            let keyboardHeight = keyboardRectangle.height
+            
+            // 노치 디자인이 있는 경우 safe area를 계산
+            if #available(iOS 13.0, *) {
+                let scenes = UIApplication.shared.connectedScenes
+                let windowScene = scenes.first as? UIWindowScene
+                let window = windowScene?.windows.first
+                let bottomInset = window?.safeAreaInsets.bottom ?? 0
+                let adjustedKeyboardHeight = keyboardHeight - bottomInset
+                commentWritingSectionView.snp.updateConstraints {
+                    $0.bottom.equalToSuperview().offset(-adjustedKeyboardHeight)
+                }
+            } else {
+                commentWritingSectionView.snp.updateConstraints {
+                    $0.bottom.equalToSuperview().offset(-keyboardHeight)
+                }
+            }
+            view.layoutIfNeeded()
+        }
+        
+    }
+    
+    @objc func keyboardWillHide(_ noti: NSNotification){
+        commentWritingSectionView.snp.updateConstraints {
+            $0.bottom.equalToSuperview().offset(nextButtonBottonConstraintsDefaultConstant)
+        }
+        view.layoutIfNeeded()
     }
 }

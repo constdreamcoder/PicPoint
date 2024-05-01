@@ -201,3 +201,22 @@ extension HomeViewModel: DetailViewModelDelegate {
             .disposed(by: disposeBag)
     }
 }
+
+extension HomeViewModel: CommentViewModelDelegate {
+    func sendUpdatedComments(_ comments: [Comment], postId: String) {
+        Observable<[Comment]>.just(comments)
+            .withLatestFrom(postList) { updatedComments, postList in
+                postList.map { post in
+                    if post.post.postId == postId {
+                        return (post.post, post.likeType, post.likes, updatedComments)
+                    } else {
+                        return post
+                    }
+                }
+            }
+            .subscribe(with: self) { owner, updatedPostList in
+                owner.postList.accept(updatedPostList)
+            }
+            .disposed(by: disposeBag)
+    }
+}

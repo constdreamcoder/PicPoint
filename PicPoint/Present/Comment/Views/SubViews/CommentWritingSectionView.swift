@@ -31,6 +31,7 @@ final class CommentWritingSectionView: UIView {
         buttonConfiguration.buttonSize = .medium
         buttonConfiguration.title = "전송"
         button.configuration = buttonConfiguration
+        button.isEnabled = false
         return button
     }()
     

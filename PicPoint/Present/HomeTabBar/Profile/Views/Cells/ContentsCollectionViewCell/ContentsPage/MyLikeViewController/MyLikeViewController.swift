@@ -67,7 +67,7 @@ extension MyLikeViewController: UIViewControllerConfiguration {
         
         output.viewDidLoadTrigger
             .drive(collectionView.rx.items(cellIdentifier: MyLikeCollectionViewCell.identifier, cellType: MyLikeCollectionViewCell.self)) { item, element, cell in
-                
+                cell.updateCellData(element)
             }
             .disposed(by: disposeBag)
         
