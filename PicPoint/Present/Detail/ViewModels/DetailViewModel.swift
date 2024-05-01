@@ -271,3 +271,21 @@ final class DetailViewModel: ViewModelType {
         )
     }
 }
+
+extension DetailViewModel: CommentViewModelDelegate {
+    func sendUpdatedComments(_ comments: [Comment], postId: String) {
+        Observable<[Comment]>.just(comments)
+            .withLatestFrom(postRelay) { updatedCommentList, post -> PostLikeType? in
+                if let post, post.post.postId == postId {
+                    return (post.post, post.likeType, post.likes, updatedCommentList)
+                } else {
+                     return post
+                }
+            }
+            .subscribe(with: self) { owner, updatePost in
+                owner.postRelay.accept(updatePost)
+                owner.delegate?.sendLikeUpdateTrigger(updatePost)
+            }
+            .disposed(by: disposeBag)
+    }
+}

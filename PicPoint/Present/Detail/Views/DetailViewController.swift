@@ -204,7 +204,9 @@ extension DetailViewController: UIViewControllerConfiguration {
         
         output.postId
             .drive(with: self) { owner, postId in
-                let commentVC = CommentViewController(commentViewModel: CommentViewModel(postId: postId))
+                let commentVM = CommentViewModel(postId: postId)
+                commentVM.delegate = owner.viewModel
+                let commentVC = CommentViewController(commentViewModel: commentVM)
                 let commenetNav = UINavigationController(rootViewController: commentVC)
                 owner.present(commenetNav, animated: true)
             }

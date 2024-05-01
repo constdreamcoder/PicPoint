@@ -108,19 +108,6 @@ extension CommentViewController: UIViewControllerConfiguration {
             $0.horizontalEdges.equalToSuperview()
             $0.bottom.equalToSuperview().offset(nextButtonBottonConstraintsDefaultConstant)
         }
-//        [
-//            tableView,
-//            commentWritingSectionView
-//        ].forEach { view.addSubview($0) }
-//        
-//        tableView.snp.makeConstraints {
-//            $0.top.horizontalEdges.equalTo(view.safeAreaLayoutGuide)
-//            $0.bottom.equalTo(commentWritingSectionView.snp.top)
-//        }
-//        
-//        commentWritingSectionView.snp.makeConstraints {
-//            $0.horizontalEdges.bottom.equalTo(view.safeAreaLayoutGuide)
-//        }
     }
     
     func configureUI() {
