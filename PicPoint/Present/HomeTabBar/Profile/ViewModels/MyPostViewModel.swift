@@ -50,6 +50,7 @@ final class MyPostViewModel: ViewModelType {
 
 extension MyPostViewModel: ProfileViewModelDelegate {
     func sendMyPosts(_ posts: [String]) {
+        print("2")
         let observables = posts.map { id in
             return Observable.just(id)
                 .observe(on: ConcurrentDispatchQueueScheduler(queue: .global()))

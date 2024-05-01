@@ -23,6 +23,7 @@ final class HomeCollectionViewCell: BaseCollectionViewCell {
         let topView = HomeCollectionViewCellTopView()
         
         topView.profileImageView.profileImageViewWidth = 40
+        topView.profileImageView.isUserInteractionEnabled = true
         
         let rightButton = topView.rightButton
         rightButton.tintColor = .black
@@ -38,6 +39,12 @@ final class HomeCollectionViewCell: BaseCollectionViewCell {
     let iconView = HomeCollectionViewCellIconView()
     
     let bottomView = HomeCollectionViewCellBottomView()
+    
+    private lazy var moveToProfileTap: UITapGestureRecognizer = {
+        let tap = UITapGestureRecognizer(target: self, action: nil)
+        topView.profileImageView.addGestureRecognizer(tap)
+        return tap
+    }()
         
     weak var homeViewModel: HomeViewModel?
     
@@ -56,6 +63,10 @@ final class HomeCollectionViewCell: BaseCollectionViewCell {
         topView.profileImageView.image = UIImage(systemName: "person.circle")
         photoImageView.image = UIImage(systemName: "photo")
         disposeBag = DisposeBag()
+    }
+    
+    deinit {
+        topView.profileImageView.removeGestureRecognizer(moveToProfileTap)
     }
     
     // MARK: - Custom Methods
@@ -165,6 +176,12 @@ extension HomeCollectionViewCell {
         iconView.heartStackView.button.rx.tap
             .bind { _ in
                 homeViewModel.heartButtonTapSubject.onNext(post)
+            }
+            .disposed(by: disposeBag)
+        
+        moveToProfileTap.rx.event
+            .bind { _ in
+                homeViewModel.profileImageViewTapTapSubject.onNext(post.post.creator.userId)
             }
             .disposed(by: disposeBag)
     }

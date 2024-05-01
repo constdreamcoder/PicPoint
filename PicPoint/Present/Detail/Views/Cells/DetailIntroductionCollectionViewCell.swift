@@ -17,6 +17,7 @@ final class DetailIntroductionCollectionViewCell: BaseCollectionViewCell {
         let topView = HomeCollectionViewCellTopView()
         
         topView.profileImageView.profileImageViewWidth = 40
+        topView.profileImageView.isUserInteractionEnabled = true
 
         let rightButton = topView.rightButton
         var buttonConfiguration = UIButton.Configuration.filled()
@@ -36,6 +37,12 @@ final class DetailIntroductionCollectionViewCell: BaseCollectionViewCell {
         return label
     }()
     
+    private lazy var moveToProfileTap: UITapGestureRecognizer = {
+        let tap = UITapGestureRecognizer(target: self, action: nil)
+        topView.profileImageView.addGestureRecognizer(tap)
+        return tap
+    }()
+    
     weak var detailViewModel: DetailViewModel?
     
     override init(frame: CGRect) {
@@ -45,6 +52,10 @@ final class DetailIntroductionCollectionViewCell: BaseCollectionViewCell {
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    deinit {
+        topView.profileImageView.removeGestureRecognizer(moveToProfileTap)
     }
     
     override func prepareForReuse() {
@@ -121,6 +132,12 @@ extension DetailIntroductionCollectionViewCell {
                     owner.topView.rightButton,
                     with: followingStatus
                 )
+            }
+            .disposed(by: disposeBag)
+        
+        moveToProfileTap.rx.event
+            .bind { _ in
+                detailViewModel.profileImageViewTapTapSubject.onNext(cellData.creator.userId)
             }
             .disposed(by: disposeBag)
     }

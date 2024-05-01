@@ -13,7 +13,8 @@ final class HomeTabBarViewController: UITabBarController {
         super.viewDidLoad()
         
         let homeVC = HomeViewController()
-        let profileVC = ProfileViewController()
+        let profileVM = ProfileViewModel()
+        let profileVC = ProfileViewController(profileViewModel: profileVM)
      
         let homeNav = UINavigationController(rootViewController: homeVC)
         let profileNav = UINavigationController(rootViewController: profileVC)

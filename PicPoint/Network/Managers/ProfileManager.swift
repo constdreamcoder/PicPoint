@@ -72,4 +72,27 @@ struct ProfileManager {
             return Disposables.create()
         }
     }
+    
+    static func fetchOtherProfile(params: FetchOtherProfileParams) -> Single<FetchOtherProfileModel> {
+        return Single<FetchOtherProfileModel>.create { singleObserver in
+            do {
+                let urlRequest = try ProfileRouter.fetchOtherProfile(params: params).asURLRequest()
+                                
+                AF.request(urlRequest)
+                    .validate(statusCode: 200...500)
+                    .responseDecodable(of: FetchOtherProfileModel.self) { response in
+                        switch response.result {
+                        case .success(let fetchOtherProfileModel):
+                            singleObserver(.success(fetchOtherProfileModel))
+                        case .failure(let AFError):
+                            print(response.response?.statusCode)
+                            singleObserver(.failure(AFError))
+                        }
+                    }
+            } catch {
+                singleObserver(.failure(error))
+            }
+            return Disposables.create()
+        }
+    }
 }

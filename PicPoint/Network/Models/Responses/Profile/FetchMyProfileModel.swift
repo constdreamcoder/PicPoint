@@ -42,6 +42,18 @@ struct FetchMyProfileModel: Decodable {
         self.followings = try container.decode([Following].self, forKey: .following)
         self.posts = try container.decode([String].self, forKey: .posts)
     }
+    
+    init(userId: String, email: String, nick: String, profileImage: String?, birthDay: String?, phoneNum: String?, followers: [Follower], followings: [Following], posts: [String]) {
+        self.userId = userId
+        self.email = email
+        self.nick = nick
+        self.profileImage = profileImage
+        self.birthDay = birthDay
+        self.phoneNum = phoneNum
+        self.followers = followers
+        self.followings = followings
+        self.posts = posts
+    }
 }
 
 struct Follower: Codable {

@@ -169,6 +169,14 @@ extension HomeViewController: UIViewControllerConfiguration {
                 owner.present(commentNav, animated: true)
             }
             .disposed(by: disposeBag)
+        
+        output.moveToOtherProfileTrigger
+            .drive(with: self) { owner, fetchOtherProfileModel in
+                let profileVM = ProfileViewModel(fetchOtherProfileModel)
+                let profileVC = ProfileViewController(profileViewModel: profileVM)
+                owner.navigationController?.pushViewController(profileVC, animated: true)
+            }
+            .disposed(by: disposeBag)
     }
 }
 

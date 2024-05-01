@@ -20,6 +20,8 @@ final class DetailViewModel: ViewModelType {
     let followButtonTapTriggerRelay = BehaviorRelay<Bool>(value: false)
     let followButtonTapSubject = PublishSubject<Creator>()
     let mapViewTapRelay = PublishRelay<CLLocationCoordinate2D>()
+    let profileImageViewTapTapSubject = PublishSubject<String>()
+    
     private let sectionsRelay = BehaviorRelay<[SectionModelWrapper]>(value: [])
     private let postRelay = BehaviorRelay<PostLikeType?>(value: nil)
     private let hashTagsSubject = BehaviorSubject<[String]>(value: [])
@@ -41,6 +43,7 @@ final class DetailViewModel: ViewModelType {
         let postId: Driver<String>
         let mapViewTapTrigger: Driver<CLLocationCoordinate2D>
         let itemTapTrigger: Driver<Post?>
+        let moveToOtherProfileTrigger: Driver<FetchOtherProfileModel?>
     }
     
     init(post: Post) {
@@ -129,7 +132,8 @@ final class DetailViewModel: ViewModelType {
         let unlikeTrigger = PublishSubject<String>()
         let followTrigger = PublishSubject<Post>()
         let unFollowTrigger = PublishSubject<Post>()
-        
+        let moveToOtherProfileTrigger = PublishRelay<FetchOtherProfileModel?>()
+
         likeTrigger
             .flatMap {
                 LikeManager.like(
@@ -258,13 +262,24 @@ final class DetailViewModel: ViewModelType {
             }
             .subscribe { itemTapTrigger.accept($0) }
             .disposed(by: disposeBag)
+        
+        profileImageViewTapTapSubject
+            .debounce(.milliseconds(500), scheduler: MainScheduler.instance)
+            .flatMap { userId in
+                ProfileManager.fetchOtherProfile(params: FetchOtherProfileParams(userId: userId))
+            }
+            .subscribe {
+                moveToOtherProfileTrigger.accept($0)
+            }
+            .disposed(by: disposeBag)
 
         return Output(
             sections: sectionsRelay.asDriver(onErrorJustReturn: []), 
             post: postRelay.asDriver(), 
             postId: postIdRelay.asDriver(onErrorJustReturn: ""), 
             mapViewTapTrigger: mapViewTapRelay.asDriver(onErrorJustReturn: CLLocationCoordinate2D()),
-            itemTapTrigger: itemTapTrigger.asDriver(onErrorJustReturn: nil)
+            itemTapTrigger: itemTapTrigger.asDriver(onErrorJustReturn: nil),
+            moveToOtherProfileTrigger: moveToOtherProfileTrigger.asDriver(onErrorJustReturn: nil)
         )
     }
 }

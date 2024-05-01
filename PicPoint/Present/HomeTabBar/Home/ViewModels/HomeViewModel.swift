@@ -20,6 +20,7 @@ final class HomeViewModel: ViewModelType {
     let otherOptionsButtonTapRelay = PublishRelay<String>()
     let commentButtonTapRelay = PublishRelay<String>()
     let heartButtonTapSubject = PublishSubject<PostLikeType>()
+    let profileImageViewTapTapSubject = PublishSubject<String>()
     
     let postLikesList = BehaviorRelay<[(String, [String])]>(value: [])
     private let postList = BehaviorRelay<[PostLikeType]>(value: [])
@@ -40,12 +41,14 @@ final class HomeViewModel: ViewModelType {
         let otherOptionsButtonTapTrigger: Driver<String>
         let postId: Driver<String>
         let postTapTrigger: Driver<Post?>
+        let moveToOtherProfileTrigger: Driver<FetchOtherProfileModel?>
     }
     
     func transform(input: Input) -> Output {
         let postTapTrigger = PublishRelay<Post?>()
         let likeTrigger = PublishSubject<String>()
         let unlikeTrigger = PublishSubject<String>()
+        let moveToOtherProfileTrigger = PublishRelay<FetchOtherProfileModel?>()
         
         input.viewDidLoadTrigger
             .flatMap { _ in
@@ -166,13 +169,24 @@ final class HomeViewModel: ViewModelType {
                 }
             }
             .disposed(by: disposeBag)
+        
+        profileImageViewTapTapSubject
+            .debounce(.milliseconds(500), scheduler: MainScheduler.instance)
+            .flatMap { userId in
+                ProfileManager.fetchOtherProfile(params: FetchOtherProfileParams(userId: userId))
+            }
+            .subscribe {
+                moveToOtherProfileTrigger.accept($0)
+            }
+            .disposed(by: disposeBag)
             
         return Output(
             postList: postList.asDriver(),
             addButtonTapTrigger: input.addButtonTap.asDriver(),
             otherOptionsButtonTapTrigger: otherOptionsButtonTapRelay.asDriver(onErrorJustReturn: ""),
             postId: commentButtonTapRelay.asDriver(onErrorJustReturn: ""), 
-            postTapTrigger: postTapTrigger.asDriver(onErrorJustReturn: nil)
+            postTapTrigger: postTapTrigger.asDriver(onErrorJustReturn: nil),
+            moveToOtherProfileTrigger: moveToOtherProfileTrigger.asDriver(onErrorJustReturn: nil)
         )
     }
 }

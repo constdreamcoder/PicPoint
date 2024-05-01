@@ -23,11 +23,11 @@ final class ProfileViewModel: ViewModelType {
     let moveToFollowTap = PublishSubject<Void>()
     let updateFollowingsCountRelay = PublishRelay<Int>()
     private let updateContentSizeRelay = PublishRelay<CGFloat>()
+    private let otherProfile = BehaviorSubject<FetchOtherProfileModel?>(value: nil)
     
     weak var delegate: ProfileViewModelDelegate?
-
+    
     struct Input {
-        let viewDidLoad: Observable<Void>
         let viewWillAppear: Observable<Bool>
     }
     
@@ -39,7 +39,18 @@ final class ProfileViewModel: ViewModelType {
         let userNickname: Driver<String>
     }
     
+    init(_ otherProfile: FetchOtherProfileModel? = nil) {
+        Observable<FetchOtherProfileModel?>.just(otherProfile)
+            .subscribe(with: self) { owner, otherProfile in
+                owner.otherProfile.onNext(otherProfile)
+            }
+            .disposed(by: disposeBag)
+    }
+    
     func transform(input: Input) -> Output {
+        let otherProfileTrigger = BehaviorSubject<FetchMyProfileModel?>(value: nil)
+        let myProfileTrigger = BehaviorSubject<Void>(value: ())
+        
         let sections: [SectionModelWrapper] = [
             SectionModelWrapper(
                 ProfileCollectionViewFirstSectionDataModel(
@@ -55,7 +66,16 @@ final class ProfileViewModel: ViewModelType {
         
         let sectionsObservable = Observable<[SectionModelWrapper]>.just(sections)
         
-        input.viewDidLoad
+        otherProfileTrigger
+            .subscribe(with: self) { owner, otherProfile in
+                guard let otherProfile else { return }
+                owner.myProfile.accept(otherProfile)
+                owner.myPosts.accept(otherProfile.posts)
+                owner.delegate?.sendMyPosts(otherProfile.posts)
+            }
+            .disposed(by: disposeBag)
+        
+        myProfileTrigger
             .flatMap { _ in
                 ProfileManager.fetchMyProfile()
             }
@@ -63,6 +83,27 @@ final class ProfileViewModel: ViewModelType {
                 owner.myProfile.accept(myProfileModel)
                 owner.myPosts.accept(myProfileModel.posts)
                 owner.delegate?.sendMyPosts(myProfileModel.posts)
+            }
+            .disposed(by: disposeBag)
+        
+        otherProfile
+            .subscribe { otherProfile  in
+                if let otherProfile {
+                    let castedOtherProfile = FetchMyProfileModel(
+                        userId: otherProfile.userId,
+                        email: "",
+                        nick: otherProfile.nick,
+                        profileImage: otherProfile.profileImage,
+                        birthDay: "",
+                        phoneNum: "",
+                        followers: otherProfile.followers,
+                        followings: otherProfile.following,
+                        posts: otherProfile.posts
+                    )
+                    otherProfileTrigger.onNext(castedOtherProfile)
+                } else {
+                    myProfileTrigger.onNext(())
+                }
             }
             .disposed(by: disposeBag)
         
@@ -74,7 +115,7 @@ final class ProfileViewModel: ViewModelType {
         
         let editProfileButtonTapTrigger = editProfileButtonTap
             .withLatestFrom(myProfile)
-                
+        
         let userNickname = myProfile
             .map { fetchMyProfileModel in
                 guard let fetchMyProfileModel else { return "" }
@@ -130,7 +171,7 @@ extension ProfileViewModel: MyLikeViewModelDelegate {
 }
 
 extension ProfileViewModel: EditViewModelDelegate {
-    func sendUpdatedProfileInfos(_ myNewProfile: FetchMyProfileModel) {        
+    func sendUpdatedProfileInfos(_ myNewProfile: FetchMyProfileModel) {
         Observable.just(myNewProfile)
             .subscribe(with: self) { owner, newMyProfile in
                 owner.myProfile.accept(newMyProfile)
