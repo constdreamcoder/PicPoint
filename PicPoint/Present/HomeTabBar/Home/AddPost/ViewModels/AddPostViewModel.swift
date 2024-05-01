@@ -188,7 +188,6 @@ final class AddPostViewModel: NSObject, ViewModelType {
             .flatMap { PostManager.writePost(body: $0) }
             .subscribe(with: self) { owner, post in
                 print("게시글 업로드됨")
-                print(post)
                 owner.delegate?.sendNewPost(post)
                 rightBarButtonItemTapTrigger.accept(())
                 NotificationCenter.default.post(name: .sendNewPost, object: nil, userInfo: ["newPost": post])

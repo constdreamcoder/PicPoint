@@ -75,10 +75,10 @@ final class HomeViewModel: ViewModelType {
             .flatMap {
                 PostManager.deletePost(params: DeletePostParams(postId: $0))
             }
-            .withLatestFrom(postList) { deletedPostId, postList in
-                NotificationCenter.default.post(name: .sendDeletedPostId, object: nil, userInfo: ["deletedPostId": deletedPostId])
+            .withLatestFrom(postList) { deletedMyPostId, postList in
+                NotificationCenter.default.post(name: .sendDeletedMyPostId, object: nil, userInfo: ["deletedMyPostId": deletedMyPostId])
                 return postList.filter { post in
-                    post.post.postId != deletedPostId
+                    post.post.postId != deletedMyPostId
                 }
             }
             .subscribe(with: self) { owner, filteredPostList in
@@ -104,13 +104,18 @@ final class HomeViewModel: ViewModelType {
                 )
             }
             .withLatestFrom(postList) { postId, postList -> [PostLikeType] in
+                var newLikedPost: Post?
                 let newPostList: [PostLikeType] = postList.map { post in
                     if post.post.postId == postId {
+                        newLikedPost = post.post
                         let likes = [UserDefaults.standard.userId] + post.likes
                         return (post.post, .like, likes, post.comments)
                     } else {
                         return post
                     }
+                }
+                if let newLikedPost {
+                    NotificationCenter.default.post(name: .sendNewLikedPost, object: nil, userInfo: ["newLikedPost": newLikedPost])
                 }
                 return newPostList
             }
@@ -128,13 +133,18 @@ final class HomeViewModel: ViewModelType {
                 )
             }
             .withLatestFrom(postList) { postId, postList -> [PostLikeType] in
+                var unlikedPost: Post?
                 let newPostList: [PostLikeType] = postList.map { post in
                     if post.post.postId == postId {
+                        unlikedPost = post.post
                         let likes = post.likes.filter { $0 != UserDefaults.standard.userId }
                         return (post.post, .unlike, likes, post.comments)
                     } else {
                         return post
                     }
+                }
+                if let unlikedPost {
+                    NotificationCenter.default.post(name: .sendUnlikedPost, object: nil, userInfo: ["unlikedPost": unlikedPost])
                 }
                 return newPostList
             }

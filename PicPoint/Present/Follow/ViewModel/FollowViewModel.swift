@@ -70,7 +70,6 @@ final class FollowViewModel: ViewModelType {
 
 extension FollowViewModel: FollowingViewModelDelegate {
     func sendUpdatedFollowingsCount(_ followingsCount: Int) {
-        print("updated followings in follow view model", followingsCount)
                 
         Observable<Int>.just(followingsCount)
             .subscribe(with: self) { owner, followingsCount in

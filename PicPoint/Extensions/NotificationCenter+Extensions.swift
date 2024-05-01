@@ -9,5 +9,7 @@ import Foundation
 
 extension Notification.Name {
     static let sendNewPost = Notification.Name("sendNewPost")
-    static let sendDeletedPostId = Notification.Name("sendUpdatedPostList")
+    static let sendDeletedMyPostId = Notification.Name("sendUpdatedPostList")
+    static let sendNewLikedPost = Notification.Name("sendNewLikedPost")
+    static let sendUnlikedPost = Notification.Name("sendUnlikedPost")
 }

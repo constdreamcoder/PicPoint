@@ -140,6 +140,7 @@ final class DetailViewModel: ViewModelType {
             .withLatestFrom(postRelay)
             .map { post -> PostLikeType? in
                 if let post {
+                    NotificationCenter.default.post(name: .sendNewLikedPost, object: nil, userInfo: ["newLikedPost": post.post])
                     let likes = [UserDefaults.standard.userId] + post.likes
                     return (post.post, .like, likes, post.comments)
                 } else {
@@ -162,6 +163,7 @@ final class DetailViewModel: ViewModelType {
             .withLatestFrom(postRelay)
             .map { post -> PostLikeType? in
                 if let post {
+                    NotificationCenter.default.post(name: .sendUnlikedPost, object: nil, userInfo: ["unlikedPost": post.post])
                     let likes = post.likes.filter { $0 != UserDefaults.standard.userId }
                     return (post.post, .unlike, likes, post.comments)
                 } else {

@@ -26,7 +26,7 @@ final class MyLikeViewController: BaseViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        print("ff")
+        
         configureNavigationBar()
         configureConstraints()
         configureUI()

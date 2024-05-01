@@ -23,22 +23,22 @@ final class MyPostViewModel: ViewModelType {
     
     weak var delegate: MyPostViewModelDelegate?
     
-    init() {
-        NotificationCenter.default.addObserver(self, selector: #selector(handleNewPost), name: .sendNewPost, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(handleUpdatedPostList), name: .sendDeletedPostId, object: nil)
-    }
-    
-    deinit {
-        NotificationCenter.default.removeObserver(self, name: .sendNewPost, object: nil)
-        NotificationCenter.default.removeObserver(self, name: .sendDeletedPostId, object: nil)
-    }
-    
     struct Input {
         let viewDidLoad: Observable<Void>
     }
     
     struct Output {
         let myPostsList: Driver<[Post]>
+    }
+    
+    init() {
+        NotificationCenter.default.addObserver(self, selector: #selector(handleNewPost), name: .sendNewPost, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(handleUpdatedPostList), name: .sendDeletedMyPostId, object: nil)
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self, name: .sendNewPost, object: nil)
+        NotificationCenter.default.removeObserver(self, name: .sendDeletedMyPostId, object: nil)
     }
     
     func transform(input: Input) -> Output {
@@ -83,11 +83,10 @@ extension MyPostViewModel {
     
     @objc func handleUpdatedPostList(notification: Notification) {
         if let userInfo = notification.userInfo,
-           let deletedPostId = userInfo["deletedPostId"] as? String {
-            print("deletedPostId", deletedPostId)
-            Observable<String>.just(deletedPostId)
-                .withLatestFrom(myPostsList) { deletedPostId, myPostList in
-                    myPostList.filter { $0.postId !=  deletedPostId }
+           let deletedMyPostId = userInfo["deletedMyPostId"] as? String {
+            Observable<String>.just(deletedMyPostId)
+                .withLatestFrom(myPostsList) { deletedMyPostId, myPostList in
+                    myPostList.filter { $0.postId !=  deletedMyPostId }
                 }
                 .subscribe(with: self) { owner, updatedPostList in
                     owner.myPostsList.accept(updatedPostList)
