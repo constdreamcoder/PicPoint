@@ -13,6 +13,7 @@ protocol MyPostViewModelDelegate: AnyObject {
     func sendMyPostCollectionViewContentHeight(_ contentHeight: CGFloat)
     func sendNewPostId(_ postId: String)
     func sendUpdatedPostIdList(_ postIdList: [String])
+    func sendPostForMovingToDetailVCFromMyPostVC(_ post: Post)
 }
 
 final class MyPostViewModel: ViewModelType {
@@ -25,6 +26,7 @@ final class MyPostViewModel: ViewModelType {
     
     struct Input {
         let viewDidLoad: Observable<Void>
+        let postTap: ControlEvent<Post>
     }
     
     struct Output {
@@ -42,15 +44,25 @@ final class MyPostViewModel: ViewModelType {
     }
     
     func transform(input: Input) -> Output {
+        input.postTap
+            .flatMap {
+                PostManager.fetchPost(params: FetchPostParams(postId: $0.postId))
+            }
+            .subscribe(with: self) { onwer, post in
+                print("fetch 완료")
+                onwer.delegate?.sendPostForMovingToDetailVCFromMyPostVC(post)
+            }
+            .disposed(by: disposeBag)
     
-        return Output(myPostsList: myPostsList.asDriver())
+        return Output(
+            myPostsList: myPostsList.asDriver()
+        )
     }
     
 }
 
 extension MyPostViewModel: ProfileViewModelDelegate {
     func sendMyPosts(_ posts: [String]) {
-        print("2")
         let observables = posts.map { id in
             return Observable.just(id)
                 .observe(on: ConcurrentDispatchQueueScheduler(queue: .global()))
@@ -64,6 +76,7 @@ extension MyPostViewModel: ProfileViewModelDelegate {
                 owner.myPostsList.accept(postList)
             }
             .disposed(by: disposeBag)
+        
     }
 }
 
@@ -96,5 +109,4 @@ extension MyPostViewModel {
                 .disposed(by: disposeBag)
         }
     }
-        
 }

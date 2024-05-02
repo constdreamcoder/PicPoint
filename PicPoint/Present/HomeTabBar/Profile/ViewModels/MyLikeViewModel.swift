@@ -11,6 +11,7 @@ import RxCocoa
 
 protocol MyLikeViewModelDelegate: AnyObject {
     func sendMyLikeCollectionViewContentHeight(_ contentHeight: CGFloat)
+    func sendPostForMovingToDetailVCFromMyLikeVC(_ post: Post)
 }
 
 final class MyLikeViewModel: ViewModelType {
@@ -22,6 +23,7 @@ final class MyLikeViewModel: ViewModelType {
 
     struct Input {
         let viewDidLoad: Observable<Void>
+        let postTap: ControlEvent<Post>
     }
     
     struct Output {
@@ -48,6 +50,17 @@ final class MyLikeViewModel: ViewModelType {
                 owner.likedPostList.accept(likedPostList)
             }
             .disposed(by: disposeBag)
+        
+        input.postTap
+            .flatMap {
+                PostManager.fetchPost(params: FetchPostParams(postId: $0.postId))
+            }
+            .subscribe(with: self) { onwer, post in
+                print("fetch 완료")
+                onwer.delegate?.sendPostForMovingToDetailVCFromMyLikeVC(post)
+            }
+            .disposed(by: disposeBag)
+        
             
         return Output(
             viewDidLoadTrigger: likedPostList.asDriver()

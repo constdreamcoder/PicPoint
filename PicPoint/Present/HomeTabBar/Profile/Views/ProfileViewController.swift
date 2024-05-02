@@ -35,6 +35,7 @@ final class ProfileViewController: BaseViewController {
         if indexPath.section == 0 {
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ProfileCollectionViewCell.identifier, for: indexPath) as? ProfileCollectionViewCell else { return UICollectionViewCell() }
             
+//            let item
             cell.profileViewModel = viewModel
             cell.bind()
             
@@ -89,6 +90,12 @@ final class ProfileViewController: BaseViewController {
         configureConstraints()
         configureUI()
         bind()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        tabBarController?.tabBar.isHidden = false
     }
     
     func updateCellHeight(height: CGFloat) {
@@ -165,6 +172,16 @@ extension ProfileViewController: UIViewControllerConfiguration {
         
         output.userNickname
             .drive(navigationItem.rx.backButtonTitle)
+            .disposed(by: disposeBag)
+        
+        output.moveToDetailVCTrigger
+            .drive(with: self) { owner, post in
+                if let post {
+                    let detailVM = DetailViewModel(post: post)
+                    let detailVC = DetailViewController(detailViewModel: detailVM)
+                    owner.navigationController?.pushViewController(detailVC, animated: true)
+                }
+            }
             .disposed(by: disposeBag)
     }
 }

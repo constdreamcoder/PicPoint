@@ -60,7 +60,8 @@ extension MyLikeViewController: UIViewControllerConfiguration {
     
     func bind() {
         let input = MyLikeViewModel.Input(
-            viewDidLoad: Observable.just(())
+            viewDidLoad: Observable.just(()),
+            postTap: collectionView.rx.modelSelected(Post.self)
         )
         
         let output = viewModel.transform(input: input)

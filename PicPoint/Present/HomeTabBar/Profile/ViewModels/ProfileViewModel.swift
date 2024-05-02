@@ -23,7 +23,8 @@ final class ProfileViewModel: ViewModelType {
     let moveToFollowTap = PublishSubject<Void>()
     let updateFollowingsCountRelay = PublishRelay<Int>()
     private let updateContentSizeRelay = PublishRelay<CGFloat>()
-    private let otherProfile = BehaviorSubject<FetchOtherProfileModel?>(value: nil)
+    private let userIdSubject = BehaviorSubject<String>(value: "")
+    private let postForMovingToDetailVCRelay = PublishRelay<Post?>()
     
     weak var delegate: ProfileViewModelDelegate?
     
@@ -37,19 +38,21 @@ final class ProfileViewModel: ViewModelType {
         let editProfileButtonTapTrigger: Driver<FetchMyProfileModel?>
         let moveToFollowTapTrigger: Driver<Void>
         let userNickname: Driver<String>
+        let moveToDetailVCTrigger: Driver<Post?>
     }
     
-    init(_ otherProfile: FetchOtherProfileModel? = nil) {
-        Observable<FetchOtherProfileModel?>.just(otherProfile)
-            .subscribe(with: self) { owner, otherProfile in
-                owner.otherProfile.onNext(otherProfile)
+    init(_ userId: String = "") {
+        Observable<String>.just(userId)
+            .subscribe(with: self) { owner, userId in
+                print("userId", userId)
+                owner.userIdSubject.onNext(userId)
             }
             .disposed(by: disposeBag)
     }
     
     func transform(input: Input) -> Output {
-        let otherProfileTrigger = BehaviorSubject<FetchMyProfileModel?>(value: nil)
-        let myProfileTrigger = BehaviorSubject<Void>(value: ())
+        let otherProfileTrigger = PublishSubject<String>()
+        let myProfileTrigger = PublishSubject<Void>()
         
         let sections: [SectionModelWrapper] = [
             SectionModelWrapper(
@@ -67,8 +70,23 @@ final class ProfileViewModel: ViewModelType {
         let sectionsObservable = Observable<[SectionModelWrapper]>.just(sections)
         
         otherProfileTrigger
+            .flatMap {
+                ProfileManager.fetchOtherProfile(params: FetchOtherProfileParams(userId: $0))
+            }
+            .map { otherProfile in
+                return FetchMyProfileModel(
+                    userId: otherProfile.userId,
+                    email: "",
+                    nick: otherProfile.nick,
+                    profileImage: otherProfile.profileImage,
+                    birthDay: "",
+                    phoneNum: "",
+                    followers: otherProfile.followers,
+                    followings: otherProfile.following,
+                    posts: otherProfile.posts
+                )
+            }
             .subscribe(with: self) { owner, otherProfile in
-                guard let otherProfile else { return }
                 owner.myProfile.accept(otherProfile)
                 owner.myPosts.accept(otherProfile.posts)
                 owner.delegate?.sendMyPosts(otherProfile.posts)
@@ -86,21 +104,10 @@ final class ProfileViewModel: ViewModelType {
             }
             .disposed(by: disposeBag)
         
-        otherProfile
-            .subscribe { otherProfile  in
-                if let otherProfile {
-                    let castedOtherProfile = FetchMyProfileModel(
-                        userId: otherProfile.userId,
-                        email: "",
-                        nick: otherProfile.nick,
-                        profileImage: otherProfile.profileImage,
-                        birthDay: "",
-                        phoneNum: "",
-                        followers: otherProfile.followers,
-                        followings: otherProfile.following,
-                        posts: otherProfile.posts
-                    )
-                    otherProfileTrigger.onNext(castedOtherProfile)
+        userIdSubject
+            .subscribe { userId  in
+                if userId != "" {
+                    otherProfileTrigger.onNext(userId)
                 } else {
                     myProfileTrigger.onNext(())
                 }
@@ -127,7 +134,8 @@ final class ProfileViewModel: ViewModelType {
             updateContentSize: updateContentSizeRelay.asDriver(onErrorJustReturn: 0),
             editProfileButtonTapTrigger: editProfileButtonTapTrigger.asDriver(onErrorJustReturn: nil),
             moveToFollowTapTrigger: moveToFollowTap.asDriver(onErrorJustReturn: ()),
-            userNickname: userNickname.asDriver(onErrorJustReturn: "")
+            userNickname: userNickname.asDriver(onErrorJustReturn: ""),
+            moveToDetailVCTrigger: postForMovingToDetailVCRelay.asDriver(onErrorJustReturn: nil)
         )
     }
 }
@@ -158,6 +166,13 @@ extension ProfileViewModel: MyPostViewModelDelegate {
             .disposed(by: disposeBag)
     }
     
+    func sendPostForMovingToDetailVCFromMyPostVC(_ post: Post) {
+        Observable<Post>.just(post)
+            .subscribe(with: self) { owner, post in
+                owner.postForMovingToDetailVCRelay.accept(post)
+            }
+            .disposed(by: disposeBag)
+    }
 }
 
 extension ProfileViewModel: MyLikeViewModelDelegate {
@@ -165,6 +180,14 @@ extension ProfileViewModel: MyLikeViewModelDelegate {
         Observable.just(contentHeight)
             .subscribe(with: self) { owner, contentHeight in
                 owner.updateContentSizeRelay.accept(contentHeight)
+            }
+            .disposed(by: disposeBag)
+    }
+    
+    func sendPostForMovingToDetailVCFromMyLikeVC(_ post: Post) {
+        Observable<Post>.just(post)
+            .subscribe(with: self) { owner, post in
+                owner.postForMovingToDetailVCRelay.accept(post)
             }
             .disposed(by: disposeBag)
     }

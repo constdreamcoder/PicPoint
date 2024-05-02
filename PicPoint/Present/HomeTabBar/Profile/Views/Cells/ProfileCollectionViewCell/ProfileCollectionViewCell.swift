@@ -44,7 +44,7 @@ final class ProfileCollectionViewCell: BaseCollectionViewCell {
     
     let bottomButton: UIButton = {
         let button = UIButton()
-        button.setTitle("프로필 편집", for: .normal)
+        button.setTitle("프로필 수정", for: .normal)
         button.setTitleColor(.white, for: .normal)
         button.titleLabel?.font = .systemFont(ofSize: 20.0, weight: .semibold)
         button.backgroundColor = .black

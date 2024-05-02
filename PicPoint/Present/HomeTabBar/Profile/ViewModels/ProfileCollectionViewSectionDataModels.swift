@@ -30,13 +30,6 @@ extension ProfileCollectionViewFirstSectionDataModel: SectionModelType {
 }
 
 // MARK: - ProfileCollectionViewSecondSectionDataModel
-//struct SecondSectionCellData {
-//    var header: String
-//    var title: String
-//    var address: String
-//    var files: [String]
-//}
-
 struct ProfileCollectionViewSecondSectionDataModel {
     var items: [Item]
 }

@@ -12,4 +12,5 @@ extension Notification.Name {
     static let sendDeletedMyPostId = Notification.Name("sendUpdatedPostList")
     static let sendNewLikedPost = Notification.Name("sendNewLikedPost")
     static let sendUnlikedPost = Notification.Name("sendUnlikedPost")
+    static let sendOtherProfilePosts = Notification.Name("sendOtherProfilePosts")
 }

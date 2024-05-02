@@ -171,8 +171,8 @@ extension HomeViewController: UIViewControllerConfiguration {
             .disposed(by: disposeBag)
         
         output.moveToOtherProfileTrigger
-            .drive(with: self) { owner, fetchOtherProfileModel in
-                let profileVM = ProfileViewModel(fetchOtherProfileModel)
+            .drive(with: self) { owner, userId in
+                let profileVM = ProfileViewModel(userId)
                 let profileVC = ProfileViewController(profileViewModel: profileVM)
                 owner.navigationController?.pushViewController(profileVC, animated: true)
             }

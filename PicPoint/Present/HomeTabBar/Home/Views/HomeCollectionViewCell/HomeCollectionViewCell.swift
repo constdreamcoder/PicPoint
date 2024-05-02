@@ -181,7 +181,7 @@ extension HomeCollectionViewCell {
         
         moveToProfileTap.rx.event
             .bind { _ in
-                homeViewModel.profileImageViewTapTapSubject.onNext(post.post.creator.userId)
+                homeViewModel.profileImageViewTapSubject.onNext(post.post.creator.userId)
             }
             .disposed(by: disposeBag)
     }

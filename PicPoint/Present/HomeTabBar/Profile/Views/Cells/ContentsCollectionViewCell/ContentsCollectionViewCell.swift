@@ -18,6 +18,7 @@ final class ContentsCollectionViewCell: BaseCollectionViewCell {
         
     override init(frame: CGRect) {
         super.init(frame: frame)
+    
     }
     
     required init?(coder: NSCoder) {
@@ -52,7 +53,7 @@ extension ContentsCollectionViewCell {
                 owner.contentsPageVC.currentPage = selectedIndex
             }
             .disposed(by: disposeBag)
-        
+                
         contentsPageVC.myPostVC.viewModel.delegate = profileViewModel
         contentsPageVC.MyLikeVC.viewModel.delegate = profileViewModel
         

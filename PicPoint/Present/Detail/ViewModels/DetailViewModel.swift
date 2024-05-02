@@ -43,7 +43,7 @@ final class DetailViewModel: ViewModelType {
         let postId: Driver<String>
         let mapViewTapTrigger: Driver<CLLocationCoordinate2D>
         let itemTapTrigger: Driver<Post?>
-        let moveToOtherProfileTrigger: Driver<FetchOtherProfileModel?>
+        let moveToOtherProfileTrigger: Driver<String>
     }
     
     init(post: Post) {
@@ -132,7 +132,6 @@ final class DetailViewModel: ViewModelType {
         let unlikeTrigger = PublishSubject<String>()
         let followTrigger = PublishSubject<Post>()
         let unFollowTrigger = PublishSubject<Post>()
-        let moveToOtherProfileTrigger = PublishRelay<FetchOtherProfileModel?>()
 
         likeTrigger
             .flatMap {
@@ -263,15 +262,8 @@ final class DetailViewModel: ViewModelType {
             .subscribe { itemTapTrigger.accept($0) }
             .disposed(by: disposeBag)
         
-        profileImageViewTapTapSubject
+        let moveToOtherProfileTrigger = profileImageViewTapTapSubject
             .debounce(.milliseconds(500), scheduler: MainScheduler.instance)
-            .flatMap { userId in
-                ProfileManager.fetchOtherProfile(params: FetchOtherProfileParams(userId: userId))
-            }
-            .subscribe {
-                moveToOtherProfileTrigger.accept($0)
-            }
-            .disposed(by: disposeBag)
 
         return Output(
             sections: sectionsRelay.asDriver(onErrorJustReturn: []), 
@@ -279,7 +271,7 @@ final class DetailViewModel: ViewModelType {
             postId: postIdRelay.asDriver(onErrorJustReturn: ""), 
             mapViewTapTrigger: mapViewTapRelay.asDriver(onErrorJustReturn: CLLocationCoordinate2D()),
             itemTapTrigger: itemTapTrigger.asDriver(onErrorJustReturn: nil),
-            moveToOtherProfileTrigger: moveToOtherProfileTrigger.asDriver(onErrorJustReturn: nil)
+            moveToOtherProfileTrigger: moveToOtherProfileTrigger.asDriver(onErrorJustReturn: "")
         )
     }
 }

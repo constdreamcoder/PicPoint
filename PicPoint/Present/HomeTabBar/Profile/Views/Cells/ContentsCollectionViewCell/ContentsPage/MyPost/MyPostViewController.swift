@@ -59,7 +59,8 @@ extension MyPostViewController: UIViewControllerConfiguration {
     
     func bind() {
         let input = MyPostViewModel.Input(
-            viewDidLoad: Observable.just(())
+            viewDidLoad: Observable.just(()),
+            postTap: collectionView.rx.modelSelected(Post.self)
         )
         
         let output = viewModel.transform(input: input)
