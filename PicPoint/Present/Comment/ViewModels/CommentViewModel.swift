@@ -56,6 +56,10 @@ final class CommentViewModel: ViewModelType {
         postIdSubject
             .flatMap {
                 PostManager.fetchPost(params: .init(postId: $0))
+                    .catch { error in
+                        print(error.errorCode, error.errorDesc)
+                        return Single<Post>.never()
+                    }
             }
             .subscribe(with: self) { owner, post in
                 commentListRelay.accept(post.comments)
@@ -71,6 +75,10 @@ final class CommentViewModel: ViewModelType {
                     params: .init(postId: $0),
                     body: .init(content: $1)
                 )
+                .catch { error in
+                    print(error.errorCode, error.errorDesc)
+                    return Single<Comment>.never()
+                }
             }
             .withLatestFrom(commentListRelay) { [$0] + $1 }
             .withLatestFrom(postIdSubject) { ($0, $1) }
@@ -85,6 +93,10 @@ final class CommentViewModel: ViewModelType {
             .withLatestFrom(postIdSubject) { ($1, $0) }
             .flatMap {
                 CommentManager.deleteComment(params: .init(postId: $0, commentId: $1))
+                    .catch { error in
+                        print(error.errorCode, error.errorDesc)
+                        return Single<String>.never()
+                    }
             }
             .withLatestFrom(commentListRelay) { deletedCommentId, commentList in
                 commentList.filter { $0.commentId != deletedCommentId }

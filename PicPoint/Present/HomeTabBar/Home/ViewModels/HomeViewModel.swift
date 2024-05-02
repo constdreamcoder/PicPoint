@@ -52,6 +52,10 @@ final class HomeViewModel: ViewModelType {
         input.viewDidLoadTrigger
             .flatMap { _ in
                 PostManager.fetchPostList(query: .init(limit: "50", product_id: APIKeys.productId))
+                    .catch { error in
+                        print(error.errorCode, error.errorDesc)
+                        return Single<PostListModel>.never()
+                    }
             }
             .map { postListModel -> [PostLikeType] in
                 postListModel.data.map { post in
@@ -76,6 +80,10 @@ final class HomeViewModel: ViewModelType {
         input.deletePostTap
             .flatMap {
                 PostManager.deletePost(params: DeletePostParams(postId: $0))
+                    .catch { error in
+                        print(error.errorCode, error.errorDesc)
+                        return Single<String>.never()
+                    }
             }
             .withLatestFrom(postList) { deletedMyPostId, postList in
                 NotificationCenter.default.post(name: .sendDeletedMyPostId, object: nil, userInfo: ["deletedMyPostId": deletedMyPostId])
@@ -91,6 +99,10 @@ final class HomeViewModel: ViewModelType {
         input.postTap
             .flatMap {
                 PostManager.fetchPost(params: FetchPostParams(postId: $0.post.postId))
+                    .catch { error in
+                        print(error.errorCode, error.errorDesc)
+                        return Single<Post>.never()
+                    }
             }
             .subscribe {
                 print("fetch 완료")
@@ -104,6 +116,10 @@ final class HomeViewModel: ViewModelType {
                     params: LikeParams(postId: $0),
                     body: LikeBody(like_status: true)
                 )
+                .catch { error in
+                    print(error.errorCode, error.errorDesc)
+                    return Single<String>.never()
+                }
             }
             .withLatestFrom(postList) { postId, postList -> [PostLikeType] in
                 var newLikedPost: Post?
@@ -133,6 +149,10 @@ final class HomeViewModel: ViewModelType {
                     params: LikeParams(postId: $0),
                     body: LikeBody(like_status: false)
                 )
+                .catch { error in
+                    print(error.errorCode, error.errorDesc)
+                    return Single<String>.never()
+                }
             }
             .withLatestFrom(postList) { postId, postList -> [PostLikeType] in
                 var unlikedPost: Post?

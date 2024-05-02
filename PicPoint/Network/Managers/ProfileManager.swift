@@ -21,13 +21,20 @@ struct ProfileManager {
                         switch response.result {
                         case .success(let fetchMyProfileModel):
                             singleObserver(.success(fetchMyProfileModel))
-                        case .failure(let AFError):
-                            print(response.response?.statusCode)
-                            singleObserver(.failure(AFError))
+                        case .failure(_):
+                            if let statusCode = response.response?.statusCode {
+                                if let commonNetworkError = CommonNetworkError(rawValue: statusCode) {
+                                    singleObserver(.failure(commonNetworkError))
+                                } else if let fetchMyProfileError = FetchMyProfileNetworkError(rawValue: statusCode) {
+                                    singleObserver(.failure(fetchMyProfileError))
+                                } else {
+                                    singleObserver(.failure(CommonNetworkError.unknownError))
+                                }
+                            }
                         }
                     }
             } catch {
-                singleObserver(.failure(error))
+                singleObserver(.failure(CommonNetworkError.unknownError))
             }
             return Disposables.create()
         }
@@ -39,7 +46,6 @@ struct ProfileManager {
                 let urlRequest = try ProfileRouter.editMyProfile(body: body).asURLRequest()
                 
                 guard let url = urlRequest.url else { return Disposables.create() }
-                print("url", url)
                 guard let method = urlRequest.method else { return Disposables.create() }
                 
                 let headers = urlRequest.headers
@@ -60,14 +66,20 @@ struct ProfileManager {
                         switch response.result {
                         case .success(let postListModel):
                             singleObserver(.success(postListModel))
-                        case .failure(let AFError):
-                            print(response.response?.statusCode)
-                            print(AFError)
-                            singleObserver(.failure(AFError))
+                        case .failure(_):
+                            if let statusCode = response.response?.statusCode {
+                                if let commonNetworkError = CommonNetworkError(rawValue: statusCode) {
+                                    singleObserver(.failure(commonNetworkError))
+                                } else if let editMyProfileError = EditMyProfileNetworkError(rawValue: statusCode) {
+                                    singleObserver(.failure(editMyProfileError))
+                                } else {
+                                    singleObserver(.failure(CommonNetworkError.unknownError))
+                                }
+                            }
                         }
                     }
             } catch {
-                singleObserver(.failure(error))
+                singleObserver(.failure(CommonNetworkError.unknownError))
             }
             return Disposables.create()
         }
@@ -84,13 +96,20 @@ struct ProfileManager {
                         switch response.result {
                         case .success(let fetchOtherProfileModel):
                             singleObserver(.success(fetchOtherProfileModel))
-                        case .failure(let AFError):
-                            print(response.response?.statusCode)
-                            singleObserver(.failure(AFError))
+                        case .failure(_):
+                            if let statusCode = response.response?.statusCode {
+                                if let commonNetworkError = CommonNetworkError(rawValue: statusCode) {
+                                    singleObserver(.failure(commonNetworkError))
+                                } else if let FetchOtherProfileError = FetchOtherProfileNetworkError(rawValue: statusCode) {
+                                    singleObserver(.failure(FetchOtherProfileError))
+                                } else {
+                                    singleObserver(.failure(CommonNetworkError.unknownError))
+                                }
+                            }
                         }
                     }
             } catch {
-                singleObserver(.failure(error))
+                singleObserver(.failure(CommonNetworkError.unknownError))
             }
             return Disposables.create()
         }

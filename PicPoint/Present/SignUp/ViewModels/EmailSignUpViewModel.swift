@@ -41,6 +41,10 @@ final class EmailSignUpViewModel: ViewModelType {
             }
             .flatMap { validateEmailBody in
                 UserManager.validateEmail(body: validateEmailBody)
+                    .catch { error in
+                        print(error.errorCode, error.errorDesc)
+                        return Single<ValidateEmailModel>.never()
+                    }
             }
             .map { validateEmailModel in
                 validateEmailModel.message

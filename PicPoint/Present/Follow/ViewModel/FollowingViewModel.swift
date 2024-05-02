@@ -45,6 +45,10 @@ final class FollowingViewModel: ViewModelType {
             }
             .flatMap {
                 FollowManager.follow(params: FollowParams(userId: $0.userId))
+                    .catch { error in
+                        print(error.errorCode, error.errorDesc)
+                        return Single<String>.never()
+                    }
             }
             .withLatestFrom(followingsRelay) { followedUserId, followings -> [FollowingCellType] in
                 return followings.map { following in
@@ -66,6 +70,10 @@ final class FollowingViewModel: ViewModelType {
         unFollowTrigger
             .flatMap {
                 FollowManager.unfollow(params: UnFollowParams(userId: $0.userId))
+                    .catch { error in
+                        print(error.errorCode, error.errorDesc)
+                        return Single<String>.never()
+                    }
             }
             .withLatestFrom(followingsRelay) { unFollowedUserId, followings -> [FollowingCellType] in
                 UserDefaults.standard.followings.removeAll(where: { $0.userId == unFollowedUserId })

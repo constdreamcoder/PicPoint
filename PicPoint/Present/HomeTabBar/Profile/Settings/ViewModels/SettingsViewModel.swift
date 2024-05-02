@@ -27,6 +27,10 @@ final class SettingsViewModel: ViewModelType {
             .debounce(.seconds(1), scheduler: MainScheduler.instance)
             .flatMap { _ in
                 UserManager.withdraw()
+                    .catch { error in
+                        print(error.errorCode, error.errorDesc)
+                        return Single<WithdrawalModel>.never()
+                    }
             }
             .subscribe(with: self) { owner, withdrawalModel in
                 UserDefaults.standard.clearAllData()

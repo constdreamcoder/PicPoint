@@ -54,6 +54,10 @@ final class PasswordSignUpViewModel: ViewModelType {
             .withUnretained(self)
             .flatMap { owner, passwordText in
                 owner.validatePassword(passwordText.trimmingCharacters(in: .whitespaces))
+                    .catch { error in
+                        print(error.errorCode, error.errorDesc)
+                        return Single<String>.never()
+                    }
             }
             .subscribe {
                 passwordValidation.accept($0)

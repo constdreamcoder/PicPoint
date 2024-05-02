@@ -47,6 +47,10 @@ final class MyPostViewModel: ViewModelType {
         input.postTap
             .flatMap {
                 PostManager.fetchPost(params: FetchPostParams(postId: $0.postId))
+                    .catch { error in
+                        print(error.errorCode, error.errorDesc)
+                        return Single<Post>.never()
+                    }
             }
             .subscribe(with: self) { onwer, post in
                 print("fetch 완료")
@@ -66,8 +70,12 @@ extension MyPostViewModel: ProfileViewModelDelegate {
         let observables = posts.map { id in
             return Observable.just(id)
                 .observe(on: ConcurrentDispatchQueueScheduler(queue: .global()))
-                .flatMap { id in
-                    return PostManager.fetchPost(params: FetchPostParams(postId: id))
+                .flatMap {
+                    PostManager.fetchPost(params: FetchPostParams(postId: $0))
+                        .catch { error in
+                            print(error.errorCode, error.errorDesc)
+                            return Single<Post>.never()
+                        }
                 }
         }
         

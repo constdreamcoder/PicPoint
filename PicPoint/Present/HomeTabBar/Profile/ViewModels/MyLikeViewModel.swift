@@ -43,8 +43,12 @@ final class MyLikeViewModel: ViewModelType {
     func transform(input: Input) -> Output {
         
         input.viewDidLoad
-            .flatMap { _ in
+            .flatMap {
                 LikeManager.fetchMyLikes()
+                    .catch { error in
+                        print(error.errorCode, error.errorDesc)
+                        return Single<[Post]>.never()
+                    }
             }
             .subscribe(with: self) { owner, likedPostList in
                 owner.likedPostList.accept(likedPostList)
@@ -54,6 +58,10 @@ final class MyLikeViewModel: ViewModelType {
         input.postTap
             .flatMap {
                 PostManager.fetchPost(params: FetchPostParams(postId: $0.postId))
+                    .catch { error in
+                        print(error.errorCode, error.errorDesc)
+                        return Single<Post>.never()
+                    }
             }
             .subscribe(with: self) { onwer, post in
                 print("fetch 완료")

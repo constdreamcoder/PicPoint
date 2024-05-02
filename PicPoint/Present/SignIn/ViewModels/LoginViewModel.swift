@@ -52,6 +52,10 @@ final class LoginViewModel: ViewModelType {
         fetchUserProfileTrigger
             .flatMap {
                 ProfileManager.fetchMyProfile()
+                    .catch { error in
+                        print(error.errorCode, error.errorDesc)
+                        return Single<FetchMyProfileModel>.never()
+                    }
             }
             .subscribe { fetchMyProfileModel in
                 UserDefaults.standard.followers = fetchMyProfileModel.followers
@@ -63,8 +67,12 @@ final class LoginViewModel: ViewModelType {
         input.loginButtonTapped
             .debounce(.seconds(1), scheduler: MainScheduler.instance)
             .withLatestFrom(loginObservable)
-            .flatMap { loginQuery in
-                return UserManager.login(body: loginQuery)
+            .flatMap {
+                UserManager.login(body: $0)
+                    .catch { error in
+                        print(error.errorCode, error.errorDesc)
+                        return Single<LoginModel>.never()
+                    }
             }
             .subscribe(with: self) { owner, loginModel in
                 UserDefaults.standard.userId = loginModel.userId

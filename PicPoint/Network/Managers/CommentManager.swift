@@ -21,14 +21,20 @@ struct CommentManager {
                         switch response.result {
                         case .success(let postListModel):
                             singleObserver(.success(postListModel))
-                        case .failure(let AFError):
-                            print(response.response?.statusCode)
-                            print(AFError)
-                            singleObserver(.failure(AFError))
+                        case .failure(_):
+                            if let statusCode = response.response?.statusCode {
+                                if let commonNetworkError = CommonNetworkError(rawValue: statusCode) {
+                                    singleObserver(.failure(commonNetworkError))
+                                } else if let writePostError = WritePostNetworkError(rawValue: statusCode) {
+                                    singleObserver(.failure(writePostError))
+                                } else {
+                                    singleObserver(.failure(CommonNetworkError.unknownError))
+                                }
+                            }
                         }
                     }
             } catch {
-                singleObserver(.failure(error))
+                singleObserver(.failure(CommonNetworkError.unknownError))
             }
             return Disposables.create()
         }
@@ -45,14 +51,20 @@ struct CommentManager {
                         switch response.result {
                         case .success:
                             singleObserver(.success(params.commentId))
-                        case .failure(let AFError):
-                            print(response.response?.statusCode)
-                            print(AFError)
-                            singleObserver(.failure(AFError))
+                        case .failure(_):
+                            if let statusCode = response.response?.statusCode {
+                                if let commonNetworkError = CommonNetworkError(rawValue: statusCode) {
+                                    singleObserver(.failure(commonNetworkError))
+                                } else if let deletePostError = DeletePostNetworkError(rawValue: statusCode) {
+                                    singleObserver(.failure(deletePostError))
+                                } else {
+                                    singleObserver(.failure(CommonNetworkError.unknownError))
+                                }
+                            }
                         }
                     }
             } catch {
-                singleObserver(.failure(error))
+                singleObserver(.failure(CommonNetworkError.unknownError))
             }
             return Disposables.create()
         }

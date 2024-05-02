@@ -21,13 +21,20 @@ struct LikeManager {
                         switch response.result {
                         case .success(let fetchMyLikesModel):
                             singleObserver(.success(fetchMyLikesModel.data))
-                        case .failure(let AFError):
-                            print(response.response?.statusCode)
-                            singleObserver(.failure(AFError))
+                        case .failure(_):
+                            if let statusCode = response.response?.statusCode {
+                                if let commonNetworkError = CommonNetworkError(rawValue: statusCode) {
+                                    singleObserver(.failure(commonNetworkError))
+                                } else if let fetchLikedPostsError = FetchLikedPostsNetworkError(rawValue: statusCode) {
+                                    singleObserver(.failure(fetchLikedPostsError))
+                                } else {
+                                    singleObserver(.failure(CommonNetworkError.unknownError))
+                                }
+                            }
                         }
                     }
             } catch {
-                singleObserver(.failure(error))
+                singleObserver(.failure(CommonNetworkError.unknownError))
             }
             return Disposables.create()
         }
@@ -44,13 +51,20 @@ struct LikeManager {
                         switch response.result {
                         case .success(_):
                             singleObserver(.success(params.postId))
-                        case .failure(let AFError):
-                            print(response.response?.statusCode)
-                            singleObserver(.failure(AFError))
+                        case .failure(_):
+                            if let statusCode = response.response?.statusCode {
+                                if let commonNetworkError = CommonNetworkError(rawValue: statusCode) {
+                                    singleObserver(.failure(commonNetworkError))
+                                } else if let likeUnlikePostError = LikeUnlikePostNetworkError(rawValue: statusCode) {
+                                    singleObserver(.failure(likeUnlikePostError))
+                                } else {
+                                    singleObserver(.failure(CommonNetworkError.unknownError))
+                                }
+                            }
                         }
                     }
             } catch {
-                singleObserver(.failure(error))
+                singleObserver(.failure(CommonNetworkError.unknownError))
             }
             return Disposables.create()
         }
@@ -67,13 +81,20 @@ struct LikeManager {
                         switch response.result {
                         case .success(_):
                             singleObserver(.success(params.postId))
-                        case .failure(let AFError):
-                            print(response.response?.statusCode)
-                            singleObserver(.failure(AFError))
+                        case .failure(_):
+                            if let statusCode = response.response?.statusCode {
+                                if let commonNetworkError = CommonNetworkError(rawValue: statusCode) {
+                                    singleObserver(.failure(commonNetworkError))
+                                } else if let likeUnlikePostError = LikeUnlikePostNetworkError(rawValue: statusCode) {
+                                    singleObserver(.failure(likeUnlikePostError))
+                                } else {
+                                    singleObserver(.failure(CommonNetworkError.unknownError))
+                                }
+                            }
                         }
                     }
             } catch {
-                singleObserver(.failure(error))
+                singleObserver(.failure(CommonNetworkError.unknownError))
             }
             return Disposables.create()
         }

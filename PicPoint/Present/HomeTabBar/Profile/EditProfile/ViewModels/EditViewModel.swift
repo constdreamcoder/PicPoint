@@ -81,6 +81,10 @@ final class EditViewModel: ViewModelType {
             }
             .flatMap {
                 ProfileManager.editMyProfile(body: $0)
+                    .catch { error in
+                        print(error.errorCode, error.errorDesc)
+                        return Single<FetchMyProfileModel>.never()
+                    }
             }
             .subscribe(with: self) { owner, newProfileModel in
                 owner.delegate?.sendUpdatedProfileInfos(newProfileModel)

@@ -21,14 +21,20 @@ struct PostManager {
                         switch response.result {
                         case .success(let postListModel):
                             singleObserver(.success(postListModel))
-                        case .failure(let AFError):
-                            print(response.response?.statusCode)
-                            print(AFError)
-                            singleObserver(.failure(AFError))
+                        case .failure(_):
+                            if let statusCode = response.response?.statusCode {
+                                if let commonNetworkError = CommonNetworkError(rawValue: statusCode) {
+                                    singleObserver(.failure(commonNetworkError))
+                                } else if let fetchPostListError = FetchPostListNetworkError(rawValue: statusCode) {
+                                    singleObserver(.failure(fetchPostListError))
+                                } else {
+                                    singleObserver(.failure(CommonNetworkError.unknownError))
+                                }
+                            }
                         }
                     }
             } catch {
-                singleObserver(.failure(error))
+                singleObserver(.failure(CommonNetworkError.unknownError))
             }
             return Disposables.create()
         }
@@ -39,23 +45,27 @@ struct PostManager {
             
             do {
                 let urlRequest = try PostRouter.fetchPost(params: params).asURLRequest()
-                
-                urlRequest.url
-                
+                                
                 AF.request(urlRequest)
                     .validate(statusCode: 200...500)
                     .responseDecodable(of: Post.self) { response in
                         switch response.result {
                         case .success(let postModel):
                             singleObserver(.success(postModel))
-                        case .failure(let AFError):
-                            print(response.response?.statusCode)
-                            print(AFError)
-                            singleObserver(.failure(AFError))
+                        case .failure(_):
+                            if let statusCode = response.response?.statusCode {
+                                if let commonNetworkError = CommonNetworkError(rawValue: statusCode) {
+                                    singleObserver(.failure(commonNetworkError))
+                                } else if let fetchPostError = FetchPostNetworkError(rawValue: statusCode) {
+                                    singleObserver(.failure(fetchPostError))
+                                } else {
+                                    singleObserver(.failure(CommonNetworkError.unknownError))
+                                }
+                            }
                         }
                     }
             } catch {
-                singleObserver(.failure(error))
+                singleObserver(.failure(CommonNetworkError.unknownError))
             }
             return Disposables.create()
         }
@@ -87,14 +97,20 @@ struct PostManager {
                         switch response.result {
                         case .success(let postListModel):
                             singleObserver(.success(postListModel))
-                        case .failure(let AFError):
-                            print(response.response?.statusCode)
-                            print(AFError)
-                            singleObserver(.failure(AFError))
+                        case .failure(_):
+                            if let statusCode = response.response?.statusCode {
+                                if let commonNetworkError = CommonNetworkError(rawValue: statusCode) {
+                                    singleObserver(.failure(commonNetworkError))
+                                } else if let uploadImagesError = UploadImagesNetworkError(rawValue: statusCode) {
+                                    singleObserver(.failure(uploadImagesError))
+                                } else {
+                                    singleObserver(.failure(CommonNetworkError.unknownError))
+                                }
+                            }
                         }
                     }
             } catch {
-                singleObserver(.failure(error))
+                singleObserver(.failure(CommonNetworkError.unknownError))
             }
             return Disposables.create()
         }
@@ -111,14 +127,20 @@ struct PostManager {
                         switch response.result {
                         case .success(let postListModel):
                             singleObserver(.success(postListModel))
-                        case .failure(let AFError):
-                            print(response.response?.statusCode)
-                            print(AFError)
-                            singleObserver(.failure(AFError))
+                        case .failure(_):
+                            if let statusCode = response.response?.statusCode {
+                                if let commonNetworkError = CommonNetworkError(rawValue: statusCode) {
+                                    singleObserver(.failure(commonNetworkError))
+                                } else if let writePostError = WritePostNetworkError(rawValue: statusCode) {
+                                    singleObserver(.failure(writePostError))
+                                } else {
+                                    singleObserver(.failure(CommonNetworkError.unknownError))
+                                }
+                            }
                         }
                     }
             } catch {
-                singleObserver(.failure(error))
+                singleObserver(.failure(CommonNetworkError.unknownError))
             }
             return Disposables.create()
         }
@@ -135,14 +157,20 @@ struct PostManager {
                         switch response.result {
                         case .success:
                             singleObserver(.success(params.postId))
-                        case .failure(let AFError):
-                            print(response.response?.statusCode)
-                            print(AFError)
-                            singleObserver(.failure(AFError))
+                        case .failure(_):
+                            if let statusCode = response.response?.statusCode {
+                                if let commonNetworkError = CommonNetworkError(rawValue: statusCode) {
+                                    singleObserver(.failure(commonNetworkError))
+                                } else if let deletePostError = DeletePostNetworkError(rawValue: statusCode) {
+                                    singleObserver(.failure(deletePostError))
+                                } else {
+                                    singleObserver(.failure(CommonNetworkError.unknownError))
+                                }
+                            }
                         }
                     }
             } catch {
-                singleObserver(.failure(error))
+                singleObserver(.failure(CommonNetworkError.unknownError))
             }
             return Disposables.create()
         }
@@ -159,14 +187,20 @@ struct PostManager {
                         switch response.result {
                         case .success(let postListModel):
                             singleObserver(.success(postListModel.data))
-                        case .failure(let AFError):
-                            print(response.response?.statusCode)
-                            print(AFError)
-                            singleObserver(.failure(AFError))
+                        case .failure(_):
+                            if let statusCode = response.response?.statusCode {
+                                if let commonNetworkError = CommonNetworkError(rawValue: statusCode) {
+                                    singleObserver(.failure(commonNetworkError))
+                                } else if let searchHashTagsError = SearchHashTagsNetworkError(rawValue: statusCode) {
+                                    singleObserver(.failure(searchHashTagsError))
+                                } else {
+                                    singleObserver(.failure(CommonNetworkError.unknownError))
+                                }
+                            }
                         }
                     }
             } catch {
-                singleObserver(.failure(error))
+                singleObserver(.failure(CommonNetworkError.unknownError))
             }
             return Disposables.create()
         }

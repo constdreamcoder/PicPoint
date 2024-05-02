@@ -52,6 +52,10 @@ final class BirthDaySignUpViewModel: ViewModelType {
             }
             .flatMap { signUpBody in
                 UserManager.signUp(body: signUpBody)
+                    .catch { error in
+                        print(error.errorCode, error.errorDesc)
+                        return Single<SignUpModel>.never()
+                    }
             }
             .map { signUpModel in
                 SignUpStorage.shared.clearAll()
@@ -94,7 +98,7 @@ extension BirthDaySignUpViewModel {
 
         // 월과 일이 유효한 조합인지 확인
         if month == 2 {
-            // 2월은 윤년 여부를 고려해야 함
+            // 2월은 윤년 확인
             let isLeapYear = (year % 4 == 0 && year % 100 != 0) || year % 400 == 0
             if isLeapYear {
                 return (1...29).contains(day)

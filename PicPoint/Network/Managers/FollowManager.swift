@@ -21,14 +21,20 @@ struct FollowManager {
                         switch response.result {
                         case .success(_):
                             singleObserver(.success(params.userId))
-                        case .failure(let AFError):
-                            print(response.response?.statusCode)
-                            print(AFError)
-                            singleObserver(.failure(AFError))
+                        case .failure(_):
+                            if let statusCode = response.response?.statusCode {
+                                if let commonNetworkError = CommonNetworkError(rawValue: statusCode) {
+                                    singleObserver(.failure(commonNetworkError))
+                                } else if let followError = FollowNetworkError(rawValue: statusCode) {
+                                    singleObserver(.failure(followError))
+                                } else {
+                                    singleObserver(.failure(CommonNetworkError.unknownError))
+                                }
+                            }
                         }
                     }
             } catch {
-                singleObserver(.failure(error))
+                singleObserver(.failure(CommonNetworkError.unknownError))
             }
             return Disposables.create()
         }
@@ -45,14 +51,20 @@ struct FollowManager {
                         switch response.result {
                         case .success(_):
                             singleObserver(.success(params.userId))
-                        case .failure(let AFError):
-                            print(response.response?.statusCode)
-                            print(AFError)
-                            singleObserver(.failure(AFError))
+                        case .failure(_):
+                            if let statusCode = response.response?.statusCode {
+                                if let commonNetworkError = CommonNetworkError(rawValue: statusCode) {
+                                    singleObserver(.failure(commonNetworkError))
+                                } else if let UnfollowError = UnfollowNetworkError(rawValue: statusCode) {
+                                    singleObserver(.failure(UnfollowError))
+                                } else {
+                                    singleObserver(.failure(CommonNetworkError.unknownError))
+                                }
+                            }
                         }
                     }
             } catch {
-                singleObserver(.failure(error))
+                singleObserver(.failure(CommonNetworkError.unknownError))
             }
             return Disposables.create()
         }

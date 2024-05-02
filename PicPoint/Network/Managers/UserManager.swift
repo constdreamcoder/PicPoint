@@ -21,13 +21,20 @@ struct UserManager {
                         switch response.result {
                         case .success(let loginModel):
                             singleObserver(.success(loginModel))
-                        case .failure(let AFError):
-                            print(response.response?.statusCode)
-                            singleObserver(.failure(AFError))
+                        case .failure(_):
+                            if let statusCode = response.response?.statusCode {
+                                if let commentNetworkError = CommonNetworkError(rawValue: statusCode) {
+                                    singleObserver(.failure(commentNetworkError))
+                                } else if let loginError = LoginNetworkError(rawValue: statusCode) {
+                                    singleObserver(.failure(loginError))
+                                } else {
+                                    singleObserver(.failure(CommonNetworkError.unknownError))
+                                }
+                            }
                         }
                     }
             } catch {
-                singleObserver(.failure(error))
+                singleObserver(.failure(CommonNetworkError.unknownError))
             }
             return Disposables.create()
         }
@@ -44,13 +51,20 @@ struct UserManager {
                         switch response.result {
                         case .success(let signUpModel):
                             singleObserver(.success(signUpModel))
-                        case .failure(let AFError):
-                            print(response.response?.statusCode)
-                            singleObserver(.failure(AFError))
+                        case .failure(_):
+                            if let statusCode = response.response?.statusCode {
+                                if let commonNetworkError = CommonNetworkError(rawValue: statusCode) {
+                                    singleObserver(.failure(commonNetworkError))
+                                } else if let signUpError = SignUpNetworkError(rawValue: statusCode) {
+                                    singleObserver(.failure(signUpError))
+                                } else {
+                                    singleObserver(.failure(CommonNetworkError.unknownError))
+                                }
+                            }
                         }
                     }
             } catch {
-                singleObserver(.failure(error))
+                singleObserver(.failure(CommonNetworkError.unknownError))
             }
             return Disposables.create()
         }
@@ -67,13 +81,20 @@ struct UserManager {
                         switch response.result {
                         case .success(let withdrawalModel):
                             singleObserver(.success(withdrawalModel))
-                        case .failure(let AFError):
-                            print(response.response?.statusCode)
-                            singleObserver(.failure(AFError))
+                        case .failure(_):
+                            if let statusCode = response.response?.statusCode {
+                                if let commonNetworkError = CommonNetworkError(rawValue: statusCode) {
+                                    singleObserver(.failure(commonNetworkError))
+                                } else if let withdralError = WithdralNetworkError(rawValue: statusCode) {
+                                    singleObserver(.failure(withdralError))
+                                } else {
+                                    singleObserver(.failure(CommonNetworkError.unknownError))
+                                }
+                            }
                         }
                     }
             } catch {
-                singleObserver(.failure(error))
+                singleObserver(.failure(CommonNetworkError.unknownError))
             }
             return Disposables.create()
         }
@@ -89,19 +110,25 @@ struct UserManager {
                     .responseDecodable(of: ValidateEmailModel.self) { response in
                         switch response.result {
                         case .success(let withdrawalModel):
-                            print(response.response?.statusCode)
                             if response.response?.statusCode == 200 {
                                 singleObserver(.success(ValidateEmailModel(message: "200")))
                             } else {
                                 singleObserver(.success(withdrawalModel))
                             }
-                        case .failure(let AFError):
-                            print(response.response?.statusCode)
-                            singleObserver(.failure(AFError))
+                        case .failure(_):
+                            if let statusCode = response.response?.statusCode {
+                                if let commonNetworkError = CommonNetworkError(rawValue: statusCode) {
+                                    singleObserver(.failure(commonNetworkError))
+                                } else if let validateEmailError = ValidateEmailNetworkError(rawValue: statusCode) {
+                                    singleObserver(.failure(validateEmailError))
+                                } else {
+                                    singleObserver(.failure(CommonNetworkError.unknownError))
+                                }
+                            }
                         }
                     }
             } catch {
-                singleObserver(.failure(error))
+                singleObserver(.failure(CommonNetworkError.unknownError))
             }
             return Disposables.create()
         }

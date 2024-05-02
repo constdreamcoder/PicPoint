@@ -158,6 +158,10 @@ final class AddPostViewModel: NSObject, ViewModelType {
             }
             .flatMap { uploadImagesBody in
                 PostManager.uploadImages(body: uploadImagesBody)
+                    .catch { error in
+                        print(error.errorCode, error.errorDesc)
+                        return Single<ImageFileListModel>.never()
+                    }
             }
             .map { uploadedImageFileList -> [String] in
                 print("이미지 업로드됨")
@@ -185,7 +189,13 @@ final class AddPostViewModel: NSObject, ViewModelType {
                 )
                 return writePostBody
             }
-            .flatMap { PostManager.writePost(body: $0) }
+            .flatMap {
+                PostManager.writePost(body: $0)
+                    .catch { error in
+                        print(error.errorCode, error.errorDesc)
+                        return Single<Post>.never()
+                    }
+            }
             .subscribe(with: self) { owner, post in
                 print("게시글 업로드됨")
                 owner.delegate?.sendNewPost(post)

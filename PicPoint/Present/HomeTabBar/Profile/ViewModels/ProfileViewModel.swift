@@ -72,6 +72,10 @@ final class ProfileViewModel: ViewModelType {
         otherProfileTrigger
             .flatMap {
                 ProfileManager.fetchOtherProfile(params: FetchOtherProfileParams(userId: $0))
+                    .catch { error in
+                        print(error.errorCode, error.errorDesc)
+                        return Single<FetchOtherProfileModel>.never()
+                    }
             }
             .map { otherProfile in
                 return FetchMyProfileModel(
@@ -96,6 +100,10 @@ final class ProfileViewModel: ViewModelType {
         myProfileTrigger
             .flatMap { _ in
                 ProfileManager.fetchMyProfile()
+                    .catch { error in
+                        print(error.errorCode, error.errorDesc)
+                        return Single<FetchMyProfileModel>.never()
+                    }
             }
             .subscribe(with: self) { owner, myProfileModel in
                 owner.myProfile.accept(myProfileModel)

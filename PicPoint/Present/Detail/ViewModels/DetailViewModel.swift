@@ -69,6 +69,10 @@ final class DetailViewModel: ViewModelType {
             }
             .flatMap { fetchPostWithHashTagQuery in
                 PostManager.FetchPostWithHashTag(query: fetchPostWithHashTagQuery)
+                    .catch { error in
+                        print(error.errorCode, error.errorDesc)
+                        return Single<[Post]>.never()
+                    }
             }
             .subscribe(with: self) { owner, postList in
                 let separatedLocationStrings = post.content1?.components(separatedBy: "/")
@@ -139,6 +143,10 @@ final class DetailViewModel: ViewModelType {
                     params: LikeParams(postId: $0),
                     body: LikeBody(like_status: true)
                 )
+                .catch { error in
+                    print(error.errorCode, error.errorDesc)
+                    return Single<String>.never()
+                }
             }
             .withLatestFrom(postRelay)
             .map { post -> PostLikeType? in
@@ -162,6 +170,10 @@ final class DetailViewModel: ViewModelType {
                     params: LikeParams(postId: $0),
                     body: LikeBody(like_status: false)
                 )
+                .catch { error in
+                    print(error.errorCode, error.errorDesc)
+                    return Single<String>.never()
+                }
             }
             .withLatestFrom(postRelay)
             .map { post -> PostLikeType? in
@@ -215,6 +227,10 @@ final class DetailViewModel: ViewModelType {
                 )
                 UserDefaults.standard.followings.append(newFollowing)
                 return FollowManager.follow(params: FollowParams(userId: $0.creator.userId))
+                    .catch { error in
+                        print(error.errorCode, error.errorDesc)
+                        return Single<String>.never()
+                    }
             }
             .subscribe(with: self) { owner, _ in
                 owner.followButtonTapTriggerRelay.accept(true)
@@ -225,6 +241,10 @@ final class DetailViewModel: ViewModelType {
             .flatMap { post in
                 UserDefaults.standard.followings.removeAll(where: { $0.userId == post.creator.userId })
                 return FollowManager.unfollow(params: UnFollowParams(userId: post.creator.userId))
+                    .catch { error in
+                        print(error.errorCode, error.errorDesc)
+                        return Single<String>.never()
+                    }
             }
             .subscribe(with: self) { owner, _ in
                 owner.followButtonTapTriggerRelay.accept(false)
@@ -258,6 +278,10 @@ final class DetailViewModel: ViewModelType {
             }
             .flatMap { postId in
                 PostManager.fetchPost(params: FetchPostParams(postId: postId))
+                    .catch { error in
+                        print(error.errorCode, error.errorDesc)
+                        return Single<Post>.never()
+                    }
             }
             .subscribe { itemTapTrigger.accept($0) }
             .disposed(by: disposeBag)
