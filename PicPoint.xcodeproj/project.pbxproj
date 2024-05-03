@@ -157,6 +157,8 @@
 		00DD46872BE27A86001B3ADA /* NotificationCenter+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00DD46862BE27A86001B3ADA /* NotificationCenter+Extensions.swift */; };
 		00DD468A2BE2AD0A001B3ADA /* FetchOtherProfileParams.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00DD46892BE2AD0A001B3ADA /* FetchOtherProfileParams.swift */; };
 		00DD468C2BE2ADCC001B3ADA /* FetchOtherProfileModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00DD468B2BE2ADCC001B3ADA /* FetchOtherProfileModel.swift */; };
+		00E1D9422BE4DFB500501328 /* NetworkMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E1D9412BE4DFB500501328 /* NetworkMonitor.swift */; };
+		00E1D9442BE4E1D100501328 /* NoNetworkView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E1D9432BE4E1D100501328 /* NoNetworkView.swift */; };
 		00E414EA2BD915AF00C76BE4 /* UploadImagesBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E414E92BD915AF00C76BE4 /* UploadImagesBody.swift */; };
 		00E414EC2BD9186400C76BE4 /* ImageFileListModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E414EB2BD9186400C76BE4 /* ImageFileListModel.swift */; };
 		00E414EE2BD91CAD00C76BE4 /* NSObject+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E414ED2BD91CAD00C76BE4 /* NSObject+Extensions.swift */; };
@@ -368,6 +370,8 @@
 		00DD46862BE27A86001B3ADA /* NotificationCenter+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NotificationCenter+Extensions.swift"; sourceTree = "<group>"; };
 		00DD46892BE2AD0A001B3ADA /* FetchOtherProfileParams.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchOtherProfileParams.swift; sourceTree = "<group>"; };
 		00DD468B2BE2ADCC001B3ADA /* FetchOtherProfileModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchOtherProfileModel.swift; sourceTree = "<group>"; };
+		00E1D9412BE4DFB500501328 /* NetworkMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkMonitor.swift; sourceTree = "<group>"; };
+		00E1D9432BE4E1D100501328 /* NoNetworkView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoNetworkView.swift; sourceTree = "<group>"; };
 		00E414E92BD915AF00C76BE4 /* UploadImagesBody.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadImagesBody.swift; sourceTree = "<group>"; };
 		00E414EB2BD9186400C76BE4 /* ImageFileListModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageFileListModel.swift; sourceTree = "<group>"; };
 		00E414ED2BD91CAD00C76BE4 /* NSObject+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSObject+Extensions.swift"; sourceTree = "<group>"; };
@@ -1026,6 +1030,7 @@
 				000AD2522BD234C800FC7768 /* CusomView */,
 				0049D87E2BC96B4800F59852 /* AppDelegate.swift */,
 				0049D8802BC96B4800F59852 /* SceneDelegate.swift */,
+				00E1D9432BE4E1D100501328 /* NoNetworkView.swift */,
 				0049D8872BC96B4900F59852 /* Assets.xcassets */,
 				0049D8892BC96B4900F59852 /* LaunchScreen.storyboard */,
 				0049D88C2BC96B4900F59852 /* Info.plist */,
@@ -1502,6 +1507,7 @@
 		00F65D462BCA1B3E0027A897 /* Network */ = {
 			isa = PBXGroup;
 			children = (
+				00E1D9412BE4DFB500501328 /* NetworkMonitor.swift */,
 				00B7C3F22BCA5C42009AC333 /* TargetType.swift */,
 				00B7C4052BCA68DB009AC333 /* HTTPHeader.swift */,
 				00FE92AD2BCE54D700554D0F /* Routers */,
@@ -1765,6 +1771,7 @@
 				002720A32BDFD702004ADC5C /* FollowManager.swift in Sources */,
 				00B67D822BD8102F0097ACDE /* RecommendedVisitTimeViewController.swift in Sources */,
 				00B67D8D2BD82ACB0097ACDE /* SelectLocationViewController.swift in Sources */,
+				00E1D9422BE4DFB500501328 /* NetworkMonitor.swift in Sources */,
 				00AFF60B2BCD2CA5006D319A /* HomeCollectionViewCellIconView.swift in Sources */,
 				00EA276E2BDE389600EE3F9C /* PasswordSignUpViewModel.swift in Sources */,
 				0002C1242BD985FB00AE36EC /* DetailLocationCollectionReusableView.swift in Sources */,
@@ -1823,6 +1830,7 @@
 				00760E552BD531BB00741C40 /* VisitDateTableViewCell.swift in Sources */,
 				00B7C40E2BCA6A93009AC333 /* ViewModelType.swift in Sources */,
 				00E4D9C92BE3AFA900C641BE /* LikeUnlikePostNetworkError.swift in Sources */,
+				00E1D9442BE4E1D100501328 /* NoNetworkView.swift in Sources */,
 				00EA277C2BDE479400EE3F9C /* CustomBottomButton.swift in Sources */,
 				00B67D8A2BD827160097ACDE /* DismissButton.swift in Sources */,
 				0035402B2BD0212800A71415 /* String+Extensions.swift in Sources */,
