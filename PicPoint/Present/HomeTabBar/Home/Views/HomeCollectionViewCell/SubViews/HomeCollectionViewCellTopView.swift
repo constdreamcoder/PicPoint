@@ -23,7 +23,7 @@ final class HomeCollectionViewCellTopView: UIView {
     let subTitleLabel: UILabel = {
         let label = UILabel()
         label.text = "서울시 창동"
-        label.textColor = .lightGray
+        label.textColor = .darkGray
         label.font = .systemFont(ofSize: 14.0)
         return label
     }()

@@ -24,7 +24,7 @@ final class HomeCollectionViewCell: BaseCollectionViewCell {
         
         topView.profileImageView.profileImageViewWidth = 40
         topView.profileImageView.isUserInteractionEnabled = true
-        
+                
         let rightButton = topView.rightButton
         rightButton.tintColor = .black
         let image = UIImage(systemName: "ellipsis")
@@ -86,6 +86,8 @@ final class HomeCollectionViewCell: BaseCollectionViewCell {
             photoImageView.kf.setImageWithAuthHeaders(with: url, placeholder: placeholderImage)
         }
         
+        topView.subTitleLabel.text = element.post.content1?.components(separatedBy: "/")[3]
+        
         iconView.heartStackView.label.text = "\(element.likes.count)"
         iconView.commentStackView.label.text = "\(element.comments.count)"
         bottomView.titleLabel.text = element.post.title
@@ -96,6 +98,12 @@ final class HomeCollectionViewCell: BaseCollectionViewCell {
             updateHeartButtonUI(heartButton, isLike: true)
         } else {
             updateHeartButtonUI(heartButton, isLike: false)
+        }
+        
+        if UserDefaults.standard.userId == element.post.creator.userId {
+            topView.rightButton.isHidden = false
+        } else {
+            topView.rightButton.isHidden = true
         }
     }
 }

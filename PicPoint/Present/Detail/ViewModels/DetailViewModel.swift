@@ -219,13 +219,18 @@ final class DetailViewModel: ViewModelType {
             .disposed(by: disposeBag)
         
         followTrigger
+            .map { post in
+                if !UserDefaults.standard.followings.contains(where: { $0.userId == post.creator.userId }) {
+                    let newFollowing = Following(
+                        userId: post.creator.userId,
+                        nick: post.creator.nick,
+                        profileImage: post.creator.profileImage
+                    )
+                    UserDefaults.standard.followings.append(newFollowing)
+                }
+                return post
+            }
             .flatMap {
-                let newFollowing = Following(
-                    userId: $0.creator.userId,
-                    nick: $0.creator.nick,
-                    profileImage: $0.creator.profileImage
-                )
-                UserDefaults.standard.followings.append(newFollowing)
                 return FollowManager.follow(params: FollowParams(userId: $0.creator.userId))
                     .catch { error in
                         print(error.errorCode, error.errorDesc)
@@ -238,15 +243,15 @@ final class DetailViewModel: ViewModelType {
             .disposed(by: disposeBag)
         
         unFollowTrigger
-            .flatMap { post in
-                UserDefaults.standard.followings.removeAll(where: { $0.userId == post.creator.userId })
-                return FollowManager.unfollow(params: UnFollowParams(userId: post.creator.userId))
+            .flatMap {
+                return FollowManager.unfollow(params: UnFollowParams(userId: $0.creator.userId))
                     .catch { error in
                         print(error.errorCode, error.errorDesc)
                         return Single<String>.never()
                     }
             }
-            .subscribe(with: self) { owner, _ in
+            .subscribe(with: self) { owner, unfollowedUserId in
+                UserDefaults.standard.followings.removeAll(where: { $0.userId == unfollowedUserId })
                 owner.followButtonTapTriggerRelay.accept(false)
             }
             .disposed(by: disposeBag)

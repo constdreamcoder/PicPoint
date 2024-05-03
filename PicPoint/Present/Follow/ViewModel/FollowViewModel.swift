@@ -14,12 +14,13 @@ protocol FollowViewModelForFollowersDelegate: AnyObject {
 }
 
 protocol FollowViewModelForFollowingsDelegate: AnyObject {
-    func sendFollowingsData(_ followings: [Following])
+    func sendFollowingsData(_ followings: [Following], userId: String)
 }
 
 final class FollowViewModel: ViewModelType {
     var disposeBag = DisposeBag()
     
+    private let myProfile = BehaviorSubject<FetchMyProfileModel?>(value: nil)
     private let followersSubject = BehaviorSubject<[Follower]>(value: [])
     private let followingsSubject = BehaviorSubject<[Following]>(value: [])
     private let followingsCountRelay = BehaviorRelay<Int>(value: 0)
@@ -36,14 +37,37 @@ final class FollowViewModel: ViewModelType {
         let followingsCount: Driver<Int>
     }
     
+    init(myProfile: FetchMyProfileModel?) {
+        guard let myProfile else { return }
+        Observable.just(myProfile)
+            .subscribe(with: self) { owner, myProfile in
+                if myProfile.userId == UserDefaults.standard.userId {
+                    let userDefaults = UserDefaults.standard
+                    owner.followersSubject.onNext(userDefaults.followers)
+                    owner.followingsSubject.onNext(userDefaults.followings)
+                    owner.followingsCountRelay.accept(userDefaults.followings.count)
+                } else {
+                    owner.followersSubject.onNext(myProfile.followers)
+                    owner.followingsSubject.onNext(myProfile.followings)
+                    owner.followingsCountRelay.accept(myProfile.followings.count)
+                }
+                owner.myProfile.onNext(myProfile)
+            }
+            .disposed(by: disposeBag)
+    }
+    
     func transform(input: Input) -> Output {
         
         input.viewWillAppear
-            .bind(with: self) { owner, _ in
-                let userDefaults = UserDefaults.standard
-                owner.followersSubject.onNext(userDefaults.followers)
-                owner.followingsSubject.onNext(userDefaults.followings)
-                owner.followingsCountRelay.accept(userDefaults.followings.count)
+            .withLatestFrom(myProfile)
+            .bind(with: self) { owner, myProfile in
+                guard let myProfile else { return }
+                if UserDefaults.standard.userId == myProfile.userId {
+                    let userDefaults = UserDefaults.standard
+                    owner.followersSubject.onNext(userDefaults.followers)
+                    owner.followingsSubject.onNext(userDefaults.followings)
+                    owner.followingsCountRelay.accept(userDefaults.followings.count)
+                }
             }
             .disposed(by: disposeBag)
         
@@ -55,8 +79,9 @@ final class FollowViewModel: ViewModelType {
             }
         
         followingsSubject
-            .subscribe(with: self) { owner , followings in
-                owner.delegateForFollowing?.sendFollowingsData(followings)
+            .withLatestFrom(myProfile) { ($0, $1?.userId ?? "") }
+            .subscribe(with: self) { owner , value in
+                owner.delegateForFollowing?.sendFollowingsData(value.0, userId: value.1)
             }
             .disposed(by: disposeBag)
     
@@ -70,10 +95,11 @@ final class FollowViewModel: ViewModelType {
 
 extension FollowViewModel: FollowingViewModelDelegate {
     func sendUpdatedFollowingsCount(_ followingsCount: Int) {
-                
+        print("count:\(followingsCount)")
         Observable<Int>.just(followingsCount)
             .subscribe(with: self) { owner, followingsCount in
                 owner.followingsCountRelay.accept(followingsCount)
+                print("send!!")
             }
             .disposed(by: disposeBag)
     }

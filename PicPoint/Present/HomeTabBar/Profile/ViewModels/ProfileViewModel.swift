@@ -37,7 +37,7 @@ final class ProfileViewModel: ViewModelType {
         let sections: Driver<[SectionModelWrapper]>
         let updateContentSize: Driver<CGFloat>
         let editProfileButtonTapTrigger: Driver<FetchMyProfileModel?>
-        let moveToFollowTapTrigger: Driver<Void>
+        let moveToFollowTapTrigger: Driver<FetchMyProfileModel?>
         let myProfile: Driver<FetchMyProfileModel?>
         let moveToDetailVCTrigger: Driver<Post?>
     }
@@ -127,19 +127,27 @@ final class ProfileViewModel: ViewModelType {
             .disposed(by: disposeBag)
         
         input.viewWillAppear
-            .subscribe(with: self) { owner, _ in
-                owner.updateFollowingsCountRelay.accept(UserDefaults.standard.followings.count)
+            .withLatestFrom(userIdSubject)
+            .subscribe(with: self) { owner, userId in
+                if userId == "" || userId == UserDefaults.standard.userId {
+                    owner.updateFollowingsCountRelay.accept(UserDefaults.standard.followings.count)
+                }
             }
             .disposed(by: disposeBag)
         
         followTrigger
+            .map { fetchMyProfileModel in
+                if !UserDefaults.standard.followings.contains(where: { $0.userId == fetchMyProfileModel.userId }) {
+                    let newFollowing = Following(
+                        userId: fetchMyProfileModel.userId,
+                        nick: fetchMyProfileModel.nick,
+                        profileImage: fetchMyProfileModel.profileImage
+                    )
+                    UserDefaults.standard.followings.append(newFollowing)
+                }
+                return fetchMyProfileModel
+            }
             .flatMap {
-                let newFollowing = Following(
-                    userId: $0.userId,
-                    nick: $0.nick,
-                    profileImage: $0.profileImage
-                )
-                UserDefaults.standard.followings.append(newFollowing)
                 return FollowManager.follow(params: FollowParams(userId: $0.userId))
                     .catch { error in
                         print(error.errorCode, error.errorDesc)
@@ -152,15 +160,15 @@ final class ProfileViewModel: ViewModelType {
             .disposed(by: disposeBag)
         
         unFollowTrigger
-            .flatMap { profile in
-                UserDefaults.standard.followings.removeAll(where: { $0.userId == profile.userId })
-                return FollowManager.unfollow(params: UnFollowParams(userId: profile.userId))
+            .flatMap {
+                return FollowManager.unfollow(params: UnFollowParams(userId: $0.userId))
                     .catch { error in
                         print(error.errorCode, error.errorDesc)
                         return Single<String>.never()
                     }
             }
             .subscribe(with: self) { owner, unfollowedUserId in
+                UserDefaults.standard.followings.removeAll(where: { $0.userId == unfollowedUserId })
                 otherProfileTrigger.onNext(unfollowedUserId)
             }
             .disposed(by: disposeBag)
@@ -181,11 +189,14 @@ final class ProfileViewModel: ViewModelType {
             }
             .disposed(by: disposeBag)
         
+        let moveToFollowTapTrigger = moveToFollowTap
+            .withLatestFrom(myProfile)
+        
         return Output(
             sections: sectionsObservable.asDriver(onErrorJustReturn: []),
             updateContentSize: updateContentSizeRelay.asDriver(onErrorJustReturn: 0),
             editProfileButtonTapTrigger: editMyProfileTrigger.asDriver(onErrorJustReturn: nil),
-            moveToFollowTapTrigger: moveToFollowTap.asDriver(onErrorJustReturn: ()),
+            moveToFollowTapTrigger: moveToFollowTapTrigger.asDriver(onErrorJustReturn: nil),
             myProfile: myProfile.asDriver(onErrorJustReturn: nil),
             moveToDetailVCTrigger: postForMovingToDetailVCRelay.asDriver(onErrorJustReturn: nil)
         )

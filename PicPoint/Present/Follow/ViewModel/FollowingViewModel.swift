@@ -23,6 +23,7 @@ final class FollowingViewModel: ViewModelType {
     
     let selectedFollowingSubject = PublishSubject<FollowingCellType>()
     
+    private let myProfileUserIdRelay = BehaviorRelay<String>(value: "")
     private let followingsRelay = BehaviorRelay<[FollowingCellType]>(value: [])
     private let followersRelay = BehaviorRelay<[Follower]>(value: [])
 
@@ -40,7 +41,9 @@ final class FollowingViewModel: ViewModelType {
         
         followTrigger
             .map { following in
-                UserDefaults.standard.followings.append(following)
+                if !UserDefaults.standard.followings.contains(where: { $0.userId == following.userId }) {
+                    UserDefaults.standard.followings.append(following)
+                }
                 return following
             }
             .flatMap {
@@ -59,8 +62,9 @@ final class FollowingViewModel: ViewModelType {
                     }
                 }
             }
-            .subscribe(with: self) { owner, updatedFollowings in
-                owner.followingsRelay.accept(updatedFollowings)
+            .withLatestFrom(myProfileUserIdRelay) { ($0, $1) }
+            .subscribe(with: self) { owner, value in
+                owner.followingsRelay.accept(value.0)
                 
                 let followingsCount = UserDefaults.standard.followings.count
                 owner.delegate?.sendUpdatedFollowingsCount(followingsCount)
@@ -85,8 +89,9 @@ final class FollowingViewModel: ViewModelType {
                     }
                 }
             }
-            .subscribe(with: self) { owner, updatedFollowings in
-                owner.followingsRelay.accept(updatedFollowings)
+            .withLatestFrom(myProfileUserIdRelay) { ($0, $1) }
+            .subscribe(with: self) { owner, value in
+                owner.followingsRelay.accept(value.0)
                 
                 let followingsCount = UserDefaults.standard.followings.count
                 owner.delegate?.sendUpdatedFollowingsCount(followingsCount)
@@ -94,8 +99,9 @@ final class FollowingViewModel: ViewModelType {
             .disposed(by: disposeBag)
             
         selectedFollowingSubject
-            .debounce(.seconds(1), scheduler: MainScheduler.instance)
+            .debounce(.milliseconds(500), scheduler: MainScheduler.instance)
             .subscribe { following, followType in
+                print(following, followType)
                 switch followType {
                 case .following:
                     unFollowTrigger.onNext(following)
@@ -110,17 +116,28 @@ final class FollowingViewModel: ViewModelType {
             followings: followingsRelay.asDriver()
         )
     }
-    
 }
 
 extension FollowingViewModel: FollowViewModelForFollowingsDelegate {
     
-    func sendFollowingsData(_ followings: [Following]) {
+    func sendFollowingsData(_ followings: [Following], userId: String) {
+        
+        Observable.just(userId)
+            .subscribe(with: self) { owner, userId in
+                owner.myProfileUserIdRelay.accept(userId)
+            }
+            .disposed(by: disposeBag)
         
         Observable<[Following]>.just(followings)
             .map { followings -> [FollowingCellType] in
-                followings.map { following in
-                    return (following, .following)
+                return followings.map { following in
+                    if UserDefaults.standard.followings.contains(where: {
+                        return $0.userId == following.userId
+                    }) {
+                        return (following, .following)
+                    } else {
+                        return (following, .unfollowing)
+                    }
                 }
             }
             .subscribe(with: self) { owner, followings in

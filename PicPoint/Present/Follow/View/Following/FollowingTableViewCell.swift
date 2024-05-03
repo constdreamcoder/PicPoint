@@ -37,7 +37,7 @@ final class FollowingTableViewCell: CustomFollowTableViewCell {
         }
         
         profileContainerView.userNicknameLabel.text = followingCellData.following.nick
-
+        print("followingCellData", followingCellData)
         updateFollowButtonUI(
             profileContainerView.rightButton,
             with: followingCellData.followType == .following ? true : false

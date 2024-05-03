@@ -29,9 +29,7 @@ final class FollowerViewModel: ViewModelType {
 }
 
 extension FollowerViewModel: FollowViewModelForFollowersDelegate {
-    func sendFollowersData(_ followers: [Follower]) {
-        print("followers", followers)
-        
+    func sendFollowersData(_ followers: [Follower]) {        
         Observable<[Follower]>.just(followers)
             .subscribe(with: self) { owner, followers in
                 owner.followersRelay.accept(followers)

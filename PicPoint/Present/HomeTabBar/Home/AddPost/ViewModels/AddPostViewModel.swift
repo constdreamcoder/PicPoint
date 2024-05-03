@@ -182,7 +182,7 @@ final class AddPostViewModel: NSObject, ViewModelType {
                 let writePostBody = WritePostBody(
                     title: elementsForRegisteringPost.titleText,
                     content: elementsForRegisteringPost.contentText,
-                    content1: "\(placePoint.latitude)/\(placePoint.longitude)/\(addressInfos.fullAddress.trimmingCharacters(in: .whitespacesAndNewlines))/\(addressInfos.shortAddress.trimmingCharacters(in: .whitespacesAndNewlines))",
+                    content1: "\(placePoint.latitude)/\(placePoint.longitude)/\(addressInfos.fullAddress)/\(addressInfos.shortAddress)",
                     content2: "\(visitDate)/\(recommendedVisitTime)",
                     product_id: APIKeys.productId,
                     files: uploadedImageFiles
