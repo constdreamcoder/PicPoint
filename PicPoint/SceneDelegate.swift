@@ -13,17 +13,18 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     var window: UIWindow?
     var errorWindow: UIWindow?
 
-    var networkMonitor: NetworkMonitor = NetworkMonitor()
+    var networkMonitor = NetworkMonitor()
     
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         
         networkMonitor.startMonitoring(statusUpdateHandler: { [weak self] connectionStatus in
+            guard let self else { return }
             switch connectionStatus {
             case .satisfied:
-                self?.removeNetworkErrorWindow()
+                removeNetworkErrorWindow()
                 print("dismiss networkError View if is present")
             case .unsatisfied:
-                self?.loadNetworkErrorWindow(on: scene)
+                loadNetworkErrorWindow(on: scene)
                 print("No Internet!! show network Error View")
             default:
                 break

@@ -9,7 +9,6 @@ import UIKit
 
 extension UIView {
     func updateFollowButtonUI(_ button: UIButton, with followingStatus: Bool) {
-        
         if followingStatus {
             button.configuration?.baseBackgroundColor = .white
             button.configuration?.baseForegroundColor = .black
@@ -24,6 +23,26 @@ extension UIView {
             button.layer.borderWidth = 0.0
             button.layer.borderColor = UIColor.black.cgColor
             button.layer.cornerRadius = 16
+        }
+    }
+    
+    func updateProfileFollowButtonUI(_ button: CustomProfileButton, with followingStatus: Bool) {
+        if followingStatus {
+            button.setTitle("언팔로우", for: .normal)
+            button.backgroundColor = .white
+            button.setTitleColor(.black, for: .normal)
+            button.layer.borderWidth = 1.0
+            button.layer.borderColor = UIColor.black.cgColor
+            button.layer.cornerRadius = 16
+            button.imageType = .following
+        } else {
+            button.setTitle("팔로우", for: .normal)
+            button.backgroundColor = .black
+            button.setTitleColor(.white, for: .normal)
+            button.layer.borderWidth = 0.0
+            button.layer.borderColor = UIColor.black.cgColor
+            button.layer.cornerRadius = 16
+            button.imageType = .unfollowing
         }
     }
 }

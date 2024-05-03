@@ -35,7 +35,6 @@ final class ProfileViewController: BaseViewController {
         if indexPath.section == 0 {
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ProfileCollectionViewCell.identifier, for: indexPath) as? ProfileCollectionViewCell else { return UICollectionViewCell() }
             
-//            let item
             cell.profileViewModel = viewModel
             cell.bind()
             
@@ -170,8 +169,17 @@ extension ProfileViewController: UIViewControllerConfiguration {
             }
             .disposed(by: disposeBag)
         
-        output.userNickname
-            .drive(navigationItem.rx.backButtonTitle)
+        output.myProfile
+            .drive(with: self) { owner, myProfile in
+                guard let myProfile else { return }
+                owner.navigationItem.backButtonTitle = myProfile.nick
+                
+                if UserDefaults.standard.userId == myProfile.userId  {
+                    owner.navigationItem.rightBarButtonItem?.isHidden = false
+                } else {
+                    owner.navigationItem.rightBarButtonItem?.isHidden = true
+                }
+            }
             .disposed(by: disposeBag)
         
         output.moveToDetailVCTrigger

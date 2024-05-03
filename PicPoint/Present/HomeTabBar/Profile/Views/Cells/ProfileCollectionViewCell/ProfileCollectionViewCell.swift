@@ -42,13 +42,9 @@ final class ProfileCollectionViewCell: BaseCollectionViewCell {
         return stackView
     }()
     
-    let bottomButton: UIButton = {
-        let button = UIButton()
+    let bottomButton: CustomProfileButton = {
+        let button = CustomProfileButton()
         button.setTitle("프로필 수정", for: .normal)
-        button.setTitleColor(.white, for: .normal)
-        button.titleLabel?.font = .systemFont(ofSize: 20.0, weight: .semibold)
-        button.backgroundColor = .black
-        button.layer.cornerRadius = 16
         return button
     }()
     
@@ -77,7 +73,6 @@ final class ProfileCollectionViewCell: BaseCollectionViewCell {
     deinit {
         followerFollowingStackView.removeGestureRecognizer(moveToFollowTap)
     }
-    
 }
 
 extension ProfileCollectionViewCell {
@@ -133,6 +128,17 @@ extension ProfileCollectionViewCell {
                 owner.nicknameLabel.text = myProfile.nick
                 owner.followerFollowingStackView.followerNumberLabel.text = myProfile.followers.count.description
                 owner.followerFollowingStackView.followingNumberLabel.text = myProfile.followings.count.description
+                
+                if UserDefaults.standard.userId == myProfile.userId {
+                    owner.bottomButton.setTitle("프로필 수정", for: .normal)
+                    owner.bottomButton.imageType = .myProfile
+                } else {
+                    if myProfile.followers.contains(where: { $0.userId == UserDefaults.standard.userId}) {
+                        owner.updateProfileFollowButtonUI(owner.bottomButton, with: true)
+                    } else {
+                        owner.updateProfileFollowButtonUI(owner.bottomButton, with: false)
+                    }
+                }
             }
             .disposed(by: disposeBag)
         
@@ -145,7 +151,7 @@ extension ProfileCollectionViewCell {
         bottomButton.rx.tap
             .bind(with: self) { owner, _ in
                 guard let profileViewModel = owner.profileViewModel else { return }
-                profileViewModel.editProfileButtonTap.accept(())
+                profileViewModel.editProfileButtonTap.accept(owner.bottomButton.imageType)
             }
             .disposed(by: disposeBag)
         

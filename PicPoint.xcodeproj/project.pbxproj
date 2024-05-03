@@ -159,6 +159,7 @@
 		00DD468C2BE2ADCC001B3ADA /* FetchOtherProfileModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00DD468B2BE2ADCC001B3ADA /* FetchOtherProfileModel.swift */; };
 		00E1D9422BE4DFB500501328 /* NetworkMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E1D9412BE4DFB500501328 /* NetworkMonitor.swift */; };
 		00E1D9442BE4E1D100501328 /* NoNetworkView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E1D9432BE4E1D100501328 /* NoNetworkView.swift */; };
+		00E1D9492BE4F33A00501328 /* CustomProfileButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E1D9482BE4F33A00501328 /* CustomProfileButton.swift */; };
 		00E414EA2BD915AF00C76BE4 /* UploadImagesBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E414E92BD915AF00C76BE4 /* UploadImagesBody.swift */; };
 		00E414EC2BD9186400C76BE4 /* ImageFileListModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E414EB2BD9186400C76BE4 /* ImageFileListModel.swift */; };
 		00E414EE2BD91CAD00C76BE4 /* NSObject+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E414ED2BD91CAD00C76BE4 /* NSObject+Extensions.swift */; };
@@ -372,6 +373,7 @@
 		00DD468B2BE2ADCC001B3ADA /* FetchOtherProfileModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchOtherProfileModel.swift; sourceTree = "<group>"; };
 		00E1D9412BE4DFB500501328 /* NetworkMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkMonitor.swift; sourceTree = "<group>"; };
 		00E1D9432BE4E1D100501328 /* NoNetworkView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoNetworkView.swift; sourceTree = "<group>"; };
+		00E1D9482BE4F33A00501328 /* CustomProfileButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomProfileButton.swift; sourceTree = "<group>"; };
 		00E414E92BD915AF00C76BE4 /* UploadImagesBody.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadImagesBody.swift; sourceTree = "<group>"; };
 		00E414EB2BD9186400C76BE4 /* ImageFileListModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageFileListModel.swift; sourceTree = "<group>"; };
 		00E414ED2BD91CAD00C76BE4 /* NSObject+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSObject+Extensions.swift"; sourceTree = "<group>"; };
@@ -507,6 +509,7 @@
 				0010414A2BDB25D400E5FDA1 /* PostCustomView.swift */,
 				003C82C72BDCECFE003315E1 /* CustomInputView.swift */,
 				00EA277B2BDE479400EE3F9C /* CustomBottomButton.swift */,
+				00E1D9482BE4F33A00501328 /* CustomProfileButton.swift */,
 			);
 			path = CusomView;
 			sourceTree = "<group>";
@@ -1851,6 +1854,7 @@
 				000AD2672BD2849900FC7768 /* SeparatorView.swift in Sources */,
 				00B67D842BD810570097ACDE /* RecommendedVisitTimeViewModel.swift in Sources */,
 				001253F82BD415A90065F1E6 /* WriteCommentParams.swift in Sources */,
+				00E1D9492BE4F33A00501328 /* CustomProfileButton.swift in Sources */,
 				00E4D9AC2BE3A69B00C641BE /* SignUpNetworkError.swift in Sources */,
 				001253E52BD373E50065F1E6 /* CommentViewModel.swift in Sources */,
 				00DD46852BE268A3001B3ADA /* FollowType.swift in Sources */,

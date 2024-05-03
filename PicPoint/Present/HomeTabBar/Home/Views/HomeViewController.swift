@@ -170,11 +170,15 @@ extension HomeViewController: UIViewControllerConfiguration {
             }
             .disposed(by: disposeBag)
         
-        output.moveToOtherProfileTrigger
+        output.moveToProfileTrigger
             .drive(with: self) { owner, userId in
-                let profileVM = ProfileViewModel(userId)
-                let profileVC = ProfileViewController(profileViewModel: profileVM)
-                owner.navigationController?.pushViewController(profileVC, animated: true)
+                if UserDefaults.standard.userId == userId {
+                    owner.tabBarController?.selectedIndex = 1
+                } else {
+                    let profileVM = ProfileViewModel(userId)
+                    let profileVC = ProfileViewController(profileViewModel: profileVM)
+                    owner.navigationController?.pushViewController(profileVC, animated: true)
+                }
             }
             .disposed(by: disposeBag)
     }

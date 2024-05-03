@@ -41,7 +41,7 @@ final class HomeViewModel: ViewModelType {
         let otherOptionsButtonTapTrigger: Driver<String>
         let postId: Driver<String>
         let postTapTrigger: Driver<Post?>
-        let moveToOtherProfileTrigger: Driver<String>
+        let moveToProfileTrigger: Driver<String>
     }
     
     func transform(input: Input) -> Output {
@@ -189,7 +189,7 @@ final class HomeViewModel: ViewModelType {
             }
             .disposed(by: disposeBag)
         
-        let moveToOtherProfileTrigger = profileImageViewTapSubject
+        let moveToProfileTrigger = profileImageViewTapSubject
             .debounce(.milliseconds(500), scheduler: MainScheduler.instance)
             
         return Output(
@@ -198,7 +198,7 @@ final class HomeViewModel: ViewModelType {
             otherOptionsButtonTapTrigger: otherOptionsButtonTapRelay.asDriver(onErrorJustReturn: ""),
             postId: commentButtonTapRelay.asDriver(onErrorJustReturn: ""), 
             postTapTrigger: postTapTrigger.asDriver(onErrorJustReturn: nil),
-            moveToOtherProfileTrigger: moveToOtherProfileTrigger.asDriver(onErrorJustReturn: "")
+            moveToProfileTrigger: moveToProfileTrigger.asDriver(onErrorJustReturn: "")
         )
     }
 }
