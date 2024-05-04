@@ -15,7 +15,7 @@ enum AccessTokenNetworkError: Int, LocalizedError {
     var errorDescription: String? {
         switch self {
         case .unauthorizedAccessToken:
-            return "\(self.rawValue)/인증할 수 없는 토근입니다."
+            return "\(self.rawValue)/인증할 수 없는 토큰입니다."
         case .forbidden:
             return "\(self.rawValue)/Forbidden"
         case .expiredFreshToken:

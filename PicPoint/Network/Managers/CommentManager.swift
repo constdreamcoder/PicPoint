@@ -15,7 +15,7 @@ struct CommentManager {
             do {
                 let urlRequest = try CommentRouter.writeComment(params: params, body: body).asURLRequest()
                 
-                AF.request(urlRequest)
+                AF.request(urlRequest, interceptor: TokenRefresher())
                     .validate(statusCode: 200...500)
                     .responseDecodable(of: Comment.self) { response in
                         switch response.result {
@@ -45,7 +45,7 @@ struct CommentManager {
             do {
                 let urlRequest = try CommentRouter.deleteComment(params: params).asURLRequest()
                 
-                AF.request(urlRequest)
+                AF.request(urlRequest, interceptor: TokenRefresher())
                     .validate(statusCode: 200...500)
                     .response { response in
                         switch response.result {

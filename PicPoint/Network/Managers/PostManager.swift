@@ -15,7 +15,7 @@ struct PostManager {
             do {
                 let urlRequest = try PostRouter.fetchPosts(query: query).asURLRequest()
                 
-                AF.request(urlRequest)
+                AF.request(urlRequest, interceptor: TokenRefresher())
                     .validate(statusCode: 200...500)
                     .responseDecodable(of: PostListModel.self) { response in
                         switch response.result {
@@ -46,7 +46,7 @@ struct PostManager {
             do {
                 let urlRequest = try PostRouter.fetchPost(params: params).asURLRequest()
                                 
-                AF.request(urlRequest)
+                AF.request(urlRequest, interceptor: TokenRefresher())
                     .validate(statusCode: 200...500)
                     .responseDecodable(of: Post.self) { response in
                         switch response.result {
@@ -77,7 +77,6 @@ struct PostManager {
                 let urlRequest = try PostRouter.uploadImages(body: body).asURLRequest()
                 
                 guard let url = urlRequest.url else { return Disposables.create() }
-                print("url", url)
                 guard let method = urlRequest.method else { return Disposables.create() }
                 
                 let headers = urlRequest.headers
@@ -91,7 +90,7 @@ struct PostManager {
                             mimeType: imageFile.mimeType.rawValue
                         )
                     }
-                }, to: url, method: method, headers: headers)
+                }, to: url, method: method, headers: headers, interceptor: TokenRefresher())
                     .validate(statusCode: 200...500)
                     .responseDecodable(of: ImageFileListModel.self) { response in
                         switch response.result {
@@ -121,7 +120,7 @@ struct PostManager {
             do {
                 let urlRequest = try PostRouter.writePost(body: body).asURLRequest()
                 
-                AF.request(urlRequest)
+                AF.request(urlRequest, interceptor: TokenRefresher())
                     .validate(statusCode: 200...500)
                     .responseDecodable(of: Post.self) { response in
                         switch response.result {
@@ -151,7 +150,7 @@ struct PostManager {
             do {
                 let urlRequest = try PostRouter.deletePost(params: params).asURLRequest()
                 
-                AF.request(urlRequest)
+                AF.request(urlRequest, interceptor: TokenRefresher())
                     .validate(statusCode: 200...500)
                     .response { response in
                         switch response.result {
@@ -181,7 +180,7 @@ struct PostManager {
             do {
                 let urlRequest = try PostRouter.fetchPostWithHashTag(query: query).asURLRequest()
                 
-                AF.request(urlRequest)
+                AF.request(urlRequest, interceptor: TokenRefresher())
                     .validate(statusCode: 200...500)
                     .responseDecodable(of: PostListModel.self) { response in
                         switch response.result {

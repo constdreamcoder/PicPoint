@@ -15,7 +15,7 @@ struct ProfileManager {
             do {
                 let urlRequest = try ProfileRouter.fetchMyProfile.asURLRequest()
                 
-                AF.request(urlRequest)
+                AF.request(urlRequest, interceptor: TokenRefresher())
                     .validate(statusCode: 200...500)
                     .responseDecodable(of: FetchMyProfileModel.self) { response in
                         switch response.result {
@@ -60,7 +60,7 @@ struct ProfileManager {
                         fileName: body.profileImage.name,
                         mimeType: body.profileImage.mimeType.rawValue
                     )
-                }, to: url, method: method, headers: headers)
+                }, to: url, method: method, headers: headers, interceptor: TokenRefresher())
                     .validate(statusCode: 200...500)
                     .responseDecodable(of: FetchMyProfileModel.self) { response in
                         switch response.result {
@@ -90,7 +90,7 @@ struct ProfileManager {
             do {
                 let urlRequest = try ProfileRouter.fetchOtherProfile(params: params).asURLRequest()
                                 
-                AF.request(urlRequest)
+                AF.request(urlRequest, interceptor: TokenRefresher())
                     .validate(statusCode: 200...500)
                     .responseDecodable(of: FetchOtherProfileModel.self) { response in
                         switch response.result {

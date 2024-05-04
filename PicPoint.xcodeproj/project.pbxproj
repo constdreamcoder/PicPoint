@@ -119,6 +119,8 @@
 		009AFAEC2BDA7530003A45BF /* ProfileCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 009AFAEB2BDA7530003A45BF /* ProfileCollectionViewCell.swift */; };
 		009AFAF02BDA75C7003A45BF /* ContentsCollectionHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 009AFAEF2BDA75C7003A45BF /* ContentsCollectionHeaderView.swift */; };
 		009AFAF22BDA7629003A45BF /* ContentsCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 009AFAF12BDA7629003A45BF /* ContentsCollectionViewCell.swift */; };
+		009F07542BE60C3D0048FF15 /* TokenRefresher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 009F07532BE60C3D0048FF15 /* TokenRefresher.swift */; };
+		009F07562BE6174A0048FF15 /* RefreshTokenModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 009F07552BE6174A0048FF15 /* RefreshTokenModel.swift */; };
 		00AA9A792BCC24B90069C55C /* HomeTabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00AA9A782BCC24B90069C55C /* HomeTabBarViewController.swift */; };
 		00AA9A7B2BCC25C90069C55C /* UserDefaults+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00AA9A7A2BCC25C90069C55C /* UserDefaults+Extensions.swift */; };
 		00AFF5FC2BCD1274006D319A /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00AFF5FB2BCD1274006D319A /* HomeViewModel.swift */; };
@@ -333,6 +335,8 @@
 		009AFAEB2BDA7530003A45BF /* ProfileCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileCollectionViewCell.swift; sourceTree = "<group>"; };
 		009AFAEF2BDA75C7003A45BF /* ContentsCollectionHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentsCollectionHeaderView.swift; sourceTree = "<group>"; };
 		009AFAF12BDA7629003A45BF /* ContentsCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentsCollectionViewCell.swift; sourceTree = "<group>"; };
+		009F07532BE60C3D0048FF15 /* TokenRefresher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenRefresher.swift; sourceTree = "<group>"; };
+		009F07552BE6174A0048FF15 /* RefreshTokenModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RefreshTokenModel.swift; sourceTree = "<group>"; };
 		00AA9A782BCC24B90069C55C /* HomeTabBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeTabBarViewController.swift; sourceTree = "<group>"; };
 		00AA9A7A2BCC25C90069C55C /* UserDefaults+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UserDefaults+Extensions.swift"; sourceTree = "<group>"; };
 		00AFF5FB2BCD1274006D319A /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
@@ -1510,6 +1514,7 @@
 		00F65D462BCA1B3E0027A897 /* Network */ = {
 			isa = PBXGroup;
 			children = (
+				009F07532BE60C3D0048FF15 /* TokenRefresher.swift */,
 				00E1D9412BE4DFB500501328 /* NetworkMonitor.swift */,
 				00B7C3F22BCA5C42009AC333 /* TargetType.swift */,
 				00B7C4052BCA68DB009AC333 /* HTTPHeader.swift */,
@@ -1596,6 +1601,7 @@
 				00C71D682BCC11C900D933FD /* SignUpModel.swift */,
 				0034FAF92BCCA19E00D932F3 /* WithdrawalModel.swift */,
 				00EA277F2BDE728500EE3F9C /* ValidateEmailModel.swift */,
+				009F07552BE6174A0048FF15 /* RefreshTokenModel.swift */,
 			);
 			path = User;
 			sourceTree = "<group>";
@@ -1705,6 +1711,7 @@
 				00AFF6002BCD14D3006D319A /* HomeCollectionViewCell.swift in Sources */,
 				00AFF60D2BCD2CE0006D319A /* UIViewConfiguration.swift in Sources */,
 				0010415E2BDBC00B00E5FDA1 /* MyPostCollectionViewCell.swift in Sources */,
+				009F07542BE60C3D0048FF15 /* TokenRefresher.swift in Sources */,
 				00E414F42BD95C5500C76BE4 /* DeletePostParams.swift in Sources */,
 				00EA277E2BDE516900EE3F9C /* ValidateEmailBody.swift in Sources */,
 				0034FAFA2BCCA19E00D932F3 /* WithdrawalModel.swift in Sources */,
@@ -1786,6 +1793,7 @@
 				00AFF5FC2BCD1274006D319A /* HomeViewModel.swift in Sources */,
 				001C92082BD6D37D0028E67B /* SelectedVisitDateViewController.swift in Sources */,
 				00B7C3F32BCA5C42009AC333 /* TargetType.swift in Sources */,
+				009F07562BE6174A0048FF15 /* RefreshTokenModel.swift in Sources */,
 				00EA27662BDE106A00EE3F9C /* BaseSignUpViewController.swift in Sources */,
 				002720902BDFA8F8004ADC5C /* FollowerTableViewCell.swift in Sources */,
 				001041772BDC2BD100E5FDA1 /* LikeManager.swift in Sources */,

@@ -13,6 +13,7 @@ enum UserRouter {
     case signUp(body: SignUpBody)
     case withdrawal
     case validateEmail(body: ValidateEmailBody)
+    case refreshToken
 }
 
 extension UserRouter: TargetType {
@@ -25,7 +26,7 @@ extension UserRouter: TargetType {
         switch self {
         case .login, .signUp, .validateEmail:
             return .post
-        case .withdrawal:
+        case .withdrawal, .refreshToken:
             return .get
         }
     }
@@ -40,6 +41,8 @@ extension UserRouter: TargetType {
             return "/users/withdraw"
         case .validateEmail:
             return "/validation/email"
+        case .refreshToken:
+            return "/auth/refresh"
         }
     }
     
@@ -54,6 +57,12 @@ extension UserRouter: TargetType {
             return [
                 HTTPHeader.authorization.rawValue: UserDefaults.standard.accessToken,
                 HTTPHeader.sesacKey.rawValue: APIKeys.sesacKey
+            ]
+        case .refreshToken:
+            return [
+                HTTPHeader.authorization.rawValue: UserDefaults.standard.accessToken,
+                HTTPHeader.sesacKey.rawValue: APIKeys.sesacKey,
+                HTTPHeader.refresh.rawValue: UserDefaults.standard.refreshToken
             ]
         }
     }
@@ -74,7 +83,7 @@ extension UserRouter: TargetType {
         case .signUp(let body):
             let encoder = JSONEncoder()
             return try? encoder.encode(body)
-        case .withdrawal:
+        case .withdrawal, .refreshToken:
             return nil
         case .validateEmail(let body):
             let encoder = JSONEncoder()

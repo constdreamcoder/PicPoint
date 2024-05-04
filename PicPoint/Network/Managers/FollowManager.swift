@@ -15,7 +15,7 @@ struct FollowManager {
             do {
                 let urlRequest = try FollowRouter.follow(params: params).asURLRequest()
                 
-                AF.request(urlRequest)
+                AF.request(urlRequest, interceptor: TokenRefresher())
                     .validate(statusCode: 200...500)
                     .responseDecodable(of: FollowModel.self) { response in
                         switch response.result {
@@ -45,7 +45,7 @@ struct FollowManager {
             do {
                 let urlRequest = try FollowRouter.unfollow(params: params).asURLRequest()
                 
-                AF.request(urlRequest)
+                AF.request(urlRequest, interceptor: TokenRefresher())
                     .validate(statusCode: 200...500)
                     .responseDecodable(of: FollowModel.self) { response in
                         switch response.result {

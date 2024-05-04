@@ -15,7 +15,7 @@ struct LikeManager {
             do {
                 let urlRequest = try LikeRouter.fetchMyLikes.asURLRequest()
                 
-                AF.request(urlRequest)
+                AF.request(urlRequest, interceptor: TokenRefresher())
                     .validate(statusCode: 200...500)
                     .responseDecodable(of: FetchMyLikesModel.self) { response in
                         switch response.result {
@@ -45,7 +45,7 @@ struct LikeManager {
             do {
                 let urlRequest = try LikeRouter.like(params: params, body: body).asURLRequest()
                 
-                AF.request(urlRequest)
+                AF.request(urlRequest, interceptor: TokenRefresher())
                     .validate(statusCode: 200...500)
                     .responseDecodable(of: LikeModel.self) { response in
                         switch response.result {
@@ -75,7 +75,7 @@ struct LikeManager {
             do {
                 let urlRequest = try LikeRouter.unlike(params: params, body: body).asURLRequest()
                 
-                AF.request(urlRequest)
+                AF.request(urlRequest, interceptor: TokenRefresher())
                     .validate(statusCode: 200...500)
                     .responseDecodable(of: LikeModel.self) { response in
                         switch response.result {

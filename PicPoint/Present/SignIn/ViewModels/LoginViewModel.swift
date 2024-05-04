@@ -81,12 +81,12 @@ final class LoginViewModel: ViewModelType {
                 UserDefaults.standard.accessToken = loginModel.accessToken
                 UserDefaults.standard.refreshToken = loginModel.refreshToken
                 
-                let accessTokenDueDate = Date().addingTimeInterval(120 * 60) 
-//                let testAccessTokenDueDate = Date().addingTimeInterval(1 * 60)
-                UserDefaults.standard.accessTokenDueDate = accessTokenDueDate
-                let refreshTokenDueDate = Date().addingTimeInterval(1200 * 60)
-//                let testRefreshTokenDueDate = Date().addingTimeInterval(5 * 60)
-                UserDefaults.standard.refreshTokenDueDate = refreshTokenDueDate
+//                let accessTokenDueDate = Date().addingTimeInterval(120 * 60) 
+                let testAccessTokenDueDate = Date().addingTimeInterval(1 * 60)
+                UserDefaults.standard.accessTokenDueDate = testAccessTokenDueDate
+//                let refreshTokenDueDate = Date().addingTimeInterval(1200 * 60)
+                let testRefreshTokenDueDate = Date().addingTimeInterval(5 * 60)
+                UserDefaults.standard.refreshTokenDueDate = testRefreshTokenDueDate
                 fetchUserProfileTrigger.onNext(())
             } onError: { owner, error in
                 print("로그인 오류 발생, \(error)")

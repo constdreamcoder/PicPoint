@@ -124,9 +124,8 @@ extension HomeViewController: UIViewControllerConfiguration {
                 guard let self else { return }
                 
                 cell.homeViewModel = viewModel
-                cell.bind(element)
-                
                 cell.updatePostData(element)
+                cell.bind(element)
             }
             .disposed(by: disposeBag)
         

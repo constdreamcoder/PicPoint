@@ -89,6 +89,9 @@ final class CommentViewModel: ViewModelType {
             }
             
         input.commentDeleteEvent
+            .filter {
+                $1.creator.userId == UserDefaults.standard.userId
+            }
             .map { $1.commentId }
             .withLatestFrom(postIdSubject) { ($1, $0) }
             .flatMap {

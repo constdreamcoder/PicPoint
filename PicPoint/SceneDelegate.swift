@@ -31,6 +31,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             }
         })
         
+        NotificationCenter.default.addObserver(self, selector: #selector(showAlertForRelogin), name: .refreshTokenExpired, object: nil)
+        
         if UserDefaults.standard.accessToken == "" {
             guard let windowScene = (scene as? UIWindowScene) else { return }
             
@@ -38,10 +40,10 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             window?.rootViewController = UINavigationController(rootViewController: SignInViewController())
             window?.makeKeyAndVisible()
         } else {
-            guard let accessTokenDueDate = UserDefaults.standard.accessTokenDueDate else {
+            guard let refreshTokenDueDate = UserDefaults.standard.refreshTokenDueDate else {
                 return }
-            print("dueDate", Date().timeIntervalSince(accessTokenDueDate))
-            if Date().timeIntervalSince(accessTokenDueDate) <= 0 {
+            print("dueDate", Date().timeIntervalSince(refreshTokenDueDate))
+            if Date().timeIntervalSince(refreshTokenDueDate) <= 0 {
                 guard let windowScene = (scene as? UIWindowScene) else { return }
                 
                 window = UIWindow(windowScene: windowScene)
@@ -65,6 +67,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // Release any resources associated with this scene that can be re-created the next time the scene connects.
         // The scene may re-connect later, as its session was not necessarily discarded (see `application:didDiscardSceneSessions` instead).
         networkMonitor.stopMonitoring()
+        NotificationCenter.default.removeObserver(self, name: .refreshTokenExpired, object: nil)
     }
 
     func sceneDidBecomeActive(_ scene: UIScene) {
@@ -106,6 +109,42 @@ extension SceneDelegate {
         errorWindow?.resignKey()
         errorWindow?.isHidden = true
         errorWindow = nil
+    }
+}
+
+extension SceneDelegate {
+    @objc private func showAlertForRelogin(notification: Notification) {
+        if let userInfo = notification.userInfo,
+           let showReloginAlert = userInfo["showReloginAlert"] as? Bool {
+            print("showReloginAlert", showReloginAlert)
+            
+            if showReloginAlert {
+                window?.rootViewController?.show(reloginAlert(), sender: nil)
+            }
+            
+        }
+    }
+    
+    private func reloginAlert() -> UIAlertController {
+        let alert = UIAlertController(title: "재 로그인", message: "세션이 만료되어 재 로그인 해주시기 바랍니다.", preferredStyle: .alert)
+        
+        let confirmButton = UIAlertAction(title: "확인", style: .default) { [weak self] _ in
+            guard let self else { return }
+            
+            UserDefaults.standard.clearAllData()
+            
+            let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene
+            let sceneDelegate = windowScene?.delegate as? SceneDelegate
+            
+            let signInNav = UINavigationController(rootViewController: SignInViewController())
+            
+            sceneDelegate?.window?.rootViewController = signInNav
+            sceneDelegate?.window?.makeKeyAndVisible()
+        }
+    
+        alert.addAction(confirmButton)
+        
+        return alert
     }
 }
 

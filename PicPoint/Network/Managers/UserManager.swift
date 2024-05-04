@@ -15,7 +15,7 @@ struct UserManager {
             do {
                 let urlRequest = try UserRouter.login(body: body).asURLRequest()
                 
-                AF.request(urlRequest)
+                AF.request(urlRequest, interceptor: TokenRefresher())
                     .validate(statusCode: 200...500)
                     .responseDecodable(of: LoginModel.self) { response in
                         switch response.result {
@@ -45,7 +45,7 @@ struct UserManager {
             do {
                 let urlRequest = try UserRouter.signUp(body: body).asURLRequest()
                 
-                AF.request(urlRequest)
+                AF.request(urlRequest, interceptor: TokenRefresher())
                     .validate(statusCode: 200...500)
                     .responseDecodable(of: SignUpModel.self) { response in
                         switch response.result {
@@ -75,7 +75,7 @@ struct UserManager {
             do {
                 let urlRequest = try UserRouter.withdrawal.asURLRequest()
                 
-                AF.request(urlRequest)
+                AF.request(urlRequest, interceptor: TokenRefresher())
                     .validate(statusCode: 200...500)
                     .responseDecodable(of: WithdrawalModel.self) { response in
                         switch response.result {
@@ -105,7 +105,7 @@ struct UserManager {
             do {
                 let urlRequest = try UserRouter.validateEmail(body: body).asURLRequest()
                 
-                AF.request(urlRequest)
+                AF.request(urlRequest, interceptor: TokenRefresher())
                     .validate(statusCode: 200...500)
                     .responseDecodable(of: ValidateEmailModel.self) { response in
                         switch response.result {
@@ -133,5 +133,35 @@ struct UserManager {
             return Disposables.create()
         }
         
+    }
+    
+    static func refreshToken(completionHandler: @escaping (Result<String, Error>) -> Void) {
+        do {
+            let urlRequest = try UserRouter.refreshToken.asURLRequest()
+            
+            print("url", urlRequest.url)
+            print("url", urlRequest.httpMethod)
+            
+            AF.request(urlRequest, interceptor: TokenRefresher())
+                .validate(statusCode: 200...500)
+                .responseDecodable(of: RefreshTokenModel.self) { response in
+                    switch response.result {
+                    case .success(let refreshedToken):
+                        completionHandler(.success(refreshedToken.accessToken))
+                    case .failure(_):
+                        if let statusCode = response.response?.statusCode {
+                            if let commonNetworkError = CommonNetworkError(rawValue: statusCode) {
+                                completionHandler(.failure(commonNetworkError))
+                            } else if let accessTokeError = AccessTokenNetworkError(rawValue: statusCode) {
+                                completionHandler(.failure(accessTokeError))
+                            } else {
+                                completionHandler(.failure(CommonNetworkError.unknownError))
+                            }
+                        }
+                    }
+                }
+        } catch {
+            completionHandler(.failure(CommonNetworkError.unknownError))
+        }
     }
 }

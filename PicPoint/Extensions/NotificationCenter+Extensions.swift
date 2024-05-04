@@ -13,4 +13,5 @@ extension Notification.Name {
     static let sendNewLikedPost = Notification.Name("sendNewLikedPost")
     static let sendUnlikedPost = Notification.Name("sendUnlikedPost")
     static let sendOtherProfilePosts = Notification.Name("sendOtherProfilePosts")
+    static let refreshTokenExpired = Notification.Name("refreshTokenExpired")
 }
