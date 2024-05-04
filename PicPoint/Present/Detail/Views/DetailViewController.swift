@@ -12,6 +12,8 @@ import RxCocoa
 import RxDataSources
 import Kingfisher
 import Differentiator
+import WebKit
+import iamport_ios
 
 final class DetailViewController: BaseViewController {
     
@@ -143,6 +145,8 @@ extension DetailViewController: UIViewControllerConfiguration {
         navigationItem.title = "상세화면"
         navigationController?.navigationBar.topItem?.title = ""
         navigationController?.navigationBar.tintColor = .black
+        
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "후원하기", style: .plain, target: self, action: nil)
     }
     
     func configureConstraints() {
@@ -175,11 +179,15 @@ extension DetailViewController: UIViewControllerConfiguration {
     func bind() {
         
         let itemTapSubject = PublishSubject<Int>()
+        let paymentResponse = PublishSubject<IamportResponse>()
         
+        guard let rightBarButtonItem = navigationItem.rightBarButtonItem else { return }
         let input = DetailViewModel.Input(
+            rightBarButtonItem: rightBarButtonItem.rx.tap,
             heartButtonTap: iconView.heartStackView.button.rx.tap,
-            commentButtonTap: iconView.commentStackView.button.rx.tap, 
-            itemTap: itemTapSubject
+            commentButtonTap: iconView.commentStackView.button.rx.tap,
+            itemTap: itemTapSubject,
+            paymentResponse: paymentResponse
         )
         
         guard let viewModel = viewModel else { return }
@@ -246,6 +254,31 @@ extension DetailViewController: UIViewControllerConfiguration {
                 let profileVM = ProfileViewModel(userId)
                 let profileVC = ProfileViewController(profileViewModel: profileVM)
                 owner.navigationController?.pushViewController(profileVC, animated: true)
+            }
+            .disposed(by: disposeBag)
+        
+        output.gotoPaymentPageTrigger
+            .drive(with: self) { owner, payment in
+                guard let payment else { return }
+                
+                Iamport.shared.payment(
+                    navController: owner.navigationController ?? UINavigationController(),
+                    userCode: APIKeys.userCode,
+                    payment: payment
+                ) { iamportResponse in
+                    print("들왔다~>>>>>>>>>>>>>>>>>>>>>>>>>")
+                    print(String(describing: iamportResponse))
+                    guard
+                        let iamportResponse,
+                        let success = iamportResponse.success
+                    else { return }
+                    
+                    if success {
+                        paymentResponse.onNext(iamportResponse)
+                    } else {
+                        owner.makeErrorAlert(title: "결제 오류", message: "결제중 오류가 발생하였습니다.")
+                    }
+                }
             }
             .disposed(by: disposeBag)
     }

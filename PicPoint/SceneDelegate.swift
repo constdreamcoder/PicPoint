@@ -116,19 +116,17 @@ extension SceneDelegate {
     @objc private func showAlertForRelogin(notification: Notification) {
         if let userInfo = notification.userInfo,
            let showReloginAlert = userInfo["showReloginAlert"] as? Bool {
-            print("showReloginAlert", showReloginAlert)
             
             if showReloginAlert {
                 window?.rootViewController?.show(reloginAlert(), sender: nil)
             }
-            
         }
     }
     
     private func reloginAlert() -> UIAlertController {
-        let alert = UIAlertController(title: "재 로그인", message: "세션이 만료되어 재 로그인 해주시기 바랍니다.", preferredStyle: .alert)
+        let alert = UIAlertController(title: "재로그인", message: "세션이 만료되어 재 로그인이 필요합니다!!", preferredStyle: .alert)
         
-        let confirmButton = UIAlertAction(title: "확인", style: .default) { [weak self] _ in
+        let confirmButton = UIAlertAction(title: "재로그인 하러가기", style: .default) { [weak self] _ in
             guard let self else { return }
             
             UserDefaults.standard.clearAllData()

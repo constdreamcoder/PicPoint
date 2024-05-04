@@ -10,6 +10,7 @@ import RxSwift
 import RxCocoa
 import Differentiator
 import CoreLocation
+import iamport_ios
 
 protocol DetailViewModelDelegate: AnyObject {
     func sendLikeUpdateTrigger(_ post: PostLikeType?)
@@ -30,11 +31,13 @@ final class DetailViewModel: ViewModelType {
     weak var delegate: DetailViewModelDelegate?
     
     var disposeBag = DisposeBag()
-
+    
     struct Input {
+        let rightBarButtonItem: ControlEvent<Void>
         let heartButtonTap: ControlEvent<Void>
         let commentButtonTap: ControlEvent<Void>
         let itemTap: PublishSubject<Int>
+        let paymentResponse: PublishSubject<IamportResponse>
     }
     
     struct Output {
@@ -44,6 +47,7 @@ final class DetailViewModel: ViewModelType {
         let mapViewTapTrigger: Driver<CLLocationCoordinate2D>
         let itemTapTrigger: Driver<Post?>
         let moveToOtherProfileTrigger: Driver<String>
+        let gotoPaymentPageTrigger: Driver<IamportPayment?>
     }
     
     init(post: Post) {
@@ -87,7 +91,7 @@ final class DetailViewModel: ViewModelType {
                         DetailCollectionViewFirstSectionDataModel(
                             items: [.init(
                                 header: "",
-                                title: post.title ?? "", 
+                                title: post.title ?? "",
                                 address: separatedLocationStrings?[3] ?? "",
                                 files: post.files)
                             ]
@@ -111,14 +115,14 @@ final class DetailViewModel: ViewModelType {
                                 latitude: latitude,
                                 longitude: longitude,
                                 longAddress: separatedLocationStrings?[2] ?? "",
-                                hashTags: post.hashTags, 
+                                hashTags: post.hashTags,
                                 recommendedVisitTime: separatedDateStrings?[1] ?? "")
                             ]
                         )
                     ),
                     SectionModelWrapper(
                         DetailCollectionViewForthSectionDataModel(
-                            header: "", 
+                            header: "",
                             items: postList.filter { $0.postId != post.postId }
                         )
                     )
@@ -136,7 +140,47 @@ final class DetailViewModel: ViewModelType {
         let unlikeTrigger = PublishSubject<String>()
         let followTrigger = PublishSubject<Post>()
         let unFollowTrigger = PublishSubject<Post>()
-
+        let gotoPaymentPageTrigger = PublishRelay<IamportPayment?>()
+        
+        input.rightBarButtonItem
+            .bind(with: self) { owner, _  in
+                let payment = IamportPayment(
+                    pg: PG.html5_inicis.makePgRawName(pgId: APIKeys.KGINICISId),
+                    merchant_uid: "ios_\(APIKeys.sesacKey)_\(Int(Date().timeIntervalSince1970))",
+                    amount: "1").then {
+                        $0.pay_method = PayMethod.card.rawValue
+                        $0.name = "잭님의 사투리교실"
+                        $0.buyer_name = APIKeys.buyerName
+                        $0.app_scheme = APIKeys.appScheme
+                    }
+                gotoPaymentPageTrigger.accept(payment)
+            }
+            .disposed(by: disposeBag)
+        
+        input.paymentResponse
+            .withLatestFrom(postRelay) { paymentResponse, post in
+                print("2")
+                return ValidatePaymentBody(
+                    imp_uid: paymentResponse.imp_uid ?? "",
+                    post_id: post?.post.postId ?? "",
+                    productName: "잭님의 사투리교실", // TODO: - post title로 변경하기
+                    price: 1
+                )
+            }
+            .flatMap {
+                print("3")
+                return PaymentManager.validatePayment(body: $0)
+                    .catch { error in
+                        print(error.errorCode, error.errorDesc)
+                        return Single<ValidatePaymentModel>.never()
+                    }
+            }
+            .subscribe { validatedPayment in
+                print("결제 영수증 검증 완료!!")
+                print("validatedPayment", validatedPayment)
+            }
+            .disposed(by: disposeBag)
+        
         likeTrigger
             .flatMap {
                 LikeManager.like(
@@ -277,7 +321,7 @@ final class DetailViewModel: ViewModelType {
             }
             .disposed(by: disposeBag)
         
-       input.itemTap
+        input.itemTap
             .withLatestFrom(relatedPostList) { tappedItemIndex, relatedPostList in
                 relatedPostList[tappedItemIndex].postId
             }
@@ -293,14 +337,15 @@ final class DetailViewModel: ViewModelType {
         
         let moveToOtherProfileTrigger = profileImageViewTapTapSubject
             .debounce(.milliseconds(500), scheduler: MainScheduler.instance)
-
+        
         return Output(
-            sections: sectionsRelay.asDriver(onErrorJustReturn: []), 
-            post: postRelay.asDriver(), 
-            postId: postIdRelay.asDriver(onErrorJustReturn: ""), 
+            sections: sectionsRelay.asDriver(onErrorJustReturn: []),
+            post: postRelay.asDriver(),
+            postId: postIdRelay.asDriver(onErrorJustReturn: ""),
             mapViewTapTrigger: mapViewTapRelay.asDriver(onErrorJustReturn: CLLocationCoordinate2D()),
             itemTapTrigger: itemTapTrigger.asDriver(onErrorJustReturn: nil),
-            moveToOtherProfileTrigger: moveToOtherProfileTrigger.asDriver(onErrorJustReturn: "")
+            moveToOtherProfileTrigger: moveToOtherProfileTrigger.asDriver(onErrorJustReturn: ""), 
+            gotoPaymentPageTrigger: gotoPaymentPageTrigger.asDriver(onErrorJustReturn: nil)
         )
     }
 }
@@ -312,7 +357,7 @@ extension DetailViewModel: CommentViewModelDelegate {
                 if let post, post.post.postId == postId {
                     return (post.post, post.likeType, post.likes, updatedCommentList)
                 } else {
-                     return post
+                    return post
                 }
             }
             .subscribe(with: self) { owner, updatePost in

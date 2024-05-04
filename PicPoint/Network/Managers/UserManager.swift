@@ -132,19 +132,16 @@ struct UserManager {
             }
             return Disposables.create()
         }
-        
     }
     
     static func refreshToken(completionHandler: @escaping (Result<String, Error>) -> Void) {
         do {
             let urlRequest = try UserRouter.refreshToken.asURLRequest()
             
-            print("url", urlRequest.url)
-            print("url", urlRequest.httpMethod)
-            
             AF.request(urlRequest, interceptor: TokenRefresher())
                 .validate(statusCode: 200...500)
                 .responseDecodable(of: RefreshTokenModel.self) { response in
+                    
                     switch response.result {
                     case .success(let refreshedToken):
                         completionHandler(.success(refreshedToken.accessToken))
