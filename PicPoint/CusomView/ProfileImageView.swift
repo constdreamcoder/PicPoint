@@ -24,7 +24,7 @@ final class ProfileImageView: UIImageView {
     private func configureUI() {
         image = UIImage(systemName: "person.circle")
         tintColor = .black
-        contentMode = .scaleToFill
+        contentMode = .scaleAspectFill
         clipsToBounds = true
     }
     

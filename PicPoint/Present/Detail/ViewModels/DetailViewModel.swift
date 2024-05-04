@@ -41,6 +41,7 @@ final class DetailViewModel: ViewModelType {
     }
     
     struct Output {
+        let rightBarButtonItemHiddenTrigger: Driver<Bool>
         let sections: Driver<[SectionModelWrapper]>
         let post: Driver<PostLikeType?>
         let postId: Driver<String>
@@ -141,6 +142,19 @@ final class DetailViewModel: ViewModelType {
         let followTrigger = PublishSubject<Post>()
         let unFollowTrigger = PublishSubject<Post>()
         let gotoPaymentPageTrigger = PublishRelay<IamportPayment?>()
+        let rightBarButtonItemHiddenTrigger = BehaviorRelay<Bool>(value: false)
+        
+       Observable.just(())
+            .withLatestFrom(postRelay)
+            .bind { post in
+                guard let post else { return }
+                if post.post.creator.userId == UserDefaults.standard.userId {
+                    rightBarButtonItemHiddenTrigger.accept(true)
+                } else {
+                    rightBarButtonItemHiddenTrigger.accept(false)
+                }
+            }
+            .disposed(by: disposeBag)
         
         input.rightBarButtonItem
             .bind(with: self) { owner, _  in
@@ -159,7 +173,6 @@ final class DetailViewModel: ViewModelType {
         
         input.paymentResponse
             .withLatestFrom(postRelay) { paymentResponse, post in
-                print("2")
                 return ValidatePaymentBody(
                     imp_uid: paymentResponse.imp_uid ?? "",
                     post_id: post?.post.postId ?? "",
@@ -168,7 +181,6 @@ final class DetailViewModel: ViewModelType {
                 )
             }
             .flatMap {
-                print("3")
                 return PaymentManager.validatePayment(body: $0)
                     .catch { error in
                         print(error.errorCode, error.errorDesc)
@@ -339,6 +351,7 @@ final class DetailViewModel: ViewModelType {
             .debounce(.milliseconds(500), scheduler: MainScheduler.instance)
         
         return Output(
+            rightBarButtonItemHiddenTrigger: rightBarButtonItemHiddenTrigger.asDriver(),
             sections: sectionsRelay.asDriver(onErrorJustReturn: []),
             post: postRelay.asDriver(),
             postId: postIdRelay.asDriver(onErrorJustReturn: ""),

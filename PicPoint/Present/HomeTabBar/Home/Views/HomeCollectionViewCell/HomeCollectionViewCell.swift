@@ -24,7 +24,7 @@ final class HomeCollectionViewCell: BaseCollectionViewCell {
         
         topView.profileImageView.profileImageViewWidth = 40
         topView.profileImageView.isUserInteractionEnabled = true
-                
+        
         let rightButton = topView.rightButton
         rightButton.tintColor = .black
         let image = UIImage(systemName: "ellipsis")
@@ -40,12 +40,30 @@ final class HomeCollectionViewCell: BaseCollectionViewCell {
     
     let bottomView = HomeCollectionViewCellBottomView()
     
+    private lazy var coverView: UIView = {
+        let view = UIView()
+        DispatchQueue.main.async {
+            let gradientLayer = CAGradientLayer()
+            gradientLayer.frame = view.bounds
+            gradientLayer.colors = [
+                UIColor.black.withAlphaComponent(0.0).cgColor,
+                UIColor.black.withAlphaComponent(0.4).cgColor,
+                UIColor.black.withAlphaComponent(0.6).cgColor
+            ]
+            gradientLayer.startPoint = CGPoint(x: 0.5, y: 0.0)
+            gradientLayer.endPoint = CGPoint(x: 0.5, y: 1.0)
+            gradientLayer.locations = [0.7, 0.9]
+            view.layer.addSublayer(gradientLayer)
+        }
+        return view
+    }()
+    
     private lazy var moveToProfileTap: UITapGestureRecognizer = {
         let tap = UITapGestureRecognizer(target: self, action: nil)
         topView.profileImageView.addGestureRecognizer(tap)
         return tap
     }()
-        
+    
     weak var homeViewModel: HomeViewModel?
     
     override init(frame: CGRect) {
@@ -79,7 +97,7 @@ final class HomeCollectionViewCell: BaseCollectionViewCell {
             let placeholderImage = UIImage(systemName: "person.circle")
             topView.profileImageView.kf.setImageWithAuthHeaders(with: url, placeholder: placeholderImage)
         }
-       
+        
         if element.post.files.count > 0 {
             let url = URL(string: APIKeys.baseURL + "/\(element.post.files[0])")
             let placeholderImage = UIImage(systemName: "photo")
@@ -114,8 +132,9 @@ extension HomeCollectionViewCell {
         [
             topView,
             photoImageView,
+            coverView,
             iconView,
-            bottomView
+            bottomView,
         ].forEach { containerView.addSubview($0) }
         
         topView.snp.makeConstraints {
@@ -126,24 +145,28 @@ extension HomeCollectionViewCell {
         photoImageView.snp.makeConstraints {
             $0.top.equalTo(topView.snp.bottom)
             $0.width.equalTo(containerView)
-            $0.height.equalTo(containerView.snp.width).multipliedBy(1.2)
         }
         
         iconView.snp.makeConstraints {
             $0.top.equalTo(photoImageView.snp.bottom)
             $0.height.equalTo(52.0)
             $0.horizontalEdges.equalTo(containerView)
+            $0.bottom.equalTo(containerView)
         }
         
         bottomView.snp.makeConstraints {
-            $0.top.equalTo(iconView.snp.bottom)
-            $0.bottom.horizontalEdges.equalTo(containerView)
+            $0.horizontalEdges.equalTo(containerView)
+            $0.bottom.equalTo(iconView.snp.top)
+        }
+        
+        coverView.snp.makeConstraints {
+            $0.edges.equalTo(photoImageView)
         }
         
         contentView.addSubview(containerView)
         
         containerView.snp.makeConstraints {
-            $0.top.bottom.equalTo(contentView.safeAreaLayoutGuide).inset(32.0)
+            $0.top.bottom.equalTo(contentView.safeAreaLayoutGuide).inset(16.0)
             $0.horizontalEdges.equalToSuperview().inset(16.0)
         }
     }

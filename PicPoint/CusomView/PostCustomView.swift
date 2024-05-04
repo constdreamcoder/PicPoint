@@ -86,7 +86,7 @@ extension PostCustomView: UIViewConfiguration {
         
         photoImageView.snp.makeConstraints {
             $0.top.horizontalEdges.equalToSuperview()
-            $0.height.equalTo(300)
+            $0.height.equalTo(220)
         }
         
         heartButton.snp.makeConstraints {

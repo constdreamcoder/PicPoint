@@ -193,6 +193,12 @@ extension DetailViewController: UIViewControllerConfiguration {
         guard let viewModel = viewModel else { return }
         let output = viewModel.transform(input: input)
         
+        output.rightBarButtonItemHiddenTrigger
+            .drive(with: self) { owner, isHidden in
+                owner.navigationItem.rightBarButtonItem?.isHidden = isHidden
+            }
+            .disposed(by: disposeBag)
+        
         output.sections
             .drive(collectionView.rx.items(dataSource: dataSource))
             .disposed(by: disposeBag)
@@ -347,7 +353,7 @@ extension DetailViewController: UICollectionViewConfiguration {
                 let group = NSCollectionLayoutGroup.horizontal(
                     layoutSize: .init(
                         widthDimension: .fractionalWidth(1.0),
-                        heightDimension: .estimated(380)
+                        heightDimension: .estimated(280)
                     ),
                     subitems: [item]
                 )
