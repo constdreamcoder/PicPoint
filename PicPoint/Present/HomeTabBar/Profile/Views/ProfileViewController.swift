@@ -31,6 +31,18 @@ final class ProfileViewController: BaseViewController {
         
         return collectionView
     }()
+    
+    let goToMapButton: UIButton = {
+        let button = UIButton()
+        button.titleLabel?.font = .systemFont(ofSize: 16.0, weight: .bold)
+        button.backgroundColor = .black
+        button.setTitleColor(.white, for: .normal)
+        button.layer.cornerRadius = 16.0
+        button.setTitle("지도로 보기", for: .normal)
+        button.setTitleColor(.white, for: .normal)
+        button.isHidden = true
+        return button
+    }()
         
     private lazy var dataSoure = RxCollectionViewSectionedReloadDataSource<SectionModelWrapper> { [weak self] dataSource, collectionView, indexPath, item in
         guard let self else { return UICollectionViewCell()}
@@ -123,10 +135,19 @@ extension ProfileViewController: UIViewControllerConfiguration {
     }
     
     func configureConstraints() {
-        view.addSubview(collectionView)
+        [
+            collectionView,
+            goToMapButton
+        ].forEach { view.addSubview($0) }
         
         collectionView.snp.makeConstraints {
             $0.edges.equalTo(view.safeAreaLayoutGuide)
+        }
+        
+        goToMapButton.snp.makeConstraints {
+            $0.centerX.equalTo(view.safeAreaLayoutGuide)
+            $0.width.equalTo(100.0)
+            $0.bottom.equalTo(view.safeAreaLayoutGuide).inset(16.0)
         }
     }
     
@@ -140,7 +161,8 @@ extension ProfileViewController: UIViewControllerConfiguration {
         
         let input = ProfileViewModel.Input(
             viewWillAppear: rx.viewWillAppear, 
-            refreshControlValueChanged: refreshControl.rx.controlEvent(.valueChanged)
+            refreshControlValueChanged: refreshControl.rx.controlEvent(.valueChanged),
+            goToMapButtonTapped: goToMapButton.rx.tap
         )
         
         let output = viewModel.transform(input: input)

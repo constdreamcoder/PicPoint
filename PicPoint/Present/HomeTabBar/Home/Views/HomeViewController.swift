@@ -84,6 +84,7 @@ extension HomeViewController: UIViewControllerConfiguration {
         
         let rightBarButtonItemImage = UIImage(systemName: "magnifyingglass")?.withTintColor(.black, renderingMode: .alwaysOriginal)
         navigationItem.rightBarButtonItem = UIBarButtonItem(image: rightBarButtonItemImage, style: .plain, target: self, action: nil)
+        navigationItem.rightBarButtonItem?.isHidden = true
     }
     
     func configureConstraints() {

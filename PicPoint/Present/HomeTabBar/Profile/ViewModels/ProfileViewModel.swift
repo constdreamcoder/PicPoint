@@ -32,6 +32,7 @@ final class ProfileViewModel: ViewModelType {
     struct Input {
         let viewWillAppear: Observable<Bool>
         let refreshControlValueChanged: ControlEvent<Void>
+        let goToMapButtonTapped: ControlEvent<Void>
     }
     
     struct Output {
@@ -208,6 +209,12 @@ final class ProfileViewModel: ViewModelType {
         let moveToFollowTapTrigger = moveToFollowTap
             .withLatestFrom(myProfile)
         
+        input.goToMapButtonTapped
+            .bind { _ in
+                print("눌림")
+            }
+            .disposed(by: disposeBag)
+            
         return Output(
             sections: sectionsObservable.asDriver(onErrorJustReturn: []),
             updateContentSize: updateContentSizeRelay.asDriver(onErrorJustReturn: 0),

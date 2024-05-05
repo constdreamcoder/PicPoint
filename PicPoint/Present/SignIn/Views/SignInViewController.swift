@@ -16,12 +16,14 @@ final class SignInViewController: BaseViewController {
         let textView = CustomInputView("이메일을 입력해주세요", charLimit: 30)
         textView.titleLabel.text = "이메일"
         textView.inputTextView.keyboardType = .emailAddress
+        textView.remainCountLabel.isHidden = true
         return textView
     }()
     
     let passwordInputTextField: CustomInputView = {
         let textView = CustomInputView("비밀번호를 입력해주세요", charLimit: 15)
         textView.titleLabel.text = "비밀번호"
+        textView.remainCountLabel.isHidden = true
         return textView
     }()
     
@@ -33,7 +35,8 @@ final class SignInViewController: BaseViewController {
     
     let goToSignUpButton: CustomBottomButton = {
         let button = CustomBottomButton(type: .system)
-        button.setTitle("회원가입하러 가기", for: .normal)
+        button.setTitle("회원가입", for: .normal)
+        button.backgroundColor = .lightGray
         return button
     }()
     
@@ -91,9 +94,29 @@ extension SignInViewController: UIViewControllerConfiguration {
     }
     
     func bind() {
+        let emailText = emailInputTextView.inputTextView.rx.text.orEmpty
+            .withUnretained(self)
+            .map { owner, emailText in
+                if  owner.emailInputTextView.inputTextView.text == owner.emailInputTextView.textViewPlaceHolder {
+                    return ""
+                } else {
+                    return emailText
+                }
+            }
+        
+        let password = passwordInputTextField.inputTextView.rx.text.orEmpty
+            .withUnretained(self)
+            .map { owner, passwordText in
+                if  owner.passwordInputTextField.inputTextView.text == owner.passwordInputTextField.textViewPlaceHolder {
+                    return ""
+                } else {
+                    return passwordText
+                }
+            }
+        
         let input = LoginViewModel.Input(
-            emailText: emailInputTextView.inputTextView.rx.text.orEmpty,
-            passwordText: passwordInputTextField.inputTextView.rx.text.orEmpty,
+            emailText: emailText,
+            passwordText: password,
             loginButtonTapped: signInButton.rx.tap,
             goToSignUpButtonTapped: goToSignUpButton.rx.tap
         )
@@ -101,7 +124,10 @@ extension SignInViewController: UIViewControllerConfiguration {
         let output = viewModel.transform(input: input)
         
         output.loginValidation
-            .drive(signInButton.rx.isEnabled)
+            .drive(with: self) { owner, isValid in
+                owner.signInButton.isEnabled = isValid
+                owner.signInButton.backgroundColor = isValid ? .black : .darkGray
+            }
             .disposed(by: disposeBag)
         
         output.loginSuccessTrigger
@@ -121,6 +147,12 @@ extension SignInViewController: UIViewControllerConfiguration {
             .drive(with: self) { owner, _ in
                 let emailSignUpVC = EmailSignUpViewController()
                 owner.navigationController?.pushViewController(emailSignUpVC, animated: true)
+            }
+            .disposed(by: disposeBag)
+        
+        output.loginFailTrigger
+            .drive(with: self) { owner, errorMessage in
+                owner.makeErrorAlert(title: "로그인 오류", message: errorMessage)
             }
             .disposed(by: disposeBag)
         

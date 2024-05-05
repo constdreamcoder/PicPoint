@@ -284,7 +284,6 @@ extension DetailViewController: UIViewControllerConfiguration {
                     userCode: APIKeys.userCode,
                     payment: payment
                 ) { iamportResponse in
-                    print("들왔다~>>>>>>>>>>>>>>>>>>>>>>>>>")
                     print(String(describing: iamportResponse))
                     guard
                         let iamportResponse,

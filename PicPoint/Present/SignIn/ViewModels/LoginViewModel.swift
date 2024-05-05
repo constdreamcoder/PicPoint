@@ -13,8 +13,8 @@ final class LoginViewModel: ViewModelType {
     var disposeBag =  DisposeBag()
     
     struct Input {
-        let emailText: ControlProperty<String>
-        let passwordText: ControlProperty<String>
+        let emailText: Observable<String>
+        let passwordText: Observable<String>
         let loginButtonTapped: ControlEvent<Void>
         let goToSignUpButtonTapped: ControlEvent<Void>
     }
@@ -23,12 +23,14 @@ final class LoginViewModel: ViewModelType {
         let loginValidation: Driver<Bool>
         let loginSuccessTrigger: Driver<Void>
         let moveToSignUpVC: Driver<Void>
+        let loginFailTrigger: Driver<String>
     }
     
     func transform(input: Input) -> Output {
         let loginValid = BehaviorRelay<Bool>(value: false)
         let fetchUserProfileTrigger = PublishSubject<Void>()
         let loginSuccessTrigger = PublishRelay<Void>()
+        let loginFailTrigger = PublishRelay<String>()
         
         let loginObservable = Observable.combineLatest(
             input.emailText,
@@ -71,6 +73,9 @@ final class LoginViewModel: ViewModelType {
                 UserManager.login(body: $0)
                     .catch { error in
                         print(error.errorCode, error.errorDesc)
+                        if error.errorCode == 401 {
+                            loginFailTrigger.accept(error.errorDesc)
+                        }
                         return Single<LoginModel>.never()
                     }
             }
@@ -96,7 +101,8 @@ final class LoginViewModel: ViewModelType {
         return Output(
             loginValidation: loginValid.asDriver(),
             loginSuccessTrigger: loginSuccessTrigger.asDriver(onErrorJustReturn: ()),
-            moveToSignUpVC: input.goToSignUpButtonTapped.asDriver()
+            moveToSignUpVC: input.goToSignUpButtonTapped.asDriver(), 
+            loginFailTrigger: loginFailTrigger.asDriver(onErrorJustReturn: "")
         )
     }
     
