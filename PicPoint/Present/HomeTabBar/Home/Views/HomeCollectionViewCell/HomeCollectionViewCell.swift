@@ -33,8 +33,21 @@ final class HomeCollectionViewCell: BaseCollectionViewCell {
         rightButton.setPreferredSymbolConfiguration(symbolConfig, forImageIn: .normal)
         return topView
     }()
+        
+    lazy var collectionView: UICollectionView = {
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: createCollectionViewLayout())
+        collectionView.register(ImageViewCollectionViewCell.self, forCellWithReuseIdentifier: ImageViewCollectionViewCell.identifier)
+        return collectionView
+    }()
     
-    let photoImageView = PhotoImageView(frame: .zero)
+    let pageControl: UIPageControl = {
+        let pageControl = UIPageControl()
+        pageControl.pageIndicatorTintColor = .gray
+        pageControl.currentPageIndicatorTintColor = .black
+        pageControl.backgroundColor = .clear
+        pageControl.allowsContinuousInteraction = true
+        return pageControl
+    }()
     
     let iconView = HomeCollectionViewCellIconView()
     
@@ -42,6 +55,7 @@ final class HomeCollectionViewCell: BaseCollectionViewCell {
     
     private lazy var coverView: UIView = {
         let view = UIView()
+        view.isUserInteractionEnabled = false
         DispatchQueue.main.async {
             let gradientLayer = CAGradientLayer()
             gradientLayer.frame = view.bounds
@@ -56,6 +70,12 @@ final class HomeCollectionViewCell: BaseCollectionViewCell {
             view.layer.addSublayer(gradientLayer)
         }
         return view
+    }()
+    
+    private lazy var moveToDetailTap: UITapGestureRecognizer = {
+        let tap = UITapGestureRecognizer(target: self, action: nil)
+        collectionView.addGestureRecognizer(tap)
+        return tap
     }()
     
     private lazy var moveToProfileTap: UITapGestureRecognizer = {
@@ -79,11 +99,11 @@ final class HomeCollectionViewCell: BaseCollectionViewCell {
         super.prepareForReuse()
         
         topView.profileImageView.image = UIImage(systemName: "person.circle")
-        photoImageView.image = UIImage(systemName: "photo")
         disposeBag = DisposeBag()
     }
     
     deinit {
+        collectionView.removeGestureRecognizer(moveToDetailTap)
         topView.profileImageView.removeGestureRecognizer(moveToProfileTap)
     }
     
@@ -98,11 +118,7 @@ final class HomeCollectionViewCell: BaseCollectionViewCell {
             topView.profileImageView.kf.setImageWithAuthHeaders(with: url, placeholder: placeholderImage)
         }
         
-        if element.post.files.count > 0 {
-            let url = URL(string: APIKeys.baseURL + "/\(element.post.files[0])")
-            let placeholderImage = UIImage(systemName: "photo")
-            photoImageView.kf.setImageWithAuthHeaders(with: url, placeholder: placeholderImage)
-        }
+        pageControl.numberOfPages = element.post.files.count
         
         topView.subTitleLabel.text = element.post.content1?.components(separatedBy: "/")[3]
         
@@ -131,36 +147,44 @@ extension HomeCollectionViewCell {
         super.configureConstraints()
         [
             topView,
-            photoImageView,
+            collectionView,
             coverView,
-            iconView,
             bottomView,
+            pageControl,
+            iconView
         ].forEach { containerView.addSubview($0) }
         
         topView.snp.makeConstraints {
             $0.height.equalTo(56.0)
             $0.top.horizontalEdges.equalTo(containerView)
         }
-        
-        photoImageView.snp.makeConstraints {
+    
+        collectionView.snp.makeConstraints {
             $0.top.equalTo(topView.snp.bottom)
             $0.width.equalTo(containerView)
+            $0.bottom.equalTo(iconView.snp.top)
+        }
+        
+        bottomView.snp.makeConstraints {
+            $0.horizontalEdges.equalTo(containerView)
+            $0.bottom.equalTo(pageControl.snp.top)
+        }
+        
+        pageControl.snp.makeConstraints {
+            $0.centerX.equalToSuperview()
+            $0.height.equalTo(24.0)
+            $0.bottom.equalTo(iconView.snp.top)
         }
         
         iconView.snp.makeConstraints {
-            $0.top.equalTo(photoImageView.snp.bottom)
             $0.height.equalTo(52.0)
             $0.horizontalEdges.equalTo(containerView)
             $0.bottom.equalTo(containerView)
         }
         
-        bottomView.snp.makeConstraints {
-            $0.horizontalEdges.equalTo(containerView)
-            $0.bottom.equalTo(iconView.snp.top)
-        }
         
         coverView.snp.makeConstraints {
-            $0.edges.equalTo(photoImageView)
+            $0.edges.equalTo(collectionView)
         }
         
         contentView.addSubview(containerView)
@@ -189,9 +213,7 @@ extension HomeCollectionViewCell {
     
     func bind(_ post: PostLikeType) {
         guard let homeViewModel else { return }
-        
-        let heartButton = iconView.heartStackView.button
-        
+                
         topView.rightButton.rx.tap
             .bind { trigger in
                 homeViewModel.otherOptionsButtonTapRelay.accept(post.post.postId)
@@ -215,5 +237,49 @@ extension HomeCollectionViewCell {
                 homeViewModel.profileImageViewTapSubject.onNext(post.post.creator.userId)
             }
             .disposed(by: disposeBag)
+        
+        moveToDetailTap.rx.event
+            .bind { _ in
+                homeViewModel.postTapSubject.onNext(post)
+            }
+            .disposed(by: disposeBag)
+        
+        Observable.just(post.post.files)
+            .bind(to: collectionView.rx.items(cellIdentifier: ImageViewCollectionViewCell.identifier, cellType: ImageViewCollectionViewCell.self)) { item, element, cell in
+                cell.updatedCellData(element)
+            }
+            .disposed(by: disposeBag)
+        
+        collectionView.rx.didScroll
+            .bind { _ in
+                print("d")
+            }
+            .disposed(by: disposeBag)
+    }
+}
+
+extension HomeCollectionViewCell: UICollectionViewConfiguration {
+    func createCollectionViewLayout() -> UICollectionViewLayout {
+        
+        let itemSize = NSCollectionLayoutSize(
+            widthDimension: .fractionalWidth(1.0),
+            heightDimension: .fractionalHeight(1.0)
+        )
+        let item = NSCollectionLayoutItem(layoutSize: itemSize)
+        
+        let groupSize = NSCollectionLayoutSize(
+            widthDimension: .fractionalWidth(1.0),
+            heightDimension: .fractionalHeight(1.0)
+        )
+        let group = NSCollectionLayoutGroup.horizontal(
+            layoutSize: groupSize,
+            subitems: [item]
+        )
+        
+        let section = NSCollectionLayoutSection(group: group)
+        
+        section.orthogonalScrollingBehavior = .groupPaging
+        
+        return UICollectionViewCompositionalLayout(section: section)
     }
 }

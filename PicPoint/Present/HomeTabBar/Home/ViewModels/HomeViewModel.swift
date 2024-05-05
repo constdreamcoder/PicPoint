@@ -21,6 +21,7 @@ final class HomeViewModel: ViewModelType {
     let commentButtonTapRelay = PublishRelay<String>()
     let heartButtonTapSubject = PublishSubject<PostLikeType>()
     let profileImageViewTapSubject = PublishSubject<String>()
+    let postTapSubject = PublishSubject<PostLikeType>()
     
     let postLikesList = BehaviorRelay<[(String, [String])]>(value: [])
     private let postList = BehaviorRelay<[PostLikeType]>(value: [])
@@ -97,6 +98,20 @@ final class HomeViewModel: ViewModelType {
             .disposed(by: disposeBag)
         
         input.postTap
+            .flatMap {
+                PostManager.fetchPost(params: FetchPostParams(postId: $0.post.postId))
+                    .catch { error in
+                        print(error.errorCode, error.errorDesc)
+                        return Single<Post>.never()
+                    }
+            }
+            .subscribe {
+                print("fetch 완료")
+                postTapTrigger.accept($0)
+            }
+            .disposed(by: disposeBag)
+        
+        postTapSubject
             .flatMap {
                 PostManager.fetchPost(params: FetchPostParams(postId: $0.post.postId))
                     .catch { error in

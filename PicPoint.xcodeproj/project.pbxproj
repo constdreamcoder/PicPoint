@@ -104,6 +104,7 @@
 		0062202B2BE1EAED0020BB78 /* LikeType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0062202A2BE1EAED0020BB78 /* LikeType.swift */; };
 		0065D9DD2BE727AB004DD1F6 /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0065D9DC2BE727AB004DD1F6 /* LocationManager.swift */; };
 		0065D9E02BE73A09004DD1F6 /* SearchCurrentUserLocationError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0065D9DF2BE73A09004DD1F6 /* SearchCurrentUserLocationError.swift */; };
+		0065D9E22BE74C70004DD1F6 /* ImageViewCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0065D9E12BE74C70004DD1F6 /* ImageViewCollectionViewCell.swift */; };
 		00760E422BD4FD3D00741C40 /* AddPostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00760E412BD4FD3D00741C40 /* AddPostViewController.swift */; };
 		00760E442BD4FE0700741C40 /* AddPostViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00760E432BD4FE0700741C40 /* AddPostViewModel.swift */; };
 		00760E462BD5072000741C40 /* SelectImageTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00760E452BD5072000741C40 /* SelectImageTableViewCell.swift */; };
@@ -328,6 +329,7 @@
 		0062202A2BE1EAED0020BB78 /* LikeType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikeType.swift; sourceTree = "<group>"; };
 		0065D9DC2BE727AB004DD1F6 /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
 		0065D9DF2BE73A09004DD1F6 /* SearchCurrentUserLocationError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchCurrentUserLocationError.swift; sourceTree = "<group>"; };
+		0065D9E12BE74C70004DD1F6 /* ImageViewCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageViewCollectionViewCell.swift; sourceTree = "<group>"; };
 		00760E412BD4FD3D00741C40 /* AddPostViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddPostViewController.swift; sourceTree = "<group>"; };
 		00760E432BD4FE0700741C40 /* AddPostViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddPostViewModel.swift; sourceTree = "<group>"; };
 		00760E452BD5072000741C40 /* SelectImageTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectImageTableViewCell.swift; sourceTree = "<group>"; };
@@ -1230,6 +1232,7 @@
 			children = (
 				00AFF5FF2BCD14D3006D319A /* HomeCollectionViewCell.swift */,
 				00AFF6122BCD5B42006D319A /* SubViews */,
+				0065D9E12BE74C70004DD1F6 /* ImageViewCollectionViewCell.swift */,
 			);
 			path = HomeCollectionViewCell;
 			sourceTree = "<group>";
@@ -1762,6 +1765,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0065D9E22BE74C70004DD1F6 /* ImageViewCollectionViewCell.swift in Sources */,
 				001253EF2BD3C5010065F1E6 /* FetchPostParams.swift in Sources */,
 				001C920A2BD6D3C10028E67B /* SelectVisitDateViewModel.swift in Sources */,
 				00760E482BD50AE600741C40 /* SelectImageInnerCollectionViewCell.swift in Sources */,
