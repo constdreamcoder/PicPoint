@@ -20,11 +20,14 @@ final class SelectLocationViewModel: ViewModelType {
     weak var delegate: SelectLocationViewModelDelegate?
     
     struct Input {
+        let viewDidLoad: Observable<Void>
         let longTap: ControlEvent<UILongPressGestureRecognizer>
+        let moveToUserButton: ControlEvent<Void>
     }
     
     struct Output {
         let gestureState: Driver<UIGestureRecognizer.State>
+        let moveToUserButton: Driver<CLLocationCoordinate2D>
     }
     
     init(
@@ -34,9 +37,24 @@ final class SelectLocationViewModel: ViewModelType {
     }
     
     func transform(input: Input) -> Output {
+        
+        input.viewDidLoad
+            .bind { _ in
+                LocationManager.shared.checkDeviceLocationAuthorization()
+            }
+            .disposed(by: disposeBag)
+        
         let gestureState = input.longTap
             .map { $0.state }
         
-        return Output(gestureState: gestureState.asDriver(onErrorJustReturn: .ended))
+        let moveToUserTrigger = input.moveToUserButton
+            .flatMap {
+                LocationManager.shared.getCurrentUserLocation()
+            }
+        
+        return Output(
+            gestureState: gestureState.asDriver(onErrorJustReturn: .ended),
+            moveToUserButton: moveToUserTrigger.asDriver(onErrorJustReturn: CLLocationCoordinate2D())
+        )
     }
 }

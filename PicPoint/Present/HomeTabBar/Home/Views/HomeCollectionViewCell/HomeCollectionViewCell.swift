@@ -166,7 +166,7 @@ extension HomeCollectionViewCell {
         contentView.addSubview(containerView)
         
         containerView.snp.makeConstraints {
-            $0.top.bottom.equalTo(contentView.safeAreaLayoutGuide).inset(16.0)
+            $0.top.bottom.equalTo(contentView.safeAreaLayoutGuide).inset(24.0)
             $0.horizontalEdges.equalToSuperview().inset(16.0)
         }
     }

@@ -102,6 +102,8 @@
 		005E8F212BE0E89E00B341A5 /* LikeParams.swift in Sources */ = {isa = PBXBuildFile; fileRef = 005E8F202BE0E89E00B341A5 /* LikeParams.swift */; };
 		005E8F232BE0F24700B341A5 /* LikeModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 005E8F222BE0F24700B341A5 /* LikeModel.swift */; };
 		0062202B2BE1EAED0020BB78 /* LikeType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0062202A2BE1EAED0020BB78 /* LikeType.swift */; };
+		0065D9DD2BE727AB004DD1F6 /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0065D9DC2BE727AB004DD1F6 /* LocationManager.swift */; };
+		0065D9E02BE73A09004DD1F6 /* SearchCurrentUserLocationError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0065D9DF2BE73A09004DD1F6 /* SearchCurrentUserLocationError.swift */; };
 		00760E422BD4FD3D00741C40 /* AddPostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00760E412BD4FD3D00741C40 /* AddPostViewController.swift */; };
 		00760E442BD4FE0700741C40 /* AddPostViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00760E432BD4FE0700741C40 /* AddPostViewModel.swift */; };
 		00760E462BD5072000741C40 /* SelectImageTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00760E452BD5072000741C40 /* SelectImageTableViewCell.swift */; };
@@ -324,6 +326,8 @@
 		005E8F202BE0E89E00B341A5 /* LikeParams.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikeParams.swift; sourceTree = "<group>"; };
 		005E8F222BE0F24700B341A5 /* LikeModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikeModel.swift; sourceTree = "<group>"; };
 		0062202A2BE1EAED0020BB78 /* LikeType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikeType.swift; sourceTree = "<group>"; };
+		0065D9DC2BE727AB004DD1F6 /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
+		0065D9DF2BE73A09004DD1F6 /* SearchCurrentUserLocationError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchCurrentUserLocationError.swift; sourceTree = "<group>"; };
 		00760E412BD4FD3D00741C40 /* AddPostViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddPostViewController.swift; sourceTree = "<group>"; };
 		00760E432BD4FE0700741C40 /* AddPostViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddPostViewModel.swift; sourceTree = "<group>"; };
 		00760E452BD5072000741C40 /* SelectImageTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectImageTableViewCell.swift; sourceTree = "<group>"; };
@@ -1093,6 +1097,14 @@
 			path = Enums;
 			sourceTree = "<group>";
 		};
+		0065D9DE2BE739ED004DD1F6 /* LocationErrors */ = {
+			isa = PBXGroup;
+			children = (
+				0065D9DF2BE73A09004DD1F6 /* SearchCurrentUserLocationError.swift */,
+			);
+			path = LocationErrors;
+			sourceTree = "<group>";
+		};
 		00760E3E2BD4FD0900741C40 /* AddPost */ = {
 			isa = PBXGroup;
 			children = (
@@ -1356,6 +1368,7 @@
 				001041762BDC2BD100E5FDA1 /* LikeManager.swift */,
 				002720A22BDFD702004ADC5C /* FollowManager.swift */,
 				009F075F2BE673D50048FF15 /* PaymentManager.swift */,
+				0065D9DC2BE727AB004DD1F6 /* LocationManager.swift */,
 			);
 			path = Managers;
 			sourceTree = "<group>";
@@ -1454,6 +1467,7 @@
 				00E4D9D12BE3B1C400C641BE /* Profile */,
 				00E4D9D82BE3B28E00C641BE /* HashTagErrors */,
 				009F07642BE675080048FF15 /* PaymentErrors */,
+				0065D9DE2BE739ED004DD1F6 /* LocationErrors */,
 			);
 			path = Errors;
 			sourceTree = "<group>";
@@ -1863,6 +1877,7 @@
 				00760E592BD5321500741C40 /* ContentTableViewCell.swift in Sources */,
 				00EA276C2BDE37B000EE3F9C /* PasswordSignUpViewController.swift in Sources */,
 				00B7C3F12BCA5BE2009AC333 /* UserRouter.swift in Sources */,
+				0065D9DD2BE727AB004DD1F6 /* LocationManager.swift in Sources */,
 				003C82CA2BDD5906003315E1 /* EditMyProfileBody.swift in Sources */,
 				00AA9A792BCC24B90069C55C /* HomeTabBarViewController.swift in Sources */,
 				00B7C4112BCA6BB7009AC333 /* UserManager.swift in Sources */,
@@ -1901,6 +1916,7 @@
 				009AFAEA2BDA3050003A45BF /* FetchPostWithHashTagQuery.swift in Sources */,
 				000AD2652BD27E0B00FC7768 /* DetailRelatedContentCollectionHeaderView.swift in Sources */,
 				002720A82BDFF2F2004ADC5C /* UIView+Extensions.swift in Sources */,
+				0065D9E02BE73A09004DD1F6 /* SearchCurrentUserLocationError.swift in Sources */,
 				00E414F02BD93C5500C76BE4 /* WritePostBody.swift in Sources */,
 				00EA277A2BDE3EAC00EE3F9C /* PhoneNumberSignUpView.swift in Sources */,
 				0002C1272BD98A4700AE36EC /* RowView.swift in Sources */,
@@ -2100,6 +2116,7 @@
 				DEVELOPMENT_TEAM = 59V6NJY3X6;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = PicPoint/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "장수찬";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "사진 접근 권한입 필요합니다~!";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
@@ -2134,6 +2151,7 @@
 				DEVELOPMENT_TEAM = 59V6NJY3X6;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = PicPoint/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "장수찬";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "사진 접근 권한입 필요합니다~!";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;

@@ -28,7 +28,7 @@ final class ProfileViewController: BaseViewController {
         
         return collectionView
     }()
-    
+        
     private lazy var dataSoure = RxCollectionViewSectionedReloadDataSource<SectionModelWrapper> { [weak self] dataSource, collectionView, indexPath, item in
         guard let self else { return UICollectionViewCell()}
         
