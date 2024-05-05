@@ -10,12 +10,15 @@ import Photos
 
 extension UIViewController {
     func makeErrorAlert(title: String? = nil, message: String? = nil) {
-        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
-
-        let confirmButton = UIAlertAction(title: "확인", style: .default)
-
-        alert.addAction(confirmButton)
-        
-        present(alert, animated: true)
+        DispatchQueue.main.async { [weak self] in
+            guard let self else { return }
+            let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+            
+            let confirmButton = UIAlertAction(title: "확인", style: .default)
+            
+            alert.addAction(confirmButton)
+            
+            present(alert, animated: true)
+        }
     }
 }

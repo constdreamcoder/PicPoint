@@ -114,8 +114,12 @@ extension SelectImageViewController: UIViewControllerConfiguration {
             .disposed(by: disposeBag)
         
         output.rightBarButtonItemTapTrigger
-            .drive(with: self) { owner, _ in
-                owner.dismiss(animated: true)
+            .drive(with: self) { owner, isOver5MB in
+                if isOver5MB {
+                    owner.dismiss(animated: true)
+                } else {
+                    owner.makeErrorAlert(title: "이미지 파일 크기 제한", message: "이미지 파일 크기가 최대 5MB까지만 업로드 가능합니다.")
+                }
             }
             .disposed(by: disposeBag)
         

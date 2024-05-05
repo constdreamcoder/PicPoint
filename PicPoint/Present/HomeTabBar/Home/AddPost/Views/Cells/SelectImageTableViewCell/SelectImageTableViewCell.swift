@@ -100,7 +100,7 @@ extension SelectImageTableViewCell: UICollectionViewConfiguration {
         layout.itemSize = CGSize(width: itemSize / 4, height: itemSize / 4)
         layout.minimumLineSpacing = spacing * 2
         layout.minimumInteritemSpacing = 0
-        layout.sectionInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+        layout.sectionInset = UIEdgeInsets(top: 0, left: spacing * 2, bottom: 0, right: spacing * 2)
         layout.scrollDirection = .horizontal
         
         return layout

@@ -252,10 +252,16 @@ extension EditProfileViewController {
                 guard let image = image as? UIImage else { return }
                 if let viewModel {
                     guard let imageData = image.pngData() else { return }
-                    viewModel.profileImageSubject.onNext(imageData)
-                }
-                DispatchQueue.main.async {
-                    self.profileImageView.image = image
+                    
+                    if imageData.count <= (5 * 1024 * 1024) {
+                        viewModel.profileImageSubject.onNext(imageData)
+                        
+                        DispatchQueue.main.async {
+                            self.profileImageView.image = image
+                        }
+                    } else {
+                        makeErrorAlert(title: "이미지 파일 크기 제한", message: "5MB 이하 사진만 업로드 가능합니다.")
+                    }
                 }
             }
         }
@@ -268,7 +274,6 @@ extension EditProfileViewController: PHPickerViewControllerDelegate {
         picker.dismiss(animated: true)
         
         itemProviders = results.map(\.itemProvider)
-        
         
         if !itemProviders.isEmpty {
             displayImage()

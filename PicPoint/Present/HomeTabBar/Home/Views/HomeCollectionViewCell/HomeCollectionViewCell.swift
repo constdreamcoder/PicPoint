@@ -46,6 +46,7 @@ final class HomeCollectionViewCell: BaseCollectionViewCell {
         pageControl.currentPageIndicatorTintColor = .black
         pageControl.backgroundColor = .clear
         pageControl.allowsContinuousInteraction = true
+        pageControl.isHidden = true
         return pageControl
     }()
     
@@ -172,7 +173,7 @@ extension HomeCollectionViewCell {
         
         pageControl.snp.makeConstraints {
             $0.centerX.equalToSuperview()
-            $0.height.equalTo(24.0)
+            $0.height.equalTo(0)
             $0.bottom.equalTo(iconView.snp.top)
         }
         

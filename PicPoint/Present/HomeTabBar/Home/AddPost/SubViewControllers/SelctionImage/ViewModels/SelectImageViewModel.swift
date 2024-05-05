@@ -15,7 +15,7 @@ protocol SelectImageViewModelDelegate: AnyObject {
     func sendSelectedImage(asset: PHAsset)
 }
 
-final class SelectImageViewModel: ViewModelType {
+final class SelectImageViewModel: NSObject, ViewModelType {
     private let assetsRelay = BehaviorRelay<[PHAsset]>(value: [])
     private let selectedImageRelay = BehaviorRelay<PHAsset?>(value: nil)
     
@@ -31,7 +31,7 @@ final class SelectImageViewModel: ViewModelType {
     
     struct Output {
         let dismissButtonTapTrigger: Driver<Void>
-        let rightBarButtonItemTapTrigger: Driver<Void>
+        let rightBarButtonItemTapTrigger: Driver<Bool>
         let assets: Driver<[PHAsset]>
         let selectedImage: Driver<PHAsset?>
     }
@@ -41,6 +41,8 @@ final class SelectImageViewModel: ViewModelType {
         delegate: SelectImageViewModelDelegate
     ) {
         self.delegate = delegate
+        
+        super.init()
         
         Observable<[PHAsset]>.just(assets)
             .subscribe(with: self) { owner, assets in
@@ -52,13 +54,19 @@ final class SelectImageViewModel: ViewModelType {
     
     func transform(input: Input) -> Output {
         let rightBarButtonItemTap = input.rightBarButtonItemTap
-            .debounce(.seconds(1), scheduler: MainScheduler.instance)
+            .debounce(.milliseconds(500), scheduler: MainScheduler.instance)
             .withUnretained(self)
             .withLatestFrom(selectedImageRelay) { ($0.0, $1) }
             .map { owner, asset in
-                guard let asset else { return }
-                owner.delegate?.sendSelectedImage(asset: asset)
-                return ()
+                guard let asset else { return false }
+                guard let imageSize = owner.getUIImageFromPHAsset(asset).pngData()?.count else { return false }
+                
+                if Double(imageSize) <= 5 * 1024 * 1024 {
+                    owner.delegate?.sendSelectedImage(asset: asset)
+                    return true
+                } else {
+                    return false
+                }
             }
         
         input.itemTap
@@ -69,7 +77,7 @@ final class SelectImageViewModel: ViewModelType {
     
         return Output(
             dismissButtonTapTrigger: input.dismissButtonTap.asDriver(onErrorJustReturn: ()),
-            rightBarButtonItemTapTrigger: rightBarButtonItemTap.asDriver(onErrorJustReturn: ()),
+            rightBarButtonItemTapTrigger: rightBarButtonItemTap.asDriver(onErrorJustReturn: false),
             assets: assetsRelay.asDriver(),
             selectedImage: selectedImageRelay.asDriver()
         )
