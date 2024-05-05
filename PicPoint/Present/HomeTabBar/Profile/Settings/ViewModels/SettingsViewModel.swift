@@ -13,18 +13,45 @@ final class SettingsViewModel: ViewModelType {
     var disposeBag = DisposeBag()
     
     struct Input {
+        let logoutButtonTapped: ControlEvent<Void>
         let withdrawalButtonTapped: ControlEvent<Void>
+        let logoutTrigger: PublishSubject<Void>
+        let withdrawalTrigger: PublishSubject<Void>
     }
     
     struct Output {
-        let withdrawalSuccessTrigger: Driver<Void>
+        let questionLogoutTrigger: Driver<Void>
+        let questionWithdrawalTrigger: Driver<Void>
+        let successTrigger: Driver<Void>
     }
     
     func transform(input: Input) -> Output {
-        let withdrawalSuccessTrigger = PublishRelay<Void>()
+        let questionLogoutTrigger = PublishRelay<Void>()
+        let questionWithdrawalTrigger = PublishRelay<Void>()
+        let successTrigger = PublishRelay<Void>()
+        
+        input.logoutButtonTapped
+            .bind { _ in
+                questionLogoutTrigger.accept(())
+            }
+            .disposed(by: disposeBag)
+        
+        input.logoutTrigger
+            .debounce(.milliseconds(500), scheduler: MainScheduler.instance)
+            .bind { _ in
+                UserDefaults.standard.clearAllData()
+                successTrigger.accept(())
+            }
+            .disposed(by: disposeBag)
         
         input.withdrawalButtonTapped
-            .debounce(.seconds(1), scheduler: MainScheduler.instance)
+            .bind { _ in
+                questionWithdrawalTrigger.accept(())
+            }
+            .disposed(by: disposeBag)
+        
+        input.withdrawalTrigger
+            .debounce(.milliseconds(500), scheduler: MainScheduler.instance)
             .flatMap { _ in
                 UserManager.withdraw()
                     .catch { error in
@@ -34,13 +61,16 @@ final class SettingsViewModel: ViewModelType {
             }
             .subscribe(with: self) { owner, withdrawalModel in
                 UserDefaults.standard.clearAllData()
-                withdrawalSuccessTrigger.accept(())
+                successTrigger.accept(())
             } onError: { owner, error in
                 print("회원탈퇴 오류 발생, \(error)")
             }
             .disposed(by: disposeBag)
+        
         return Output(
-            withdrawalSuccessTrigger: withdrawalSuccessTrigger.asDriver(onErrorJustReturn: ())
+            questionLogoutTrigger: questionLogoutTrigger.asDriver(onErrorJustReturn: ()),
+            questionWithdrawalTrigger: questionWithdrawalTrigger.asDriver(onErrorJustReturn: ()),
+            successTrigger: successTrigger.asDriver(onErrorJustReturn: ())
         )
     }
 }
