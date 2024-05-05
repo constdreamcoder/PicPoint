@@ -12,10 +12,6 @@ final class TokenRefresher: RequestInterceptor {
     
     private let retryLimit = 2
     
-    deinit {
-        print("deinit - TokenRefresher 해제")
-    }
-    
     func adapt(_ urlRequest: URLRequest, for session: Session, completion: @escaping (Result<URLRequest, Error>) -> Void) {
         var urlRequest = urlRequest
         if urlRequest.headers.dictionary[HTTPHeader.authorization.rawValue] == nil {

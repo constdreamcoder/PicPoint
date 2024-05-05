@@ -29,6 +29,7 @@ final class CommentViewModel: ViewModelType {
         let sendButtonTap: ControlEvent<Void>
         let commentDeleteEvent: Observable<(ControlEvent<IndexPath>.Element, ControlEvent<Comment>.Element)>
         let baseViewTap: ControlEvent<UITapGestureRecognizer>
+        let refreshControlValueChanged: ControlEvent<Void>
     }
     
     struct Output {
@@ -39,6 +40,7 @@ final class CommentViewModel: ViewModelType {
         let sendButtonTapTrigger: Driver<Void>
         let commentSendingValid: Driver<Bool>
         let baseViewTapTrigger: Driver<UITapGestureRecognizer>
+        let endRefreshTrigger: Driver<Void>
     }
     
     init(postId: String) {
@@ -52,6 +54,7 @@ final class CommentViewModel: ViewModelType {
     func transform(input: Input) -> Output {
         let commentListRelay = BehaviorRelay<[Comment]>(value: [])
         let commentSendingValidation = BehaviorRelay<Bool>(value: false)
+        let endRefreshTrigger = PublishRelay<Void>()
         
         postIdSubject
             .flatMap {
@@ -63,6 +66,21 @@ final class CommentViewModel: ViewModelType {
             }
             .subscribe(with: self) { owner, post in
                 commentListRelay.accept(post.comments)
+            }
+            .disposed(by: disposeBag)
+        
+        input.refreshControlValueChanged
+            .withLatestFrom(postIdSubject)
+            .flatMap {
+                PostManager.fetchPost(params: .init(postId: $0))
+                    .catch { error in
+                        print(error.errorCode, error.errorDesc)
+                        return Single<Post>.never()
+                    }
+            }
+            .subscribe(with: self) { owner, post in
+                commentListRelay.accept(post.comments)
+                endRefreshTrigger.accept(())
             }
             .disposed(by: disposeBag)
         
@@ -128,7 +146,8 @@ final class CommentViewModel: ViewModelType {
             commentDidEndEditingTrigger: input.commentDidEndEditing.asDriver(),
             sendButtonTapTrigger: sendButtonTapTrigger.asDriver(onErrorJustReturn: ()),
             commentSendingValid: commentSendingValidation.asDriver(),
-            baseViewTapTrigger: input.baseViewTap.asDriver()
+            baseViewTapTrigger: input.baseViewTap.asDriver(), 
+            endRefreshTrigger: endRefreshTrigger.asDriver(onErrorJustReturn: ())
         )
     }
 }

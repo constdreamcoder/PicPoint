@@ -38,6 +38,9 @@ final class DetailViewController: BaseViewController {
         )
         collectionView.register(DetailRelatedContentsCollectionViewCell.self, forCellWithReuseIdentifier: DetailRelatedContentsCollectionViewCell.identifier)
         
+        let refreshControl = UIRefreshControl()
+        collectionView.refreshControl = refreshControl
+        
         return collectionView
     }()
     
@@ -182,12 +185,15 @@ extension DetailViewController: UIViewControllerConfiguration {
         let paymentResponse = PublishSubject<IamportResponse>()
         
         guard let rightBarButtonItem = navigationItem.rightBarButtonItem else { return }
+        guard let refreshControl = collectionView.refreshControl else { return }
+        
         let input = DetailViewModel.Input(
             rightBarButtonItem: rightBarButtonItem.rx.tap,
             heartButtonTap: iconView.heartStackView.button.rx.tap,
             commentButtonTap: iconView.commentStackView.button.rx.tap,
             itemTap: itemTapSubject,
-            paymentResponse: paymentResponse
+            paymentResponse: paymentResponse, 
+            refreshControllValueChagned: refreshControl.rx.controlEvent(.valueChanged)
         )
         
         guard let viewModel = viewModel else { return }
@@ -201,6 +207,12 @@ extension DetailViewController: UIViewControllerConfiguration {
         
         output.sections
             .drive(collectionView.rx.items(dataSource: dataSource))
+            .disposed(by: disposeBag)
+        
+        output.endRefreshTrigger
+            .drive(with: self) { owner, _ in
+                refreshControl.endRefreshing()
+            }
             .disposed(by: disposeBag)
         
         output.post

@@ -31,6 +31,7 @@ final class ProfileViewModel: ViewModelType {
     
     struct Input {
         let viewWillAppear: Observable<Bool>
+        let refreshControlValueChanged: ControlEvent<Void>
     }
     
     struct Output {
@@ -40,6 +41,7 @@ final class ProfileViewModel: ViewModelType {
         let moveToFollowTapTrigger: Driver<FetchMyProfileModel?>
         let myProfile: Driver<FetchMyProfileModel?>
         let moveToDetailVCTrigger: Driver<Post?>
+        let endRefreshTrigger: Driver<Void>
     }
     
     init(_ userId: String = "") {
@@ -57,6 +59,7 @@ final class ProfileViewModel: ViewModelType {
         let editMyProfileTrigger = PublishRelay<FetchMyProfileModel?>()
         let followTrigger = PublishSubject<FetchMyProfileModel>()
         let unFollowTrigger = PublishSubject<FetchMyProfileModel>()
+        let endRefreshTrigger = PublishRelay<Void>()
         
         let sections: [SectionModelWrapper] = [
             SectionModelWrapper(
@@ -98,9 +101,10 @@ final class ProfileViewModel: ViewModelType {
                 owner.myProfile.accept(otherProfile)
                 owner.myPosts.accept(otherProfile.posts)
                 owner.delegate?.sendMyPosts(otherProfile.posts)
+                endRefreshTrigger.accept(())
             }
             .disposed(by: disposeBag)
-        
+            
         myProfileTrigger
             .flatMap { _ in
                 ProfileManager.fetchMyProfile()
@@ -113,11 +117,23 @@ final class ProfileViewModel: ViewModelType {
                 owner.myProfile.accept(myProfileModel)
                 owner.myPosts.accept(myProfileModel.posts)
                 owner.delegate?.sendMyPosts(myProfileModel.posts)
+                endRefreshTrigger.accept(())
             }
             .disposed(by: disposeBag)
         
         userIdSubject
             .subscribe { userId  in
+                if userId != "" && UserDefaults.standard.userId != userId {
+                    otherProfileTrigger.onNext(userId)
+                } else {
+                    myProfileTrigger.onNext(())
+                }
+            }
+            .disposed(by: disposeBag)
+        
+        input.refreshControlValueChanged
+            .withLatestFrom(userIdSubject)
+            .bind { userId  in
                 if userId != "" && UserDefaults.standard.userId != userId {
                     otherProfileTrigger.onNext(userId)
                 } else {
@@ -198,7 +214,8 @@ final class ProfileViewModel: ViewModelType {
             editProfileButtonTapTrigger: editMyProfileTrigger.asDriver(onErrorJustReturn: nil),
             moveToFollowTapTrigger: moveToFollowTapTrigger.asDriver(onErrorJustReturn: nil),
             myProfile: myProfile.asDriver(onErrorJustReturn: nil),
-            moveToDetailVCTrigger: postForMovingToDetailVCRelay.asDriver(onErrorJustReturn: nil)
+            moveToDetailVCTrigger: postForMovingToDetailVCRelay.asDriver(onErrorJustReturn: nil),
+            endRefreshTrigger: endRefreshTrigger.asDriver(onErrorJustReturn: ())
         )
     }
 }

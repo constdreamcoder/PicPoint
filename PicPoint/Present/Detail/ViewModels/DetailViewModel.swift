@@ -38,6 +38,7 @@ final class DetailViewModel: ViewModelType {
         let commentButtonTap: ControlEvent<Void>
         let itemTap: PublishSubject<Int>
         let paymentResponse: PublishSubject<IamportResponse>
+        let refreshControllValueChagned: ControlEvent<Void>
     }
     
     struct Output {
@@ -49,6 +50,7 @@ final class DetailViewModel: ViewModelType {
         let itemTapTrigger: Driver<Post?>
         let moveToOtherProfileTrigger: Driver<String>
         let gotoPaymentPageTrigger: Driver<IamportPayment?>
+        let endRefreshTrigger: Driver<Void>
     }
     
     init(post: Post) {
@@ -87,47 +89,14 @@ final class DetailViewModel: ViewModelType {
                 
                 let separatedDateStrings = post.content2?.components(separatedBy: "/")
                 
-                let sections: [SectionModelWrapper] = [
-                    SectionModelWrapper(
-                        DetailCollectionViewFirstSectionDataModel(
-                            items: [.init(
-                                header: "",
-                                title: post.title ?? "",
-                                address: separatedLocationStrings?[3] ?? "",
-                                files: post.files)
-                            ]
-                        )
-                    ),
-                    SectionModelWrapper(
-                        DetailCollectionViewSecondSectionDataModel(
-                            items: [.init(
-                                header: "",
-                                content: post.content ?? "",
-                                visitDate: separatedDateStrings?[0].getDateString ?? "",
-                                creator: post.creator)
-                            ]
-                        )
-                    ),
-                    SectionModelWrapper(
-                        DetailCollectionViewThirdSectionDataModel(
-                            header: "",
-                            items: [.init(
-                                header: "",
-                                latitude: latitude,
-                                longitude: longitude,
-                                longAddress: separatedLocationStrings?[2] ?? "",
-                                hashTags: post.hashTags,
-                                recommendedVisitTime: separatedDateStrings?[1] ?? "")
-                            ]
-                        )
-                    ),
-                    SectionModelWrapper(
-                        DetailCollectionViewForthSectionDataModel(
-                            header: "",
-                            items: postList.filter { $0.postId != post.postId }
-                        )
-                    )
-                ]
+                let sections = owner.createSections(
+                    post: post,
+                    postList: postList,
+                    separatedLocationStrings: separatedLocationStrings,
+                    latitude: latitude,
+                    longitude: longitude,
+                    separatedDateStrings: separatedDateStrings)
+                
                 owner.sectionsRelay.accept(sections)
                 owner.relatedPostList.onNext(postList.filter { $0.postId != post.postId })
             }
@@ -143,6 +112,8 @@ final class DetailViewModel: ViewModelType {
         let unFollowTrigger = PublishSubject<Post>()
         let gotoPaymentPageTrigger = PublishRelay<IamportPayment?>()
         let rightBarButtonItemHiddenTrigger = BehaviorRelay<Bool>(value: false)
+        let postRefreshTrigger = PublishSubject<Post>()
+        let endRefreshTrigger = PublishRelay<Void>()
         
        Observable.just(())
             .withLatestFrom(postRelay)
@@ -168,6 +139,64 @@ final class DetailViewModel: ViewModelType {
                         $0.app_scheme = APIKeys.appScheme
                     }
                 gotoPaymentPageTrigger.accept(payment)
+            }
+            .disposed(by: disposeBag)
+        
+        postRefreshTrigger
+            .withUnretained(self)
+            .map { owner, post in
+                if post.likes.contains(where: { $0 == UserDefaults.standard.userId }) {
+                    let postLike: PostLikeType = (post, .like, post.likes, post.comments)
+                    owner.postRelay.accept(postLike)
+                } else {
+                    let postLike: PostLikeType = (post, .unlike, post.likes, post.comments)
+                    owner.postRelay.accept(postLike)
+                }
+                return post
+            }
+            .withUnretained(self)
+            .map { owner, post -> FetchPostWithHashTagQuery in
+                owner.hashTagsSubject.onNext(post.hashTags)
+                return FetchPostWithHashTagQuery(
+                    limit: "10",
+                    hashTag: post.hashTags.count == 0 ? "" : post.hashTags[0]
+                )
+            }
+            .flatMap { fetchPostWithHashTagQuery in
+                PostManager.FetchPostWithHashTag(query: fetchPostWithHashTagQuery)
+                    .catch { error in
+                        print(error.errorCode, error.errorDesc)
+                        return Single<[Post]>.never()
+                    }
+            }
+            .withLatestFrom(postRefreshTrigger) { ($0, $1) }
+            .subscribe(with: self) { owner, value in
+                let separatedLocationStrings = value.1.content1?.components(separatedBy: "/")
+                
+                let latitude = Double(separatedLocationStrings?[0] ?? "") ?? 0
+                let longitude = Double(separatedLocationStrings?[1] ?? "") ?? 0
+                
+                let separatedDateStrings = value.1.content2?.components(separatedBy: "/")
+                
+                let sections = owner.createSections(
+                    post: value.1,
+                    postList: value.0,
+                    separatedLocationStrings: separatedLocationStrings,
+                    latitude: latitude,
+                    longitude: longitude,
+                    separatedDateStrings: separatedDateStrings)
+                
+                owner.sectionsRelay.accept(sections)
+                owner.relatedPostList.onNext(value.0.filter { $0.postId != value.1.postId })
+                endRefreshTrigger.accept(())
+            }
+            .disposed(by: disposeBag)
+        
+        input.refreshControllValueChagned
+            .withLatestFrom(postRelay)
+            .bind { post in
+                guard let post else { return }
+                postRefreshTrigger.onNext(post.post)
             }
             .disposed(by: disposeBag)
         
@@ -358,8 +387,64 @@ final class DetailViewModel: ViewModelType {
             mapViewTapTrigger: mapViewTapRelay.asDriver(onErrorJustReturn: CLLocationCoordinate2D()),
             itemTapTrigger: itemTapTrigger.asDriver(onErrorJustReturn: nil),
             moveToOtherProfileTrigger: moveToOtherProfileTrigger.asDriver(onErrorJustReturn: ""), 
-            gotoPaymentPageTrigger: gotoPaymentPageTrigger.asDriver(onErrorJustReturn: nil)
+            gotoPaymentPageTrigger: gotoPaymentPageTrigger.asDriver(onErrorJustReturn: nil), 
+            endRefreshTrigger: endRefreshTrigger.asDriver(onErrorJustReturn: ())
         )
+    }
+}
+
+extension DetailViewModel {
+    private func createSections(
+        post: Post,
+        postList: [Post],
+        separatedLocationStrings: [String]?,
+        latitude: Double,
+        longitude: Double,
+        separatedDateStrings: [String]?
+    ) -> [SectionModelWrapper] {
+        let sections: [SectionModelWrapper] = [
+            SectionModelWrapper(
+                DetailCollectionViewFirstSectionDataModel(
+                    items: [.init(
+                        header: "",
+                        title: post.title ?? "",
+                        address: separatedLocationStrings?[3] ?? "",
+                        files: post.files)
+                    ]
+                )
+            ),
+            SectionModelWrapper(
+                DetailCollectionViewSecondSectionDataModel(
+                    items: [.init(
+                        header: "",
+                        content: post.content ?? "",
+                        visitDate: separatedDateStrings?[0].getDateString ?? "",
+                        creator: post.creator)
+                    ]
+                )
+            ),
+            SectionModelWrapper(
+                DetailCollectionViewThirdSectionDataModel(
+                    header: "",
+                    items: [.init(
+                        header: "",
+                        latitude: latitude,
+                        longitude: longitude,
+                        longAddress: separatedLocationStrings?[2] ?? "",
+                        hashTags: post.hashTags,
+                        recommendedVisitTime: separatedDateStrings?[1] ?? "")
+                    ]
+                )
+            ),
+            SectionModelWrapper(
+                DetailCollectionViewForthSectionDataModel(
+                    header: "",
+                    items: postList.filter { $0.postId != post.postId }
+                )
+            )
+        ]
+        
+        return sections
     }
 }
 

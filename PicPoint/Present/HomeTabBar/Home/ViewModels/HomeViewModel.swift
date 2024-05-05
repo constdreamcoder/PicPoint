@@ -34,6 +34,7 @@ final class HomeViewModel: ViewModelType {
         let addButtonTap: ControlEvent<Void>
         let deletePostTap: PublishSubject<String>
         let postTap: ControlEvent<PostLikeType>
+        let refreshControlValueChanged: ControlEvent<()>
     }
     
     struct Output {
@@ -43,12 +44,14 @@ final class HomeViewModel: ViewModelType {
         let postId: Driver<String>
         let postTapTrigger: Driver<Post?>
         let moveToProfileTrigger: Driver<String>
+        let refreshTrigger: Driver<Void>
     }
     
     func transform(input: Input) -> Output {
         let postTapTrigger = PublishRelay<Post?>()
         let likeTrigger = PublishSubject<String>()
         let unlikeTrigger = PublishSubject<String>()
+        let refreshTrigger = PublishRelay<Void>()
         
         input.viewDidLoadTrigger
             .flatMap { _ in
@@ -75,6 +78,29 @@ final class HomeViewModel: ViewModelType {
         input.rightBarButtonItemTapped
             .bind(with: self) { owner, _ in
                 print("검색")
+            }
+            .disposed(by: disposeBag)
+        
+        input.refreshControlValueChanged
+            .flatMap { _ in
+                PostManager.fetchPostList(query: .init(limit: "50", product_id: APIKeys.productId))
+                    .catch { error in
+                        print(error.errorCode, error.errorDesc)
+                        return Single<PostListModel>.never()
+                    }
+            }
+            .map { postListModel -> [PostLikeType] in
+                postListModel.data.map { post in
+                    if post.likes.contains(UserDefaults.standard.userId) {
+                        return (post, .like, post.likes, post.comments)
+                    } else {
+                        return (post, .unlike, post.likes, post.comments)
+                    }
+                }
+            }
+            .subscribe(with: self) { owner, newPostList in
+                owner.postList.accept(newPostList)
+                refreshTrigger.accept(())
             }
             .disposed(by: disposeBag)
         
@@ -213,7 +239,8 @@ final class HomeViewModel: ViewModelType {
             otherOptionsButtonTapTrigger: otherOptionsButtonTapRelay.asDriver(onErrorJustReturn: ""),
             postId: commentButtonTapRelay.asDriver(onErrorJustReturn: ""), 
             postTapTrigger: postTapTrigger.asDriver(onErrorJustReturn: nil),
-            moveToProfileTrigger: moveToProfileTrigger.asDriver(onErrorJustReturn: "")
+            moveToProfileTrigger: moveToProfileTrigger.asDriver(onErrorJustReturn: ""), 
+            refreshTrigger: refreshTrigger.asDriver(onErrorJustReturn: ())
         )
     }
 }

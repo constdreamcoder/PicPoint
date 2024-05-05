@@ -26,6 +26,9 @@ final class HomeViewController: BaseViewController {
         collectionView.showsVerticalScrollIndicator = false
         
         collectionView.register(HomeCollectionViewCell.self, forCellWithReuseIdentifier: HomeCollectionViewCell.identifier)
+                
+        let refreshControl = UIRefreshControl()
+        collectionView.refreshControl = refreshControl
         
         return collectionView
     }()
@@ -108,13 +111,14 @@ extension HomeViewController: UIViewControllerConfiguration {
         let deletePostTap = PublishSubject<String>()
         
         guard let rightBarButtonItem = navigationItem.rightBarButtonItem else { return }
-        
+        guard let refreshControl = collectionView.refreshControl else { return }
         let input = HomeViewModel.Input(
             viewDidLoadTrigger: Observable<Void>.just(()),
             rightBarButtonItemTapped: rightBarButtonItem.rx.tap, 
             addButtonTap: addPostButton.rx.tap, 
             deletePostTap: deletePostTap,
-            postTap: collectionView.rx.modelSelected(PostLikeType.self)
+            postTap: collectionView.rx.modelSelected(PostLikeType.self),
+            refreshControlValueChanged: refreshControl.rx.controlEvent(.valueChanged)
         )
         
         let output = viewModel.transform(input: input)
@@ -178,6 +182,12 @@ extension HomeViewController: UIViewControllerConfiguration {
                     let profileVC = ProfileViewController(profileViewModel: profileVM)
                     owner.navigationController?.pushViewController(profileVC, animated: true)
                 }
+            }
+            .disposed(by: disposeBag)
+        
+        output.refreshTrigger
+            .drive(with: self) { owner, _ in
+                refreshControl.endRefreshing()
             }
             .disposed(by: disposeBag)
     }

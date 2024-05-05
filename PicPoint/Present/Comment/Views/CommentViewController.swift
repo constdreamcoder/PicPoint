@@ -26,6 +26,8 @@ final class CommentViewController: BaseViewController {
         
         tableView.register(CommentTableViewCell.self, forCellReuseIdentifier: CommentTableViewCell.identifier)
         
+        let refreshControl = UIRefreshControl()
+        tableView.refreshControl = refreshControl
         return tableView
     }()
     
@@ -132,17 +134,26 @@ extension CommentViewController: UIViewControllerConfiguration {
                 }
             }
         
+        guard let refreshControl = tableView.refreshControl else { return }
+        
         let input = CommentViewModel.Input(
             commentTextEvent: commentText,
             commentDidBeginEditing: textView.rx.didBeginEditing,
             commentDidEndEditing: textView.rx.didEndEditing, 
             sendButtonTap: commentWritingSectionView.sendButton.rx.tap,
             commentDeleteEvent: commentDeleteEvent,
-            baseViewTap: baseViewTap.rx.event
+            baseViewTap: baseViewTap.rx.event, 
+            refreshControlValueChanged: refreshControl.rx.controlEvent(.valueChanged)
         )
         
         guard let viewModel else { return }
         let output = viewModel.transform(input: input)
+        
+        output.endRefreshTrigger
+            .drive(with: self) { owner, _ in
+                refreshControl.endRefreshing()
+            }
+            .disposed(by: disposeBag)
         
         output.commentList
             .drive(tableView.rx.items(cellIdentifier: CommentTableViewCell.identifier, cellType: CommentTableViewCell.self)) { row, element, cell in

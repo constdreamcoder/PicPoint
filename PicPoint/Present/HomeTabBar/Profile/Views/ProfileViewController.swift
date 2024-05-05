@@ -26,6 +26,9 @@ final class ProfileViewController: BaseViewController {
         )
         collectionView.register(ContentsCollectionViewCell.self, forCellWithReuseIdentifier: ContentsCollectionViewCell.identifier)
         
+        let refreshControl = UIRefreshControl()
+        collectionView.refreshControl = refreshControl
+        
         return collectionView
     }()
         
@@ -133,8 +136,11 @@ extension ProfileViewController: UIViewControllerConfiguration {
     
     func bind() {
         
+        guard let refreshControl = collectionView.refreshControl else { return }
+        
         let input = ProfileViewModel.Input(
-            viewWillAppear: rx.viewWillAppear
+            viewWillAppear: rx.viewWillAppear, 
+            refreshControlValueChanged: refreshControl.rx.controlEvent(.valueChanged)
         )
         
         let output = viewModel.transform(input: input)
@@ -189,6 +195,12 @@ extension ProfileViewController: UIViewControllerConfiguration {
                     let detailVC = DetailViewController(detailViewModel: detailVM)
                     owner.navigationController?.pushViewController(detailVC, animated: true)
                 }
+            }
+            .disposed(by: disposeBag)
+        
+        output.endRefreshTrigger
+            .drive(with: self) { owner, _ in
+                refreshControl.endRefreshing()
             }
             .disposed(by: disposeBag)
     }
