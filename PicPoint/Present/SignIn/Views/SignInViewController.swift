@@ -155,6 +155,5 @@ extension SignInViewController: UIViewControllerConfiguration {
                 owner.makeErrorAlert(title: "로그인 오류", message: errorMessage)
             }
             .disposed(by: disposeBag)
-        
     }
 }

@@ -28,6 +28,7 @@ final class AddPostViewController: BaseViewController {
         
         return tableView
     }()
+    
     private lazy var dataSource = RxTableViewSectionedReloadDataSource<AddPostCollectionViewSectionDataModel> { [weak self] dataSource, tableView, indexPath, item in
         guard let self else { return UITableViewCell() }
         
@@ -77,6 +78,12 @@ final class AddPostViewController: BaseViewController {
         return UITableViewCell()
     }
     
+    private lazy var endEditingTap: UITapGestureRecognizer = {
+        let tap = UITapGestureRecognizer(target: self, action: nil)
+        view.addGestureRecognizer(tap)
+        return tap
+    }()
+    
     private var viewModel: AddPostViewModel
     
     init(addPostViewModel: AddPostViewModel) {
@@ -87,6 +94,10 @@ final class AddPostViewController: BaseViewController {
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    deinit {
+        view?.removeGestureRecognizer(endEditingTap)
     }
     
     override func viewDidLoad() {
@@ -134,7 +145,8 @@ extension AddPostViewController: UIViewControllerConfiguration {
         
         let input = AddPostViewModel.Input(
             rightBarButtonItemTap: rightBarButtonItem.rx.tap, 
-            itemTap: itemTap
+            itemTap: itemTap,
+            endEditingTap: endEditingTap.rx.event
         )
         
         let output = viewModel.transform(input: input)
@@ -200,6 +212,12 @@ extension AddPostViewController: UIViewControllerConfiguration {
         
         output.registerButtonValid
             .drive(rightBarButtonItem.rx.isEnabled)
+            .disposed(by: disposeBag)
+        
+        output.endEditingTrigger
+            .drive(with: self) { owner, _ in
+                owner.view.endEditing(true)
+            }
             .disposed(by: disposeBag)
     }
 }

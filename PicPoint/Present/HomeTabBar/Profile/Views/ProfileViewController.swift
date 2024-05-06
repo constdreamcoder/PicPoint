@@ -34,13 +34,13 @@ final class ProfileViewController: BaseViewController {
     
     let goToMapButton: UIButton = {
         let button = UIButton()
-        button.titleLabel?.font = .systemFont(ofSize: 16.0, weight: .bold)
-        button.backgroundColor = .black
-        button.setTitleColor(.white, for: .normal)
-        button.layer.cornerRadius = 16.0
-        button.setTitle("지도로 보기", for: .normal)
-        button.setTitleColor(.white, for: .normal)
-        button.isHidden = true
+        var buttonConfiguration = UIButton.Configuration.filled()
+        buttonConfiguration.baseBackgroundColor = .black
+        buttonConfiguration.baseForegroundColor = .white
+        buttonConfiguration.title = "지도로 보기"
+        buttonConfiguration.buttonSize = .large
+        buttonConfiguration.background.cornerRadius = 32.0
+        button.configuration = buttonConfiguration
         return button
     }()
         
@@ -146,7 +146,6 @@ extension ProfileViewController: UIViewControllerConfiguration {
         
         goToMapButton.snp.makeConstraints {
             $0.centerX.equalTo(view.safeAreaLayoutGuide)
-            $0.width.equalTo(100.0)
             $0.bottom.equalTo(view.safeAreaLayoutGuide).inset(16.0)
         }
     }
@@ -223,6 +222,14 @@ extension ProfileViewController: UIViewControllerConfiguration {
         output.endRefreshTrigger
             .drive(with: self) { owner, _ in
                 refreshControl.endRefreshing()
+            }
+            .disposed(by: disposeBag)
+        
+        output.goToMapButtonTrigger
+            .drive(with: self) { owner, postList in
+                let showOnMapVM = ShowOnMapViewModel(postList)
+                let showOnMapVC = ShowOnMapViewController(showOnMapViewModel: showOnMapVM)
+                owner.navigationController?.pushViewController(showOnMapVC, animated: true)
             }
             .disposed(by: disposeBag)
     }

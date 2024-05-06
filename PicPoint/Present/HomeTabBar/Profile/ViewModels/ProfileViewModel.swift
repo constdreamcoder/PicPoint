@@ -26,6 +26,7 @@ final class ProfileViewModel: ViewModelType {
     private let updateContentSizeRelay = PublishRelay<CGFloat>()
     private let userIdSubject = BehaviorSubject<String>(value: "")
     private let postForMovingToDetailVCRelay = PublishRelay<Post?>()
+    private let postList = PublishRelay<[Post]>()
     
     weak var delegate: ProfileViewModelDelegate?
     
@@ -43,6 +44,7 @@ final class ProfileViewModel: ViewModelType {
         let myProfile: Driver<FetchMyProfileModel?>
         let moveToDetailVCTrigger: Driver<Post?>
         let endRefreshTrigger: Driver<Void>
+        let goToMapButtonTrigger: Driver<[Post]>
     }
     
     init(_ userId: String = "") {
@@ -206,15 +208,12 @@ final class ProfileViewModel: ViewModelType {
             }
             .disposed(by: disposeBag)
         
+        let goToMapButtonTrigger = input.goToMapButtonTapped
+            .withLatestFrom(postList)
+        
         let moveToFollowTapTrigger = moveToFollowTap
             .withLatestFrom(myProfile)
-        
-        input.goToMapButtonTapped
-            .bind { _ in
-                print("눌림")
-            }
-            .disposed(by: disposeBag)
-            
+                
         return Output(
             sections: sectionsObservable.asDriver(onErrorJustReturn: []),
             updateContentSize: updateContentSizeRelay.asDriver(onErrorJustReturn: 0),
@@ -222,12 +221,14 @@ final class ProfileViewModel: ViewModelType {
             moveToFollowTapTrigger: moveToFollowTapTrigger.asDriver(onErrorJustReturn: nil),
             myProfile: myProfile.asDriver(onErrorJustReturn: nil),
             moveToDetailVCTrigger: postForMovingToDetailVCRelay.asDriver(onErrorJustReturn: nil),
-            endRefreshTrigger: endRefreshTrigger.asDriver(onErrorJustReturn: ())
+            endRefreshTrigger: endRefreshTrigger.asDriver(onErrorJustReturn: ()),
+            goToMapButtonTrigger: goToMapButtonTrigger.asDriver(onErrorJustReturn: [])
         )
     }
 }
 
 extension ProfileViewModel: MyPostViewModelDelegate {
+
     func sendMyPostCollectionViewContentHeight(_ contentHeight: CGFloat) {
         Observable.just(contentHeight)
             .subscribe(with: self) { owner, contentHeight in
@@ -257,6 +258,14 @@ extension ProfileViewModel: MyPostViewModelDelegate {
         Observable<Post>.just(post)
             .subscribe(with: self) { owner, post in
                 owner.postForMovingToDetailVCRelay.accept(post)
+            }
+            .disposed(by: disposeBag)
+    }
+    
+    func sendPostListBackToProfileVC(_ postList: [Post]) {
+        Observable<[Post]>.just(postList)
+            .subscribe(with: self) { owner, postList in
+                owner.postList.accept(postList)
             }
             .disposed(by: disposeBag)
     }

@@ -44,7 +44,7 @@ final class HomeViewController: BaseViewController {
         return button
     }()
     
-    private let addPostButtonWidth: CGFloat = 44.0
+    private let addPostButtonWidth: CGFloat = 56.0
     
     private let viewModel = HomeViewModel()
     

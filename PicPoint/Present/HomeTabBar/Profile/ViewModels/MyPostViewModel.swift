@@ -14,6 +14,7 @@ protocol MyPostViewModelDelegate: AnyObject {
     func sendNewPostId(_ postId: String)
     func sendUpdatedPostIdList(_ postIdList: [String])
     func sendPostForMovingToDetailVCFromMyPostVC(_ post: Post)
+    func sendPostListBackToProfileVC(_ postList: [Post])
 }
 
 final class MyPostViewModel: ViewModelType {
@@ -82,6 +83,7 @@ extension MyPostViewModel: ProfileViewModelDelegate {
         Observable.combineLatest(observables)
             .subscribe(with: self) { owner, postList in
                 owner.myPostsList.accept(postList)
+                owner.delegate?.sendPostListBackToProfileVC(postList)
             }
             .disposed(by: disposeBag)
         
