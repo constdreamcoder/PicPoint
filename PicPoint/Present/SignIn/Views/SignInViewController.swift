@@ -12,6 +12,22 @@ import RxCocoa
 
 final class SignInViewController: BaseViewController {
     
+    let appNameLabel: UILabel = {
+        let label = UILabel()
+        label.text = "PicPoint"
+        label.textColor = .black
+        label.font = .systemFont(ofSize: 80.0, weight: .bold)
+        return label
+    }()
+    
+    let subLabel: UILabel = {
+        let label = UILabel()
+        label.text = "자신만의 사진 장소를 공유해보세요"
+        label.textColor = .black
+        label.font = .systemFont(ofSize: 18.0)
+        return label
+    }()
+    
     let emailInputTextView: CustomInputView = {
         let textView = CustomInputView("이메일을 입력해주세요", charLimit: 30)
         textView.titleLabel.text = "이메일"
@@ -65,14 +81,27 @@ extension SignInViewController: UIViewControllerConfiguration {
     
     func configureConstraints() {
         [
+            appNameLabel,
+            subLabel,
             emailInputTextView,
             passwordInputTextField,
             signInButton,
             goToSignUpButton
         ].forEach { view.addSubview($0) }
         
+        appNameLabel.snp.makeConstraints {
+            $0.top.equalTo(view.safeAreaLayoutGuide).offset(16.0)
+            $0.centerX.equalTo(view.safeAreaLayoutGuide)
+        }
+        
+        subLabel.snp.makeConstraints {
+            $0.top.equalTo(appNameLabel.snp.bottom).offset(12.0)
+            $0.centerX.equalTo(view.safeAreaLayoutGuide)
+        }
+        
         emailInputTextView.snp.makeConstraints {
-            $0.top.horizontalEdges.equalTo(view.safeAreaLayoutGuide).inset(16.0)
+            $0.top.equalTo(subLabel.snp.bottom).offset(48.0)
+            $0.horizontalEdges.equalTo(view.safeAreaLayoutGuide).inset(16.0)
         }
         
         passwordInputTextField.snp.makeConstraints {
