@@ -14,9 +14,10 @@ final class LoginViewModel: ViewModelType {
     
     struct Input {
         let emailText: Observable<String>
-        let passwordText: Observable<String>
+        let passwordText: ControlProperty<String>
         let loginButtonTapped: ControlEvent<Void>
         let goToSignUpButtonTapped: ControlEvent<Void>
+        let showPasswordButtonTapped: ControlEvent<Void>
     }
     
     struct Output {
@@ -24,6 +25,7 @@ final class LoginViewModel: ViewModelType {
         let loginSuccessTrigger: Driver<Void>
         let moveToSignUpVC: Driver<Void>
         let loginFailTrigger: Driver<String>
+        let showPasswordButtonTrigger: Driver<Void>
     }
     
     func transform(input: Input) -> Output {
@@ -102,7 +104,8 @@ final class LoginViewModel: ViewModelType {
             loginValidation: loginValid.asDriver(),
             loginSuccessTrigger: loginSuccessTrigger.asDriver(onErrorJustReturn: ()),
             moveToSignUpVC: input.goToSignUpButtonTapped.asDriver(), 
-            loginFailTrigger: loginFailTrigger.asDriver(onErrorJustReturn: "")
+            loginFailTrigger: loginFailTrigger.asDriver(onErrorJustReturn: ""),
+            showPasswordButtonTrigger: input.showPasswordButtonTapped.asDriver()
         )
     }
     

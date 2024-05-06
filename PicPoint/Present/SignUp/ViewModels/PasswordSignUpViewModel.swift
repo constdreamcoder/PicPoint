@@ -37,6 +37,8 @@ final class PasswordSignUpViewModel: ViewModelType {
         let passwordText: ControlProperty<String>
         let passwordConfirmText: ControlProperty<String>
         let bottomButtonTap: ControlEvent<Void>
+        let showPasswordButtonTapped: ControlEvent<Void>
+        let showPasswordConfirmButtonTapped: ControlEvent<Void>
     }
     
     struct Output {
@@ -44,6 +46,8 @@ final class PasswordSignUpViewModel: ViewModelType {
         let passwordConfirmValid: Driver<String>
         let bottomButtonValid: Driver<Bool>
         let bottomButtonTapTrigger: Driver<Void>
+        let showPasswordButtonTrigger: Driver<Void>
+        let showPasswordConfirmButtonTrigger: Driver<Void>
     }
     
     func transform(input: Input) -> Output {
@@ -65,8 +69,10 @@ final class PasswordSignUpViewModel: ViewModelType {
             .disposed(by: disposeBag)
         
         input.passwordConfirmText
-            .withLatestFrom(input.passwordText) { 
-                if $0 == $1 {
+            .withLatestFrom(input.passwordText) {
+                if $0.isEmpty && $1.isEmpty {
+                    return ""
+                } else if $0 == $1 {
                     SignUpStorage.shared.password = $0.trimmingCharacters(in: .whitespacesAndNewlines)
                     return "200"
                 } else {
@@ -92,7 +98,9 @@ final class PasswordSignUpViewModel: ViewModelType {
             passwordValidation: passwordValidation.asDriver(onErrorJustReturn: ""),
             passwordConfirmValid: passwordConfirmValidation.asDriver(onErrorJustReturn: ""),
             bottomButtonValid: bottomButtonValidation.asDriver(onErrorJustReturn: false),
-            bottomButtonTapTrigger: bottomButtonTapTrigger.asDriver()
+            bottomButtonTapTrigger: bottomButtonTapTrigger.asDriver(),
+            showPasswordButtonTrigger: input.showPasswordButtonTapped.asDriver(onErrorJustReturn: ()),
+            showPasswordConfirmButtonTrigger: input.showPasswordConfirmButtonTapped.asDriver()
         )
     }
 }

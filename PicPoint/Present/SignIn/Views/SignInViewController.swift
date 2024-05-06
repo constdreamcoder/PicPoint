@@ -24,6 +24,8 @@ final class SignInViewController: BaseViewController {
         let textView = CustomInputView("비밀번호를 입력해주세요", charLimit: 15)
         textView.titleLabel.text = "비밀번호"
         textView.remainCountLabel.isHidden = true
+        textView.inputTextView.isHidden = true
+        textView.inputContainerStackView.isHidden = false
         return textView
     }()
     
@@ -104,21 +106,14 @@ extension SignInViewController: UIViewControllerConfiguration {
                 }
             }
         
-        let password = passwordInputTextField.inputTextView.rx.text.orEmpty
-            .withUnretained(self)
-            .map { owner, passwordText in
-                if  owner.passwordInputTextField.inputTextView.text == owner.passwordInputTextField.textViewPlaceHolder {
-                    return ""
-                } else {
-                    return passwordText
-                }
-            }
+        let passwordText = passwordInputTextField.passwordInputTextField.rx.text.orEmpty
         
         let input = LoginViewModel.Input(
             emailText: emailText,
-            passwordText: password,
+            passwordText: passwordText,
             loginButtonTapped: signInButton.rx.tap,
-            goToSignUpButtonTapped: goToSignUpButton.rx.tap
+            goToSignUpButtonTapped: goToSignUpButton.rx.tap,
+            showPasswordButtonTapped: passwordInputTextField.showPasswordButton.rx.tap
         )
         
         let output = viewModel.transform(input: input)
@@ -153,6 +148,19 @@ extension SignInViewController: UIViewControllerConfiguration {
         output.loginFailTrigger
             .drive(with: self) { owner, errorMessage in
                 owner.makeErrorAlert(title: "로그인 오류", message: errorMessage)
+            }
+            .disposed(by: disposeBag)
+        
+        output.showPasswordButtonTrigger
+            .drive(with: self) { owner, _ in
+                owner.passwordInputTextField.passwordInputTextField.isSecureTextEntry.toggle()
+                if owner.passwordInputTextField.passwordInputTextField.isSecureTextEntry {
+                    let image = UIImage(systemName: "eye.slash")
+                    owner.passwordInputTextField.showPasswordButton.setImage(image, for: .normal)
+                } else {
+                    let image = UIImage(systemName: "eye")
+                    owner.passwordInputTextField.showPasswordButton.setImage(image, for: .normal)
+                }
             }
             .disposed(by: disposeBag)
     }

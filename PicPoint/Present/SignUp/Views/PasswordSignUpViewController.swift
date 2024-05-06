@@ -13,14 +13,18 @@ import RxCocoa
 final class PasswordSignUpViewController: BaseSignUpViewController {
     
     let passwordInputTextView: CustomInputView = {
-        let textView = CustomInputView("비밀번호를 입력해주세요", charLimit: 15)
+        let textView = CustomInputView("", charLimit: 15)
         textView.titleLabel.text = "비밀번호"
+        textView.inputTextView.isHidden = true
+        textView.inputContainerStackView.isHidden = false
         return textView
     }()
     
     let passwordConfirmInputTextView: CustomInputView = {
-        let textView = CustomInputView("비밀번호를 확인해주세요", charLimit: 15)
+        let textView = CustomInputView("", charLimit: 15)
         textView.titleLabel.text = "비밀번호 확인"
+        textView.inputTextView.isHidden = true
+        textView.inputContainerStackView.isHidden = false
         return textView
     }()
     
@@ -112,9 +116,11 @@ extension PasswordSignUpViewController {
         super.bind()
         
         let input = PasswordSignUpViewModel.Input(
-            passwordText: passwordInputTextView.inputTextView.rx.text.orEmpty,
-            passwordConfirmText: passwordConfirmInputTextView.inputTextView.rx.text.orEmpty,
-            bottomButtonTap: bottomButton.rx.tap
+            passwordText: passwordInputTextView.passwordInputTextField.rx.text.orEmpty,
+            passwordConfirmText: passwordConfirmInputTextView.passwordInputTextField.rx.text.orEmpty,
+            bottomButtonTap: bottomButton.rx.tap, 
+            showPasswordButtonTapped: passwordInputTextView.showPasswordButton.rx.tap,
+            showPasswordConfirmButtonTapped: passwordConfirmInputTextView.showPasswordButton.rx.tap
         )
         
         let output = viewModel.transform(input: input)
@@ -154,6 +160,33 @@ extension PasswordSignUpViewController {
             .drive(with: self) { owner, _ in
                 let nicknameSignUpVC = NicknameSignUpViewController()
                 owner.navigationController?.pushViewController(nicknameSignUpVC, animated: true)
+            }
+            .disposed(by: disposeBag)
+        
+        output.showPasswordButtonTrigger
+            .drive(with: self) { owner, _ in
+                owner.passwordInputTextView.passwordInputTextField.isSecureTextEntry.toggle()
+                if owner.passwordInputTextView.passwordInputTextField.isSecureTextEntry {
+                    let image = UIImage(systemName: "eye.slash")
+                    owner.passwordInputTextView.showPasswordButton.setImage(image, for: .normal)
+                } else {
+                    let image = UIImage(systemName: "eye")
+                    owner.passwordInputTextView.showPasswordButton.setImage(image, for: .normal)
+                }
+            }
+            .disposed(by: disposeBag)
+        
+        output.showPasswordConfirmButtonTrigger
+            .drive(with: self) { owner, _ in
+                owner.passwordConfirmInputTextView.passwordInputTextField.isSecureTextEntry.toggle()
+
+                if owner.passwordConfirmInputTextView.passwordInputTextField.isSecureTextEntry {
+                    let image = UIImage(systemName: "eye.slash")
+                    owner.passwordConfirmInputTextView.showPasswordButton.setImage(image, for: .normal)
+                } else {
+                    let image = UIImage(systemName: "eye")
+                    owner.passwordConfirmInputTextView.showPasswordButton.setImage(image, for: .normal)
+                }
             }
             .disposed(by: disposeBag)
     }

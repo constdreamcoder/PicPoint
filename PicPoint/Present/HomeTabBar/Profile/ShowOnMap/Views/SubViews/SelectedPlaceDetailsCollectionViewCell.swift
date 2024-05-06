@@ -17,11 +17,17 @@ final class SelectedPlaceDetailsCollectionViewCell: BaseCollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        contentView.backgroundColor = .brown
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        
+        photoImageView.image = UIImage(systemName: "photo")
+        disposeBag = DisposeBag()
     }
 }
 
