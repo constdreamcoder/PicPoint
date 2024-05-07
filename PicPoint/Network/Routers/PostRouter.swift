@@ -15,6 +15,7 @@ enum PostRouter {
     case writePost(body: WritePostBody)
     case deletePost(params: DeletePostParams)
     case fetchPostWithHashTag(query: FetchPostWithHashTagQuery)
+    case updatePost(paramas: FetchPostParams, body: WritePostBody)
 }
 
 extension PostRouter: TargetType {
@@ -31,12 +32,14 @@ extension PostRouter: TargetType {
             return .post
         case .deletePost:
             return .delete
+        case .updatePost:
+            return .put
         }
     }
     
     var path: String {
         switch self {
-        case .fetchPosts, .fetchPost, .writePost, .deletePost:
+        case .fetchPosts, .fetchPost, .writePost, .deletePost, .updatePost:
             return "/posts"
         case .uploadImages:
             return "/posts/files"
@@ -52,16 +55,10 @@ extension PostRouter: TargetType {
                 HTTPHeader.authorization.rawValue: UserDefaults.standard.accessToken,
                 HTTPHeader.sesacKey.rawValue: APIKeys.sesacKey
             ]
-        case .uploadImages:
+        case .uploadImages, .writePost, .updatePost:
             return [
                 HTTPHeader.sesacKey.rawValue: APIKeys.sesacKey,
                 HTTPHeader.contentType.rawValue: HTTPHeader.formData.rawValue,
-                HTTPHeader.authorization.rawValue: UserDefaults.standard.accessToken,
-            ]
-        case .writePost:
-            return [
-                HTTPHeader.sesacKey.rawValue: APIKeys.sesacKey,
-                HTTPHeader.contentType.rawValue: HTTPHeader.json.rawValue,
                 HTTPHeader.authorization.rawValue: UserDefaults.standard.accessToken,
             ]
         }
@@ -77,6 +74,8 @@ extension PostRouter: TargetType {
             return nil
         case .deletePost(let params):
             return "/\(params.postId)"
+        case .updatePost(let params, _):
+            return "/\(params.postId)"
         }
     }
     
@@ -88,7 +87,7 @@ extension PostRouter: TargetType {
                 .init(name: "limit", value: query.limit),
                 .init(name: "product_id", value: query.product_id)
             ]
-        case .fetchPost, .uploadImages, .writePost, .deletePost:
+        case .fetchPost, .uploadImages, .writePost, .deletePost, .updatePost:
             return nil
         case .fetchPostWithHashTag(let query):
             return [
@@ -106,6 +105,9 @@ extension PostRouter: TargetType {
         case .fetchPosts, .fetchPost, .uploadImages, .deletePost, .fetchPostWithHashTag:
             return nil
         case .writePost(let body):
+            let encoder = JSONEncoder()
+            return try? encoder.encode(body)
+        case .updatePost(_, let body):
             let encoder = JSONEncoder()
             return try? encoder.encode(body)
         }

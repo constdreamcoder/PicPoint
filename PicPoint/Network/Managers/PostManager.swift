@@ -204,4 +204,34 @@ struct PostManager {
             return Disposables.create()
         }
     }
+    
+    static func updatePost(paramas: FetchPostParams, body: WritePostBody) -> Single<Post> {
+        return Single<Post>.create { singleObserver in
+            do {
+                let urlRequest = try PostRouter.updatePost(paramas: paramas, body: body).asURLRequest()
+                
+                AF.request(urlRequest, interceptor: TokenRefresher())
+                    .validate(statusCode: 200...500)
+                    .responseDecodable(of: Post.self) { response in
+                        switch response.result {
+                        case .success(let postListModel):
+                            singleObserver(.success(postListModel))
+                        case .failure(_):
+                            if let statusCode = response.response?.statusCode {
+                                if let commonNetworkError = CommonNetworkError(rawValue: statusCode) {
+                                    singleObserver(.failure(commonNetworkError))
+                                } else if let updatePostError = UpdatePostNetworkError(rawValue: statusCode) {
+                                    singleObserver(.failure(updatePostError))
+                                } else {
+                                    singleObserver(.failure(CommonNetworkError.unknownError))
+                                }
+                            }
+                        }
+                    }
+            } catch {
+                singleObserver(.failure(CommonNetworkError.unknownError))
+            }
+            return Disposables.create()
+        }
+    }
 }

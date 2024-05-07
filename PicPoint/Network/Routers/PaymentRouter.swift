@@ -15,7 +15,7 @@ enum PaymentRouter {
 extension PaymentRouter: TargetType {
     
     var baseURL: String {
-        return APIKeys.paymentBaseURL
+        return APIKeys.baseURL
     }
     
     var method: HTTPMethod {
@@ -37,7 +37,8 @@ extension PaymentRouter: TargetType {
         case .validatePayment:
             return [
                 HTTPHeader.authorization.rawValue: UserDefaults.standard.accessToken,
-                HTTPHeader.sesacKey.rawValue: APIKeys.sesacKey
+                HTTPHeader.sesacKey.rawValue: APIKeys.sesacKey,
+                HTTPHeader.contentType.rawValue:  HTTPHeader.json.rawValue
             ]
         }
     }
@@ -54,6 +55,7 @@ extension PaymentRouter: TargetType {
         switch self {
         case .validatePayment(let body):
             let encoder = JSONEncoder()
+            // encoder.keyEncodingStrategy = .useDefaultKeys
             return try? encoder.encode(body)
         }
     }

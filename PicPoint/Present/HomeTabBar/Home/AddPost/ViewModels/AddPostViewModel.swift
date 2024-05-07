@@ -53,7 +53,6 @@ final class AddPostViewModel: NSObject, ViewModelType {
     struct Input {
         let rightBarButtonItemTap: ControlEvent<Void>
         let itemTap: ControlEvent<AddPostCollectionViewCellType>
-        let endEditingTap: ControlEvent<UITapGestureRecognizer>
     }
     
     struct Output {
@@ -65,7 +64,6 @@ final class AddPostViewModel: NSObject, ViewModelType {
         let itemTapTrigger: Driver<(AddPostCollectionViewCellType ,Date)>
         let showTappedAsset: Driver<PHAsset>
         let registerButtonValid: Driver<Bool>
-        let endEditingTrigger: Driver<Void>
     }
     
     func transform(input: Input) -> Output {
@@ -206,10 +204,7 @@ final class AddPostViewModel: NSObject, ViewModelType {
                 NotificationCenter.default.post(name: .sendNewPost, object: nil, userInfo: ["newPost": post])
             }
             .disposed(by: disposeBag)
-        
-        let endEditingTapTrigger = input.endEditingTap
-            .map { _ in () }
-        
+                
         return Output(
             sections: Observable.just(sections).asDriver(onErrorJustReturn: []),
             rightBarButtonItemTapTrigger: rightBarButtonItemTapTrigger.asDriver(onErrorJustReturn: ()),
@@ -218,8 +213,7 @@ final class AddPostViewModel: NSObject, ViewModelType {
             fetchPhotos: fetchPhotosTrigger.asDriver(onErrorJustReturn: ()),
             itemTapTrigger: itemTap.asDriver(onErrorJustReturn: (.none, Date())),
             showTappedAsset: showTappedAsset.asDriver(onErrorJustReturn: PHAsset()),
-            registerButtonValid: registerButtonValid.asDriver(onErrorJustReturn: false), 
-            endEditingTrigger: endEditingTapTrigger.asDriver(onErrorJustReturn: ())
+            registerButtonValid: registerButtonValid.asDriver(onErrorJustReturn: false)
         )
     }
 }

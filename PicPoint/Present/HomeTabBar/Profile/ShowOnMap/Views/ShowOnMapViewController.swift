@@ -91,6 +91,12 @@ extension ShowOnMapViewController: UIViewControllerConfiguration {
         
         let output = viewModel.transform(input: input)
         
+        output.sendNavigationBarTitleTrigger
+            .drive(with: self) { owner, nickname in
+                owner.navigationItem.title = "\(nickname)의 방문공간"
+            }
+            .disposed(by: disposeBag)
+        
         output.showPostsOnMapTrigger
             .drive(with: self) { owner, postList in
                 postList.forEach { post in

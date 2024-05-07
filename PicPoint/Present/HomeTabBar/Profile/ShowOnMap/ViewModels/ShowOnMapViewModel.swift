@@ -17,6 +17,7 @@ final class ShowOnMapViewModel: ViewModelType {
     var disposeBag = DisposeBag()
     
     let selectedPin = PublishSubject<CLLocationCoordinate2D>()
+    private let nicknameRelay = BehaviorRelay<String>(value: "")
     private let postListRelay = BehaviorRelay<[Post]>(value: [])
     private let selectedPostRelay = PublishRelay<Post?>()
     
@@ -25,12 +26,21 @@ final class ShowOnMapViewModel: ViewModelType {
     }
     
     struct Output {
+        let sendNavigationBarTitleTrigger: Driver<String>
         let showPostsOnMapTrigger: Driver<[Post]>
         let showSelectedPlaceInfoTrigger: Driver<Post?>
         let moveToDetailVCTrigger: Driver<Post?>
     }
     
-    init(_ postList: [Post]) {
+    init(_ nickname: String?, _ postList: [Post]) {
+        
+        Observable.just(nickname)
+            .subscribe(with: self) { owner, nickname in
+                guard let nickname else { return }
+                owner.nicknameRelay.accept(nickname)
+            }
+            .disposed(by: disposeBag)
+        
         Observable.just(postList)
             .subscribe(with: self) { owner, postList in
                 owner.postListRelay.accept(postList)
@@ -65,6 +75,7 @@ final class ShowOnMapViewModel: ViewModelType {
             .withLatestFrom(selectedPostRelay)
            
         return Output(
+            sendNavigationBarTitleTrigger: nicknameRelay.asDriver(),
             showPostsOnMapTrigger: postListRelay.asDriver(),
             showSelectedPlaceInfoTrigger: showSelectedPlaceInfoTrigger.asDriver(onErrorJustReturn: nil),
             moveToDetailVCTrigger: moveToDetailVCTrigger.asDriver(onErrorJustReturn: nil)

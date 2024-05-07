@@ -15,18 +15,14 @@ struct PaymentManager {
             do {
                 let urlRequest = try PaymentRouter.validatePayment(body: body).asURLRequest()
                 
-                print("url", urlRequest.url)
-                print("method", urlRequest.httpMethod)
-                print("header", urlRequest.headers)
-                print("body", body)
-                
                 AF.request(urlRequest, interceptor: TokenRefresher())
                     .validate(statusCode: 200...500)
                     .responseDecodable(of: ValidatePaymentModel.self) { response in
                         switch response.result {
                         case .success(let postListModel):
                             singleObserver(.success(postListModel))
-                        case .failure(_):
+                        case .failure(let error):
+                            dump(error)
                             if let statusCode = response.response?.statusCode {
                                 if let commonNetworkError = CommonNetworkError(rawValue: statusCode) {
                                     singleObserver(.failure(commonNetworkError))

@@ -44,7 +44,7 @@ final class ProfileViewModel: ViewModelType {
         let myProfile: Driver<FetchMyProfileModel?>
         let moveToDetailVCTrigger: Driver<Post?>
         let endRefreshTrigger: Driver<Void>
-        let goToMapButtonTrigger: Driver<[Post]>
+        let goToMapButtonTrigger: Driver<(String?, [Post])>
     }
     
     init(_ userId: String = "") {
@@ -209,7 +209,8 @@ final class ProfileViewModel: ViewModelType {
             .disposed(by: disposeBag)
         
         let goToMapButtonTrigger = input.goToMapButtonTapped
-            .withLatestFrom(postList)
+            .withLatestFrom(myProfile)
+            .withLatestFrom(postList) { ($0?.nick, $1) }
         
         let moveToFollowTapTrigger = moveToFollowTap
             .withLatestFrom(myProfile)
@@ -222,7 +223,7 @@ final class ProfileViewModel: ViewModelType {
             myProfile: myProfile.asDriver(onErrorJustReturn: nil),
             moveToDetailVCTrigger: postForMovingToDetailVCRelay.asDriver(onErrorJustReturn: nil),
             endRefreshTrigger: endRefreshTrigger.asDriver(onErrorJustReturn: ()),
-            goToMapButtonTrigger: goToMapButtonTrigger.asDriver(onErrorJustReturn: [])
+            goToMapButtonTrigger: goToMapButtonTrigger.asDriver(onErrorJustReturn: (nil, []))
         )
     }
 }

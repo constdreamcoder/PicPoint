@@ -26,7 +26,7 @@ final class NicknameViewModel: ViewModelType {
         
         let nicknameValidation = input.nicknameText
             .map {
-                if $0.count >= 5 {
+                if $0.count >= 2 {
                     SignUpStorage.shared.nickname = $0.trimmingCharacters(in: .whitespacesAndNewlines)
                     return true
                 } else {

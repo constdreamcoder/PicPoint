@@ -226,8 +226,8 @@ extension ProfileViewController: UIViewControllerConfiguration {
             .disposed(by: disposeBag)
         
         output.goToMapButtonTrigger
-            .drive(with: self) { owner, postList in
-                let showOnMapVM = ShowOnMapViewModel(postList)
+            .drive(with: self) { owner, value in
+                let showOnMapVM = ShowOnMapViewModel(value.0, value.1)
                 let showOnMapVC = ShowOnMapViewController(showOnMapViewModel: showOnMapVM)
                 owner.navigationController?.pushViewController(showOnMapVC, animated: true)
             }

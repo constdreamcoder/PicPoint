@@ -26,6 +26,8 @@ final class AddPostViewController: BaseViewController {
         tableView.register(TitleTableViewCell.self, forCellReuseIdentifier: TitleTableViewCell.identifier)
         tableView.register(ContentTableViewCell.self, forCellReuseIdentifier: ContentTableViewCell.identifier)
         
+        tableView.keyboardDismissMode = .onDrag
+        
         return tableView
     }()
     
@@ -78,13 +80,11 @@ final class AddPostViewController: BaseViewController {
         return UITableViewCell()
     }
     
-    private lazy var endEditingTap: UITapGestureRecognizer = {
-        let tap = UITapGestureRecognizer(target: self, action: nil)
-        view.addGestureRecognizer(tap)
-        return tap
-    }()
-    
     private var viewModel: AddPostViewModel
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?){
+         self.view.endEditing(true)
+   }
     
     init(addPostViewModel: AddPostViewModel) {
         self.viewModel = addPostViewModel
@@ -94,10 +94,6 @@ final class AddPostViewController: BaseViewController {
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-    
-    deinit {
-        view?.removeGestureRecognizer(endEditingTap)
     }
     
     override func viewDidLoad() {
@@ -145,8 +141,7 @@ extension AddPostViewController: UIViewControllerConfiguration {
         
         let input = AddPostViewModel.Input(
             rightBarButtonItemTap: rightBarButtonItem.rx.tap, 
-            itemTap: itemTap,
-            endEditingTap: endEditingTap.rx.event
+            itemTap: itemTap
         )
         
         let output = viewModel.transform(input: input)
@@ -212,12 +207,6 @@ extension AddPostViewController: UIViewControllerConfiguration {
         
         output.registerButtonValid
             .drive(rightBarButtonItem.rx.isEnabled)
-            .disposed(by: disposeBag)
-        
-        output.endEditingTrigger
-            .drive(with: self) { owner, _ in
-                owner.view.endEditing(true)
-            }
             .disposed(by: disposeBag)
     }
 }

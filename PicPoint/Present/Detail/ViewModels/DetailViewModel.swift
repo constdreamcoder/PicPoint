@@ -27,6 +27,7 @@ final class DetailViewModel: ViewModelType {
     private let postRelay = BehaviorRelay<PostLikeType?>(value: nil)
     private let hashTagsSubject = BehaviorSubject<[String]>(value: [])
     private let relatedPostList = BehaviorSubject<[Post]>(value: [])
+    private let selectedDonationAmountSubject = BehaviorSubject<Int>(value: 0)
     
     weak var delegate: DetailViewModelDelegate?
     
@@ -51,6 +52,7 @@ final class DetailViewModel: ViewModelType {
         let moveToOtherProfileTrigger: Driver<String>
         let gotoPaymentPageTrigger: Driver<IamportPayment?>
         let endRefreshTrigger: Driver<Void>
+        let inputDonationTrigger: Driver<Void>
     }
     
     init(post: Post) {
@@ -115,7 +117,7 @@ final class DetailViewModel: ViewModelType {
         let postRefreshTrigger = PublishSubject<Post>()
         let endRefreshTrigger = PublishRelay<Void>()
         
-       Observable.just(())
+        Observable.just(())
             .withLatestFrom(postRelay)
             .bind { post in
                 guard let post else { return }
@@ -127,14 +129,15 @@ final class DetailViewModel: ViewModelType {
             }
             .disposed(by: disposeBag)
         
-        input.rightBarButtonItem
-            .bind(with: self) { owner, _  in
+        selectedDonationAmountSubject
+            .withLatestFrom(postRelay) { (amount: $0, post: $1) }
+            .bind(with: self) { owner, value  in
                 let payment = IamportPayment(
                     pg: PG.html5_inicis.makePgRawName(pgId: APIKeys.KGINICISId),
                     merchant_uid: "ios_\(APIKeys.sesacKey)_\(Int(Date().timeIntervalSince1970))",
-                    amount: "1").then {
+                    amount: "\(value.amount)").then {
                         $0.pay_method = PayMethod.card.rawValue
-                        $0.name = "잭님의 사투리교실"
+                        $0.name = value.post?.post.title ?? ""
                         $0.buyer_name = APIKeys.buyerName
                         $0.app_scheme = APIKeys.appScheme
                     }
@@ -201,16 +204,17 @@ final class DetailViewModel: ViewModelType {
             .disposed(by: disposeBag)
         
         input.paymentResponse
-            .withLatestFrom(postRelay) { paymentResponse, post in
-                return ValidatePaymentBody(
-                    imp_uid: paymentResponse.imp_uid ?? "",
+            .withLatestFrom(selectedDonationAmountSubject) { (paymentResponse: $0, donationAmount: $1) }
+            .withLatestFrom(postRelay){ value, post in
+                ValidatePaymentBody(
+                    imp_uid: value.paymentResponse.imp_uid ?? "",
                     post_id: post?.post.postId ?? "",
-                    productName: "잭님의 사투리교실", // TODO: - post title로 변경하기
-                    price: 1
+                    productName: post?.post.title ?? "",
+                    price: value.donationAmount
                 )
             }
             .flatMap {
-                return PaymentManager.validatePayment(body: $0)
+                PaymentManager.validatePayment(body: $0)
                     .catch { error in
                         print(error.errorCode, error.errorDesc)
                         return Single<ValidatePaymentModel>.never()
@@ -388,7 +392,8 @@ final class DetailViewModel: ViewModelType {
             itemTapTrigger: itemTapTrigger.asDriver(onErrorJustReturn: nil),
             moveToOtherProfileTrigger: moveToOtherProfileTrigger.asDriver(onErrorJustReturn: ""), 
             gotoPaymentPageTrigger: gotoPaymentPageTrigger.asDriver(onErrorJustReturn: nil), 
-            endRefreshTrigger: endRefreshTrigger.asDriver(onErrorJustReturn: ())
+            endRefreshTrigger: endRefreshTrigger.asDriver(onErrorJustReturn: ()),
+            inputDonationTrigger: input.rightBarButtonItem.asDriver()
         )
     }
 }
@@ -461,6 +466,16 @@ extension DetailViewModel: CommentViewModelDelegate {
             .subscribe(with: self) { owner, updatePost in
                 owner.postRelay.accept(updatePost)
                 owner.delegate?.sendLikeUpdateTrigger(updatePost)
+            }
+            .disposed(by: disposeBag)
+    }
+}
+
+extension DetailViewModel: InputDonationViewModelDelegate {
+    func sendSelectedDonationAmount(_ amount: Int) {
+        Observable.just(amount)
+            .subscribe(with: self) { owner, amount in
+                owner.selectedDonationAmountSubject.onNext(amount)
             }
             .disposed(by: disposeBag)
     }

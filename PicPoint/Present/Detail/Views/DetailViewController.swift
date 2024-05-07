@@ -275,6 +275,16 @@ extension DetailViewController: UIViewControllerConfiguration {
             }
             .disposed(by: disposeBag)
         
+        output.inputDonationTrigger
+            .drive(with: self) { owner, _ in
+                let inputDonationVM = InputDonationViewModel()
+                inputDonationVM.delegate = owner.viewModel
+                let inputDonationVC = InputDonationViewController(inputDonationViewModel: inputDonationVM)
+                inputDonationVC.modalPresentationStyle = .overFullScreen
+                owner.present(inputDonationVC, animated: true)
+            }
+            .disposed(by: disposeBag)
+        
         output.gotoPaymentPageTrigger
             .drive(with: self) { owner, payment in
                 guard let payment else { return }
@@ -291,6 +301,7 @@ extension DetailViewController: UIViewControllerConfiguration {
                     else { return }
                     
                     if success {
+                        print("iamportResponse", iamportResponse)
                         paymentResponse.onNext(iamportResponse)
                     } else {
                         owner.makeErrorAlert(title: "결제 오류", message: "결제중 오류가 발생하였습니다.")
