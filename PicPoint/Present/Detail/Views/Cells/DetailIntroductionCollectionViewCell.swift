@@ -71,7 +71,7 @@ final class DetailIntroductionCollectionViewCell: BaseCollectionViewCell {
             topView.profileImageView.kf.setImageWithAuthHeaders(with: url, placeholder: placeholderImage)
         }
         topView.userNicknameLabel.text = cellData.creator.nick
-        topView.subTitleLabel.text = cellData.visitDate
+        topView.subTitleLabel.text = "\(cellData.visitDate) 방문"
         contentLabel.text = cellData.content
         
         if cellData.creator.userId == UserDefaults.standard.userId {

@@ -28,7 +28,7 @@ extension String {
         
         let outputDateFormatter = DateFormatter()
         outputDateFormatter.locale = Locale(identifier: "ko_KR")
-        outputDateFormatter.dateFormat = "yyyy년 M월 d일 방문"
+        outputDateFormatter.dateFormat = "yyyy년 M월 d일"
         return outputDateFormatter.string(from: date)
     }
     

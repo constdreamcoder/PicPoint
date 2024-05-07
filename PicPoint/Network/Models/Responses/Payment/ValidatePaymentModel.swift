@@ -11,7 +11,7 @@ struct ValidatePaymentModel: Decodable {
     let paymentId: String
     let buyerId: String
     let postId: String
-    let merchant_uid: String
+    let merchantUid: String
     let productName: String
     let price: Int
     let paidAt: String
@@ -20,7 +20,7 @@ struct ValidatePaymentModel: Decodable {
         case paymentId = "payment_id"
         case buyerId = "buyer_id"
         case postId = "post_id"
-        case merchant_uid
+        case merchantUid = "merchant_uid"
         case productName
         case price
         case paidAt
@@ -31,7 +31,7 @@ struct ValidatePaymentModel: Decodable {
         self.paymentId = try container.decode(String.self, forKey: .paymentId)
         self.buyerId = try container.decode(String.self, forKey: .buyerId)
         self.postId = try container.decode(String.self, forKey: .postId)
-        self.merchant_uid = try container.decode(String.self, forKey: .merchant_uid)
+        self.merchantUid = try container.decode(String.self, forKey: .merchantUid)
         self.productName = try container.decode(String.self, forKey: .productName)
         self.price = try container.decode(Int.self, forKey: .price)
         self.paidAt = try container.decode(String.self, forKey: .paidAt)

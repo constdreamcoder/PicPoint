@@ -17,18 +17,29 @@ final class SettingsViewModel: ViewModelType {
         let withdrawalButtonTapped: ControlEvent<Void>
         let logoutTrigger: PublishSubject<Void>
         let withdrawalTrigger: PublishSubject<Void>
+        let donationDetailsCellTapped: PublishSubject<Void>
     }
     
     struct Output {
         let questionLogoutTrigger: Driver<Void>
         let questionWithdrawalTrigger: Driver<Void>
         let successTrigger: Driver<Void>
+        let goToPaymentListVCTrigger: Driver<[ValidatePaymentModel]>
     }
     
     func transform(input: Input) -> Output {
         let questionLogoutTrigger = PublishRelay<Void>()
         let questionWithdrawalTrigger = PublishRelay<Void>()
         let successTrigger = PublishRelay<Void>()
+        
+        let goToPaymentListVCTrigger = input.donationDetailsCellTapped
+            .flatMap { _ in
+                PaymentManager.fetchPaymentList()
+                    .catch { error in
+                        print(error.errorCode, error.errorDesc)
+                        return Single<[ValidatePaymentModel]>.never()
+                    }
+            }
         
         input.logoutButtonTapped
             .bind { _ in
@@ -70,7 +81,8 @@ final class SettingsViewModel: ViewModelType {
         return Output(
             questionLogoutTrigger: questionLogoutTrigger.asDriver(onErrorJustReturn: ()),
             questionWithdrawalTrigger: questionWithdrawalTrigger.asDriver(onErrorJustReturn: ()),
-            successTrigger: successTrigger.asDriver(onErrorJustReturn: ())
+            successTrigger: successTrigger.asDriver(onErrorJustReturn: ()),
+            goToPaymentListVCTrigger: goToPaymentListVCTrigger.asDriver(onErrorJustReturn: [])
         )
     }
 }

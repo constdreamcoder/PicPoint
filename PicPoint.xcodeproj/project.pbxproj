@@ -138,6 +138,14 @@
 		00A49CF92BEA71070058F35B /* InputDonationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00A49CF82BEA71070058F35B /* InputDonationViewController.swift */; };
 		00A49CFB2BEA78390058F35B /* InputDonationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00A49CFA2BEA78390058F35B /* InputDonationViewModel.swift */; };
 		00A49CFD2BEA8BA10058F35B /* UpdatePostNetworkError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00A49CFC2BEA8BA10058F35B /* UpdatePostNetworkError.swift */; };
+		00A49D002BEAA00E0058F35B /* SettingTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00A49CFF2BEAA00E0058F35B /* SettingTableViewCell.swift */; };
+		00A49D022BEAA3B20058F35B /* SettingTableViewCellType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00A49D012BEAA3B20058F35B /* SettingTableViewCellType.swift */; };
+		00A49D052BEAA6490058F35B /* FetchPaymentListModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00A49D042BEAA6490058F35B /* FetchPaymentListModel.swift */; };
+		00A49D082BEAA73B0058F35B /* FatchPaymentListNetworkError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00A49D072BEAA73B0058F35B /* FatchPaymentListNetworkError.swift */; };
+		00A49D0A2BEAAA110058F35B /* PaymentListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00A49D092BEAAA110058F35B /* PaymentListViewController.swift */; };
+		00A49D0D2BEAAB450058F35B /* PaymentListTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00A49D0C2BEAAB450058F35B /* PaymentListTableViewCell.swift */; };
+		00A49D112BEAAD490058F35B /* PaymentListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00A49D102BEAAD490058F35B /* PaymentListViewModel.swift */; };
+		00A49D132BEAB3510058F35B /* Int+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00A49D122BEAB3510058F35B /* Int+Extensions.swift */; };
 		00AA9A792BCC24B90069C55C /* HomeTabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00AA9A782BCC24B90069C55C /* HomeTabBarViewController.swift */; };
 		00AA9A7B2BCC25C90069C55C /* UserDefaults+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00AA9A7A2BCC25C90069C55C /* UserDefaults+Extensions.swift */; };
 		00AFF5FC2BCD1274006D319A /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00AFF5FB2BCD1274006D319A /* HomeViewModel.swift */; };
@@ -370,6 +378,14 @@
 		00A49CF82BEA71070058F35B /* InputDonationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputDonationViewController.swift; sourceTree = "<group>"; };
 		00A49CFA2BEA78390058F35B /* InputDonationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputDonationViewModel.swift; sourceTree = "<group>"; };
 		00A49CFC2BEA8BA10058F35B /* UpdatePostNetworkError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdatePostNetworkError.swift; sourceTree = "<group>"; };
+		00A49CFF2BEAA00E0058F35B /* SettingTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingTableViewCell.swift; sourceTree = "<group>"; };
+		00A49D012BEAA3B20058F35B /* SettingTableViewCellType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingTableViewCellType.swift; sourceTree = "<group>"; };
+		00A49D042BEAA6490058F35B /* FetchPaymentListModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchPaymentListModel.swift; sourceTree = "<group>"; };
+		00A49D072BEAA73B0058F35B /* FatchPaymentListNetworkError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FatchPaymentListNetworkError.swift; sourceTree = "<group>"; };
+		00A49D092BEAAA110058F35B /* PaymentListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentListViewController.swift; sourceTree = "<group>"; };
+		00A49D0C2BEAAB450058F35B /* PaymentListTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentListTableViewCell.swift; sourceTree = "<group>"; };
+		00A49D102BEAAD490058F35B /* PaymentListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentListViewModel.swift; sourceTree = "<group>"; };
+		00A49D122BEAB3510058F35B /* Int+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Int+Extensions.swift"; sourceTree = "<group>"; };
 		00AA9A782BCC24B90069C55C /* HomeTabBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeTabBarViewController.swift; sourceTree = "<group>"; };
 		00AA9A7A2BCC25C90069C55C /* UserDefaults+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UserDefaults+Extensions.swift"; sourceTree = "<group>"; };
 		00AFF5FB2BCD1274006D319A /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
@@ -938,7 +954,6 @@
 				0034FAEC2BCC9A8800D932F3 /* Views */,
 				0034FAED2BCC9A8D00D932F3 /* ViewModels */,
 				0034FAF22BCC9EF400D932F3 /* Settings */,
-				003C82C02BDCD59A003315E1 /* EditProfile */,
 				004FE26E2BE8A4B30044C323 /* ShowOnMap */,
 			);
 			path = Profile;
@@ -968,8 +983,11 @@
 		0034FAF22BCC9EF400D932F3 /* Settings */ = {
 			isa = PBXGroup;
 			children = (
+				00A49D032BEAA3C40058F35B /* Enum */,
 				0034FAF32BCC9EFD00D932F3 /* Views */,
 				0034FAF42BCC9F0100D932F3 /* ViewModels */,
+				003C82C02BDCD59A003315E1 /* EditProfile */,
+				00A49D0B2BEAAA160058F35B /* PaymentList */,
 			);
 			path = Settings;
 			sourceTree = "<group>";
@@ -978,6 +996,7 @@
 			isa = PBXGroup;
 			children = (
 				0034FAF52BCC9F1200D932F3 /* SettingsViewController.swift */,
+				00A49CFF2BEAA00E0058F35B /* SettingTableViewCell.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -1260,6 +1279,7 @@
 			isa = PBXGroup;
 			children = (
 				009F07622BE674C50048FF15 /* ValidatePaymentModel.swift */,
+				00A49D042BEAA6490058F35B /* FetchPaymentListModel.swift */,
 			);
 			path = Payment;
 			sourceTree = "<group>";
@@ -1268,8 +1288,43 @@
 			isa = PBXGroup;
 			children = (
 				009F07652BE675300048FF15 /* ValidatePaymentNetworkError.swift */,
+				00A49D072BEAA73B0058F35B /* FatchPaymentListNetworkError.swift */,
 			);
 			path = PaymentErrors;
+			sourceTree = "<group>";
+		};
+		00A49D032BEAA3C40058F35B /* Enum */ = {
+			isa = PBXGroup;
+			children = (
+				00A49D012BEAA3B20058F35B /* SettingTableViewCellType.swift */,
+			);
+			path = Enum;
+			sourceTree = "<group>";
+		};
+		00A49D0B2BEAAA160058F35B /* PaymentList */ = {
+			isa = PBXGroup;
+			children = (
+				00A49D0E2BEAAD1C0058F35B /* View */,
+				00A49D0F2BEAAD290058F35B /* ViewModels */,
+			);
+			path = PaymentList;
+			sourceTree = "<group>";
+		};
+		00A49D0E2BEAAD1C0058F35B /* View */ = {
+			isa = PBXGroup;
+			children = (
+				00A49D092BEAAA110058F35B /* PaymentListViewController.swift */,
+				00A49D0C2BEAAB450058F35B /* PaymentListTableViewCell.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		00A49D0F2BEAAD290058F35B /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				00A49D102BEAAD490058F35B /* PaymentListViewModel.swift */,
+			);
+			path = ViewModels;
 			sourceTree = "<group>";
 		};
 		00AA9A772BCC247C0069C55C /* HomeTabBar */ = {
@@ -1664,6 +1719,7 @@
 				002720A72BDFF2F2004ADC5C /* UIView+Extensions.swift */,
 				00DD46862BE27A86001B3ADA /* NotificationCenter+Extensions.swift */,
 				00E4D9DD2BE3BE3B00C641BE /* Error+Extensions.swift */,
+				00A49D122BEAB3510058F35B /* Int+Extensions.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -1868,6 +1924,7 @@
 				000AD26B2BD2CFCF00FC7768 /* CommentViewController.swift in Sources */,
 				00C71D692BCC11C900D933FD /* SignUpModel.swift in Sources */,
 				0027209E2BDFD59A004ADC5C /* FollowRouter.swift in Sources */,
+				00A49D132BEAB3510058F35B /* Int+Extensions.swift in Sources */,
 				009F07632BE674C50048FF15 /* ValidatePaymentModel.swift in Sources */,
 				00EA27742BDE3CA600EE3F9C /* BirthDaySignUpViewController.swift in Sources */,
 				00AA9A7B2BCC25C90069C55C /* UserDefaults+Extensions.swift in Sources */,
@@ -1883,6 +1940,7 @@
 				00B7C4062BCA68DB009AC333 /* HTTPHeader.swift in Sources */,
 				00E4D9CB2BE3B0AD00C641BE /* FetchLikedPostsNetworkError.swift in Sources */,
 				0034FAEF2BCC9AA200D932F3 /* ProfileViewController.swift in Sources */,
+				00A49D002BEAA00E0058F35B /* SettingTableViewCell.swift in Sources */,
 				001C92032BD6A2820028E67B /* UIViewController+Extensions.swift in Sources */,
 				00242C592BD7C7CA00B4C96E /* BaseBottomViewViewController.swift in Sources */,
 				00760E462BD5072000741C40 /* SelectImageTableViewCell.swift in Sources */,
@@ -1915,6 +1973,7 @@
 				00AFF60B2BCD2CA5006D319A /* HomeCollectionViewCellIconView.swift in Sources */,
 				00EA276E2BDE389600EE3F9C /* PasswordSignUpViewModel.swift in Sources */,
 				004FE2792BE8C23F0044C323 /* SelectedPlaceDetailsCollectionViewCell.swift in Sources */,
+				00A49D022BEAA3B20058F35B /* SettingTableViewCellType.swift in Sources */,
 				0002C1242BD985FB00AE36EC /* DetailLocationCollectionReusableView.swift in Sources */,
 				002720982BDFCA13004ADC5C /* CustomFollowTableViewCell.swift in Sources */,
 				009F075E2BE672380048FF15 /* ValidatePaymentBody.swift in Sources */,
@@ -1944,6 +2003,8 @@
 				003C82C22BDCD5AF003315E1 /* EditProfileViewController.swift in Sources */,
 				009AFAF22BDA7629003A45BF /* ContentsCollectionViewCell.swift in Sources */,
 				00E4D9B92BE3AC5600C641BE /* FetchPostNetworkError.swift in Sources */,
+				00A49D0A2BEAAA110058F35B /* PaymentListViewController.swift in Sources */,
+				00A49D052BEAA6490058F35B /* FetchPaymentListModel.swift in Sources */,
 				00E414EE2BD91CAD00C76BE4 /* NSObject+Extensions.swift in Sources */,
 				00E4D9C22BE3ADD800C641BE /* WriteCommentNetworkError.swift in Sources */,
 				00760E592BD5321500741C40 /* ContentTableViewCell.swift in Sources */,
@@ -1966,6 +2027,7 @@
 				00E414EC2BD9186400C76BE4 /* ImageFileListModel.swift in Sources */,
 				00B7C3F72BCA5F38009AC333 /* SignInViewController.swift in Sources */,
 				00FE92B72BCE59FF00554D0F /* PostListModel.swift in Sources */,
+				00A49D082BEAA73B0058F35B /* FatchPaymentListNetworkError.swift in Sources */,
 				000AD24B2BD1FF2000FC7768 /* DetailIntroductionCollectionViewCell.swift in Sources */,
 				00B7C3EF2BCA5A42009AC333 /* APIKeys.swift in Sources */,
 				00E4D9D32BE3B1DA00C641BE /* FetchMyProfileNetworkError.swift in Sources */,
@@ -1979,6 +2041,7 @@
 				00E1D9442BE4E1D100501328 /* NoNetworkView.swift in Sources */,
 				00EA277C2BDE479400EE3F9C /* CustomBottomButton.swift in Sources */,
 				00B67D8A2BD827160097ACDE /* DismissButton.swift in Sources */,
+				00A49D112BEAAD490058F35B /* PaymentListViewModel.swift in Sources */,
 				0035402B2BD0212800A71415 /* String+Extensions.swift in Sources */,
 				0055FB3C2BDA773E0053781D /* ProfileCollectionViewSectionDataModels.swift in Sources */,
 				00DD468A2BE2AD0A001B3ADA /* FetchOtherProfileParams.swift in Sources */,
@@ -2024,6 +2087,7 @@
 				001041752BDC2ADE00E5FDA1 /* LikeRouter.swift in Sources */,
 				001041662BDBEB4D00E5FDA1 /* MyLikeViewModel.swift in Sources */,
 				001254022BD427840065F1E6 /* DeleteCommentParams.swift in Sources */,
+				00A49D0D2BEAAB450058F35B /* PaymentListTableViewCell.swift in Sources */,
 				002F01C02BD8822200992674 /* SelectLocationViewModel.swift in Sources */,
 				0010416C2BDBF66100E5FDA1 /* ProfileManager.swift in Sources */,
 				00E4D9AA2BE3A48500C641BE /* LogindNetoworkError.swift in Sources */,

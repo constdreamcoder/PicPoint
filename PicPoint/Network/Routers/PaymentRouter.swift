@@ -10,6 +10,7 @@ import Alamofire
 
 enum PaymentRouter {
     case validatePayment(body: ValidatePaymentBody)
+    case fetchPaymentList
 }
 
 extension PaymentRouter: TargetType {
@@ -22,6 +23,8 @@ extension PaymentRouter: TargetType {
         switch self {
         case .validatePayment:
             return .post
+        case .fetchPaymentList:
+            return .get
         }
     }
     
@@ -29,12 +32,14 @@ extension PaymentRouter: TargetType {
         switch self {
         case .validatePayment:
             return "/payments/validation"
+        case .fetchPaymentList:
+            return "/payments/me"
         }
     }
     
     var header: [String : String] {
         switch self {
-        case .validatePayment:
+        case .validatePayment, .fetchPaymentList:
             return [
                 HTTPHeader.authorization.rawValue: UserDefaults.standard.accessToken,
                 HTTPHeader.sesacKey.rawValue: APIKeys.sesacKey,
@@ -55,8 +60,9 @@ extension PaymentRouter: TargetType {
         switch self {
         case .validatePayment(let body):
             let encoder = JSONEncoder()
-            // encoder.keyEncodingStrategy = .useDefaultKeys
             return try? encoder.encode(body)
+        case .fetchPaymentList:
+            return nil
         }
     }
 }
