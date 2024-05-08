@@ -9,9 +9,8 @@ import Foundation
 
 extension Int {
     var numberDecimalFormat: String {
-        let number = 1000
         let numberFormatter = NumberFormatter()
         numberFormatter.numberStyle = .decimal
-        return numberFormatter.string(from: NSNumber(value: number)) ?? ""
+        return numberFormatter.string(from: NSNumber(value: self)) ?? ""
     }
 }

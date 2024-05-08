@@ -26,6 +26,7 @@ final class PaymentListViewModel: ViewModelType {
     init(_ paymentList: [ValidatePaymentModel]) {
         Observable.just(paymentList)
             .bind(with: self) { owner, paymentList in
+                print("paymentList", paymentList)
                 owner.paymentListRelay.accept(paymentList)
             }
             .disposed(by: disposeBag)

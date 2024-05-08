@@ -69,7 +69,7 @@ extension PaymentListViewController: UIViewControllerConfiguration {
             .drive(tableView.rx.items(cellIdentifier: PaymentListTableViewCell.identifier, cellType: PaymentListTableViewCell.self)) { index, element, cell in
                 cell.productNameLabel.text = element.productName
                 cell.priceLabel.text = "\(element.price.numberDecimalFormat)원"
-                cell.paidAtLabel.text = "방문일: \(element.paidAt.getDateString)"
+                cell.paidAtLabel.text = "구매일: \(element.paidAt.getDateString)"
             }
             .disposed(by: disposeBag)
     }

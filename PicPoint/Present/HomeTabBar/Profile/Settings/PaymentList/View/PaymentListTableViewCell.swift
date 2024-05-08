@@ -12,7 +12,6 @@ final class PaymentListTableViewCell: BaseTableViewCell {
     
     let productNameLabel: UILabel = {
         let label = UILabel()
-        label.text = "테스트"
         label.textColor = .black
         label.font = .boldSystemFont(ofSize: 20.0)
         return label
@@ -20,7 +19,6 @@ final class PaymentListTableViewCell: BaseTableViewCell {
     
     let priceLabel: UILabel = {
         let label = UILabel()
-        label.text = "1000원"
         label.textColor = .black
         label.font = .boldSystemFont(ofSize: 20.0)
         return label
@@ -28,7 +26,6 @@ final class PaymentListTableViewCell: BaseTableViewCell {
     
     let paidAtLabel: UILabel = {
         let label = UILabel()
-        label.text = "구매일: 2022년 2월 22일"
         label.textColor = .darkGray
         label.font = .boldSystemFont(ofSize: 16.0)
         return label
