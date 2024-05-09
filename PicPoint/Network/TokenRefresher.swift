@@ -9,38 +9,27 @@ import Foundation
 import Alamofire
 
 final class TokenRefresher: RequestInterceptor {
-    
-    private let retryLimit = 2
-    
+        
     func adapt(_ urlRequest: URLRequest, for session: Session, completion: @escaping (Result<URLRequest, Error>) -> Void) {
         var urlRequest = urlRequest
-        if urlRequest.headers.dictionary[HTTPHeader.authorization.rawValue] == nil {
-            let token = UserDefaults.standard.accessToken
-            if !token.isEmpty {
-                urlRequest.setValue(token, forHTTPHeaderField: HTTPHeader.authorization.rawValue)
-            }
-        }
+        let token = UserDefaults.standard.accessToken
+        urlRequest.setValue(token, forHTTPHeaderField: HTTPHeader.authorization.rawValue)
         
         completion(.success(urlRequest))
     }
     
     func retry(_ request: Request, for session: Session, dueTo error: Error, completion: @escaping (RetryResult) -> Void) {
-        
         guard let response = request.task?.response as? HTTPURLResponse,
               response.statusCode == 419
         else {
             completion(.doNotRetryWithError(error))
             return
         }
-        
-        guard request.retryCount < retryLimit
-        else {
-            return completion(.doNotRetryWithError(error))
-        }
-        
+                
         let refreshToken = UserDefaults.standard.refreshToken
         if !refreshToken.isEmpty {
-            UserManager.refreshToken { response in
+            UserManager.refreshToken { [weak self] response in
+                guard let self else { return }
                 switch response {
                 case .success(let refreshedAccessToken):
                     UserDefaults.standard.accessToken = refreshedAccessToken

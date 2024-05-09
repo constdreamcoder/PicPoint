@@ -14,8 +14,6 @@ final class NetworkMonitor {
     
     init() {
         monitor = NWPathMonitor()
-        dump(monitor)
-        print("------------")
     }
     
     func startMonitoring(statusUpdateHandler: @escaping (NWPath.Status) -> Void) {

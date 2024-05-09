@@ -42,12 +42,10 @@ extension LikeRouter: TargetType {
         switch self {
         case .fetchMyLikes:
             return [
-                HTTPHeader.authorization.rawValue: UserDefaults.standard.accessToken,
                 HTTPHeader.sesacKey.rawValue: APIKeys.sesacKey,
             ]
         case .like, .unlike:
             return [
-                HTTPHeader.authorization.rawValue: UserDefaults.standard.accessToken,
                 HTTPHeader.sesacKey.rawValue: APIKeys.sesacKey,
                 HTTPHeader.contentType.rawValue: HTTPHeader.json.rawValue
             ]

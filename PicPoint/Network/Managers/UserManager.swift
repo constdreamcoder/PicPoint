@@ -138,7 +138,7 @@ struct UserManager {
         do {
             let urlRequest = try UserRouter.refreshToken.asURLRequest()
             
-            AF.request(urlRequest, interceptor: TokenRefresher())
+            AF.request(urlRequest)
                 .validate(statusCode: 200...500)
                 .responseDecodable(of: RefreshTokenModel.self) { response in
                     

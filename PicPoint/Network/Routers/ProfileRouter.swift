@@ -42,12 +42,10 @@ extension ProfileRouter: TargetType {
         switch self {
         case .fetchMyProfile, .fetchOtherProfile:
             return [
-                HTTPHeader.authorization.rawValue: UserDefaults.standard.accessToken,
                 HTTPHeader.sesacKey.rawValue: APIKeys.sesacKey
             ]
         case .editMyProfile:
             return [
-                HTTPHeader.authorization.rawValue: UserDefaults.standard.accessToken,
                 HTTPHeader.sesacKey.rawValue: APIKeys.sesacKey,
                 HTTPHeader.contentType.rawValue: HTTPHeader.formData.rawValue
             ]

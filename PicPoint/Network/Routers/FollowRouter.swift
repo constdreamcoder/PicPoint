@@ -39,7 +39,6 @@ extension FollowRouter: TargetType {
         switch self {
         case .follow, .unfollow:
             return [
-                HTTPHeader.authorization.rawValue: UserDefaults.standard.accessToken,
                 HTTPHeader.sesacKey.rawValue: APIKeys.sesacKey
             ]
         }

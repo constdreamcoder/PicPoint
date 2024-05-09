@@ -52,14 +52,13 @@ extension PostRouter: TargetType {
         switch self {
         case .fetchPosts, .fetchPost, .deletePost, .fetchPostWithHashTag:
             return [
-                HTTPHeader.authorization.rawValue: UserDefaults.standard.accessToken,
-                HTTPHeader.sesacKey.rawValue: APIKeys.sesacKey
+                HTTPHeader.sesacKey.rawValue: APIKeys.sesacKey,
+                HTTPHeader.contentType.rawValue: HTTPHeader.json.rawValue
             ]
         case .uploadImages, .writePost, .updatePost:
             return [
                 HTTPHeader.sesacKey.rawValue: APIKeys.sesacKey,
                 HTTPHeader.contentType.rawValue: HTTPHeader.formData.rawValue,
-                HTTPHeader.authorization.rawValue: UserDefaults.standard.accessToken,
             ]
         }
     }

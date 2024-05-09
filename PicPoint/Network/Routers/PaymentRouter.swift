@@ -41,7 +41,6 @@ extension PaymentRouter: TargetType {
         switch self {
         case .validatePayment, .fetchPaymentList:
             return [
-                HTTPHeader.authorization.rawValue: UserDefaults.standard.accessToken,
                 HTTPHeader.sesacKey.rawValue: APIKeys.sesacKey,
                 HTTPHeader.contentType.rawValue:  HTTPHeader.json.rawValue
             ]

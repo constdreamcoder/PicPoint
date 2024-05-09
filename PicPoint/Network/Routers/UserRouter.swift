@@ -55,7 +55,6 @@ extension UserRouter: TargetType {
             ]
         case .withdrawal:
             return [
-                HTTPHeader.authorization.rawValue: UserDefaults.standard.accessToken,
                 HTTPHeader.sesacKey.rawValue: APIKeys.sesacKey
             ]
         case .refreshToken:
