@@ -10,12 +10,13 @@ import RxSwift
 import Alamofire
 
 struct PostManager {
+
     static func fetchPostList(query: FetchPostsQuery) -> Single<PostListModel> {
         return Single<PostListModel>.create { singleObserver in
             do {
                 let urlRequest = try PostRouter.fetchPosts(query: query).asURLRequest()
                 
-                AF.request(urlRequest, interceptor: TokenRefresher())
+                CustomSession.shared.session.request(urlRequest)
                     .validate(statusCode: 200...500)
                     .responseDecodable(of: PostListModel.self) { response in
                         switch response.result {
@@ -46,7 +47,7 @@ struct PostManager {
             do {
                 let urlRequest = try PostRouter.fetchPost(params: params).asURLRequest()
                                 
-                AF.request(urlRequest, interceptor: TokenRefresher())
+                CustomSession.shared.session.request(urlRequest)
                     .validate(statusCode: 200...500)
                     .responseDecodable(of: Post.self) { response in
                         switch response.result {
@@ -81,7 +82,7 @@ struct PostManager {
                 
                 let headers = urlRequest.headers
                 
-                AF.upload(multipartFormData: { multipartFormData in
+                CustomSession.shared.session.upload(multipartFormData: { multipartFormData in
                     body.files.forEach { imageFile in
                         multipartFormData.append(
                             imageFile.imageData,
@@ -90,7 +91,7 @@ struct PostManager {
                             mimeType: imageFile.mimeType.rawValue
                         )
                     }
-                }, to: url, method: method, headers: headers, interceptor: TokenRefresher())
+                }, to: url, method: method, headers: headers)
                     .validate(statusCode: 200...500)
                     .responseDecodable(of: ImageFileListModel.self) { response in
                         switch response.result {
@@ -120,7 +121,7 @@ struct PostManager {
             do {
                 let urlRequest = try PostRouter.writePost(body: body).asURLRequest()
                 
-                AF.request(urlRequest, interceptor: TokenRefresher())
+                CustomSession.shared.session.request(urlRequest)
                     .validate(statusCode: 200...500)
                     .responseDecodable(of: Post.self) { response in
                         switch response.result {
@@ -150,7 +151,7 @@ struct PostManager {
             do {
                 let urlRequest = try PostRouter.deletePost(params: params).asURLRequest()
                 
-                AF.request(urlRequest, interceptor: TokenRefresher())
+                CustomSession.shared.session.request(urlRequest)
                     .validate(statusCode: 200...500)
                     .response { response in
                         switch response.result {
@@ -180,7 +181,7 @@ struct PostManager {
             do {
                 let urlRequest = try PostRouter.fetchPostWithHashTag(query: query).asURLRequest()
                 
-                AF.request(urlRequest, interceptor: TokenRefresher())
+                CustomSession.shared.session.request(urlRequest)
                     .validate(statusCode: 200...500)
                     .responseDecodable(of: PostListModel.self) { response in
                         switch response.result {
@@ -210,7 +211,7 @@ struct PostManager {
             do {
                 let urlRequest = try PostRouter.updatePost(paramas: paramas, body: body).asURLRequest()
                 
-                AF.request(urlRequest, interceptor: TokenRefresher())
+                CustomSession.shared.session.request(urlRequest)
                     .validate(statusCode: 200...500)
                     .responseDecodable(of: Post.self) { response in
                         switch response.result {

@@ -15,7 +15,7 @@ struct ProfileManager {
             do {
                 let urlRequest = try ProfileRouter.fetchMyProfile.asURLRequest()
                 
-                AF.request(urlRequest, interceptor: TokenRefresher())
+                CustomSession.shared.session.request(urlRequest)
                     .validate(statusCode: 200...500)
                     .responseDecodable(of: FetchMyProfileModel.self) { response in
                         switch response.result {
@@ -50,7 +50,7 @@ struct ProfileManager {
                 
                 let headers = urlRequest.headers
                 
-                AF.upload(multipartFormData: { multipartFormData in
+                CustomSession.shared.session.upload(multipartFormData: { multipartFormData in
                     multipartFormData.append(body.nick.data(using: .utf8)!, withName: EditMyProfileBody.Key.nick)
                     multipartFormData.append(body.phoneNum.data(using: .utf8)!, withName: EditMyProfileBody.Key.phoneNum)
                     multipartFormData.append(body.birthDay.data(using: .utf8)!, withName: EditMyProfileBody.Key.birthDay)
@@ -60,7 +60,7 @@ struct ProfileManager {
                         fileName: body.profileImage.name,
                         mimeType: body.profileImage.mimeType.rawValue
                     )
-                }, to: url, method: method, headers: headers, interceptor: TokenRefresher())
+                }, to: url, method: method, headers: headers)
                     .validate(statusCode: 200...500)
                     .responseDecodable(of: FetchMyProfileModel.self) { response in
                         switch response.result {
@@ -90,7 +90,7 @@ struct ProfileManager {
             do {
                 let urlRequest = try ProfileRouter.fetchOtherProfile(params: params).asURLRequest()
                                 
-                AF.request(urlRequest, interceptor: TokenRefresher())
+                CustomSession.shared.session.request(urlRequest)
                     .validate(statusCode: 200...500)
                     .responseDecodable(of: FetchOtherProfileModel.self) { response in
                         switch response.result {

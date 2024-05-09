@@ -15,7 +15,7 @@ struct UserManager {
             do {
                 let urlRequest = try UserRouter.login(body: body).asURLRequest()
                 
-                AF.request(urlRequest, interceptor: TokenRefresher())
+                CustomSession.shared.session.request(urlRequest)
                     .validate(statusCode: 200...500)
                     .responseDecodable(of: LoginModel.self) { response in
                         switch response.result {
@@ -45,7 +45,7 @@ struct UserManager {
             do {
                 let urlRequest = try UserRouter.signUp(body: body).asURLRequest()
                 
-                AF.request(urlRequest, interceptor: TokenRefresher())
+                CustomSession.shared.session.request(urlRequest)
                     .validate(statusCode: 200...500)
                     .responseDecodable(of: SignUpModel.self) { response in
                         switch response.result {
@@ -75,7 +75,7 @@ struct UserManager {
             do {
                 let urlRequest = try UserRouter.withdrawal.asURLRequest()
                 
-                AF.request(urlRequest, interceptor: TokenRefresher())
+                CustomSession.shared.session.request(urlRequest)
                     .validate(statusCode: 200...500)
                     .responseDecodable(of: WithdrawalModel.self) { response in
                         switch response.result {
@@ -105,7 +105,7 @@ struct UserManager {
             do {
                 let urlRequest = try UserRouter.validateEmail(body: body).asURLRequest()
                 
-                AF.request(urlRequest, interceptor: TokenRefresher())
+                CustomSession.shared.session.request(urlRequest)
                     .validate(statusCode: 200...500)
                     .responseDecodable(of: ValidateEmailModel.self) { response in
                         switch response.result {

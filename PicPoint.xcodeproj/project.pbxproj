@@ -123,6 +123,7 @@
 		00760E592BD5321500741C40 /* ContentTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00760E582BD5321500741C40 /* ContentTableViewCell.swift */; };
 		00760E5C2BD53B5900741C40 /* InnerContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00760E5B2BD53B5900741C40 /* InnerContainerView.swift */; };
 		00760E5E2BD540C200741C40 /* InnerTextViewContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00760E5D2BD540C200741C40 /* InnerTextViewContainerView.swift */; };
+		008D04CD2BED11C300BCCCB1 /* CustomSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 008D04CC2BED11C300BCCCB1 /* CustomSession.swift */; };
 		009AFAEA2BDA3050003A45BF /* FetchPostWithHashTagQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = 009AFAE92BDA3050003A45BF /* FetchPostWithHashTagQuery.swift */; };
 		009AFAEC2BDA7530003A45BF /* ProfileCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 009AFAEB2BDA7530003A45BF /* ProfileCollectionViewCell.swift */; };
 		009AFAF02BDA75C7003A45BF /* ContentsCollectionHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 009AFAEF2BDA75C7003A45BF /* ContentsCollectionHeaderView.swift */; };
@@ -233,6 +234,8 @@
 		00EA277E2BDE516900EE3F9C /* ValidateEmailBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00EA277D2BDE516900EE3F9C /* ValidateEmailBody.swift */; };
 		00EA27802BDE728500EE3F9C /* ValidateEmailModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00EA277F2BDE728500EE3F9C /* ValidateEmailModel.swift */; };
 		00EA27832BDEA5ED00EE3F9C /* SignUpStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00EA27822BDEA5ED00EE3F9C /* SignUpStorage.swift */; };
+		00EE55FE2BEC98DF0016A791 /* EventLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00EE55FD2BEC98DF0016A791 /* EventLogger.swift */; };
+		00EE56002BEC99540016A791 /* Data+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00EE55FF2BEC99540016A791 /* Data+Extensions.swift */; };
 		00F65D372BCA16290027A897 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 00F65D362BCA16290027A897 /* Alamofire */; };
 		00F65D3A2BCA167F0027A897 /* RxCocoa in Frameworks */ = {isa = PBXBuildFile; productRef = 00F65D392BCA167F0027A897 /* RxCocoa */; };
 		00F65D3C2BCA167F0027A897 /* RxSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 00F65D3B2BCA167F0027A897 /* RxSwift */; };
@@ -364,6 +367,7 @@
 		00760E582BD5321500741C40 /* ContentTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentTableViewCell.swift; sourceTree = "<group>"; };
 		00760E5B2BD53B5900741C40 /* InnerContainerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InnerContainerView.swift; sourceTree = "<group>"; };
 		00760E5D2BD540C200741C40 /* InnerTextViewContainerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InnerTextViewContainerView.swift; sourceTree = "<group>"; };
+		008D04CC2BED11C300BCCCB1 /* CustomSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomSession.swift; sourceTree = "<group>"; };
 		009AFAE92BDA3050003A45BF /* FetchPostWithHashTagQuery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchPostWithHashTagQuery.swift; sourceTree = "<group>"; };
 		009AFAEB2BDA7530003A45BF /* ProfileCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileCollectionViewCell.swift; sourceTree = "<group>"; };
 		009AFAEF2BDA75C7003A45BF /* ContentsCollectionHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentsCollectionHeaderView.swift; sourceTree = "<group>"; };
@@ -473,6 +477,8 @@
 		00EA277D2BDE516900EE3F9C /* ValidateEmailBody.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValidateEmailBody.swift; sourceTree = "<group>"; };
 		00EA277F2BDE728500EE3F9C /* ValidateEmailModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValidateEmailModel.swift; sourceTree = "<group>"; };
 		00EA27822BDEA5ED00EE3F9C /* SignUpStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpStorage.swift; sourceTree = "<group>"; };
+		00EE55FD2BEC98DF0016A791 /* EventLogger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventLogger.swift; sourceTree = "<group>"; };
+		00EE55FF2BEC99540016A791 /* Data+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Data+Extensions.swift"; sourceTree = "<group>"; };
 		00FE92AB2BCE53EA00554D0F /* PostManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostManager.swift; sourceTree = "<group>"; };
 		00FE92AE2BCE54F000554D0F /* PostRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostRouter.swift; sourceTree = "<group>"; };
 		00FE92B22BCE56F600554D0F /* FetchPostsQuery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchPostsQuery.swift; sourceTree = "<group>"; };
@@ -1690,6 +1696,8 @@
 		00F65D462BCA1B3E0027A897 /* Network */ = {
 			isa = PBXGroup;
 			children = (
+				008D04CC2BED11C300BCCCB1 /* CustomSession.swift */,
+				00EE55FD2BEC98DF0016A791 /* EventLogger.swift */,
 				009F07532BE60C3D0048FF15 /* TokenRefresher.swift */,
 				00E1D9412BE4DFB500501328 /* NetworkMonitor.swift */,
 				00B7C3F22BCA5C42009AC333 /* TargetType.swift */,
@@ -1720,6 +1728,7 @@
 				00DD46862BE27A86001B3ADA /* NotificationCenter+Extensions.swift */,
 				00E4D9DD2BE3BE3B00C641BE /* Error+Extensions.swift */,
 				00A49D122BEAB3510058F35B /* Int+Extensions.swift */,
+				00EE55FF2BEC99540016A791 /* Data+Extensions.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -1912,6 +1921,7 @@
 				00760E532BD5308F00741C40 /* RecommendedVisitTimeTableViewCell.swift in Sources */,
 				00B7C4142BCA6C7F009AC333 /* LoginModel.swift in Sources */,
 				00E4D9BF2BE3AC8F00C641BE /* FetchPostsForEachUserNetworkError.swift in Sources */,
+				00EE55FE2BEC98DF0016A791 /* EventLogger.swift in Sources */,
 				0010416A2BDBF59A00E5FDA1 /* ProfileRouter.swift in Sources */,
 				0010415C2BDBBF2000E5FDA1 /* MyPostViewModel.swift in Sources */,
 				00E4D9B02BE3A6B800C641BE /* WithdralNetworkError.swift in Sources */,
@@ -1940,6 +1950,7 @@
 				00B7C4062BCA68DB009AC333 /* HTTPHeader.swift in Sources */,
 				00E4D9CB2BE3B0AD00C641BE /* FetchLikedPostsNetworkError.swift in Sources */,
 				0034FAEF2BCC9AA200D932F3 /* ProfileViewController.swift in Sources */,
+				00EE56002BEC99540016A791 /* Data+Extensions.swift in Sources */,
 				00A49D002BEAA00E0058F35B /* SettingTableViewCell.swift in Sources */,
 				001C92032BD6A2820028E67B /* UIViewController+Extensions.swift in Sources */,
 				00242C592BD7C7CA00B4C96E /* BaseBottomViewViewController.swift in Sources */,
@@ -2088,6 +2099,7 @@
 				001041662BDBEB4D00E5FDA1 /* MyLikeViewModel.swift in Sources */,
 				001254022BD427840065F1E6 /* DeleteCommentParams.swift in Sources */,
 				00A49D0D2BEAAB450058F35B /* PaymentListTableViewCell.swift in Sources */,
+				008D04CD2BED11C300BCCCB1 /* CustomSession.swift in Sources */,
 				002F01C02BD8822200992674 /* SelectLocationViewModel.swift in Sources */,
 				0010416C2BDBF66100E5FDA1 /* ProfileManager.swift in Sources */,
 				00E4D9AA2BE3A48500C641BE /* LogindNetoworkError.swift in Sources */,

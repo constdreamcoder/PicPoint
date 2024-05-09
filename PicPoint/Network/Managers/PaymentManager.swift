@@ -15,7 +15,7 @@ struct PaymentManager {
             do {
                 let urlRequest = try PaymentRouter.validatePayment(body: body).asURLRequest()
                 
-                AF.request(urlRequest, interceptor: TokenRefresher())
+                CustomSession.shared.session.request(urlRequest)
                     .validate(statusCode: 200...500)
                     .responseDecodable(of: ValidatePaymentModel.self) { response in
                         switch response.result {
@@ -45,7 +45,7 @@ struct PaymentManager {
             do {
                 let urlRequest = try PaymentRouter.fetchPaymentList.asURLRequest()
                 
-                AF.request(urlRequest, interceptor: TokenRefresher())
+                CustomSession.shared.session.request(urlRequest)
                     .validate(statusCode: 200...500)
                     .responseDecodable(of: FetchPaymentListModel.self) { response in
                         switch response.result {
