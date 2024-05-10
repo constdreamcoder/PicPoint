@@ -22,6 +22,6 @@ final class CustomSession {
         return Session(
             configuration: configuration,
             interceptor: interceptor,
-            eventMonitors: [apiLogger])
+            eventMonitors: [])
     }()
 }

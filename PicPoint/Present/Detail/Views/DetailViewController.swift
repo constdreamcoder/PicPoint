@@ -173,6 +173,7 @@ extension DetailViewController: UIViewControllerConfiguration {
             $0.height.equalTo(50.0)
             $0.horizontalEdges.bottom.equalTo(view.safeAreaLayoutGuide)
         }
+
     }
     
     func configureUI() {
@@ -193,7 +194,8 @@ extension DetailViewController: UIViewControllerConfiguration {
             commentButtonTap: iconView.commentStackView.button.rx.tap,
             itemTap: itemTapSubject,
             paymentResponse: paymentResponse, 
-            refreshControllValueChagned: refreshControl.rx.controlEvent(.valueChanged)
+            refreshControllValueChagned: refreshControl.rx.controlEvent(.valueChanged),
+            prefetchItems: collectionView.rx.prefetchItems
         )
         
         guard let viewModel = viewModel else { return }

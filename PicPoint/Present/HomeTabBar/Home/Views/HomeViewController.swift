@@ -119,7 +119,8 @@ extension HomeViewController: UIViewControllerConfiguration {
             addButtonTap: addPostButton.rx.tap, 
             deletePostTap: deletePostTap,
             postTap: collectionView.rx.modelSelected(PostLikeType.self),
-            refreshControlValueChanged: refreshControl.rx.controlEvent(.valueChanged)
+            refreshControlValueChanged: refreshControl.rx.controlEvent(.valueChanged),
+            prefetchItems: collectionView.rx.prefetchItems
         )
         
         let output = viewModel.transform(input: input)

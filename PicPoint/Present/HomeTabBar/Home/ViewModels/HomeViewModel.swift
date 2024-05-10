@@ -25,6 +25,8 @@ final class HomeViewModel: ViewModelType {
     
     let postLikesList = BehaviorRelay<[(String, [String])]>(value: [])
     private let postList = BehaviorRelay<[PostLikeType]>(value: [])
+    private let nextCursor = BehaviorSubject<String?>(value: nil)
+    private let networkTrigger = PublishSubject<Void>()
 
     var disposeBag = DisposeBag()
     
@@ -35,6 +37,7 @@ final class HomeViewModel: ViewModelType {
         let deletePostTap: PublishSubject<String>
         let postTap: ControlEvent<PostLikeType>
         let refreshControlValueChanged: ControlEvent<()>
+        let prefetchItems: ControlEvent<[IndexPath]>
     }
     
     struct Output {
@@ -53,16 +56,19 @@ final class HomeViewModel: ViewModelType {
         let unlikeTrigger = PublishSubject<String>()
         let refreshTrigger = PublishRelay<Void>()
         
-        input.viewDidLoadTrigger
-            .flatMap { _ in
-                PostManager.fetchPostList(query: .init(limit: "50", product_id: APIKeys.productId))
+        networkTrigger
+            .withLatestFrom(nextCursor)
+            .flatMap { nextCursor in
+                PostManager.fetchPostList(query: .init(next: nextCursor,limit: "3", product_id: APIKeys.productId))
                     .catch { error in
                         print(error.errorCode, error.errorDesc)
                         return Single<PostListModel>.never()
                     }
             }
-            .map { postListModel -> [PostLikeType] in
-                postListModel.data.map { post in
+            .withUnretained(self)
+            .map { owner, postListModel -> [PostLikeType] in
+                owner.nextCursor.onNext(postListModel.nextCursor)
+                return postListModel.data.map { post in
                     if post.likes.contains(UserDefaults.standard.userId) {
                         return (post, .like, post.likes, post.comments)
                     } else {
@@ -70,8 +76,31 @@ final class HomeViewModel: ViewModelType {
                     }
                 }
             }
-            .subscribe(with: self) { owner, newPostList in
-                owner.postList.accept(newPostList)
+            .withLatestFrom(postList) { (newPostList: $0, oldPostList: $1) }
+            .subscribe(with: self) { owner, value in
+                let updatedPostList = value.oldPostList + value.newPostList
+                owner.postList.accept(updatedPostList)
+            }
+            .disposed(by: disposeBag)
+        
+        input.viewDidLoadTrigger
+            .bind(with: self) { owner, _ in
+                owner.networkTrigger.onNext(())
+            }
+            .disposed(by: disposeBag)
+        
+        input.prefetchItems
+            .withLatestFrom(postList) { ($0, $1) }
+            .withLatestFrom(nextCursor) { value, nextCursor in
+                (indexPaths: value.0, postList: value.1, nextCursor: nextCursor)
+            }
+            .bind(with: self) { owner, value in
+                for indexPath in value.indexPaths {
+                    if indexPath.row == value.postList.count - 1
+                        && Int(value.nextCursor ?? "") != 0 {
+                        owner.networkTrigger.onNext(())
+                    }
+                }
             }
             .disposed(by: disposeBag)
         
@@ -83,14 +112,16 @@ final class HomeViewModel: ViewModelType {
         
         input.refreshControlValueChanged
             .flatMap { _ in
-                PostManager.fetchPostList(query: .init(limit: "50", product_id: APIKeys.productId))
+                return PostManager.fetchPostList(query: .init(limit: "3", product_id: APIKeys.productId))
                     .catch { error in
                         print(error.errorCode, error.errorDesc)
                         return Single<PostListModel>.never()
                     }
             }
-            .map { postListModel -> [PostLikeType] in
-                postListModel.data.map { post in
+            .withUnretained(self)
+            .map { owner, postListModel -> [PostLikeType] in
+                owner.nextCursor.onNext(postListModel.nextCursor)
+                return postListModel.data.map { post in
                     if post.likes.contains(UserDefaults.standard.userId) {
                         return (post, .like, post.likes, post.comments)
                     } else {
@@ -247,7 +278,6 @@ final class HomeViewModel: ViewModelType {
 
 extension HomeViewModel: AddPostViewModelDelegate {
     func sendNewPost(_ post: Post) {
-        print("new post", post)
         
         Observable<Post>.just(post)
             .withLatestFrom(postList) { newPost, postList in

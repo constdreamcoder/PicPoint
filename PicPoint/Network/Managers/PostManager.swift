@@ -119,6 +119,7 @@ struct PostManager {
     static func writePost(body: WritePostBody) -> Single<Post> {
         return Single<Post>.create { singleObserver in
             do {
+                print()
                 let urlRequest = try PostRouter.writePost(body: body).asURLRequest()
                 
                 CustomSession.shared.session.request(urlRequest)
@@ -176,8 +177,8 @@ struct PostManager {
         }
     }
     
-    static func FetchPostWithHashTag(query: FetchPostWithHashTagQuery) -> Single<[Post]> {
-        return Single<[Post]>.create { singleObserver in
+    static func FetchPostWithHashTag(query: FetchPostWithHashTagQuery) -> Single<PostListModel> {
+        return Single<PostListModel>.create { singleObserver in
             do {
                 let urlRequest = try PostRouter.fetchPostWithHashTag(query: query).asURLRequest()
                 
@@ -186,7 +187,7 @@ struct PostManager {
                     .responseDecodable(of: PostListModel.self) { response in
                         switch response.result {
                         case .success(let postListModel):
-                            singleObserver(.success(postListModel.data))
+                            singleObserver(.success(postListModel))
                         case .failure(_):
                             if let statusCode = response.response?.statusCode {
                                 if let commonNetworkError = CommonNetworkError(rawValue: statusCode) {

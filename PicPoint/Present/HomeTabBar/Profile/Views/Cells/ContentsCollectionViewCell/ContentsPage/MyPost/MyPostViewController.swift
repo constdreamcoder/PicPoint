@@ -35,7 +35,7 @@ final class MyPostViewController: BaseViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
+
         viewModel.delegate?.sendMyPostCollectionViewContentHeight(collectionView.contentSize.height)
     }
 }

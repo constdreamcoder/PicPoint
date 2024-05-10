@@ -120,7 +120,7 @@ final class HomeCollectionViewCell: BaseCollectionViewCell {
         }
         
         pageControl.numberOfPages = element.post.files.count
-        
+       
         topView.subTitleLabel.text = element.post.content1?.components(separatedBy: "/")[3]
         
         iconView.heartStackView.label.text = "\(element.likes.count)"

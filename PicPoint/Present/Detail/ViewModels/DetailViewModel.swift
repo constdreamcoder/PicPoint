@@ -28,6 +28,7 @@ final class DetailViewModel: ViewModelType {
     private let hashTagsSubject = BehaviorSubject<[String]>(value: [])
     private let relatedPostList = BehaviorSubject<[Post]>(value: [])
     private let selectedDonationAmountSubject = BehaviorSubject<Int>(value: 0)
+    private let nextCorsorSubject = BehaviorSubject<String?>(value: nil)
     
     weak var delegate: DetailViewModelDelegate?
     
@@ -40,6 +41,7 @@ final class DetailViewModel: ViewModelType {
         let itemTap: PublishSubject<Int>
         let paymentResponse: PublishSubject<IamportResponse>
         let refreshControllValueChagned: ControlEvent<Void>
+        let prefetchItems: ControlEvent<[IndexPath]>
     }
     
     struct Output {
@@ -72,7 +74,7 @@ final class DetailViewModel: ViewModelType {
             .map { owner, post -> FetchPostWithHashTagQuery in
                 owner.hashTagsSubject.onNext(post.hashTags)
                 return FetchPostWithHashTagQuery(
-                    limit: "10",
+                    limit: "3",
                     hashTag: post.hashTags.count == 0 ? "" : post.hashTags[0]
                 )
             }
@@ -80,10 +82,13 @@ final class DetailViewModel: ViewModelType {
                 PostManager.FetchPostWithHashTag(query: fetchPostWithHashTagQuery)
                     .catch { error in
                         print(error.errorCode, error.errorDesc)
-                        return Single<[Post]>.never()
+                        return Single<PostListModel>.never()
                     }
             }
-            .subscribe(with: self) { owner, postList in
+            .subscribe(with: self) { owner, postListModel in
+                owner.nextCorsorSubject.onNext(postListModel.nextCursor)
+                let postList = postListModel.data
+                
                 let separatedLocationStrings = post.content1?.components(separatedBy: "/")
                 
                 let latitude = Double(separatedLocationStrings?[0] ?? "") ?? 0
@@ -116,6 +121,8 @@ final class DetailViewModel: ViewModelType {
         let rightBarButtonItemHiddenTrigger = BehaviorRelay<Bool>(value: false)
         let postRefreshTrigger = PublishSubject<Post>()
         let endRefreshTrigger = PublishRelay<Void>()
+        let updateRelatedPostListTrigger = PublishSubject<Void>()
+        let updateHashTagSearchKeywordTrigger = PublishSubject<Void>()
         
         Observable.just(())
             .withLatestFrom(postRelay)
@@ -161,7 +168,7 @@ final class DetailViewModel: ViewModelType {
             .map { owner, post -> FetchPostWithHashTagQuery in
                 owner.hashTagsSubject.onNext(post.hashTags)
                 return FetchPostWithHashTagQuery(
-                    limit: "10",
+                    limit: "3",
                     hashTag: post.hashTags.count == 0 ? "" : post.hashTags[0]
                 )
             }
@@ -169,28 +176,33 @@ final class DetailViewModel: ViewModelType {
                 PostManager.FetchPostWithHashTag(query: fetchPostWithHashTagQuery)
                     .catch { error in
                         print(error.errorCode, error.errorDesc)
-                        return Single<[Post]>.never()
+                        return Single<PostListModel>.never()
                     }
             }
-            .withLatestFrom(postRefreshTrigger) { ($0, $1) }
+            .withLatestFrom(postRefreshTrigger) { (postListModel: $0, post: $1) }
             .subscribe(with: self) { owner, value in
-                let separatedLocationStrings = value.1.content1?.components(separatedBy: "/")
+                owner.nextCorsorSubject.onNext(value.postListModel.nextCursor)
+                
+                let post = value.post
+                let postList = value.postListModel.data
+                
+                let separatedLocationStrings = post.content1?.components(separatedBy: "/")
                 
                 let latitude = Double(separatedLocationStrings?[0] ?? "") ?? 0
                 let longitude = Double(separatedLocationStrings?[1] ?? "") ?? 0
                 
-                let separatedDateStrings = value.1.content2?.components(separatedBy: "/")
+                let separatedDateStrings = post.content2?.components(separatedBy: "/")
                 
                 let sections = owner.createSections(
-                    post: value.1,
-                    postList: value.0,
+                    post: post,
+                    postList: postList,
                     separatedLocationStrings: separatedLocationStrings,
                     latitude: latitude,
                     longitude: longitude,
                     separatedDateStrings: separatedDateStrings)
                 
                 owner.sectionsRelay.accept(sections)
-                owner.relatedPostList.onNext(value.0.filter { $0.postId != value.1.postId })
+                owner.relatedPostList.onNext(postList.filter { $0.postId != post.postId })
                 endRefreshTrigger.accept(())
             }
             .disposed(by: disposeBag)
@@ -382,6 +394,87 @@ final class DetailViewModel: ViewModelType {
         
         let moveToOtherProfileTrigger = profileImageViewTapTapSubject
             .debounce(.milliseconds(500), scheduler: MainScheduler.instance)
+        
+        updateHashTagSearchKeywordTrigger
+            .withLatestFrom(hashTagsSubject)
+            .bind(with: self) { owner, hashTags in
+                guard hashTags.count > 0 else { return }
+                var hashTags = hashTags
+                hashTags.remove(at: 0)
+                owner.hashTagsSubject.onNext(hashTags)
+                owner.nextCorsorSubject.onNext(nil)
+            }
+            .disposed(by: disposeBag)
+        
+        updateRelatedPostListTrigger
+            .withLatestFrom(nextCorsorSubject)
+            .withLatestFrom(hashTagsSubject) { (nextCorsor: $0, hashTags: $1) }
+            .map{ value in
+                return FetchPostWithHashTagQuery(
+                    next: value.nextCorsor,
+                    limit: "3",
+                    hashTag: value.hashTags.count == 0 ? "" : value.hashTags[0]
+                )
+            }
+            .flatMap { fetchPostWithHashTagQuery in
+                PostManager.FetchPostWithHashTag(query: fetchPostWithHashTagQuery)
+                    .catch { error in
+                        print(error.errorCode, error.errorDesc)
+                        return Single<PostListModel>.never()
+                    }
+            }
+            .withLatestFrom(relatedPostList) { ($0, $1) }
+            .withLatestFrom(postRelay, resultSelector: { value, post in
+                (postListModel: value.0, relatedPostList: value.1, post: post)
+            })
+            .subscribe(with: self) { owner, value in
+                owner.nextCorsorSubject.onNext(value.postListModel.nextCursor)
+                
+                guard let post = value.post?.post else { return }
+        
+                let separatedLocationStrings = post.content1?.components(separatedBy: "/")
+
+                let latitude = Double(separatedLocationStrings?[0] ?? "") ?? 0
+                let longitude = Double(separatedLocationStrings?[1] ?? "") ?? 0
+                
+                let separatedDateStrings = post.content2?.components(separatedBy: "/")
+                
+                let newPostList = value.postListModel.data
+                let updatedRelatedPostList = value.relatedPostList + newPostList
+                owner.relatedPostList.onNext(updatedRelatedPostList)
+                
+                let sections = owner.createSections(
+                    post: post,
+                    postList: updatedRelatedPostList,
+                    separatedLocationStrings: separatedLocationStrings,
+                    latitude: latitude,
+                    longitude: longitude,
+                    separatedDateStrings: separatedDateStrings)
+                
+                owner.sectionsRelay.accept(sections)
+                
+                if Int(value.postListModel.nextCursor ?? "") == 0 {
+                    updateHashTagSearchKeywordTrigger.onNext(())
+                }
+            }
+            .disposed(by: disposeBag)
+        
+        input.prefetchItems
+            .withLatestFrom(nextCorsorSubject) { ($0, $1) }
+            .withLatestFrom(relatedPostList) { value, relatedPostList in
+                (indexPaths: value.0, nextCursor: value.1, relatedPostList: relatedPostList)
+            }
+            .bind { value in
+                for indexPath in value.indexPaths {
+                    if indexPath.section == 3 {
+                        if indexPath.item == value.relatedPostList.count - 2
+                            && Int(value.nextCursor ?? "") != 0 {
+                            updateRelatedPostListTrigger.onNext(())
+                        }
+                    }
+                }
+            }
+            .disposed(by: disposeBag)
         
         return Output(
             rightBarButtonItemHiddenTrigger: rightBarButtonItemHiddenTrigger.asDriver(),

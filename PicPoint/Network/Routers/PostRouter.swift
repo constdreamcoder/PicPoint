@@ -50,12 +50,12 @@ extension PostRouter: TargetType {
     
     var header: [String : String] {
         switch self {
-        case .fetchPosts, .fetchPost, .deletePost, .fetchPostWithHashTag:
+        case .fetchPosts, .fetchPost, .deletePost, .fetchPostWithHashTag, .writePost:
             return [
                 HTTPHeader.sesacKey.rawValue: APIKeys.sesacKey,
                 HTTPHeader.contentType.rawValue: HTTPHeader.json.rawValue
             ]
-        case .uploadImages, .writePost, .updatePost:
+        case .uploadImages, .updatePost:
             return [
                 HTTPHeader.sesacKey.rawValue: APIKeys.sesacKey,
                 HTTPHeader.contentType.rawValue: HTTPHeader.formData.rawValue,
