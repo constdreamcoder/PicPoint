@@ -62,6 +62,14 @@ final class HomeViewController: BaseViewController {
         super.viewWillAppear(animated)
         
         tabBarController?.tabBar.isHidden = false
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(presentLocationSettingAlert), name: .showLocationSettingAlert, object: nil)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        NotificationCenter.default.removeObserver(self, name: .showLocationSettingAlert, object: nil)
     }
     
     private func makeActionSheet(title: String? = nil, message: String? = nil, handler: @escaping () -> Void) {
@@ -89,6 +97,15 @@ final class HomeViewController: BaseViewController {
                     completionHandler(placeMark)
                 }
             }
+        }
+    }
+}
+
+extension HomeViewController {
+    @objc func presentLocationSettingAlert(notification: Notification) {
+        if let userInfo = notification.userInfo,
+           let locationSettingAlert = userInfo["showLocationSettingAlert"] as? UIAlertController {
+            present(locationSettingAlert, animated: true)
         }
     }
 }

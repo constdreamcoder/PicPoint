@@ -243,7 +243,6 @@
 		00F65D3F2BCA176B0027A897 /* Realm in Frameworks */ = {isa = PBXBuildFile; productRef = 00F65D3E2BCA176B0027A897 /* Realm */; };
 		00F65D412BCA176B0027A897 /* RealmSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 00F65D402BCA176B0027A897 /* RealmSwift */; };
 		00F65D442BCA178C0027A897 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 00F65D432BCA178C0027A897 /* SnapKit */; };
-		00F9AAF92BEF236000E51C65 /* exmaple.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00F9AAF82BEF236000E51C65 /* exmaple.swift */; };
 		00FE92AC2BCE53EA00554D0F /* PostManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00FE92AB2BCE53EA00554D0F /* PostManager.swift */; };
 		00FE92AF2BCE54F000554D0F /* PostRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00FE92AE2BCE54F000554D0F /* PostRouter.swift */; };
 		00FE92B32BCE56F600554D0F /* FetchPostsQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00FE92B22BCE56F600554D0F /* FetchPostsQuery.swift */; };
@@ -482,7 +481,6 @@
 		00EA27822BDEA5ED00EE3F9C /* SignUpStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpStorage.swift; sourceTree = "<group>"; };
 		00EE55FD2BEC98DF0016A791 /* EventLogger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventLogger.swift; sourceTree = "<group>"; };
 		00EE55FF2BEC99540016A791 /* Data+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Data+Extensions.swift"; sourceTree = "<group>"; };
-		00F9AAF82BEF236000E51C65 /* exmaple.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = exmaple.swift; sourceTree = "<group>"; };
 		00FE92AB2BCE53EA00554D0F /* PostManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostManager.swift; sourceTree = "<group>"; };
 		00FE92AE2BCE54F000554D0F /* PostRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostRouter.swift; sourceTree = "<group>"; };
 		00FE92B22BCE56F600554D0F /* FetchPostsQuery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchPostsQuery.swift; sourceTree = "<group>"; };
@@ -1702,7 +1700,6 @@
 				00B7C3F52BCA5F01009AC333 /* SignUp */,
 				00B7C3F42BCA5EE9009AC333 /* SignIn */,
 				002720822BDF8765004ADC5C /* Follow */,
-				00F9AAF82BEF236000E51C65 /* exmaple.swift */,
 			);
 			path = Present;
 			sourceTree = "<group>";
@@ -2128,7 +2125,6 @@
 				004FE27B2BE8C7490044C323 /* SelectedPlaceDetailsViewModel.swift in Sources */,
 				002720882BDF87EB004ADC5C /* FollowViewModel.swift in Sources */,
 				0003E9342BD57DA400695D40 /* SelectImageViewController.swift in Sources */,
-				00F9AAF92BEF236000E51C65 /* exmaple.swift in Sources */,
 				00EA27832BDEA5ED00EE3F9C /* SignUpStorage.swift in Sources */,
 				001254002BD4190D0065F1E6 /* CommentManager.swift in Sources */,
 				00E4D9AE2BE3A6AB00C641BE /* AccessTokenNetworkError.swift in Sources */,
