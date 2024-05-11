@@ -240,11 +240,14 @@
 		00F65D372BCA16290027A897 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 00F65D362BCA16290027A897 /* Alamofire */; };
 		00F65D3A2BCA167F0027A897 /* RxCocoa in Frameworks */ = {isa = PBXBuildFile; productRef = 00F65D392BCA167F0027A897 /* RxCocoa */; };
 		00F65D3C2BCA167F0027A897 /* RxSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 00F65D3B2BCA167F0027A897 /* RxSwift */; };
-		00F65D3F2BCA176B0027A897 /* Realm in Frameworks */ = {isa = PBXBuildFile; productRef = 00F65D3E2BCA176B0027A897 /* Realm */; };
-		00F65D412BCA176B0027A897 /* RealmSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 00F65D402BCA176B0027A897 /* RealmSwift */; };
 		00F65D442BCA178C0027A897 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 00F65D432BCA178C0027A897 /* SnapKit */; };
 		00F9AAFB2BEF953600E51C65 /* SearchLocationTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00F9AAFA2BEF953600E51C65 /* SearchLocationTableViewCell.swift */; };
 		00F9AAFE2BEFAF2600E51C65 /* RepositoryType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00F9AAFD2BEFAF2600E51C65 /* RepositoryType.swift */; };
+		00F9AB022BEFB06A00E51C65 /* RecentKeywordRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00F9AB012BEFB06A00E51C65 /* RecentKeywordRepository.swift */; };
+		00F9AB062BEFBEE000E51C65 /* RecentKeyword.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00F9AB052BEFBEE000E51C65 /* RecentKeyword.swift */; };
+		00F9AB082BEFBF7600E51C65 /* RecentKeywordTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00F9AB072BEFBF7600E51C65 /* RecentKeywordTableViewCell.swift */; };
+		00F9AB0B2BEFD50C00E51C65 /* Realm in Frameworks */ = {isa = PBXBuildFile; productRef = 00F9AB0A2BEFD50C00E51C65 /* Realm */; };
+		00F9AB0D2BEFD50C00E51C65 /* RealmSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 00F9AB0C2BEFD50C00E51C65 /* RealmSwift */; };
 		00FE92AC2BCE53EA00554D0F /* PostManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00FE92AB2BCE53EA00554D0F /* PostManager.swift */; };
 		00FE92AF2BCE54F000554D0F /* PostRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00FE92AE2BCE54F000554D0F /* PostRouter.swift */; };
 		00FE92B32BCE56F600554D0F /* FetchPostsQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00FE92B22BCE56F600554D0F /* FetchPostsQuery.swift */; };
@@ -485,6 +488,9 @@
 		00EE55FF2BEC99540016A791 /* Data+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Data+Extensions.swift"; sourceTree = "<group>"; };
 		00F9AAFA2BEF953600E51C65 /* SearchLocationTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchLocationTableViewCell.swift; sourceTree = "<group>"; };
 		00F9AAFD2BEFAF2600E51C65 /* RepositoryType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepositoryType.swift; sourceTree = "<group>"; };
+		00F9AB012BEFB06A00E51C65 /* RecentKeywordRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentKeywordRepository.swift; sourceTree = "<group>"; };
+		00F9AB052BEFBEE000E51C65 /* RecentKeyword.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentKeyword.swift; sourceTree = "<group>"; };
+		00F9AB072BEFBF7600E51C65 /* RecentKeywordTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentKeywordTableViewCell.swift; sourceTree = "<group>"; };
 		00FE92AB2BCE53EA00554D0F /* PostManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostManager.swift; sourceTree = "<group>"; };
 		00FE92AE2BCE54F000554D0F /* PostRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostRouter.swift; sourceTree = "<group>"; };
 		00FE92B22BCE56F600554D0F /* FetchPostsQuery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchPostsQuery.swift; sourceTree = "<group>"; };
@@ -500,12 +506,12 @@
 				00F65D3C2BCA167F0027A897 /* RxSwift in Frameworks */,
 				00F65D3A2BCA167F0027A897 /* RxCocoa in Frameworks */,
 				00FE92BA2BCE877C00554D0F /* Kingfisher in Frameworks */,
-				00F65D3F2BCA176B0027A897 /* Realm in Frameworks */,
 				003540142BCFB7EE00A71415 /* Differentiator in Frameworks */,
 				009F07592BE6608B0048FF15 /* iamport-ios in Frameworks */,
 				00F65D442BCA178C0027A897 /* SnapKit in Frameworks */,
+				00F9AB0B2BEFD50C00E51C65 /* Realm in Frameworks */,
 				003540162BCFB7EE00A71415 /* RxDataSources in Frameworks */,
-				00F65D412BCA176B0027A897 /* RealmSwift in Frameworks */,
+				00F9AB0D2BEFD50C00E51C65 /* RealmSwift in Frameworks */,
 				00F65D372BCA16290027A897 /* Alamofire in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -949,6 +955,7 @@
 			children = (
 				00B67D8C2BD82ACB0097ACDE /* SelectLocationViewController.swift */,
 				00F9AAFA2BEF953600E51C65 /* SearchLocationTableViewCell.swift */,
+				00F9AB072BEFBF7600E51C65 /* RecentKeywordTableViewCell.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -1712,16 +1719,8 @@
 		00F65D462BCA1B3E0027A897 /* Network */ = {
 			isa = PBXGroup;
 			children = (
-				008D04CC2BED11C300BCCCB1 /* CustomSession.swift */,
-				00EE55FD2BEC98DF0016A791 /* EventLogger.swift */,
-				009F07532BE60C3D0048FF15 /* TokenRefresher.swift */,
-				00E1D9412BE4DFB500501328 /* NetworkMonitor.swift */,
-				00B7C3F22BCA5C42009AC333 /* TargetType.swift */,
-				00B7C4052BCA68DB009AC333 /* HTTPHeader.swift */,
-				00FE92AD2BCE54D700554D0F /* Routers */,
-				00B7C40A2BCA697B009AC333 /* Models */,
-				00B7C40F2BCA6B56009AC333 /* Managers */,
-				00E4D9A52BE3883C00C641BE /* Errors */,
+				00F9AB002BEFB04000E51C65 /* Local */,
+				00F9AAFF2BEFB02B00E51C65 /* Remote */,
 			);
 			path = Network;
 			sourceTree = "<group>";
@@ -1771,6 +1770,48 @@
 				00F9AAFD2BEFAF2600E51C65 /* RepositoryType.swift */,
 			);
 			path = LocalDB;
+			sourceTree = "<group>";
+		};
+		00F9AAFF2BEFB02B00E51C65 /* Remote */ = {
+			isa = PBXGroup;
+			children = (
+				008D04CC2BED11C300BCCCB1 /* CustomSession.swift */,
+				00EE55FD2BEC98DF0016A791 /* EventLogger.swift */,
+				009F07532BE60C3D0048FF15 /* TokenRefresher.swift */,
+				00E1D9412BE4DFB500501328 /* NetworkMonitor.swift */,
+				00B7C3F22BCA5C42009AC333 /* TargetType.swift */,
+				00B7C4052BCA68DB009AC333 /* HTTPHeader.swift */,
+				00FE92AD2BCE54D700554D0F /* Routers */,
+				00B7C40A2BCA697B009AC333 /* Models */,
+				00B7C40F2BCA6B56009AC333 /* Managers */,
+				00E4D9A52BE3883C00C641BE /* Errors */,
+			);
+			path = Remote;
+			sourceTree = "<group>";
+		};
+		00F9AB002BEFB04000E51C65 /* Local */ = {
+			isa = PBXGroup;
+			children = (
+				00F9AB032BEFBEBF00E51C65 /* Models */,
+				00F9AB042BEFBEC900E51C65 /* Repositories */,
+			);
+			path = Local;
+			sourceTree = "<group>";
+		};
+		00F9AB032BEFBEBF00E51C65 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				00F9AB052BEFBEE000E51C65 /* RecentKeyword.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		00F9AB042BEFBEC900E51C65 /* Repositories */ = {
+			isa = PBXGroup;
+			children = (
+				00F9AB012BEFB06A00E51C65 /* RecentKeywordRepository.swift */,
+			);
+			path = Repositories;
 			sourceTree = "<group>";
 		};
 		00FE92AD2BCE54D700554D0F /* Routers */ = {
@@ -1847,13 +1888,13 @@
 				00F65D362BCA16290027A897 /* Alamofire */,
 				00F65D392BCA167F0027A897 /* RxCocoa */,
 				00F65D3B2BCA167F0027A897 /* RxSwift */,
-				00F65D3E2BCA176B0027A897 /* Realm */,
-				00F65D402BCA176B0027A897 /* RealmSwift */,
 				00F65D432BCA178C0027A897 /* SnapKit */,
 				00FE92B92BCE877C00554D0F /* Kingfisher */,
 				003540132BCFB7EE00A71415 /* Differentiator */,
 				003540152BCFB7EE00A71415 /* RxDataSources */,
 				009F07582BE6608B0048FF15 /* iamport-ios */,
+				00F9AB0A2BEFD50C00E51C65 /* Realm */,
+				00F9AB0C2BEFD50C00E51C65 /* RealmSwift */,
 			);
 			productName = PicPoint;
 			productReference = 0049D87B2BC96B4800F59852 /* PicPoint.app */;
@@ -1886,11 +1927,11 @@
 			packageReferences = (
 				00F65D352BCA16290027A897 /* XCRemoteSwiftPackageReference "Alamofire" */,
 				00F65D382BCA167F0027A897 /* XCRemoteSwiftPackageReference "RxSwift" */,
-				00F65D3D2BCA176B0027A897 /* XCRemoteSwiftPackageReference "realm-swift" */,
 				00F65D422BCA178C0027A897 /* XCRemoteSwiftPackageReference "SnapKit" */,
 				00FE92B82BCE877C00554D0F /* XCRemoteSwiftPackageReference "Kingfisher" */,
 				003540122BCFB7EE00A71415 /* XCRemoteSwiftPackageReference "RxDataSources" */,
 				009F07572BE6608B0048FF15 /* XCRemoteSwiftPackageReference "iamport-ios" */,
+				00F9AB092BEFD50C00E51C65 /* XCRemoteSwiftPackageReference "realm-swift" */,
 			);
 			productRefGroup = 0049D87C2BC96B4800F59852 /* Products */;
 			projectDirPath = "";
@@ -1949,9 +1990,11 @@
 				00EE55FE2BEC98DF0016A791 /* EventLogger.swift in Sources */,
 				0010416A2BDBF59A00E5FDA1 /* ProfileRouter.swift in Sources */,
 				0010415C2BDBBF2000E5FDA1 /* MyPostViewModel.swift in Sources */,
+				00F9AB022BEFB06A00E51C65 /* RecentKeywordRepository.swift in Sources */,
 				00E4D9B02BE3A6B800C641BE /* WithdralNetworkError.swift in Sources */,
 				005E8F1E2BE0E7DE00B341A5 /* LikeBody.swift in Sources */,
 				00760E5C2BD53B5900741C40 /* InnerContainerView.swift in Sources */,
+				00F9AB062BEFBEE000E51C65 /* RecentKeyword.swift in Sources */,
 				00F9AAFE2BEFAF2600E51C65 /* RepositoryType.swift in Sources */,
 				00E4D9DC2BE3B62600C641BE /* ValidateEmailNetworkError.swift in Sources */,
 				00321C9A2BCD79B800BE2407 /* RxSwift+Extensions.swift in Sources */,
@@ -1965,6 +2008,7 @@
 				00EA27742BDE3CA600EE3F9C /* BirthDaySignUpViewController.swift in Sources */,
 				00AA9A7B2BCC25C90069C55C /* UserDefaults+Extensions.swift in Sources */,
 				00E4D9DE2BE3BE3B00C641BE /* Error+Extensions.swift in Sources */,
+				00F9AB082BEFBF7600E51C65 /* RecentKeywordTableViewCell.swift in Sources */,
 				001253E72BD3A00B0065F1E6 /* CommentTableViewCell.swift in Sources */,
 				003540202BCFBB2200A71415 /* UITableViewCell+Extensions.swift in Sources */,
 				00353FE02BCFAA7500A71415 /* DetailViewController.swift in Sources */,
@@ -2412,20 +2456,20 @@
 				minimumVersion = 6.6.0;
 			};
 		};
-		00F65D3D2BCA176B0027A897 /* XCRemoteSwiftPackageReference "realm-swift" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/realm/realm-swift.git";
-			requirement = {
-				kind = exactVersion;
-				version = 10.49.1;
-			};
-		};
 		00F65D422BCA178C0027A897 /* XCRemoteSwiftPackageReference "SnapKit" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/SnapKit/SnapKit.git";
 			requirement = {
 				kind = upToNextMajorVersion;
 				minimumVersion = 5.7.1;
+			};
+		};
+		00F9AB092BEFD50C00E51C65 /* XCRemoteSwiftPackageReference "realm-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/realm/realm-swift.git";
+			requirement = {
+				kind = exactVersion;
+				version = 10.48.1;
 			};
 		};
 		00FE92B82BCE877C00554D0F /* XCRemoteSwiftPackageReference "Kingfisher" */ = {
@@ -2469,20 +2513,20 @@
 			package = 00F65D382BCA167F0027A897 /* XCRemoteSwiftPackageReference "RxSwift" */;
 			productName = RxSwift;
 		};
-		00F65D3E2BCA176B0027A897 /* Realm */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 00F65D3D2BCA176B0027A897 /* XCRemoteSwiftPackageReference "realm-swift" */;
-			productName = Realm;
-		};
-		00F65D402BCA176B0027A897 /* RealmSwift */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 00F65D3D2BCA176B0027A897 /* XCRemoteSwiftPackageReference "realm-swift" */;
-			productName = RealmSwift;
-		};
 		00F65D432BCA178C0027A897 /* SnapKit */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 00F65D422BCA178C0027A897 /* XCRemoteSwiftPackageReference "SnapKit" */;
 			productName = SnapKit;
+		};
+		00F9AB0A2BEFD50C00E51C65 /* Realm */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 00F9AB092BEFD50C00E51C65 /* XCRemoteSwiftPackageReference "realm-swift" */;
+			productName = Realm;
+		};
+		00F9AB0C2BEFD50C00E51C65 /* RealmSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 00F9AB092BEFD50C00E51C65 /* XCRemoteSwiftPackageReference "realm-swift" */;
+			productName = RealmSwift;
 		};
 		00FE92B92BCE877C00554D0F /* Kingfisher */ = {
 			isa = XCSwiftPackageProductDependency;

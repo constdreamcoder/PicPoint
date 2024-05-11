@@ -13,5 +13,5 @@ protocol RepositoryType {
     func read<T: Object>(_ object: T.Type) -> Results<T>
     func write<T: Object>(_ object: T)
     func delete<T: Object>(_ object: T)
-    func deleteAll() -> String
+    func deleteAll()
 }

@@ -18,8 +18,10 @@ protocol SelectLocationViewModelDelegate: AnyObject {
 final class SelectLocationViewModel: ViewModelType {
     var disposeBag = DisposeBag()
     
-    let searchResults = PublishSubject<[MKLocalSearchCompletion]>()
-    let selectedPin = PublishSubject<CLLocationCoordinate2D>()
+    let eraseButtonTapped = PublishSubject<RecentKeyword>()
+    let searchResultsSubject = PublishSubject<[MKLocalSearchCompletion]>()
+    let selectedResultSubject = PublishSubject<MKPlacemark>()
+    private let recentKeywordListRelay = BehaviorRelay<[RecentKeyword]>(value: [])
     
     weak var delegate: SelectLocationViewModelDelegate?
     
@@ -33,6 +35,7 @@ final class SelectLocationViewModel: ViewModelType {
         let gestureState: Driver<UIGestureRecognizer.State>
         let moveToUserButton: Driver<CLLocationCoordinate2D>
         let searchResults: Driver<[MKLocalSearchCompletion]>
+        let recentKeywordList: Driver<[RecentKeyword]>
     }
     
     init(
@@ -42,10 +45,21 @@ final class SelectLocationViewModel: ViewModelType {
     }
     
     func transform(input: Input) -> Output {
+        let fetchRecentKeywordListTrigger = PublishSubject<Void>()
+        
+        fetchRecentKeywordListTrigger
+            .bind(with: self) { owner,  _ in
+                let recentKeywordList: [RecentKeyword] = RecentKeywordRepository.shared.read(RecentKeyword.self).sorted(byKeyPath: "regDate", ascending: false).map { $0 }
+                owner.recentKeywordListRelay.accept(recentKeywordList)
+            }
+            .disposed(by: disposeBag)
         
         input.viewDidLoad
-            .bind { _ in
+            .map {
                 LocationManager.shared.checkDeviceLocationAuthorization()
+            }
+            .bind { _ in
+                fetchRecentKeywordListTrigger.onNext(())
             }
             .disposed(by: disposeBag)
         
@@ -57,10 +71,38 @@ final class SelectLocationViewModel: ViewModelType {
                 LocationManager.shared.getCurrentUserLocationSingle()
             }
         
+        selectedResultSubject
+            .bind { selectedResult in
+                let id = "\(selectedResult.coordinate.latitude)/\(selectedResult.coordinate.longitude)"
+                let recentKeyword = RecentKeyword(
+                    id: id,
+                    keyword: selectedResult.name ?? ""
+                )
+                let count = RecentKeywordRepository.shared.read(RecentKeyword.self).filter { $0.keyword == recentKeyword.keyword }.count
+                
+                if count < 1 {
+                    RecentKeywordRepository.shared.write(recentKeyword)
+
+                    RecentKeywordRepository.shared.getLocationOfDefaultRealm()
+                    
+                    fetchRecentKeywordListTrigger.onNext(())
+                }
+            }
+            .disposed(by: disposeBag)
+        
+        eraseButtonTapped
+            .bind { selectedRecentKeyword in
+                RecentKeywordRepository.shared.delete(selectedRecentKeyword)
+                
+                fetchRecentKeywordListTrigger.onNext(())
+            }
+            .disposed(by: disposeBag)
+        
         return Output(
             gestureState: gestureState.asDriver(onErrorJustReturn: .ended),
             moveToUserButton: moveToUserTrigger.asDriver(onErrorJustReturn: CLLocationCoordinate2D()),
-            searchResults: searchResults.asDriver(onErrorJustReturn: [])
+            searchResults: searchResultsSubject.asDriver(onErrorJustReturn: []),
+            recentKeywordList: recentKeywordListRelay.asDriver(onErrorJustReturn: [])
         )
     }
 }
