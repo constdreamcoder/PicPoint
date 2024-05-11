@@ -12,14 +12,41 @@ import CoreLocation
 import RxSwift
 import RxCocoa
 
-// TODO: - 처음 맵 띄울 때 현재 사용자 위치 중심으로 지도 표시, 검색 기능 추가
 final class SelectLocationViewController: BaseViewController {
     
-    let mapView: MKMapView = {
+    private lazy var searchCompleter: MKLocalSearchCompleter = {
+        let searchCompleter = MKLocalSearchCompleter()
+        searchCompleter.resultTypes = .query
+        searchCompleter.delegate = self
+        return searchCompleter
+    }()
+    
+    let searchBar: UISearchBar = {
+        let searchBar = UISearchBar()
+        return searchBar
+    }()
+    
+    let searchTableView: UITableView = {
+        let tableView = UITableView()
+        tableView.backgroundColor = .white
+        
+        tableView.register(SearchLocationTableViewCell.self, forCellReuseIdentifier: SearchLocationTableViewCell.identifier)
+        return tableView
+    }()
+    
+    let searchBaseView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .white
+        view.isHidden = true
+        return view
+    }()
+    
+    lazy var mapView: MKMapView = {
         let mapView = MKMapView()
         mapView.showsUserLocation = true
         mapView.userTrackingMode = .follow
         mapView.setUserTrackingMode(.follow, animated: true)
+        mapView.delegate = self
         return mapView
     }()
     
@@ -100,6 +127,19 @@ final class SelectLocationViewController: BaseViewController {
         mapView.removeGestureRecognizer(tap)
         NotificationCenter.default.removeObserver(self, name: .showLocationSettingAlert, object: nil)
     }
+    
+    private func addAnnotationAndShowAddress(with placeMark: MKPlacemark) {
+        
+        let annotation = MKPointAnnotation()
+
+        annotation.coordinate = placeMark.coordinate
+    
+        mapView.addAnnotation(annotation)
+
+        locationLabel.text = placeMark.fullAddress
+        
+        locationLabelContainerView.isHidden = false
+    }
 }
 
 extension SelectLocationViewController {
@@ -114,17 +154,21 @@ extension SelectLocationViewController {
 extension SelectLocationViewController: UIViewControllerConfiguration {
     func configureNavigationBar() {
         navigationController?.navigationBar.tintColor = .black
+        
+        navigationItem.titleView = searchBar
     }
     
     func configureConstraints() {
         [
             mapView,
             moveToUserButtonContainerView,
-            locationLabelContainerView
+            locationLabelContainerView,
+            searchBaseView
         ].forEach { view.addSubview($0) }
        
         mapView.snp.makeConstraints {
-            $0.edges.equalToSuperview()
+            $0.top.equalTo(view.safeAreaLayoutGuide)
+            $0.horizontalEdges.bottom.equalToSuperview()
         }
         
         moveToUserButtonContainerView.snp.makeConstraints {
@@ -147,6 +191,16 @@ extension SelectLocationViewController: UIViewControllerConfiguration {
         
         moveToUserButton.snp.makeConstraints {
             $0.center.equalTo(moveToUserButtonContainerView)
+        }
+        
+        searchBaseView.snp.makeConstraints {
+            $0.edges.equalTo(view)
+        }
+        
+        searchBaseView.addSubview(searchTableView)
+        
+        searchTableView.snp.makeConstraints {
+            $0.edges.equalTo(view.safeAreaLayoutGuide)
         }
     }
     
@@ -174,7 +228,57 @@ extension SelectLocationViewController: UIViewControllerConfiguration {
         
         output.moveToUserButton
             .drive(with: self) { onwer, userLocation in
-                onwer.moveToUser(userLocation)
+                onwer.moveToPoint(userLocation)
+            }
+            .disposed(by: disposeBag)
+        
+        searchBar.rx.text.orEmpty.asDriver()
+            .drive(with: self) { owner, searchText in
+                owner.searchCompleter.queryFragment = searchText
+                if searchText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+                    owner.viewModel?.searchResults.onNext([])
+                }
+            }
+            .disposed(by: disposeBag)
+        
+        output.searchResults
+            .drive(searchTableView.rx.items(cellIdentifier: SearchLocationTableViewCell.identifier, cellType: SearchLocationTableViewCell.self)) { row, element, cell in
+                cell.titleLabel.text = element.title
+                cell.subTitleLabel.text = element.subtitle
+            }
+            .disposed(by: disposeBag)
+        
+        searchTableView.rx.modelSelected(MKLocalSearchCompletion.self)
+            .bind(with: self) { owner, selectedResult in
+                let searchReqeust = MKLocalSearch.Request(completion: selectedResult)
+                let search = MKLocalSearch(request: searchReqeust)
+                search.start { response, error in
+                    guard error == nil else {
+                        print(error.debugDescription)
+                        return
+                    }
+                    
+                    owner.removeAllAnnotations()
+                    
+                    guard let placeMark = response?.mapItems[0].placemark else {
+                        return
+                    }
+                    
+                    owner.addAnnotationAndShowAddress(with: placeMark)
+
+                    viewModel.delegate?.sendSelectedMapPointAndAddressInfos(placeMark.coordinate, placeMark)
+                    owner.searchBaseView.isHidden = true
+                    
+                    owner.moveToPoint(placeMark.coordinate)
+                    
+                    owner.searchBar.endEditing(true)
+                }
+            }
+            .disposed(by: disposeBag)
+        
+        searchBar.rx.textDidBeginEditing
+            .bind(with: self) { owner, _ in
+                owner.searchBaseView.isHidden = false
             }
             .disposed(by: disposeBag)
     }
@@ -183,7 +287,7 @@ extension SelectLocationViewController: UIViewControllerConfiguration {
 // MARK: - Map-Related Custom Methods
 extension SelectLocationViewController {
     
-    private func moveToUser(_ coordinates: CLLocationCoordinate2D) {
+    private func moveToPoint(_ coordinates: CLLocationCoordinate2D) {
         mapView.setCenter(coordinates, animated: true)
         
         let region = MKCoordinateRegion(
@@ -211,21 +315,8 @@ extension SelectLocationViewController {
             
             if error == nil, let marks = placeMarks {
                 marks.forEach { placeMark in
-                    let annotation = MKPointAnnotation()
-                    annotation.coordinate = CLLocationCoordinate2D(latitude: point.latitude, longitude: point.longitude)
                     
-                    self.locationLabel.text =
-                        """
-                        \(placeMark.administrativeArea ?? "")
-                        \(placeMark.locality ?? "")
-                        \(placeMark.subLocality ?? "")
-                        \(placeMark.thoroughfare ?? "")
-                        \(placeMark.subThoroughfare ?? "")
-                        """
-            
-                    self.mapView.addAnnotation(annotation)
-                    
-                    self.locationLabelContainerView.isHidden = false
+                    self.addAnnotationAndShowAddress(with: MKPlacemark(placemark: placeMark))
                     
                     guard let viewModel = self.viewModel else { return }
                     viewModel.delegate?.sendSelectedMapPointAndAddressInfos(point, placeMark)
@@ -239,5 +330,30 @@ extension SelectLocationViewController {
     private func removeAllAnnotations() {
         let allAnnotations = mapView.annotations
         mapView.removeAnnotations(allAnnotations)
+    }
+}
+
+extension SelectLocationViewController: MKLocalSearchCompleterDelegate {
+    func completerDidUpdateResults(_ completer: MKLocalSearchCompleter) {
+        Observable.just(completer.results)
+            .bind(with: self) { owner, results in
+                owner.viewModel?.searchResults.onNext(results)
+            }
+            .disposed(by: disposeBag)
+        
+    }
+    
+    func completer(_ completer: MKLocalSearchCompleter, didFailWithError error: Error) {
+        print("completer error", error.localizedDescription)
+    }
+}
+
+extension SelectLocationViewController: MKMapViewDelegate {
+    func mapView(_ mapView: MKMapView, didSelect annotation: MKAnnotation) {
+        Observable.just(annotation)
+            .bind(with: self) { owner, selectedAnnotation in
+                owner.viewModel?.selectedPin.onNext(selectedAnnotation.coordinate)
+            }
+            .disposed(by: disposeBag)
     }
 }

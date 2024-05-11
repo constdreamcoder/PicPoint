@@ -243,6 +243,8 @@
 		00F65D3F2BCA176B0027A897 /* Realm in Frameworks */ = {isa = PBXBuildFile; productRef = 00F65D3E2BCA176B0027A897 /* Realm */; };
 		00F65D412BCA176B0027A897 /* RealmSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 00F65D402BCA176B0027A897 /* RealmSwift */; };
 		00F65D442BCA178C0027A897 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 00F65D432BCA178C0027A897 /* SnapKit */; };
+		00F9AAFB2BEF953600E51C65 /* SearchLocationTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00F9AAFA2BEF953600E51C65 /* SearchLocationTableViewCell.swift */; };
+		00F9AAFE2BEFAF2600E51C65 /* RepositoryType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00F9AAFD2BEFAF2600E51C65 /* RepositoryType.swift */; };
 		00FE92AC2BCE53EA00554D0F /* PostManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00FE92AB2BCE53EA00554D0F /* PostManager.swift */; };
 		00FE92AF2BCE54F000554D0F /* PostRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00FE92AE2BCE54F000554D0F /* PostRouter.swift */; };
 		00FE92B32BCE56F600554D0F /* FetchPostsQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00FE92B22BCE56F600554D0F /* FetchPostsQuery.swift */; };
@@ -481,6 +483,8 @@
 		00EA27822BDEA5ED00EE3F9C /* SignUpStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpStorage.swift; sourceTree = "<group>"; };
 		00EE55FD2BEC98DF0016A791 /* EventLogger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventLogger.swift; sourceTree = "<group>"; };
 		00EE55FF2BEC99540016A791 /* Data+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Data+Extensions.swift"; sourceTree = "<group>"; };
+		00F9AAFA2BEF953600E51C65 /* SearchLocationTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchLocationTableViewCell.swift; sourceTree = "<group>"; };
+		00F9AAFD2BEFAF2600E51C65 /* RepositoryType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepositoryType.swift; sourceTree = "<group>"; };
 		00FE92AB2BCE53EA00554D0F /* PostManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostManager.swift; sourceTree = "<group>"; };
 		00FE92AE2BCE54F000554D0F /* PostRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostRouter.swift; sourceTree = "<group>"; };
 		00FE92B22BCE56F600554D0F /* FetchPostsQuery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchPostsQuery.swift; sourceTree = "<group>"; };
@@ -944,6 +948,7 @@
 			isa = PBXGroup;
 			children = (
 				00B67D8C2BD82ACB0097ACDE /* SelectLocationViewController.swift */,
+				00F9AAFA2BEF953600E51C65 /* SearchLocationTableViewCell.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -1747,6 +1752,7 @@
 		00F65D482BCA1C5B0027A897 /* Protocols */ = {
 			isa = PBXGroup;
 			children = (
+				00F9AAFC2BEFAF0700E51C65 /* LocalDB */,
 				00B7C3F82BCA5F56009AC333 /* UI */,
 			);
 			path = Protocols;
@@ -1757,6 +1763,14 @@
 			children = (
 			);
 			name = Resources;
+			sourceTree = "<group>";
+		};
+		00F9AAFC2BEFAF0700E51C65 /* LocalDB */ = {
+			isa = PBXGroup;
+			children = (
+				00F9AAFD2BEFAF2600E51C65 /* RepositoryType.swift */,
+			);
+			path = LocalDB;
 			sourceTree = "<group>";
 		};
 		00FE92AD2BCE54D700554D0F /* Routers */ = {
@@ -1938,6 +1952,7 @@
 				00E4D9B02BE3A6B800C641BE /* WithdralNetworkError.swift in Sources */,
 				005E8F1E2BE0E7DE00B341A5 /* LikeBody.swift in Sources */,
 				00760E5C2BD53B5900741C40 /* InnerContainerView.swift in Sources */,
+				00F9AAFE2BEFAF2600E51C65 /* RepositoryType.swift in Sources */,
 				00E4D9DC2BE3B62600C641BE /* ValidateEmailNetworkError.swift in Sources */,
 				00321C9A2BCD79B800BE2407 /* RxSwift+Extensions.swift in Sources */,
 				00AFF5FE2BCD1418006D319A /* UICollectionViewConfiguration.swift in Sources */,
@@ -2063,6 +2078,7 @@
 				00E4D9C92BE3AFA900C641BE /* LikeUnlikePostNetworkError.swift in Sources */,
 				00E1D9442BE4E1D100501328 /* NoNetworkView.swift in Sources */,
 				00EA277C2BDE479400EE3F9C /* CustomBottomButton.swift in Sources */,
+				00F9AAFB2BEF953600E51C65 /* SearchLocationTableViewCell.swift in Sources */,
 				00B67D8A2BD827160097ACDE /* DismissButton.swift in Sources */,
 				00A49D112BEAAD490058F35B /* PaymentListViewModel.swift in Sources */,
 				0035402B2BD0212800A71415 /* String+Extensions.swift in Sources */,

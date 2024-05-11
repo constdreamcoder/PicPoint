@@ -9,6 +9,7 @@ import RxSwift
 import RxCocoa
 import UIKit
 import CoreLocation
+import MapKit
 
 protocol SelectLocationViewModelDelegate: AnyObject {
     func sendSelectedMapPointAndAddressInfos(_ mapPoint: CLLocationCoordinate2D, _ addressInfos: CLPlacemark)
@@ -16,6 +17,9 @@ protocol SelectLocationViewModelDelegate: AnyObject {
 
 final class SelectLocationViewModel: ViewModelType {
     var disposeBag = DisposeBag()
+    
+    let searchResults = PublishSubject<[MKLocalSearchCompletion]>()
+    let selectedPin = PublishSubject<CLLocationCoordinate2D>()
     
     weak var delegate: SelectLocationViewModelDelegate?
     
@@ -28,6 +32,7 @@ final class SelectLocationViewModel: ViewModelType {
     struct Output {
         let gestureState: Driver<UIGestureRecognizer.State>
         let moveToUserButton: Driver<CLLocationCoordinate2D>
+        let searchResults: Driver<[MKLocalSearchCompletion]>
     }
     
     init(
@@ -54,7 +59,8 @@ final class SelectLocationViewModel: ViewModelType {
         
         return Output(
             gestureState: gestureState.asDriver(onErrorJustReturn: .ended),
-            moveToUserButton: moveToUserTrigger.asDriver(onErrorJustReturn: CLLocationCoordinate2D())
+            moveToUserButton: moveToUserTrigger.asDriver(onErrorJustReturn: CLLocationCoordinate2D()),
+            searchResults: searchResults.asDriver(onErrorJustReturn: [])
         )
     }
 }

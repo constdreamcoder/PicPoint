@@ -119,6 +119,8 @@ extension AddPostViewController: UIViewControllerConfiguration {
         navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .close, target: self, action: #selector(leftBarButtonItemTapped))
         
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "등록", style: .plain, target: self, action: nil)
+        
+        navigationItem.backButtonTitle = ""
     }
     
     func configureConstraints() {
