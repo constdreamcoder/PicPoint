@@ -55,6 +55,8 @@ final class DetailViewModel: ViewModelType {
         let gotoPaymentPageTrigger: Driver<IamportPayment?>
         let endRefreshTrigger: Driver<Void>
         let inputDonationTrigger: Driver<Void>
+        let startLoadingTrigger: Driver<Void>
+        let endLoadingTrigger: Driver<Void>
     }
     
     init(post: Post) {
@@ -123,6 +125,8 @@ final class DetailViewModel: ViewModelType {
         let endRefreshTrigger = PublishRelay<Void>()
         let updateRelatedPostListTrigger = PublishSubject<Void>()
         let updateHashTagSearchKeywordTrigger = PublishSubject<Void>()
+        let startLoadingTrigger = PublishRelay<Void>()
+        let endLoadingTrigger = PublishRelay<Void>()
         
         Observable.just(())
             .withLatestFrom(postRelay)
@@ -410,6 +414,7 @@ final class DetailViewModel: ViewModelType {
             .withLatestFrom(nextCorsorSubject)
             .withLatestFrom(hashTagsSubject) { (nextCorsor: $0, hashTags: $1) }
             .map{ value in
+                startLoadingTrigger.accept(())
                 return FetchPostWithHashTagQuery(
                     next: value.nextCorsor,
                     limit: "3",
@@ -456,6 +461,7 @@ final class DetailViewModel: ViewModelType {
                 if Int(value.postListModel.nextCursor ?? "") == 0 {
                     updateHashTagSearchKeywordTrigger.onNext(())
                 }
+                endLoadingTrigger.accept(())
             }
             .disposed(by: disposeBag)
         
@@ -486,7 +492,9 @@ final class DetailViewModel: ViewModelType {
             moveToOtherProfileTrigger: moveToOtherProfileTrigger.asDriver(onErrorJustReturn: ""), 
             gotoPaymentPageTrigger: gotoPaymentPageTrigger.asDriver(onErrorJustReturn: nil), 
             endRefreshTrigger: endRefreshTrigger.asDriver(onErrorJustReturn: ()),
-            inputDonationTrigger: input.rightBarButtonItem.asDriver()
+            inputDonationTrigger: input.rightBarButtonItem.asDriver(),
+            startLoadingTrigger: startLoadingTrigger.asDriver(onErrorJustReturn: ()),
+            endLoadingTrigger: endLoadingTrigger.asDriver(onErrorJustReturn: ())
         )
     }
 }

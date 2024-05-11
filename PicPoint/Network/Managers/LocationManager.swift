@@ -77,7 +77,7 @@ extension LocationManager {
             if let setting = URL(string: UIApplication.openSettingsURLString) {
                 UIApplication.shared.open(setting)
             } else {
-                print("설정으로 가주세여~~~~~!!")
+                print("설정으로 이동!")
             }
         }
         

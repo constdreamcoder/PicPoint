@@ -37,6 +37,11 @@ final class DetailViewController: BaseViewController {
             withReuseIdentifier: DetailRelatedContentCollectionHeaderView.identifier
         )
         collectionView.register(DetailRelatedContentsCollectionViewCell.self, forCellWithReuseIdentifier: DetailRelatedContentsCollectionViewCell.identifier)
+        collectionView.register(
+            LoadingFooterView.self,
+            forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter,
+            withReuseIdentifier: LoadingFooterView.identifier
+        )
         
         let refreshControl = UIRefreshControl()
         collectionView.refreshControl = refreshControl
@@ -115,12 +120,28 @@ final class DetailViewController: BaseViewController {
             } else {
                 return UICollectionReusableView()
             }
+        case UICollectionView.elementKindSectionFooter:
+            if indexPath.section == 3 {
+                guard let footer = collectionView.dequeueReusableSupplementaryView(
+                    ofKind: kind,
+                    withReuseIdentifier: LoadingFooterView.identifier,
+                    for: indexPath) as? LoadingFooterView else { return UICollectionReusableView() }
+                
+                return footer
+            } else {
+                return UICollectionReusableView()
+            }
         default:
             return UICollectionReusableView()
         }
     }
     
     private let viewModel: DetailViewModel?
+    
+    var footerSize = NSCollectionLayoutSize(
+        widthDimension: .fractionalWidth(1.0),
+        heightDimension: .absolute(0.1)
+    )
     
     init(detailViewModel: DetailViewModel) {
         self.viewModel = detailViewModel
@@ -139,6 +160,14 @@ final class DetailViewController: BaseViewController {
         configureConstraints()
         configureUI()
         bind()
+    }
+    
+    private func updateFooterHeight(height: CGFloat) {
+        footerSize = NSCollectionLayoutSize(
+            widthDimension: .fractionalWidth(1.0),
+            heightDimension: .absolute(height)
+        )
+        collectionView.collectionViewLayout.invalidateLayout()
     }
 }
 
@@ -311,13 +340,26 @@ extension DetailViewController: UIViewControllerConfiguration {
                 }
             }
             .disposed(by: disposeBag)
+        
+        output.startLoadingTrigger
+            .drive(with: self) { owner, _ in
+                owner.updateFooterHeight(height: 30.0)
+            }
+            .disposed(by: disposeBag)
+        
+        output.endLoadingTrigger
+            .drive(with: self) { owner, _ in
+                owner.updateFooterHeight(height: 0.1)
+            }
+            .disposed(by: disposeBag)
     }
 }
 
 extension DetailViewController: UICollectionViewConfiguration {
     func createCollectionViewLayout() -> UICollectionViewLayout {
-        // TODO: - 열거형으로 정리하기
-        return UICollectionViewCompositionalLayout { sectionNumber, layoutEnvironment -> NSCollectionLayoutSection? in
+        return UICollectionViewCompositionalLayout { [weak self] sectionNumber, layoutEnvironment -> NSCollectionLayoutSection? in
+            guard let self else { return nil }
+            
             if sectionNumber == 0 {
                 let item = NSCollectionLayoutItem(
                     layoutSize: .init(
@@ -334,7 +376,7 @@ extension DetailViewController: UICollectionViewConfiguration {
                     subitems: [item]
                 )
                 let section = NSCollectionLayoutSection(group: group)
-                section.orthogonalScrollingBehavior = .paging
+                                
                 return section
             } else if sectionNumber == 1 {
                 var config = UICollectionLayoutListConfiguration(appearance: .plain)
@@ -385,20 +427,28 @@ extension DetailViewController: UICollectionViewConfiguration {
                 
                 let section = NSCollectionLayoutSection(group: group)
                 
-                let headerFooterSize = NSCollectionLayoutSize(
+                let headerSize = NSCollectionLayoutSize(
                     widthDimension: .fractionalWidth(1.0),
                     heightDimension: .absolute(56.0)
                 )
                 let header = NSCollectionLayoutBoundarySupplementaryItem(
-                    layoutSize: headerFooterSize,
+                    layoutSize: headerSize,
                     elementKind: UICollectionView.elementKindSectionHeader,
                     alignment: .top
                 )
-                section.boundarySupplementaryItems = [header]
+                
+                let footer = NSCollectionLayoutBoundarySupplementaryItem(
+                    layoutSize: footerSize,
+                    elementKind: UICollectionView.elementKindSectionFooter,
+                    alignment: .bottom
+                )
+                
+                section.boundarySupplementaryItems = [header, footer]
                 
                 return section
             }
             return nil
         }
     }
+    
 }
