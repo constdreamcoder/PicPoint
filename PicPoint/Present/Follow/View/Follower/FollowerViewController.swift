@@ -39,15 +39,22 @@ extension FollowerViewController: UIViewControllerConfiguration {
     }
     
     func configureConstraints() {
-        view.addSubview(tableView)
-        
+        [
+            tableView,
+            noContentsWarningLabel
+        ].forEach { view.addSubview($0) }
+
         tableView.snp.makeConstraints {
             $0.edges.equalTo(view.safeAreaLayoutGuide)
+        }
+        
+        noContentsWarningLabel.snp.makeConstraints {
+            $0.center.equalTo(tableView)
         }
     }
     
     func configureUI() {
-        
+        noContentsWarningLabel.text = "팔로워한 유저가 없습니다."
     }
     
     func bind() {
@@ -60,6 +67,12 @@ extension FollowerViewController: UIViewControllerConfiguration {
             .drive(tableView.rx.items(cellIdentifier: FollowerTableViewCell.identifier, cellType: FollowerTableViewCell.self)) { row, element, cell in
                 
                 cell.updateCellData(element)
+            }
+            .disposed(by: disposeBag)
+        
+        output.followers
+            .drive(with: self) { owner, followerList in
+                owner.noContentsWarningLabel.isHidden = followerList.count > 0
             }
             .disposed(by: disposeBag)
     }

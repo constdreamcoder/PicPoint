@@ -39,15 +39,22 @@ extension FollowingViewController: UIViewControllerConfiguration {
     }
     
     func configureConstraints() {
-        view.addSubview(tableView)
+        [
+            tableView,
+            noContentsWarningLabel
+        ].forEach { view.addSubview($0) }
         
         tableView.snp.makeConstraints {
             $0.edges.equalTo(view.safeAreaLayoutGuide)
         }
+        
+        noContentsWarningLabel.snp.makeConstraints {
+            $0.center.equalTo(tableView)
+        }
     }
     
     func configureUI() {
-        
+        noContentsWarningLabel.text = "팔로잉한 유저가 없습니다."
     }
     
     func bind() {
@@ -62,6 +69,12 @@ extension FollowingViewController: UIViewControllerConfiguration {
                 cell.followingViewModel = self.viewModel
                 cell.updateCellData(element)
                 cell.bind(element)
+            }
+            .disposed(by: disposeBag)
+        
+        output.followings
+            .drive(with: self) { owner, followingList in
+                owner.noContentsWarningLabel.isHidden = followingList.count > 0
             }
             .disposed(by: disposeBag)
     }

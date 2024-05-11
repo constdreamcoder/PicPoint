@@ -44,19 +44,25 @@ final class PaymentListViewController: BaseViewController {
 
 extension PaymentListViewController: UIViewControllerConfiguration {
     func configureNavigationBar() {
-        
     }
     
     func configureConstraints() {
-        view.addSubview(tableView)
-        
+        [
+            tableView,
+            noContentsWarningLabel
+        ].forEach { view.addSubview($0) }
+       
         tableView.snp.makeConstraints {
             $0.edges.equalTo(view.safeAreaLayoutGuide)
+        }
+        
+        noContentsWarningLabel.snp.makeConstraints {
+            $0.center.equalTo(view.safeAreaLayoutGuide)
         }
     }
     
     func configureUI() {
-        
+        noContentsWarningLabel.text = "후원 내역이 존재하지 않습니다."
     }
     
     func bind() {
@@ -70,6 +76,12 @@ extension PaymentListViewController: UIViewControllerConfiguration {
                 cell.productNameLabel.text = element.productName
                 cell.priceLabel.text = "\(element.price.numberDecimalFormat)원"
                 cell.paidAtLabel.text = "구매일: \(element.paidAt.getDateString)"
+            }
+            .disposed(by: disposeBag)
+        
+        output.paymentListTrigger
+            .drive(with: self) { owner, paymentList in
+                owner.noContentsWarningLabel.isHidden = paymentList.count > 0
             }
             .disposed(by: disposeBag)
     }
