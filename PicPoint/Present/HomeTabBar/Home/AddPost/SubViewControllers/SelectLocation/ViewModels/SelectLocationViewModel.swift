@@ -49,7 +49,7 @@ final class SelectLocationViewModel: ViewModelType {
         
         let moveToUserTrigger = input.moveToUserButton
             .flatMap {
-                LocationManager.shared.getCurrentUserLocation()
+                LocationManager.shared.getCurrentUserLocationSingle()
             }
         
         return Output(

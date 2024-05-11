@@ -36,7 +36,7 @@ final class MyPostViewController: BaseViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
-        viewModel.delegate?.sendMyPostCollectionViewContentHeight(collectionView.contentSize.height)
+        viewModel.delegate?.sendMyPostCollectionViewContentHeight(collectionView.contentSize.height == 0 ? 250: collectionView.contentSize.height)
     }
 }
 
@@ -46,18 +46,26 @@ extension MyPostViewController: UIViewControllerConfiguration {
     }
     
     func configureConstraints() {
-        view.addSubview(collectionView)
+        [
+            collectionView,
+            noContentsWarningLabel
+        ].forEach { view.addSubview($0) }
         
         collectionView.snp.makeConstraints {
             $0.edges.equalTo(view.safeAreaLayoutGuide)
         }
+        
+        noContentsWarningLabel.snp.makeConstraints {
+            $0.center.equalTo(collectionView)
+        }
     }
     
     func configureUI() {
-        
+        noContentsWarningLabel.text = "게시글이 존재하지 않습니다!!"
     }
     
     func bind() {
+        
         let input = MyPostViewModel.Input(
             viewDidLoad: Observable.just(()),
             postTap: collectionView.rx.modelSelected(Post.self)
@@ -68,6 +76,13 @@ extension MyPostViewController: UIViewControllerConfiguration {
         output.myPostsList
             .drive(collectionView.rx.items(cellIdentifier: MyPostCollectionViewCell.identifier, cellType: MyPostCollectionViewCell.self)) { item, element, cell in
                 cell.updateCellData(element)
+            }
+            .disposed(by: disposeBag)
+            
+       
+        output.myPostsList
+            .drive(with: self) { owner, postList in
+                owner.noContentsWarningLabel.isHidden = postList.count > 0
             }
             .disposed(by: disposeBag)
         

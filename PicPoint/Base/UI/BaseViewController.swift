@@ -11,6 +11,15 @@ import RxCocoa
 
 class BaseViewController: UIViewController {
     
+    let noContentsWarningLabel: UILabel = {
+        let label = UILabel()
+        label.textColor = .black
+        label.font = .systemFont(ofSize: 24.0, weight: .bold)
+        label.textAlignment = .center
+        label.isHidden = false
+        return label
+    }()
+    
     let disposeBag = DisposeBag()
 
     override func viewDidLoad() {

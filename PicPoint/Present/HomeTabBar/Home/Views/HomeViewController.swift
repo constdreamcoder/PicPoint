@@ -9,12 +9,13 @@ import UIKit
 import SnapKit
 import RxSwift
 import RxCocoa
+import CoreLocation
 
 final class HomeViewController: BaseViewController {
     
     let leftBarButtonItemLabel: UILabel = {
         let label = UILabel()
-        label.text = "서울시 동작구"
+        label.text = "서울특별시 중랑구 길림동"
         label.textColor = .black
         label.font = .systemFont(ofSize: 20.0, weight: .bold)
         return label
@@ -76,6 +77,20 @@ final class HomeViewController: BaseViewController {
         
         present(alert, animated: true)
     }
+    
+    private func searchUserAddress(with userLocation: CLLocationCoordinate2D, completionHandler: @escaping (CLPlacemark) -> Void) {
+        let geocoder: CLGeocoder = CLGeocoder()
+        let location = CLLocation(latitude: userLocation.latitude, longitude: userLocation.longitude)
+        
+        geocoder.reverseGeocodeLocation(location) { [weak self] placeMarks, error in
+            guard let self else { return }
+            if error == nil, let marks = placeMarks {
+                marks.forEach { placeMark in
+                    completionHandler(placeMark)
+                }
+            }
+        }
+    }
 }
 
 extension HomeViewController: UIViewControllerConfiguration {
@@ -90,11 +105,16 @@ extension HomeViewController: UIViewControllerConfiguration {
     func configureConstraints() {
         [
             collectionView,
+            noContentsWarningLabel,
             addPostButton
         ].forEach { view.addSubview($0) }
        
         collectionView.snp.makeConstraints {
             $0.edges.equalTo(view.safeAreaLayoutGuide)
+        }
+        
+        noContentsWarningLabel.snp.makeConstraints {
+            $0.center.equalTo(collectionView)
         }
         
         addPostButton.snp.makeConstraints {
@@ -104,7 +124,7 @@ extension HomeViewController: UIViewControllerConfiguration {
     }
     
     func configureUI() {
-        
+        noContentsWarningLabel.text = "게시글이 존재하지 않습니다!!"
     }
     
     func bind() {
@@ -128,10 +148,15 @@ extension HomeViewController: UIViewControllerConfiguration {
         output.postList
             .drive(collectionView.rx.items(cellIdentifier: HomeCollectionViewCell.identifier, cellType: HomeCollectionViewCell.self)) { [weak self] item, element, cell in
                 guard let self else { return }
-                
                 cell.homeViewModel = viewModel
                 cell.updatePostData(element)
                 cell.bind(element)
+            }
+            .disposed(by: disposeBag)
+        
+        output.postList
+            .drive(with: self) { owner, postList in
+                owner.noContentsWarningLabel.isHidden = postList.count > 0
             }
             .disposed(by: disposeBag)
         
@@ -189,7 +214,15 @@ extension HomeViewController: UIViewControllerConfiguration {
         
         output.refreshTrigger
             .drive(with: self) { owner, _ in
-                refreshControl.endRefreshing()
+                refreshControl.endRefreshing()                
+            }
+            .disposed(by: disposeBag)
+        
+        output.updateUserLocationTrigger
+            .drive(with: self) { owner, userLocation in
+                owner.searchUserAddress(with: userLocation) { placeMark in
+                    owner.leftBarButtonItemLabel.text = placeMark.shortAddress
+                }
             }
             .disposed(by: disposeBag)
     }

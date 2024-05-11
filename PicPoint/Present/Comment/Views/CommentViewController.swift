@@ -48,7 +48,6 @@ final class CommentViewController: BaseViewController {
         return baseTap
     }()
     
-    
     private let viewModel: CommentViewModel?
     
     init(commentViewModel: CommentViewModel) {
@@ -84,10 +83,18 @@ extension CommentViewController: UIViewControllerConfiguration {
     }
     
     func configureConstraints() {
-        view.addSubview(baseView)
+        [
+            baseView,
+            noContentsWarningLabel
+        ].forEach { view.addSubview($0) }
         
         baseView.snp.makeConstraints {
             $0.edges.equalTo(view.safeAreaLayoutGuide)
+        }
+        
+        noContentsWarningLabel.snp.makeConstraints {
+            $0.centerX.equalTo(baseView)
+            $0.centerY.equalTo(baseView).offset(-150.0)
         }
         
         [
@@ -113,6 +120,7 @@ extension CommentViewController: UIViewControllerConfiguration {
     }
     
     func configureUI() {
+        noContentsWarningLabel.text = "댓글이 존재하지 않습니다."
     }
     
     func bind() {
@@ -167,6 +175,12 @@ extension CommentViewController: UIViewControllerConfiguration {
                 cell.commentView.userNicknameLabel.text = element.creator.nick
                 cell.commentView.subTitleLabel.text = element.content
                 cell.commentView.agoLabel.text = element.createdAt.timeAgoToDisplay
+            }
+            .disposed(by: disposeBag)
+        
+        output.commentList
+            .drive(with: self) { owner, commentList in
+                owner.noContentsWarningLabel.isHidden = commentList.count > 0
             }
             .disposed(by: disposeBag)
         

@@ -36,7 +36,7 @@ final class MyLikeViewController: BaseViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        viewModel.delegate?.sendMyLikeCollectionViewContentHeight(collectionView.contentSize.height)
+        viewModel.delegate?.sendMyLikeCollectionViewContentHeight(collectionView.contentSize.height == 0 ? 250 : collectionView.contentSize.height)
     }
 
 }
@@ -47,15 +47,22 @@ extension MyLikeViewController: UIViewControllerConfiguration {
     }
     
     func configureConstraints() {
-        view.addSubview(collectionView)
+        [
+            collectionView,
+            noContentsWarningLabel
+        ].forEach { view.addSubview($0) }
         
         collectionView.snp.makeConstraints {
             $0.edges.equalTo(view.safeAreaLayoutGuide)
         }
+        
+        noContentsWarningLabel.snp.makeConstraints {
+            $0.center.equalTo(collectionView)
+        }
     }
     
     func configureUI() {
-        
+        noContentsWarningLabel.text = "게시글이 존재하지 않습니다!!"
     }
     
     func bind() {
@@ -66,9 +73,15 @@ extension MyLikeViewController: UIViewControllerConfiguration {
         
         let output = viewModel.transform(input: input)
         
-        output.viewDidLoadTrigger
+        output.likedPostList
             .drive(collectionView.rx.items(cellIdentifier: MyLikeCollectionViewCell.identifier, cellType: MyLikeCollectionViewCell.self)) { item, element, cell in
                 cell.updateCellData(element)
+            }
+            .disposed(by: disposeBag)
+        
+        output.likedPostList
+            .drive(with: self) { owner, postList in
+                owner.noContentsWarningLabel.isHidden = postList.count > 0
             }
             .disposed(by: disposeBag)
         

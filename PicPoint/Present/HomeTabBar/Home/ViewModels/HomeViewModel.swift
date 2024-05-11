@@ -8,6 +8,7 @@
 import Foundation
 import RxSwift
 import RxCocoa
+import CoreLocation
 
 typealias PostLikeType = (
     post: Post,
@@ -27,6 +28,7 @@ final class HomeViewModel: ViewModelType {
     private let postList = BehaviorRelay<[PostLikeType]>(value: [])
     private let nextCursor = BehaviorSubject<String?>(value: nil)
     private let networkTrigger = PublishSubject<Void>()
+    private let updateUserLocationRelay = PublishRelay<CLLocationCoordinate2D>()
 
     var disposeBag = DisposeBag()
     
@@ -48,6 +50,7 @@ final class HomeViewModel: ViewModelType {
         let postTapTrigger: Driver<Post?>
         let moveToProfileTrigger: Driver<String>
         let refreshTrigger: Driver<Void>
+        let updateUserLocationTrigger: Driver<CLLocationCoordinate2D>
     }
     
     func transform(input: Input) -> Output {
@@ -59,16 +62,29 @@ final class HomeViewModel: ViewModelType {
         networkTrigger
             .withLatestFrom(nextCursor)
             .flatMap { nextCursor in
-                PostManager.fetchPostList(query: .init(next: nextCursor,limit: "3", product_id: APIKeys.productId))
+                return PostManager.fetchPostList(query: .init(next: nextCursor,limit: "3", product_id: APIKeys.productId))
                     .catch { error in
                         print(error.errorCode, error.errorDesc)
                         return Single<PostListModel>.never()
                     }
             }
             .withUnretained(self)
-            .map { owner, postListModel -> [PostLikeType] in
+            .map { owner, postListModel in
                 owner.nextCursor.onNext(postListModel.nextCursor)
-                return postListModel.data.map { post in
+                let userLocation = LocationManager.shared.getCurrentUserLocation()
+                owner.updateUserLocationRelay.accept(userLocation)
+                return postListModel.data.filter { post in
+                    guard let locationContents = post.content1?.components(separatedBy: "/") else { return false }
+                    let latitude = Double(locationContents[0]) ?? 0
+                    let longitude = Double(locationContents[1]) ?? 0
+                    let postLocation = CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
+                    let distance = LocationManager.shared.distanceBetweenLocations(from: userLocation, to: postLocation)
+                    return distance <= 3000
+                }
+            }
+            .withUnretained(self)
+            .map { owner, filteredPostList -> [PostLikeType] in
+                return filteredPostList.map { post in
                     if post.likes.contains(UserDefaults.standard.userId) {
                         return (post, .like, post.likes, post.comments)
                     } else {
@@ -84,6 +100,9 @@ final class HomeViewModel: ViewModelType {
             .disposed(by: disposeBag)
         
         input.viewDidLoadTrigger
+            .map {
+                LocationManager.shared.checkDeviceLocationAuthorization()
+            }
             .bind(with: self) { owner, _ in
                 owner.networkTrigger.onNext(())
             }
@@ -119,9 +138,22 @@ final class HomeViewModel: ViewModelType {
                     }
             }
             .withUnretained(self)
-            .map { owner, postListModel -> [PostLikeType] in
+            .map { owner, postListModel in
                 owner.nextCursor.onNext(postListModel.nextCursor)
-                return postListModel.data.map { post in
+                let userLocation = LocationManager.shared.getCurrentUserLocation()
+                owner.updateUserLocationRelay.accept(userLocation)
+                return postListModel.data.filter { post in
+                    guard let locationContents = post.content1?.components(separatedBy: "/") else { return false }
+                    let latitude = Double(locationContents[0]) ?? 0
+                    let longitude = Double(locationContents[1]) ?? 0
+                    let postLocation = CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
+                    let distance = LocationManager.shared.distanceBetweenLocations(from: userLocation, to: postLocation)
+                    return distance <= 3000
+                }
+            }
+            .withUnretained(self)
+            .map { owner, filteredPostList -> [PostLikeType] in
+                return filteredPostList.map { post in
                     if post.likes.contains(UserDefaults.standard.userId) {
                         return (post, .like, post.likes, post.comments)
                     } else {
@@ -271,7 +303,8 @@ final class HomeViewModel: ViewModelType {
             postId: commentButtonTapRelay.asDriver(onErrorJustReturn: ""), 
             postTapTrigger: postTapTrigger.asDriver(onErrorJustReturn: nil),
             moveToProfileTrigger: moveToProfileTrigger.asDriver(onErrorJustReturn: ""), 
-            refreshTrigger: refreshTrigger.asDriver(onErrorJustReturn: ())
+            refreshTrigger: refreshTrigger.asDriver(onErrorJustReturn: ()),
+            updateUserLocationTrigger: updateUserLocationRelay.asDriver(onErrorJustReturn: CLLocationCoordinate2D())
         )
     }
 }

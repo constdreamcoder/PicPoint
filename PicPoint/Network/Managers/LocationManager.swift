@@ -89,7 +89,7 @@ extension LocationManager {
         return alert
     }
     
-    func getCurrentUserLocation() -> Single<CLLocationCoordinate2D> {
+    func getCurrentUserLocationSingle() -> Single<CLLocationCoordinate2D> {
         return Single.create { [weak self] singleObservable in
             guard let self else { return Disposables.create() }
             if let currentUserLocation {
@@ -99,6 +99,16 @@ extension LocationManager {
             }
             return Disposables.create()
         }
+    }
+    
+    func getCurrentUserLocation() -> CLLocationCoordinate2D {
+        currentUserLocation ?? CLLocationCoordinate2D()
+    }
+    
+    func distanceBetweenLocations(from source: CLLocationCoordinate2D, to destination: CLLocationCoordinate2D) -> CLLocationDistance {
+        let sourceLocation = CLLocation(latitude: source.latitude, longitude: source.longitude)
+        let destinationLocation = CLLocation(latitude: destination.latitude, longitude: destination.longitude)
+        return sourceLocation.distance(from: destinationLocation)
     }
 }
 
@@ -129,5 +139,3 @@ extension LocationManager: CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
     }
 }
-
-

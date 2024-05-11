@@ -27,7 +27,7 @@ final class MyLikeViewModel: ViewModelType {
     }
     
     struct Output {
-        let viewDidLoadTrigger: Driver<[Post]>
+        let likedPostList: Driver<[Post]>
     }
     
     init() {
@@ -71,7 +71,7 @@ final class MyLikeViewModel: ViewModelType {
         
             
         return Output(
-            viewDidLoadTrigger: likedPostList.asDriver()
+            likedPostList: likedPostList.asDriver()
         )
     }
 }
