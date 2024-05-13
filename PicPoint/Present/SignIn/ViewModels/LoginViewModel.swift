@@ -89,10 +89,8 @@ final class LoginViewModel: ViewModelType {
                 UserDefaults.standard.refreshToken = loginModel.refreshToken
                 
                 let accessTokenDueDate = Date().addingTimeInterval(120 * 60) 
-//                let testAccessTokenDueDate = Date().addingTimeInterval(1 * 60)
                 UserDefaults.standard.accessTokenDueDate = accessTokenDueDate
                 let refreshTokenDueDate = Date().addingTimeInterval(1200 * 60)
-//                let testRefreshTokenDueDate = Date().addingTimeInterval(5 * 60)
                 UserDefaults.standard.refreshTokenDueDate = refreshTokenDueDate
                 fetchUserProfileTrigger.onNext(())
             } onError: { owner, error in

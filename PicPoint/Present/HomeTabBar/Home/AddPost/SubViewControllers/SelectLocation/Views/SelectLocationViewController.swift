@@ -46,7 +46,6 @@ final class SelectLocationViewController: BaseViewController {
         tableView.backgroundColor = .white
         
         tableView.register(RecentKeywordTableViewCell.self, forCellReuseIdentifier: RecentKeywordTableViewCell.identifier)
-//        tableView.isHidden = true
         return tableView
     }()
     
