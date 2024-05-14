@@ -219,7 +219,7 @@ extension HomeViewController: UIViewControllerConfiguration {
         
         output.moveToProfileTrigger
             .drive(with: self) { owner, userId in
-                if UserDefaults.standard.userId == userId {
+                if UserDefaultsManager.userId == userId {
                     owner.tabBarController?.selectedIndex = 1
                 } else {
                     let profileVM = ProfileViewModel(userId)

@@ -41,8 +41,8 @@ final class FollowingViewModel: ViewModelType {
         
         followTrigger
             .map { following in
-                if !UserDefaults.standard.followings.contains(where: { $0.userId == following.userId }) {
-                    UserDefaults.standard.followings.append(following)
+                if !UserDefaultsManager.followings.contains(where: { $0.userId == following.userId }) {
+                    UserDefaultsManager.followings.append(following)
                 }
                 return following
             }
@@ -66,7 +66,7 @@ final class FollowingViewModel: ViewModelType {
             .subscribe(with: self) { owner, value in
                 owner.followingsRelay.accept(value.0)
                 
-                let followingsCount = UserDefaults.standard.followings.count
+                let followingsCount = UserDefaultsManager.followings.count
                 owner.delegate?.sendUpdatedFollowingsCount(followingsCount)
             }
             .disposed(by: disposeBag)
@@ -80,7 +80,7 @@ final class FollowingViewModel: ViewModelType {
                     }
             }
             .withLatestFrom(followingsRelay) { unFollowedUserId, followings -> [FollowingCellType] in
-                UserDefaults.standard.followings.removeAll(where: { $0.userId == unFollowedUserId })
+                UserDefaultsManager.followings.removeAll(where: { $0.userId == unFollowedUserId })
                 return followings.map { following in
                     if following.following.userId == unFollowedUserId {
                         return (following.following, .unfollowing)
@@ -93,7 +93,7 @@ final class FollowingViewModel: ViewModelType {
             .subscribe(with: self) { owner, value in
                 owner.followingsRelay.accept(value.0)
                 
-                let followingsCount = UserDefaults.standard.followings.count
+                let followingsCount = UserDefaultsManager.followings.count
                 owner.delegate?.sendUpdatedFollowingsCount(followingsCount)
             }
             .disposed(by: disposeBag)
@@ -131,7 +131,7 @@ extension FollowingViewModel: FollowViewModelForFollowingsDelegate {
         Observable<[Following]>.just(followings)
             .map { followings -> [FollowingCellType] in
                 return followings.map { following in
-                    if UserDefaults.standard.followings.contains(where: {
+                    if UserDefaultsManager.followings.contains(where: {
                         return $0.userId == following.userId
                     }) {
                         return (following, .following)

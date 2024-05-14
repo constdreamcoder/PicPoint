@@ -63,7 +63,7 @@ final class DetailViewModel: ViewModelType {
         Observable.just(post)
             .withUnretained(self)
             .map { owner, post in
-                if post.likes.contains(where: { $0 == UserDefaults.standard.userId }) {
+                if post.likes.contains(where: { $0 == UserDefaultsManager.userId }) {
                     let postLike: PostLikeType = (post, .like, post.likes, post.comments)
                     owner.postRelay.accept(postLike)
                 } else {
@@ -132,7 +132,7 @@ final class DetailViewModel: ViewModelType {
             .withLatestFrom(postRelay)
             .bind { post in
                 guard let post else { return }
-                if post.post.creator.userId == UserDefaults.standard.userId {
+                if post.post.creator.userId == UserDefaultsManager.userId {
                     rightBarButtonItemHiddenTrigger.accept(true)
                 } else {
                     rightBarButtonItemHiddenTrigger.accept(false)
@@ -159,7 +159,7 @@ final class DetailViewModel: ViewModelType {
         postRefreshTrigger
             .withUnretained(self)
             .map { owner, post in
-                if post.likes.contains(where: { $0 == UserDefaults.standard.userId }) {
+                if post.likes.contains(where: { $0 == UserDefaultsManager.userId }) {
                     let postLike: PostLikeType = (post, .like, post.likes, post.comments)
                     owner.postRelay.accept(postLike)
                 } else {
@@ -257,7 +257,7 @@ final class DetailViewModel: ViewModelType {
             .map { post -> PostLikeType? in
                 if let post {
                     NotificationCenter.default.post(name: .sendNewLikedPost, object: nil, userInfo: ["newLikedPost": post.post])
-                    let likes = [UserDefaults.standard.userId] + post.likes
+                    let likes = [UserDefaultsManager.userId] + post.likes
                     return (post.post, .like, likes, post.comments)
                 } else {
                     return post
@@ -284,7 +284,7 @@ final class DetailViewModel: ViewModelType {
             .map { post -> PostLikeType? in
                 if let post {
                     NotificationCenter.default.post(name: .sendUnlikedPost, object: nil, userInfo: ["unlikedPost": post.post])
-                    let likes = post.likes.filter { $0 != UserDefaults.standard.userId }
+                    let likes = post.likes.filter { $0 != UserDefaultsManager.userId }
                     return (post.post, .unlike, likes, post.comments)
                 } else {
                     return post
@@ -314,7 +314,7 @@ final class DetailViewModel: ViewModelType {
         postRelay
             .bind(with: self) { owner, post in
                 if let post {
-                    if UserDefaults.standard.followings.contains(where: { $0.userId == post.post.creator.userId }) {
+                    if UserDefaultsManager.followings.contains(where: { $0.userId == post.post.creator.userId }) {
                         owner.followButtonTapTriggerRelay.accept(true)
                     } else {
                         owner.followButtonTapTriggerRelay.accept(false)
@@ -325,13 +325,13 @@ final class DetailViewModel: ViewModelType {
         
         followTrigger
             .map { post in
-                if !UserDefaults.standard.followings.contains(where: { $0.userId == post.creator.userId }) {
+                if !UserDefaultsManager.followings.contains(where: { $0.userId == post.creator.userId }) {
                     let newFollowing = Following(
                         userId: post.creator.userId,
                         nick: post.creator.nick,
                         profileImage: post.creator.profileImage
                     )
-                    UserDefaults.standard.followings.append(newFollowing)
+                    UserDefaultsManager.followings.append(newFollowing)
                 }
                 return post
             }
@@ -356,7 +356,7 @@ final class DetailViewModel: ViewModelType {
                     }
             }
             .subscribe(with: self) { owner, unfollowedUserId in
-                UserDefaults.standard.followings.removeAll(where: { $0.userId == unfollowedUserId })
+                UserDefaultsManager.followings.removeAll(where: { $0.userId == unfollowedUserId })
                 owner.followButtonTapTriggerRelay.accept(false)
             }
             .disposed(by: disposeBag)
@@ -366,7 +366,7 @@ final class DetailViewModel: ViewModelType {
             .withLatestFrom(postRelay) { ($0, $1) }
             .subscribe { creator, post in
                 guard let post else { return }
-                if UserDefaults.standard.followings.contains(where: { $0.userId == creator.userId }) {
+                if UserDefaultsManager.followings.contains(where: { $0.userId == creator.userId }) {
                     unFollowTrigger.onNext(post.post)
                 } else {
                     followTrigger.onNext(post.post)

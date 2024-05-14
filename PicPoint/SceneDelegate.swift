@@ -32,16 +32,14 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         })
         
         NotificationCenter.default.addObserver(self, selector: #selector(showAlertForRelogin), name: .refreshTokenExpired, object: nil)
-        
-        if UserDefaults.standard.accessToken == "" {
+        if UserDefaultsManager.accessToken == "" {
             guard let windowScene = (scene as? UIWindowScene) else { return }
             
             window = UIWindow(windowScene: windowScene)
             window?.rootViewController = UINavigationController(rootViewController: SignInViewController())
             window?.makeKeyAndVisible()
         } else {
-            guard let refreshTokenDueDate = UserDefaults.standard.refreshTokenDueDate else {
-                return }
+            let refreshTokenDueDate = UserDefaultsManager.refreshTokenDueDate
             print("dueDate", Date().timeIntervalSince(refreshTokenDueDate))
             if Date().timeIntervalSince(refreshTokenDueDate) <= 0 {
                 guard let windowScene = (scene as? UIWindowScene) else { return }
@@ -50,7 +48,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                 window?.rootViewController = HomeTabBarViewController()
                 window?.makeKeyAndVisible()
             } else {
-                UserDefaults.standard.clearAllData()
+                UserDefaultsManager.clearAllData()
                 
                 guard let windowScene = (scene as? UIWindowScene) else { return }
 
@@ -129,7 +127,7 @@ extension SceneDelegate {
         let confirmButton = UIAlertAction(title: "재로그인 하러가기", style: .default) { [weak self] _ in
             guard let self else { return }
             
-            UserDefaults.standard.clearAllData()
+            UserDefaultsManager.clearAllData()
             
             let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene
             let sceneDelegate = windowScene?.delegate as? SceneDelegate

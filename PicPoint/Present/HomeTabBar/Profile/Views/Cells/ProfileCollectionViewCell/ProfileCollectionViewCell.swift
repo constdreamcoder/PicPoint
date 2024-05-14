@@ -129,11 +129,11 @@ extension ProfileCollectionViewCell {
                 owner.followerFollowingStackView.followerNumberLabel.text = myProfile.followers.count.description
                 owner.followerFollowingStackView.followingNumberLabel.text = myProfile.followings.count.description
                 
-                if UserDefaults.standard.userId == myProfile.userId {
+                if UserDefaultsManager.userId == myProfile.userId {
                     owner.bottomButton.setTitle("프로필 수정", for: .normal)
                     owner.bottomButton.imageType = .myProfile
                 } else {
-                    if myProfile.followers.contains(where: { $0.userId == UserDefaults.standard.userId}) {
+                    if myProfile.followers.contains(where: { $0.userId == UserDefaultsManager.userId}) {
                         owner.updateProfileFollowButtonUI(owner.bottomButton, with: true)
                     } else {
                         owner.updateProfileFollowButtonUI(owner.bottomButton, with: false)

@@ -59,9 +59,9 @@ extension UserRouter: TargetType {
             ]
         case .refreshToken:
             return [
-                HTTPHeader.authorization.rawValue: UserDefaults.standard.accessToken,
+                HTTPHeader.authorization.rawValue: UserDefaultsManager.accessToken,
                 HTTPHeader.sesacKey.rawValue: APIKeys.sesacKey,
-                HTTPHeader.refresh.rawValue: UserDefaults.standard.refreshToken
+                HTTPHeader.refresh.rawValue: UserDefaultsManager.refreshToken
             ]
         }
     }

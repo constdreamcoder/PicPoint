@@ -152,7 +152,7 @@
 		00A49D112BEAAD490058F35B /* PaymentListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00A49D102BEAAD490058F35B /* PaymentListViewModel.swift */; };
 		00A49D132BEAB3510058F35B /* Int+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00A49D122BEAB3510058F35B /* Int+Extensions.swift */; };
 		00AA9A792BCC24B90069C55C /* HomeTabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00AA9A782BCC24B90069C55C /* HomeTabBarViewController.swift */; };
-		00AA9A7B2BCC25C90069C55C /* UserDefaults+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00AA9A7A2BCC25C90069C55C /* UserDefaults+Extensions.swift */; };
+		00AA9A7B2BCC25C90069C55C /* BaseDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00AA9A7A2BCC25C90069C55C /* BaseDefaults.swift */; };
 		00AFF5FC2BCD1274006D319A /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00AFF5FB2BCD1274006D319A /* HomeViewModel.swift */; };
 		00AFF5FE2BCD1418006D319A /* UICollectionViewConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00AFF5FD2BCD1418006D319A /* UICollectionViewConfiguration.swift */; };
 		00AFF6002BCD14D3006D319A /* HomeCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00AFF5FF2BCD14D3006D319A /* HomeCollectionViewCell.swift */; };
@@ -404,7 +404,7 @@
 		00A49D102BEAAD490058F35B /* PaymentListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentListViewModel.swift; sourceTree = "<group>"; };
 		00A49D122BEAB3510058F35B /* Int+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Int+Extensions.swift"; sourceTree = "<group>"; };
 		00AA9A782BCC24B90069C55C /* HomeTabBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeTabBarViewController.swift; sourceTree = "<group>"; };
-		00AA9A7A2BCC25C90069C55C /* UserDefaults+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UserDefaults+Extensions.swift"; sourceTree = "<group>"; };
+		00AA9A7A2BCC25C90069C55C /* BaseDefaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseDefaults.swift; sourceTree = "<group>"; };
 		00AFF5FB2BCD1274006D319A /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
 		00AFF5FD2BCD1418006D319A /* UICollectionViewConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UICollectionViewConfiguration.swift; sourceTree = "<group>"; };
 		00AFF5FF2BCD14D3006D319A /* HomeCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -1122,6 +1122,7 @@
 		0049D87D2BC96B4800F59852 /* PicPoint */ = {
 			isa = PBXGroup;
 			children = (
+				00609BBA2BF3B06F00400653 /* PropertyWrappers */,
 				006220292BE1EAE40020BB78 /* Enums */,
 				00F65D492BCA1C8D0027A897 /* Resources */,
 				00F65D482BCA1C5B0027A897 /* Protocols */,
@@ -1200,6 +1201,14 @@
 				005E8F202BE0E89E00B341A5 /* LikeParams.swift */,
 			);
 			path = Like;
+			sourceTree = "<group>";
+		};
+		00609BBA2BF3B06F00400653 /* PropertyWrappers */ = {
+			isa = PBXGroup;
+			children = (
+				00AA9A7A2BCC25C90069C55C /* BaseDefaults.swift */,
+			);
+			path = PropertyWrappers;
 			sourceTree = "<group>";
 		};
 		006220292BE1EAE40020BB78 /* Enums */ = {
@@ -1745,7 +1754,6 @@
 		00F65D472BCA1C450027A897 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
-				00AA9A7A2BCC25C90069C55C /* UserDefaults+Extensions.swift */,
 				00AFF6032BCD155E006D319A /* UICollectionReusableView+Extensions.swift */,
 				00321C992BCD79B800BE2407 /* RxSwift+Extensions.swift */,
 				00FE92BD2BCE91F500554D0F /* Kingfisher+Extensions.swift */,
@@ -2023,7 +2031,7 @@
 				00A49D132BEAB3510058F35B /* Int+Extensions.swift in Sources */,
 				009F07632BE674C50048FF15 /* ValidatePaymentModel.swift in Sources */,
 				00EA27742BDE3CA600EE3F9C /* BirthDaySignUpViewController.swift in Sources */,
-				00AA9A7B2BCC25C90069C55C /* UserDefaults+Extensions.swift in Sources */,
+				00AA9A7B2BCC25C90069C55C /* BaseDefaults.swift in Sources */,
 				00E4D9DE2BE3BE3B00C641BE /* Error+Extensions.swift in Sources */,
 				00F9AB082BEFBF7600E51C65 /* RecentKeywordTableViewCell.swift in Sources */,
 				001253E72BD3A00B0065F1E6 /* CommentTableViewCell.swift in Sources */,

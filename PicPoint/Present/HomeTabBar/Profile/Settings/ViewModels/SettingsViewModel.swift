@@ -50,7 +50,7 @@ final class SettingsViewModel: ViewModelType {
         input.logoutTrigger
             .debounce(.milliseconds(500), scheduler: MainScheduler.instance)
             .bind { _ in
-                UserDefaults.standard.clearAllData()
+                UserDefaultsManager.clearAllData()
                 successTrigger.accept(())
             }
             .disposed(by: disposeBag)
@@ -71,7 +71,7 @@ final class SettingsViewModel: ViewModelType {
                     }
             }
             .subscribe(with: self) { owner, withdrawalModel in
-                UserDefaults.standard.clearAllData()
+                UserDefaultsManager.clearAllData()
                 successTrigger.accept(())
             } onError: { owner, error in
                 print("회원탈퇴 오류 발생, \(error)")

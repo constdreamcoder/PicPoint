@@ -85,7 +85,7 @@ final class HomeViewModel: ViewModelType {
             .withUnretained(self)
             .map { owner, filteredPostList -> [PostLikeType] in
                 return filteredPostList.map { post in
-                    if post.likes.contains(UserDefaults.standard.userId) {
+                    if post.likes.contains(UserDefaultsManager.userId) {
                         return (post, .like, post.likes, post.comments)
                     } else {
                         return (post, .unlike, post.likes, post.comments)
@@ -154,7 +154,7 @@ final class HomeViewModel: ViewModelType {
             .withUnretained(self)
             .map { owner, filteredPostList -> [PostLikeType] in
                 return filteredPostList.map { post in
-                    if post.likes.contains(UserDefaults.standard.userId) {
+                    if post.likes.contains(UserDefaultsManager.userId) {
                         return (post, .like, post.likes, post.comments)
                     } else {
                         return (post, .unlike, post.likes, post.comments)
@@ -230,7 +230,7 @@ final class HomeViewModel: ViewModelType {
                 let newPostList: [PostLikeType] = postList.map { post in
                     if post.post.postId == postId {
                         newLikedPost = post.post
-                        let likes = [UserDefaults.standard.userId] + post.likes
+                        let likes = [UserDefaultsManager.userId] + post.likes
                         return (post.post, .like, likes, post.comments)
                     } else {
                         return post
@@ -263,7 +263,7 @@ final class HomeViewModel: ViewModelType {
                 let newPostList: [PostLikeType] = postList.map { post in
                     if post.post.postId == postId {
                         unlikedPost = post.post
-                        let likes = post.likes.filter { $0 != UserDefaults.standard.userId }
+                        let likes = post.likes.filter { $0 != UserDefaultsManager.userId }
                         return (post.post, .unlike, likes, post.comments)
                     } else {
                         return post

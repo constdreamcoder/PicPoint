@@ -12,7 +12,7 @@ final class TokenRefresher: RequestInterceptor {
         
     func adapt(_ urlRequest: URLRequest, for session: Session, completion: @escaping (Result<URLRequest, Error>) -> Void) {
         var urlRequest = urlRequest
-        let token = UserDefaults.standard.accessToken
+        let token = UserDefaultsManager.accessToken
         urlRequest.setValue(token, forHTTPHeaderField: HTTPHeader.authorization.rawValue)
         
         completion(.success(urlRequest))
@@ -26,13 +26,13 @@ final class TokenRefresher: RequestInterceptor {
             return
         }
                 
-        let refreshToken = UserDefaults.standard.refreshToken
+        let refreshToken = UserDefaultsManager.refreshToken
         if !refreshToken.isEmpty {
             UserManager.refreshToken { [weak self] response in
                 guard let self else { return }
                 switch response {
                 case .success(let refreshedAccessToken):
-                    UserDefaults.standard.accessToken = refreshedAccessToken
+                    UserDefaultsManager.accessToken = refreshedAccessToken
                     completion(.retry)
                 case .failure(let error):
                     print("failure")

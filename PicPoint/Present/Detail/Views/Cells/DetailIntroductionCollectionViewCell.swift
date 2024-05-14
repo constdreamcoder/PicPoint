@@ -74,7 +74,7 @@ final class DetailIntroductionCollectionViewCell: BaseCollectionViewCell {
         topView.subTitleLabel.text = "\(cellData.visitDate) 방문"
         contentLabel.text = cellData.content
         
-        if cellData.creator.userId == UserDefaults.standard.userId {
+        if cellData.creator.userId == UserDefaultsManager.userId {
             topView.rightButton.isHidden = true
         } else {
             topView.rightButton.isHidden = false

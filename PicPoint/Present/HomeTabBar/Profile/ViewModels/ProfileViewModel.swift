@@ -126,7 +126,7 @@ final class ProfileViewModel: ViewModelType {
         
         userIdSubject
             .subscribe { userId  in
-                if userId != "" && UserDefaults.standard.userId != userId {
+                if userId != "" && UserDefaultsManager.userId != userId {
                     otherProfileTrigger.onNext(userId)
                 } else {
                     myProfileTrigger.onNext(())
@@ -137,7 +137,7 @@ final class ProfileViewModel: ViewModelType {
         input.refreshControlValueChanged
             .withLatestFrom(userIdSubject)
             .bind { userId  in
-                if userId != "" && UserDefaults.standard.userId != userId {
+                if userId != "" && UserDefaultsManager.userId != userId {
                     otherProfileTrigger.onNext(userId)
                 } else {
                     myProfileTrigger.onNext(())
@@ -148,21 +148,21 @@ final class ProfileViewModel: ViewModelType {
         input.viewWillAppear
             .withLatestFrom(userIdSubject)
             .subscribe(with: self) { owner, userId in
-                if userId == "" || userId == UserDefaults.standard.userId {
-                    owner.updateFollowingsCountRelay.accept(UserDefaults.standard.followings.count)
+                if userId == "" || userId == UserDefaultsManager.userId {
+                    owner.updateFollowingsCountRelay.accept(UserDefaultsManager.followings.count)
                 }
             }
             .disposed(by: disposeBag)
         
         followTrigger
             .map { fetchMyProfileModel in
-                if !UserDefaults.standard.followings.contains(where: { $0.userId == fetchMyProfileModel.userId }) {
+                if !UserDefaultsManager.followings.contains(where: { $0.userId == fetchMyProfileModel.userId }) {
                     let newFollowing = Following(
                         userId: fetchMyProfileModel.userId,
                         nick: fetchMyProfileModel.nick,
                         profileImage: fetchMyProfileModel.profileImage
                     )
-                    UserDefaults.standard.followings.append(newFollowing)
+                    UserDefaultsManager.followings.append(newFollowing)
                 }
                 return fetchMyProfileModel
             }
@@ -187,7 +187,7 @@ final class ProfileViewModel: ViewModelType {
                     }
             }
             .subscribe(with: self) { owner, unfollowedUserId in
-                UserDefaults.standard.followings.removeAll(where: { $0.userId == unfollowedUserId })
+                UserDefaultsManager.followings.removeAll(where: { $0.userId == unfollowedUserId })
                 otherProfileTrigger.onNext(unfollowedUserId)
             }
             .disposed(by: disposeBag)

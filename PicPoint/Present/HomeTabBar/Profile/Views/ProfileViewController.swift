@@ -201,7 +201,7 @@ extension ProfileViewController: UIViewControllerConfiguration {
                 guard let myProfile else { return }
                 owner.navigationItem.backButtonTitle = myProfile.nick
                 
-                if UserDefaults.standard.userId == myProfile.userId  {
+                if UserDefaultsManager.userId == myProfile.userId  {
                     owner.navigationItem.rightBarButtonItem?.isHidden = false
                 } else {
                     owner.navigationItem.rightBarButtonItem?.isHidden = true

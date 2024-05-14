@@ -41,11 +41,10 @@ final class FollowViewModel: ViewModelType {
         guard let myProfile else { return }
         Observable.just(myProfile)
             .subscribe(with: self) { owner, myProfile in
-                if myProfile.userId == UserDefaults.standard.userId {
-                    let userDefaults = UserDefaults.standard
-                    owner.followersSubject.onNext(userDefaults.followers)
-                    owner.followingsSubject.onNext(userDefaults.followings)
-                    owner.followingsCountRelay.accept(userDefaults.followings.count)
+                if myProfile.userId == UserDefaultsManager.userId {
+                    owner.followersSubject.onNext(UserDefaultsManager.followers)
+                    owner.followingsSubject.onNext(UserDefaultsManager.followings)
+                    owner.followingsCountRelay.accept(UserDefaultsManager.followings.count)
                 } else {
                     owner.followersSubject.onNext(myProfile.followers)
                     owner.followingsSubject.onNext(myProfile.followings)
@@ -62,11 +61,10 @@ final class FollowViewModel: ViewModelType {
             .withLatestFrom(myProfile)
             .bind(with: self) { owner, myProfile in
                 guard let myProfile else { return }
-                if UserDefaults.standard.userId == myProfile.userId {
-                    let userDefaults = UserDefaults.standard
-                    owner.followersSubject.onNext(userDefaults.followers)
-                    owner.followingsSubject.onNext(userDefaults.followings)
-                    owner.followingsCountRelay.accept(userDefaults.followings.count)
+                if UserDefaultsManager.userId == myProfile.userId {
+                    owner.followersSubject.onNext(UserDefaultsManager.followers)
+                    owner.followingsSubject.onNext(UserDefaultsManager.followings)
+                    owner.followingsCountRelay.accept(UserDefaultsManager.followings.count)
                 }
             }
             .disposed(by: disposeBag)

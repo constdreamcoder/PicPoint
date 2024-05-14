@@ -62,8 +62,8 @@ final class LoginViewModel: ViewModelType {
                     }
             }
             .subscribe { fetchMyProfileModel in
-                UserDefaults.standard.followers = fetchMyProfileModel.followers
-                UserDefaults.standard.followings = fetchMyProfileModel.followings
+                UserDefaultsManager.followers = fetchMyProfileModel.followers
+                UserDefaultsManager.followings = fetchMyProfileModel.followings
                 loginSuccessTrigger.accept(())
             }
             .disposed(by: disposeBag)
@@ -82,16 +82,15 @@ final class LoginViewModel: ViewModelType {
                     }
             }
             .subscribe(with: self) { owner, loginModel in
-                UserDefaults.standard.userId = loginModel.userId
-                UserDefaults.standard.email = loginModel.email
-                UserDefaults.standard.nick = loginModel.nick
-                UserDefaults.standard.accessToken = loginModel.accessToken
-                UserDefaults.standard.refreshToken = loginModel.refreshToken
-                
-                let accessTokenDueDate = Date().addingTimeInterval(120 * 60) 
-                UserDefaults.standard.accessTokenDueDate = accessTokenDueDate
+                UserDefaultsManager.userId = loginModel.userId
+                UserDefaultsManager.email = loginModel.email
+                UserDefaultsManager.nick = loginModel.nick
+                UserDefaultsManager.accessToken = loginModel.accessToken
+                UserDefaultsManager.refreshToken = loginModel.refreshToken
+                let accessTokenDueDate = Date().addingTimeInterval(120 * 60)
+                UserDefaultsManager.accessTokenDueDate = accessTokenDueDate
                 let refreshTokenDueDate = Date().addingTimeInterval(1200 * 60)
-                UserDefaults.standard.refreshTokenDueDate = refreshTokenDueDate
+                UserDefaultsManager.refreshTokenDueDate = refreshTokenDueDate
                 fetchUserProfileTrigger.onNext(())
             } onError: { owner, error in
                 print("로그인 오류 발생, \(error)")

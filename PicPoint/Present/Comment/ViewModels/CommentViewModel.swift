@@ -108,7 +108,7 @@ final class CommentViewModel: ViewModelType {
             
         input.commentDeleteEvent
             .filter {
-                $1.creator.userId == UserDefaults.standard.userId
+                $1.creator.userId == UserDefaultsManager.userId
             }
             .map { $1.commentId }
             .withLatestFrom(postIdSubject) { ($1, $0) }

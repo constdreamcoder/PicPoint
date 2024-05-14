@@ -18,7 +18,7 @@ extension KingfisherWrapper where Base: UIImageView {
     ) {
         let imageDownloadRequest = AnyModifier { request in
             var requestBody = request
-            requestBody.setValue(UserDefaults.standard.accessToken, forHTTPHeaderField: HTTPHeader.authorization.rawValue)
+            requestBody.setValue(UserDefaultsManager.accessToken, forHTTPHeaderField: HTTPHeader.authorization.rawValue)
             requestBody.setValue(APIKeys.sesacKey, forHTTPHeaderField: HTTPHeader.sesacKey.rawValue)
             return requestBody
         }

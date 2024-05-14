@@ -135,7 +135,7 @@ final class HomeCollectionViewCell: BaseCollectionViewCell {
             updateHeartButtonUI(heartButton, isLike: false)
         }
         
-        if UserDefaults.standard.userId == element.post.creator.userId {
+        if UserDefaultsManager.userId == element.post.creator.userId {
             topView.rightButton.isHidden = false
         } else {
             topView.rightButton.isHidden = true
