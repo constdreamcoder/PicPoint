@@ -13,6 +13,11 @@ import Kingfisher
 
 final class HashTagSearchViewController: BaseViewController {
     
+    let searchBar: UISearchBar = {
+        let searchBar = UISearchBar()
+        return searchBar
+    }()
+    
     lazy var collectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: pinterestLayout)
         collectionView.backgroundColor = .white
@@ -42,7 +47,7 @@ final class HashTagSearchViewController: BaseViewController {
 
 extension HashTagSearchViewController: UIViewControllerConfiguration {
     func configureNavigationBar() {
-        
+        navigationItem.titleView = searchBar
     }
     
     func configureConstraints() {
@@ -61,7 +66,11 @@ extension HashTagSearchViewController: UIViewControllerConfiguration {
         
         let viewDidLoad = Observable.just(())
         
-        let input = HashTagSearchViewModel.Input(viewDidLoad: viewDidLoad)
+        let input = HashTagSearchViewModel.Input(
+            viewDidLoad: viewDidLoad,
+            searText: searchBar.rx.text.orEmpty,
+            searchButtonClicked: searchBar.rx.searchButtonClicked
+        )
         
         let output = viewModel.transform(input: input)
         

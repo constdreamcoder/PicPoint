@@ -1116,7 +1116,7 @@
 		003E23142BF49334000BF3D7 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				003E23182BF4943F000BF3D7 /* PinterestLayout.swift */,
+				003E23202BF4BE4C000BF3D7 /* HashTagSearchCollectionViewLayout */,
 				003E23122BF491FB000BF3D7 /* HashTagSearchViewController.swift */,
 				003E231A2BF494E4000BF3D7 /* HashTagSearchCollectionViewCell.swift */,
 			);
@@ -1129,6 +1129,14 @@
 				003E23162BF49363000BF3D7 /* HashTagSearchViewModel.swift */,
 			);
 			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		003E23202BF4BE4C000BF3D7 /* HashTagSearchCollectionViewLayout */ = {
+			isa = PBXGroup;
+			children = (
+				003E23182BF4943F000BF3D7 /* PinterestLayout.swift */,
+			);
+			path = HashTagSearchCollectionViewLayout;
 			sourceTree = "<group>";
 		};
 		0046D0652BF25763001BE9CC /* SectionModels */ = {

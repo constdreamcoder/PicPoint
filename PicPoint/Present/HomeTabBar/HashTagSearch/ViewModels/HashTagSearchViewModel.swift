@@ -23,6 +23,8 @@ final class HashTagSearchViewModel: ViewModelType {
     
     struct Input {
         let viewDidLoad: Observable<Void>
+        let searText: ControlProperty<String>
+        let searchButtonClicked: ControlEvent<Void>
     }
     
     struct Output {
@@ -52,7 +54,25 @@ final class HashTagSearchViewModel: ViewModelType {
                 post.onNext(postListModel.data)
             }
             .disposed(by: disposeBag)
-    
+        
+        input.searchButtonClicked
+            .debounce(.milliseconds(500), scheduler: MainScheduler.instance)
+            .withLatestFrom(input.searText)
+            .flatMap { searchText in
+                return PostManager.FetchPostWithHashTag(
+                    query: FetchPostWithHashTagQuery(
+                        next: nil,
+                        limit: "30",
+                        product_id: APIKeys.productId,
+                        hashTag: searchText
+                    )
+                )
+            }
+            .subscribe { postListModel in
+                post.onNext(postListModel.data)
+            }
+            .disposed(by: disposeBag)
+            
         return Output(
             postList: postListRelay.asDriver()
         )
