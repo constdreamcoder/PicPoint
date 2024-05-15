@@ -25,22 +25,20 @@ final class HashTagSearchViewModel: ViewModelType {
         let viewDidLoad: Observable<Void>
         let searText: ControlProperty<String>
         let searchButtonClicked: ControlEvent<Void>
+        let refreshControlValueChanged: ControlEvent<()>
     }
     
     struct Output {
         let postList: Driver<[PostViewModel]>
+        let endRefreshControlTrigger: Driver<Void>
     }
     
     func transform(input: Input) -> Output {
         let post = PublishSubject<[Post]>()
+        let fetchPostList = PublishSubject<Void>()
+        let endRefreshControlTrigger = PublishRelay<Void>()
         
-        post
-            .bind(with: self) { owner, postList in
-                owner.getPostViewModels(postList)
-            }
-            .disposed(by: disposeBag)
-        
-        input.viewDidLoad
+        fetchPostList
             .flatMap { _ in
                 PostManager.fetchPostList(
                     query: FetchPostsQuery(
@@ -49,9 +47,29 @@ final class HashTagSearchViewModel: ViewModelType {
                         product_id: APIKeys.productId
                     )
                 )
+                .catch { error in
+                    print(error.errorCode, error.errorDesc)
+                    return Single<PostListModel>.never()
+                }
             }
-            .subscribe { postListModel in
+            .map { postListModel in
                 post.onNext(postListModel.data)
+                return ()
+            }
+            .subscribe { _ in
+                endRefreshControlTrigger.accept(())
+            }
+            .disposed(by: disposeBag)
+        
+        post
+            .bind(with: self) { owner, postList in
+                owner.getPostViewModels(postList)
+            }
+            .disposed(by: disposeBag)
+        
+        input.viewDidLoad
+            .bind { _ in
+                fetchPostList.onNext(())
             }
             .disposed(by: disposeBag)
         
@@ -67,14 +85,25 @@ final class HashTagSearchViewModel: ViewModelType {
                         hashTag: searchText
                     )
                 )
+                .catch { error in
+                    print(error.errorCode, error.errorDesc)
+                    return Single<PostListModel>.never()
+                }
             }
             .subscribe { postListModel in
                 post.onNext(postListModel.data)
             }
             .disposed(by: disposeBag)
+        
+        input.refreshControlValueChanged
+            .bind { _ in
+                fetchPostList.onNext(())
+            }
+            .disposed(by: disposeBag)
             
         return Output(
-            postList: postListRelay.asDriver()
+            postList: postListRelay.asDriver(), 
+            endRefreshControlTrigger: endRefreshControlTrigger.asDriver(onErrorJustReturn: ())
         )
     }
     

@@ -24,6 +24,10 @@ final class HashTagSearchViewController: BaseViewController {
         
         collectionView.register(HashTagSearchCollectionViewCell.self, forCellWithReuseIdentifier: HashTagSearchCollectionViewCell.identifier)
         
+        
+        let refreshControl = UIRefreshControl()
+        collectionView.refreshControl = refreshControl
+        
         return collectionView
     }()
     
@@ -66,10 +70,13 @@ extension HashTagSearchViewController: UIViewControllerConfiguration {
         
         let viewDidLoad = Observable.just(())
         
+        guard let refreshControl = collectionView.refreshControl else { return }
+        
         let input = HashTagSearchViewModel.Input(
             viewDidLoad: viewDidLoad,
             searText: searchBar.rx.text.orEmpty,
-            searchButtonClicked: searchBar.rx.searchButtonClicked
+            searchButtonClicked: searchBar.rx.searchButtonClicked, 
+            refreshControlValueChanged: refreshControl.rx.controlEvent(.valueChanged)
         )
         
         let output = viewModel.transform(input: input)
@@ -78,6 +85,12 @@ extension HashTagSearchViewController: UIViewControllerConfiguration {
             .drive(collectionView.rx.items(cellIdentifier: HashTagSearchCollectionViewCell.identifier, cellType: HashTagSearchCollectionViewCell.self)) { item, element, cell in
                 cell.thumnailImageView.image = element.image
                 
+            }
+            .disposed(by: disposeBag)
+        
+        output.endRefreshControlTrigger
+            .drive { _ in
+                refreshControl.endRefreshing()
             }
             .disposed(by: disposeBag)
     }
