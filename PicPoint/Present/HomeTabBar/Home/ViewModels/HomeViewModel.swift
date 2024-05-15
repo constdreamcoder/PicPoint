@@ -34,7 +34,6 @@ final class HomeViewModel: ViewModelType {
     
     struct Input {
         let viewDidLoadTrigger: Observable<Void>
-        let rightBarButtonItemTapped: ControlEvent<Void>
         let addButtonTap: ControlEvent<Void>
         let deletePostTap: PublishSubject<String>
         let postTap: ControlEvent<PostLikeType>
@@ -120,12 +119,6 @@ final class HomeViewModel: ViewModelType {
                         owner.networkTrigger.onNext(())
                     }
                 }
-            }
-            .disposed(by: disposeBag)
-        
-        input.rightBarButtonItemTapped
-            .bind(with: self) { owner, _ in
-                print("검색")
             }
             .disposed(by: disposeBag)
         

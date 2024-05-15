@@ -91,6 +91,12 @@
 		003C82C62BDCE9EA003315E1 /* EditViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 003C82C52BDCE9EA003315E1 /* EditViewModel.swift */; };
 		003C82C82BDCECFE003315E1 /* CustomInputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 003C82C72BDCECFE003315E1 /* CustomInputView.swift */; };
 		003C82CA2BDD5906003315E1 /* EditMyProfileBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = 003C82C92BDD5906003315E1 /* EditMyProfileBody.swift */; };
+		003E23132BF491FB000BF3D7 /* HashTagSearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 003E23122BF491FB000BF3D7 /* HashTagSearchViewController.swift */; };
+		003E23172BF49363000BF3D7 /* HashTagSearchViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 003E23162BF49363000BF3D7 /* HashTagSearchViewModel.swift */; };
+		003E23192BF4943F000BF3D7 /* PinterestLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 003E23182BF4943F000BF3D7 /* PinterestLayout.swift */; };
+		003E231B2BF494E4000BF3D7 /* HashTagSearchCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 003E231A2BF494E4000BF3D7 /* HashTagSearchCollectionViewCell.swift */; };
+		003E231D2BF498A4000BF3D7 /* UIImage+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 003E231C2BF498A4000BF3D7 /* UIImage+Extensions.swift */; };
+		003E231F2BF4B459000BF3D7 /* CachedImageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 003E231E2BF4B459000BF3D7 /* CachedImageManager.swift */; };
 		0046D0672BF257A6001BE9CC /* DetailCollectionViewFirstSectionDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0046D0662BF257A6001BE9CC /* DetailCollectionViewFirstSectionDataModel.swift */; };
 		0046D0692BF257CA001BE9CC /* DetailCollectionViewSecondSectionDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0046D0682BF257CA001BE9CC /* DetailCollectionViewSecondSectionDataModel.swift */; };
 		0046D06B2BF257E8001BE9CC /* DetailCollectionViewThirdSectionDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0046D06A2BF257E8001BE9CC /* DetailCollectionViewThirdSectionDataModel.swift */; };
@@ -342,6 +348,12 @@
 		003C82C52BDCE9EA003315E1 /* EditViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditViewModel.swift; sourceTree = "<group>"; };
 		003C82C72BDCECFE003315E1 /* CustomInputView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomInputView.swift; sourceTree = "<group>"; };
 		003C82C92BDD5906003315E1 /* EditMyProfileBody.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditMyProfileBody.swift; sourceTree = "<group>"; };
+		003E23122BF491FB000BF3D7 /* HashTagSearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HashTagSearchViewController.swift; sourceTree = "<group>"; };
+		003E23162BF49363000BF3D7 /* HashTagSearchViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HashTagSearchViewModel.swift; sourceTree = "<group>"; };
+		003E23182BF4943F000BF3D7 /* PinterestLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PinterestLayout.swift; sourceTree = "<group>"; };
+		003E231A2BF494E4000BF3D7 /* HashTagSearchCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HashTagSearchCollectionViewCell.swift; sourceTree = "<group>"; };
+		003E231C2BF498A4000BF3D7 /* UIImage+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Extensions.swift"; sourceTree = "<group>"; };
+		003E231E2BF4B459000BF3D7 /* CachedImageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CachedImageManager.swift; sourceTree = "<group>"; };
 		0046D0662BF257A6001BE9CC /* DetailCollectionViewFirstSectionDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailCollectionViewFirstSectionDataModel.swift; sourceTree = "<group>"; };
 		0046D0682BF257CA001BE9CC /* DetailCollectionViewSecondSectionDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailCollectionViewSecondSectionDataModel.swift; sourceTree = "<group>"; };
 		0046D06A2BF257E8001BE9CC /* DetailCollectionViewThirdSectionDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailCollectionViewThirdSectionDataModel.swift; sourceTree = "<group>"; };
@@ -1092,6 +1104,33 @@
 			path = ViewModels;
 			sourceTree = "<group>";
 		};
+		003E23112BF49156000BF3D7 /* HashTagSearch */ = {
+			isa = PBXGroup;
+			children = (
+				003E23142BF49334000BF3D7 /* Views */,
+				003E23152BF49342000BF3D7 /* ViewModels */,
+			);
+			path = HashTagSearch;
+			sourceTree = "<group>";
+		};
+		003E23142BF49334000BF3D7 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				003E23182BF4943F000BF3D7 /* PinterestLayout.swift */,
+				003E23122BF491FB000BF3D7 /* HashTagSearchViewController.swift */,
+				003E231A2BF494E4000BF3D7 /* HashTagSearchCollectionViewCell.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		003E23152BF49342000BF3D7 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				003E23162BF49363000BF3D7 /* HashTagSearchViewModel.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
 		0046D0652BF25763001BE9CC /* SectionModels */ = {
 			isa = PBXGroup;
 			children = (
@@ -1387,6 +1426,7 @@
 			children = (
 				00AA9A782BCC24B90069C55C /* HomeTabBarViewController.swift */,
 				00C71D6A2BCC22AC00D933FD /* Home */,
+				003E23112BF49156000BF3D7 /* HashTagSearch */,
 				0034FAEB2BCC9A7700D932F3 /* Profile */,
 			);
 			path = HomeTabBar;
@@ -1537,6 +1577,7 @@
 				002720A22BDFD702004ADC5C /* FollowManager.swift */,
 				009F075F2BE673D50048FF15 /* PaymentManager.swift */,
 				0065D9DC2BE727AB004DD1F6 /* LocationManager.swift */,
+				003E231E2BF4B459000BF3D7 /* CachedImageManager.swift */,
 			);
 			path = Managers;
 			sourceTree = "<group>";
@@ -1769,6 +1810,7 @@
 				00E4D9DD2BE3BE3B00C641BE /* Error+Extensions.swift */,
 				00A49D122BEAB3510058F35B /* Int+Extensions.swift */,
 				00EE55FF2BEC99540016A791 /* Data+Extensions.swift */,
+				003E231C2BF498A4000BF3D7 /* UIImage+Extensions.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -2014,6 +2056,7 @@
 				00E4D9BF2BE3AC8F00C641BE /* FetchPostsForEachUserNetworkError.swift in Sources */,
 				00EE55FE2BEC98DF0016A791 /* EventLogger.swift in Sources */,
 				0010416A2BDBF59A00E5FDA1 /* ProfileRouter.swift in Sources */,
+				003E23172BF49363000BF3D7 /* HashTagSearchViewModel.swift in Sources */,
 				0010415C2BDBBF2000E5FDA1 /* MyPostViewModel.swift in Sources */,
 				00F9AB022BEFB06A00E51C65 /* RecentKeywordRepository.swift in Sources */,
 				00E4D9B02BE3A6B800C641BE /* WithdralNetworkError.swift in Sources */,
@@ -2044,6 +2087,7 @@
 				003540182BCFB99F00A71415 /* DetailViewModel.swift in Sources */,
 				00B7C4062BCA68DB009AC333 /* HTTPHeader.swift in Sources */,
 				00E4D9CB2BE3B0AD00C641BE /* FetchLikedPostsNetworkError.swift in Sources */,
+				003E23192BF4943F000BF3D7 /* PinterestLayout.swift in Sources */,
 				0034FAEF2BCC9AA200D932F3 /* ProfileViewController.swift in Sources */,
 				00EE56002BEC99540016A791 /* Data+Extensions.swift in Sources */,
 				00A49D002BEAA00E0058F35B /* SettingTableViewCell.swift in Sources */,
@@ -2054,6 +2098,7 @@
 				00E414EA2BD915AF00C76BE4 /* UploadImagesBody.swift in Sources */,
 				0020231A2BDA82F1004CA12F /* FollowerFollowingStackView.swift in Sources */,
 				004FE2702BE8A4ED0044C323 /* ShowOnMapViewController.swift in Sources */,
+				003E231B2BF494E4000BF3D7 /* HashTagSearchCollectionViewCell.swift in Sources */,
 				0027209C2BDFCE40004ADC5C /* FollowingViewModel.swift in Sources */,
 				009AFAF02BDA75C7003A45BF /* ContentsCollectionHeaderView.swift in Sources */,
 				00AFF6092BCD2AAD006D319A /* HomeCollectionViewCellTopView.swift in Sources */,
@@ -2085,6 +2130,7 @@
 				009F075E2BE672380048FF15 /* ValidatePaymentBody.swift in Sources */,
 				0003E9322BD54B0800695D40 /* Label+Extension.swift in Sources */,
 				00E4D9B32BE3A6EB00C641BE /* UploadImagesNetworkError.swift in Sources */,
+				003E231F2BF4B459000BF3D7 /* CachedImageManager.swift in Sources */,
 				00EA27802BDE728500EE3F9C /* ValidateEmailModel.swift in Sources */,
 				0010414B2BDB25D400E5FDA1 /* PostCustomView.swift in Sources */,
 				00AFF5FC2BCD1274006D319A /* HomeViewModel.swift in Sources */,
@@ -2116,6 +2162,7 @@
 				00E414EE2BD91CAD00C76BE4 /* NSObject+Extensions.swift in Sources */,
 				00E4D9C22BE3ADD800C641BE /* WriteCommentNetworkError.swift in Sources */,
 				00760E592BD5321500741C40 /* ContentTableViewCell.swift in Sources */,
+				003E23132BF491FB000BF3D7 /* HashTagSearchViewController.swift in Sources */,
 				00EA276C2BDE37B000EE3F9C /* PasswordSignUpViewController.swift in Sources */,
 				00A49CF92BEA71070058F35B /* InputDonationViewController.swift in Sources */,
 				00B7C3F12BCA5BE2009AC333 /* UserRouter.swift in Sources */,
@@ -2194,6 +2241,7 @@
 				002023162BDA819C004CA12F /* ProfileImageView.swift in Sources */,
 				00EA27702BDE3ABB00EE3F9C /* NicknameSignUpViewController.swift in Sources */,
 				003540252BCFCC2D00A71415 /* BaseTableViewCell.swift in Sources */,
+				003E231D2BF498A4000BF3D7 /* UIImage+Extensions.swift in Sources */,
 				00760E502BD52EF000741C40 /* SelectLocationTableViewCell.swift in Sources */,
 				001041752BDC2ADE00E5FDA1 /* LikeRouter.swift in Sources */,
 				001041662BDBEB4D00E5FDA1 /* MyLikeViewModel.swift in Sources */,

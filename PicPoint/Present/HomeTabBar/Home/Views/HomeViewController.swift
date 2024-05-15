@@ -114,9 +114,6 @@ extension HomeViewController: UIViewControllerConfiguration {
     func configureNavigationBar() {
         navigationItem.leftBarButtonItem = UIBarButtonItem(customView: leftBarButtonItemLabel)
         
-        let rightBarButtonItemImage = UIImage(systemName: "magnifyingglass")?.withTintColor(.black, renderingMode: .alwaysOriginal)
-        navigationItem.rightBarButtonItem = UIBarButtonItem(image: rightBarButtonItemImage, style: .plain, target: self, action: nil)
-        navigationItem.rightBarButtonItem?.isHidden = true
     }
     
     func configureConstraints() {
@@ -148,12 +145,10 @@ extension HomeViewController: UIViewControllerConfiguration {
         
         let deletePostTap = PublishSubject<String>()
         
-        guard let rightBarButtonItem = navigationItem.rightBarButtonItem else { return }
         guard let refreshControl = collectionView.refreshControl else { return }
         let input = HomeViewModel.Input(
             viewDidLoadTrigger: Observable<Void>.just(()),
-            rightBarButtonItemTapped: rightBarButtonItem.rx.tap, 
-            addButtonTap: addPostButton.rx.tap, 
+            addButtonTap: addPostButton.rx.tap,
             deletePostTap: deletePostTap,
             postTap: collectionView.rx.modelSelected(PostLikeType.self),
             refreshControlValueChanged: refreshControl.rx.controlEvent(.valueChanged),

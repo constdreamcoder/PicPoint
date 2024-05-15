@@ -13,16 +13,24 @@ final class HomeTabBarViewController: UITabBarController {
         super.viewDidLoad()
         
         let homeVC = HomeViewController()
+        let hashTagSearchVC = HashTagSearchViewController()
         let profileVM = ProfileViewModel()
         let profileVC = ProfileViewController(profileViewModel: profileVM)
      
         let homeNav = UINavigationController(rootViewController: homeVC)
+        let hashTagSearchNav = UINavigationController(rootViewController: hashTagSearchVC)
         let profileNav = UINavigationController(rootViewController: profileVC)
         
         homeNav.tabBarItem = UITabBarItem(
             title: "홈",
             image: UIImage(systemName: "house"),
             selectedImage: UIImage(systemName: "house.fill")
+        )
+        
+        hashTagSearchNav.tabBarItem = UITabBarItem(
+            title: "검색",
+            image: UIImage(systemName: "magnifyingglass"),
+            selectedImage: UIImage(systemName: "magnifyingglass")
         )
         
         profileNav.tabBarItem = UITabBarItem(
@@ -34,6 +42,6 @@ final class HomeTabBarViewController: UITabBarController {
         tabBar.tintColor = .black
         tabBar.backgroundColor = .white
         
-        setViewControllers([homeNav, profileNav], animated: false)
+        setViewControllers([homeNav, hashTagSearchNav, profileNav], animated: false)
     }
 }

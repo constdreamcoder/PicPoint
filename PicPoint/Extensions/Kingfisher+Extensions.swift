@@ -23,7 +23,7 @@ extension KingfisherWrapper where Base: UIImageView {
             return requestBody
         }
         
-        let newOptions: KingfisherOptionsInfo = options ?? [] + [.requestModifier(imageDownloadRequest)]
+        let newOptions: KingfisherOptionsInfo = options ?? [] + [.requestModifier(imageDownloadRequest), .cacheMemoryOnly]
         
         self.setImage(
             with: resource,
