@@ -48,6 +48,24 @@ final class ProfileCollectionViewCell: BaseCollectionViewCell {
         return button
     }()
     
+    let drectMessageButton: CustomProfileButton = {
+        let button = CustomProfileButton()
+        button.setTitle("메세지", for: .normal)
+        return button
+    }()
+    
+    lazy var bottomStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.axis = .horizontal
+        stackView.spacing = 8.0
+        stackView.distribution = .fillEqually
+        [
+            bottomButton,
+            drectMessageButton
+        ].forEach { stackView.addArrangedSubview($0) }
+        return stackView
+    }()
+    
     private lazy var moveToFollowTap: UITapGestureRecognizer = {
         let tap = UITapGestureRecognizer(target: self, action: nil)
         followerFollowingStackView.addGestureRecognizer(tap)
@@ -83,7 +101,7 @@ extension ProfileCollectionViewCell {
         [
             profileImageView,
             profileInfoStackView,
-            bottomButton
+            bottomStackView
         ].forEach { contentView.addSubview($0) }
         
         profileImageView.snp.makeConstraints {
@@ -101,7 +119,7 @@ extension ProfileCollectionViewCell {
             $0.width.equalTo(profileInfoStackView)
         }
         
-        bottomButton.snp.makeConstraints {
+        bottomStackView.snp.makeConstraints {
             $0.top.equalTo(profileImageView.snp.bottom).offset(16.0)
             $0.horizontalEdges.bottom.equalTo(contentView.safeAreaLayoutGuide).inset(16.0)
         }
@@ -132,12 +150,14 @@ extension ProfileCollectionViewCell {
                 if UserDefaultsManager.userId == myProfile.userId {
                     owner.bottomButton.setTitle("프로필 수정", for: .normal)
                     owner.bottomButton.imageType = .myProfile
+                    owner.drectMessageButton.isHidden = true
                 } else {
                     if myProfile.followers.contains(where: { $0.userId == UserDefaultsManager.userId}) {
                         owner.updateProfileFollowButtonUI(owner.bottomButton, with: true)
                     } else {
                         owner.updateProfileFollowButtonUI(owner.bottomButton, with: false)
                     }
+                    owner.drectMessageButton.isHidden = false
                 }
             }
             .disposed(by: disposeBag)
@@ -150,7 +170,6 @@ extension ProfileCollectionViewCell {
         
         bottomButton.rx.tap
             .bind(with: self) { owner, _ in
-                guard let profileViewModel = owner.profileViewModel else { return }
                 profileViewModel.editProfileButtonTap.accept(owner.bottomButton.imageType)
             }
             .disposed(by: disposeBag)
@@ -158,6 +177,12 @@ extension ProfileCollectionViewCell {
         moveToFollowTap.rx.event
             .bind(with: self) { owner, gesture in
                 profileViewModel.moveToFollowTap.onNext(())
+            }
+            .disposed(by: disposeBag)
+        
+        drectMessageButton.rx.tap
+            .bind(with: self) { owner, _ in
+                profileViewModel.drectMessageButtonTap.onNext(())
             }
             .disposed(by: disposeBag)
     }

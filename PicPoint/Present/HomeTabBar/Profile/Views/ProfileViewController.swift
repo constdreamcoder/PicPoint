@@ -105,13 +105,7 @@ final class ProfileViewController: BaseViewController {
         configureUI()
         bind()
     }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
-        tabBarController?.tabBar.isHidden = false
-    }
-    
+
     func updateCellHeight(height: CGFloat) {
         currentCellHeight = height
         collectionView.collectionViewLayout.invalidateLayout()  // 레이아웃 갱신
@@ -230,6 +224,19 @@ extension ProfileViewController: UIViewControllerConfiguration {
                 let showOnMapVM = ShowOnMapViewModel(value.0, value.1)
                 let showOnMapVC = ShowOnMapViewController(showOnMapViewModel: showOnMapVM)
                 owner.navigationController?.pushViewController(showOnMapVC, animated: true)
+            }
+            .disposed(by: disposeBag)
+        
+        output.goToDirectMessageVCTrigger
+            .drive(with: self) { owner, _ in
+                let directMessageVC = DirectMessageViewController()
+                owner.navigationController?.pushViewController(directMessageVC, animated: true)
+            }
+            .disposed(by: disposeBag)
+        
+        output.isHiddenTabBarTrigger
+            .drive(with: self) { owner, isHidden in
+                owner.tabBarController?.tabBar.isHidden = isHidden
             }
             .disposed(by: disposeBag)
     }

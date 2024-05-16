@@ -22,6 +22,7 @@ final class ProfileViewModel: ViewModelType {
     let myPosts = BehaviorRelay<[String]>(value: [])
     let moveToFollowTap = PublishSubject<Void>()
     let updateFollowingsCountRelay = PublishRelay<Int>()
+    let drectMessageButtonTap = PublishSubject<Void>()
     
     private let updateContentSizeRelay = PublishRelay<CGFloat>()
     private let userIdSubject = BehaviorSubject<String>(value: "")
@@ -45,6 +46,8 @@ final class ProfileViewModel: ViewModelType {
         let moveToDetailVCTrigger: Driver<Post?>
         let endRefreshTrigger: Driver<Void>
         let goToMapButtonTrigger: Driver<(String?, [Post])>
+        let goToDirectMessageVCTrigger: Driver<Void>
+        let isHiddenTabBarTrigger: Driver<Bool>
     }
     
     init(_ userId: String = "") {
@@ -63,6 +66,7 @@ final class ProfileViewModel: ViewModelType {
         let followTrigger = PublishSubject<FetchMyProfileModel>()
         let unFollowTrigger = PublishSubject<FetchMyProfileModel>()
         let endRefreshTrigger = PublishRelay<Void>()
+        let isHiddenTabBarTrigger = BehaviorRelay<Bool>(value: false)
         
         let sections: [SectionModelWrapper] = [
             SectionModelWrapper(
@@ -150,6 +154,9 @@ final class ProfileViewModel: ViewModelType {
             .subscribe(with: self) { owner, userId in
                 if userId == "" || userId == UserDefaultsManager.userId {
                     owner.updateFollowingsCountRelay.accept(UserDefaultsManager.followings.count)
+                    isHiddenTabBarTrigger.accept(false)
+                } else {
+                    isHiddenTabBarTrigger.accept(true)
                 }
             }
             .disposed(by: disposeBag)
@@ -223,7 +230,9 @@ final class ProfileViewModel: ViewModelType {
             myProfile: myProfile.asDriver(onErrorJustReturn: nil),
             moveToDetailVCTrigger: postForMovingToDetailVCRelay.asDriver(onErrorJustReturn: nil),
             endRefreshTrigger: endRefreshTrigger.asDriver(onErrorJustReturn: ()),
-            goToMapButtonTrigger: goToMapButtonTrigger.asDriver(onErrorJustReturn: (nil, []))
+            goToMapButtonTrigger: goToMapButtonTrigger.asDriver(onErrorJustReturn: (nil, [])),
+            goToDirectMessageVCTrigger: drectMessageButtonTap.asDriver(onErrorJustReturn: ()),
+            isHiddenTabBarTrigger: isHiddenTabBarTrigger.asDriver()
         )
     }
 }

@@ -51,6 +51,11 @@
 		001C92032BD6A2820028E67B /* UIViewController+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001C92022BD6A2820028E67B /* UIViewController+Extensions.swift */; };
 		001C92082BD6D37D0028E67B /* SelectedVisitDateViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001C92072BD6D37D0028E67B /* SelectedVisitDateViewController.swift */; };
 		001C920A2BD6D3C10028E67B /* SelectVisitDateViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001C92092BD6D3C10028E67B /* SelectVisitDateViewModel.swift */; };
+		001F13382BF5EA2D0083BAD6 /* DirectMessageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001F13372BF5EA2D0083BAD6 /* DirectMessageViewController.swift */; };
+		001F133A2BF5EA800083BAD6 /* DirectMessageViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001F13392BF5EA800083BAD6 /* DirectMessageViewModel.swift */; };
+		001F133D2BF5EEEE0083BAD6 /* SocketIO in Frameworks */ = {isa = PBXBuildFile; productRef = 001F133C2BF5EEEE0083BAD6 /* SocketIO */; };
+		001F133F2BF5F0420083BAD6 /* DirectMessageTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001F133E2BF5F0420083BAD6 /* DirectMessageTableViewCell.swift */; };
+		001F13422BF5F16C0083BAD6 /* IQKeyboardManagerSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 001F13412BF5F16C0083BAD6 /* IQKeyboardManagerSwift */; };
 		002023162BDA819C004CA12F /* ProfileImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 002023152BDA819C004CA12F /* ProfileImageView.swift */; };
 		0020231A2BDA82F1004CA12F /* FollowerFollowingStackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 002023192BDA82F1004CA12F /* FollowerFollowingStackView.swift */; };
 		00242C552BD7805600B4C96E /* Date+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00242C542BD7805600B4C96E /* Date+Extensions.swift */; };
@@ -310,6 +315,9 @@
 		001C92022BD6A2820028E67B /* UIViewController+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Extensions.swift"; sourceTree = "<group>"; };
 		001C92072BD6D37D0028E67B /* SelectedVisitDateViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectedVisitDateViewController.swift; sourceTree = "<group>"; };
 		001C92092BD6D3C10028E67B /* SelectVisitDateViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectVisitDateViewModel.swift; sourceTree = "<group>"; };
+		001F13372BF5EA2D0083BAD6 /* DirectMessageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DirectMessageViewController.swift; sourceTree = "<group>"; };
+		001F13392BF5EA800083BAD6 /* DirectMessageViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DirectMessageViewModel.swift; sourceTree = "<group>"; };
+		001F133E2BF5F0420083BAD6 /* DirectMessageTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DirectMessageTableViewCell.swift; sourceTree = "<group>"; };
 		002023152BDA819C004CA12F /* ProfileImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileImageView.swift; sourceTree = "<group>"; };
 		002023192BDA82F1004CA12F /* FollowerFollowingStackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowerFollowingStackView.swift; sourceTree = "<group>"; };
 		00242C542BD7805600B4C96E /* Date+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Extensions.swift"; sourceTree = "<group>"; };
@@ -526,6 +534,8 @@
 				00FE92BA2BCE877C00554D0F /* Kingfisher in Frameworks */,
 				003540142BCFB7EE00A71415 /* Differentiator in Frameworks */,
 				009F07592BE6608B0048FF15 /* iamport-ios in Frameworks */,
+				001F13422BF5F16C0083BAD6 /* IQKeyboardManagerSwift in Frameworks */,
+				001F133D2BF5EEEE0083BAD6 /* SocketIO in Frameworks */,
 				00F65D442BCA178C0027A897 /* SnapKit in Frameworks */,
 				00F9AB0B2BEFD50C00E51C65 /* Realm in Frameworks */,
 				003540162BCFB7EE00A71415 /* RxDataSources in Frameworks */,
@@ -859,6 +869,32 @@
 				001C92042BD6D30B0028E67B /* SelectVisitDate */,
 			);
 			path = SubViewControllers;
+			sourceTree = "<group>";
+		};
+		001F13342BF5E9F70083BAD6 /* DirectMessage */ = {
+			isa = PBXGroup;
+			children = (
+				001F13352BF5EA0C0083BAD6 /* Views */,
+				001F13362BF5EA100083BAD6 /* ViewModels */,
+			);
+			path = DirectMessage;
+			sourceTree = "<group>";
+		};
+		001F13352BF5EA0C0083BAD6 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				001F13372BF5EA2D0083BAD6 /* DirectMessageViewController.swift */,
+				001F133E2BF5F0420083BAD6 /* DirectMessageTableViewCell.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		001F13362BF5EA100083BAD6 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				001F13392BF5EA800083BAD6 /* DirectMessageViewModel.swift */,
+			);
+			path = ViewModels;
 			sourceTree = "<group>";
 		};
 		002023172BDA829F004CA12F /* ProfileCollectionViewCell */ = {
@@ -1781,6 +1817,7 @@
 		00F65D452BCA179C0027A897 /* Present */ = {
 			isa = PBXGroup;
 			children = (
+				001F13342BF5E9F70083BAD6 /* DirectMessage */,
 				00AA9A772BCC247C0069C55C /* HomeTabBar */,
 				000AD2692BD2CFB600FC7768 /* Comment */,
 				00353FDC2BCFAA4B00A71415 /* Detail */,
@@ -1970,6 +2007,8 @@
 				009F07582BE6608B0048FF15 /* iamport-ios */,
 				00F9AB0A2BEFD50C00E51C65 /* Realm */,
 				00F9AB0C2BEFD50C00E51C65 /* RealmSwift */,
+				001F133C2BF5EEEE0083BAD6 /* SocketIO */,
+				001F13412BF5F16C0083BAD6 /* IQKeyboardManagerSwift */,
 			);
 			productName = PicPoint;
 			productReference = 0049D87B2BC96B4800F59852 /* PicPoint.app */;
@@ -2007,6 +2046,8 @@
 				003540122BCFB7EE00A71415 /* XCRemoteSwiftPackageReference "RxDataSources" */,
 				009F07572BE6608B0048FF15 /* XCRemoteSwiftPackageReference "iamport-ios" */,
 				00F9AB092BEFD50C00E51C65 /* XCRemoteSwiftPackageReference "realm-swift" */,
+				001F133B2BF5EEEE0083BAD6 /* XCRemoteSwiftPackageReference "socket.io-client-swift" */,
+				001F13402BF5F16C0083BAD6 /* XCRemoteSwiftPackageReference "IQKeyboardManager" */,
 			);
 			productRefGroup = 0049D87C2BC96B4800F59852 /* Products */;
 			projectDirPath = "";
@@ -2083,6 +2124,7 @@
 				009F07632BE674C50048FF15 /* ValidatePaymentModel.swift in Sources */,
 				00EA27742BDE3CA600EE3F9C /* BirthDaySignUpViewController.swift in Sources */,
 				00AA9A7B2BCC25C90069C55C /* BaseDefaults.swift in Sources */,
+				001F133A2BF5EA800083BAD6 /* DirectMessageViewModel.swift in Sources */,
 				00E4D9DE2BE3BE3B00C641BE /* Error+Extensions.swift in Sources */,
 				00F9AB082BEFBF7600E51C65 /* RecentKeywordTableViewCell.swift in Sources */,
 				001253E72BD3A00B0065F1E6 /* CommentTableViewCell.swift in Sources */,
@@ -2162,6 +2204,7 @@
 				00EA27762BDE3D7200EE3F9C /* BirthDaySignUpViewModel.swift in Sources */,
 				00FE92B32BCE56F600554D0F /* FetchPostsQuery.swift in Sources */,
 				007ADD312BEE934D00C1A6ED /* LoadingFooterView.swift in Sources */,
+				001F133F2BF5F0420083BAD6 /* DirectMessageTableViewCell.swift in Sources */,
 				003C82C22BDCD5AF003315E1 /* EditProfileViewController.swift in Sources */,
 				009AFAF22BDA7629003A45BF /* ContentsCollectionViewCell.swift in Sources */,
 				00E4D9B92BE3AC5600C641BE /* FetchPostNetworkError.swift in Sources */,
@@ -2200,6 +2243,7 @@
 				003540272BCFCC7500A71415 /* BaseCollectionViewCell.swift in Sources */,
 				002720AC2BE0151F004ADC5C /* UnFollowParams.swift in Sources */,
 				00760E552BD531BB00741C40 /* VisitDateTableViewCell.swift in Sources */,
+				001F13382BF5EA2D0083BAD6 /* DirectMessageViewController.swift in Sources */,
 				00B7C40E2BCA6A93009AC333 /* ViewModelType.swift in Sources */,
 				00E4D9C92BE3AFA900C641BE /* LikeUnlikePostNetworkError.swift in Sources */,
 				00E1D9442BE4E1D100501328 /* NoNetworkView.swift in Sources */,
@@ -2508,6 +2552,22 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		001F133B2BF5EEEE0083BAD6 /* XCRemoteSwiftPackageReference "socket.io-client-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/socketio/socket.io-client-swift.git";
+			requirement = {
+				kind = exactVersion;
+				version = 16.1.0;
+			};
+		};
+		001F13402BF5F16C0083BAD6 /* XCRemoteSwiftPackageReference "IQKeyboardManager" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/hackiftekhar/IQKeyboardManager.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 7.0.3;
+			};
+		};
 		003540122BCFB7EE00A71415 /* XCRemoteSwiftPackageReference "RxDataSources" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/RxSwiftCommunity/RxDataSources.git";
@@ -2567,6 +2627,16 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		001F133C2BF5EEEE0083BAD6 /* SocketIO */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 001F133B2BF5EEEE0083BAD6 /* XCRemoteSwiftPackageReference "socket.io-client-swift" */;
+			productName = SocketIO;
+		};
+		001F13412BF5F16C0083BAD6 /* IQKeyboardManagerSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 001F13402BF5F16C0083BAD6 /* XCRemoteSwiftPackageReference "IQKeyboardManager" */;
+			productName = IQKeyboardManagerSwift;
+		};
 		003540132BCFB7EE00A71415 /* Differentiator */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 003540122BCFB7EE00A71415 /* XCRemoteSwiftPackageReference "RxDataSources" */;

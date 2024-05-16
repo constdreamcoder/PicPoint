@@ -10,6 +10,16 @@ import SnapKit
 
 final class CommentWritingSectionView: UIView {
     
+    let sendImageButton: UIButton = {
+        let button = UIButton()
+        let buttonImage = UIImage(systemName: "camera")
+        button.setImage(buttonImage, for: .normal)
+        button.tintColor = .black
+        let symbolConfiguration = UIImage.SymbolConfiguration(pointSize: 24.0)
+        button.setPreferredSymbolConfiguration(symbolConfiguration, forImageIn: .normal)
+        return button
+    }()
+    
     lazy var commentTextView: UITextView = {
         let textView = UITextView()
         textView.text = textViewPlaceHolder
@@ -35,11 +45,14 @@ final class CommentWritingSectionView: UIView {
         return button
     }()
     
-    let textViewPlaceHolder: String = "댓글을 작성해주세요"
+    var textViewPlaceHolder: String
 
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+    init(_ textViewPlaceHolder: String = "댓글을 작성해주세요") {
         
+        self.textViewPlaceHolder = textViewPlaceHolder
+        
+        super.init(frame: .zero)
+
         configureConstraints()
         configureUI()
     }
@@ -52,12 +65,19 @@ final class CommentWritingSectionView: UIView {
 extension CommentWritingSectionView: UIViewConfiguration {
     func configureConstraints() {
         [
+            sendImageButton,
             commentTextView,
             sendButton
         ].forEach { addSubview($0) }
         
+        sendImageButton.snp.makeConstraints {
+            $0.leading.equalToSuperview().inset(8.0)
+            $0.centerY.equalTo(sendButton)
+        }
+        
         commentTextView.snp.makeConstraints {
-            $0.leading.top.equalToSuperview().inset(8.0)
+            $0.top.equalToSuperview().inset(8.0)
+            $0.leading.equalTo(sendImageButton.snp.trailing).offset(8.0)
             $0.bottom.equalToSuperview().inset(16.0)
             $0.trailing.equalTo(sendButton.snp.leading).offset(-8.0)
             $0.height.equalTo(34.0)
