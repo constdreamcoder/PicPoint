@@ -8,14 +8,14 @@
 import Foundation
 
 struct CreateRoomModel: Decodable {
-    let room_id: String
+    let roomId: String
     let createdAt: String
     let updatedAt: String
     let participants: [Sender]
     let lastChat: Chat?
     
-    enum CodingKeys: CodingKey {
-        case room_id
+    enum CodingKeys: String, CodingKey {
+        case roomId = "room_id"
         case createdAt
         case updatedAt
         case participants
@@ -24,7 +24,7 @@ struct CreateRoomModel: Decodable {
     
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.room_id = try container.decode(String.self, forKey: .room_id)
+        self.roomId = try container.decode(String.self, forKey: .roomId)
         self.createdAt = try container.decode(String.self, forKey: .createdAt)
         self.updatedAt = try container.decode(String.self, forKey: .updatedAt)
         self.participants = try container.decode([Sender].self, forKey: .participants)

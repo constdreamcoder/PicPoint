@@ -36,8 +36,10 @@ final class DirectMessageViewModel: ViewModelType {
         Observable.just(createRoomModel)
             .withUnretained(self)
             .map { owner, createRoomModel -> (roomId: String, lastChat: Chat?) in
+                SocketIOManager.shared.setupSocketEventListeners(createRoomModel.roomId)
+                
                 owner.roomInfoSubject.onNext(createRoomModel)
-                return (createRoomModel.room_id, createRoomModel.lastChat)
+                return (createRoomModel.roomId, createRoomModel.lastChat)
             }
             .flatMap { value in
                 ChatManager.fetchChattingHistory(
@@ -51,10 +53,18 @@ final class DirectMessageViewModel: ViewModelType {
                 }
             }
             .subscribe(with: self) { owner, chattingListModel in
+                // TODO: - DB에 저장되어 있는 채팅 내역 불러와서 append하기
                 owner.chattingListSubject.onNext(chattingListModel.data)
+                SocketIOManager.shared.establishConnection()
             }
             .disposed(by: disposeBag)
             
+    }
+    
+    deinit {
+        print("deinit - DirectMessageViewModel")
+        SocketIOManager.shared.leaveConnection()
+        SocketIOManager.shared.removeAllEventHandlers()
     }
     
     func transform(input: Input) -> Output {

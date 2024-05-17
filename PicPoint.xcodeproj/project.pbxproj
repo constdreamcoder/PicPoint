@@ -114,6 +114,8 @@
 		0049D8812BC96B4800F59852 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0049D8802BC96B4800F59852 /* SceneDelegate.swift */; };
 		0049D8882BC96B4900F59852 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0049D8872BC96B4900F59852 /* Assets.xcassets */; };
 		0049D88B2BC96B4900F59852 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0049D8892BC96B4900F59852 /* LaunchScreen.storyboard */; };
+		004CAC862BF7AEE40090D0A6 /* SocketIO in Frameworks */ = {isa = PBXBuildFile; productRef = 004CAC852BF7AEE40090D0A6 /* SocketIO */; };
+		004CAC882BF7B39F0090D0A6 /* SocketIOManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 004CAC872BF7B39F0090D0A6 /* SocketIOManager.swift */; };
 		004FE2702BE8A4ED0044C323 /* ShowOnMapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 004FE26F2BE8A4ED0044C323 /* ShowOnMapViewController.swift */; };
 		004FE2742BE8A5D70044C323 /* ShowOnMapViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 004FE2732BE8A5D70044C323 /* ShowOnMapViewModel.swift */; };
 		004FE2772BE8BBA70044C323 /* SelectedPlaceDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 004FE2762BE8BBA70044C323 /* SelectedPlaceDetailsView.swift */; };
@@ -388,6 +390,7 @@
 		0049D8872BC96B4900F59852 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		0049D88A2BC96B4900F59852 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		0049D88C2BC96B4900F59852 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		004CAC872BF7B39F0090D0A6 /* SocketIOManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SocketIOManager.swift; sourceTree = "<group>"; };
 		004FE26F2BE8A4ED0044C323 /* ShowOnMapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowOnMapViewController.swift; sourceTree = "<group>"; };
 		004FE2732BE8A5D70044C323 /* ShowOnMapViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowOnMapViewModel.swift; sourceTree = "<group>"; };
 		004FE2762BE8BBA70044C323 /* SelectedPlaceDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectedPlaceDetailsView.swift; sourceTree = "<group>"; };
@@ -556,6 +559,7 @@
 				00F65D3C2BCA167F0027A897 /* RxSwift in Frameworks */,
 				00F65D3A2BCA167F0027A897 /* RxCocoa in Frameworks */,
 				00FE92BA2BCE877C00554D0F /* Kingfisher in Frameworks */,
+				004CAC862BF7AEE40090D0A6 /* SocketIO in Frameworks */,
 				003540142BCFB7EE00A71415 /* Differentiator in Frameworks */,
 				009F07592BE6608B0048FF15 /* iamport-ios in Frameworks */,
 				001F13422BF5F16C0083BAD6 /* IQKeyboardManagerSwift in Frameworks */,
@@ -1703,6 +1707,7 @@
 				00554FCA2BF7414F005CC833 /* ChatManager.swift */,
 				0065D9DC2BE727AB004DD1F6 /* LocationManager.swift */,
 				003E231E2BF4B459000BF3D7 /* CachedImageManager.swift */,
+				004CAC872BF7B39F0090D0A6 /* SocketIOManager.swift */,
 			);
 			path = Managers;
 			sourceTree = "<group>";
@@ -2093,6 +2098,7 @@
 				00F9AB0C2BEFD50C00E51C65 /* RealmSwift */,
 				001F133C2BF5EEEE0083BAD6 /* SocketIO */,
 				001F13412BF5F16C0083BAD6 /* IQKeyboardManagerSwift */,
+				004CAC852BF7AEE40090D0A6 /* SocketIO */,
 			);
 			productName = PicPoint;
 			productReference = 0049D87B2BC96B4800F59852 /* PicPoint.app */;
@@ -2275,6 +2281,7 @@
 				00EA27802BDE728500EE3F9C /* ValidateEmailModel.swift in Sources */,
 				0010414B2BDB25D400E5FDA1 /* PostCustomView.swift in Sources */,
 				00AFF5FC2BCD1274006D319A /* HomeViewModel.swift in Sources */,
+				004CAC882BF7B39F0090D0A6 /* SocketIOManager.swift in Sources */,
 				001C92082BD6D37D0028E67B /* SelectedVisitDateViewController.swift in Sources */,
 				00B7C3F32BCA5C42009AC333 /* TargetType.swift in Sources */,
 				009F07562BE6174A0048FF15 /* RefreshTokenModel.swift in Sources */,
@@ -2742,6 +2749,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 003540122BCFB7EE00A71415 /* XCRemoteSwiftPackageReference "RxDataSources" */;
 			productName = RxDataSources;
+		};
+		004CAC852BF7AEE40090D0A6 /* SocketIO */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 001F133B2BF5EEEE0083BAD6 /* XCRemoteSwiftPackageReference "socket.io-client-swift" */;
+			productName = SocketIO;
 		};
 		009F07582BE6608B0048FF15 /* iamport-ios */ = {
 			isa = XCSwiftPackageProductDependency;
