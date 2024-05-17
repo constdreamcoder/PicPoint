@@ -9,21 +9,62 @@ import UIKit
 import SnapKit
 import RxSwift
 import RxCocoa
+import RxDataSources
+import Kingfisher
 
 final class DirectMessageViewController: BaseViewController {
     
     let tableView: UITableView = {
         let tableView = UITableView()
         tableView.backgroundColor = .white
-        tableView.register(DirectMessageTableViewCell.self, forCellReuseIdentifier: DirectMessageTableViewCell.identifier)
+        
+        tableView.register(OpponentDirectMessageTableViewCell.self, forCellReuseIdentifier: OpponentDirectMessageTableViewCell.identifier)
+        tableView.register(MyDirectMessageTableViewCell.self, forCellReuseIdentifier: MyDirectMessageTableViewCell.identifier)
+        
+        tableView.separatorStyle = .none
         
         return tableView
     }()
     
-    let chatWritingSectionView = CommentWritingSectionView("")
+    private let chatWritingSectionView = CommentWritingSectionView("")
     
-    private let viewModel = DirectMessageViewModel()
+    private let viewModel: DirectMessageViewModel
 
+    private let dataSource = RxTableViewSectionedReloadDataSource<DirectMessageTableViewSectionDataModel>(
+      configureCell: { dataSource, tableView, indexPath, item in
+          
+          if item.sender.userId == UserDefaultsManager.userId {
+              guard let cell = tableView.dequeueReusableCell(withIdentifier: MyDirectMessageTableViewCell.identifier, for: indexPath) as? MyDirectMessageTableViewCell else { return UITableViewCell() }
+              
+              cell.contentLabel.text = item.content
+              cell.dateLabel.text = item.createdAt.getChattingDateString
+
+              return cell
+          } else {
+              guard let cell = tableView.dequeueReusableCell(withIdentifier: OpponentDirectMessageTableViewCell.identifier, for: indexPath) as? OpponentDirectMessageTableViewCell else { return UITableViewCell() }
+              
+              if let profileImage = item.sender.profileImage, !profileImage.isEmpty {
+                  let url = URL(string: APIKeys.baseURL + "/\(profileImage)")
+                  let placeholderImage = UIImage(systemName: "person.circle")
+                  cell.profileImageView.kf.setImageWithAuthHeaders(with: url, placeholder: placeholderImage)
+              }
+              cell.nicknameLabel.text = item.sender.nick
+              cell.contentLabel.text = item.content
+              cell.dateLabel.text = item.createdAt.getChattingDateString
+              return cell
+          }
+    })
+    
+    init(directMessageViewModel: DirectMessageViewModel) {
+        self.viewModel = directMessageViewModel
+        
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -89,10 +130,8 @@ extension DirectMessageViewController: UIViewControllerConfiguration {
         
         let output = viewModel.transform(input: input)
         
-        Observable.just([1,2,3,4,45,5,5,3])
-            .bind(to: tableView.rx.items(cellIdentifier: DirectMessageTableViewCell.identifier, cellType: DirectMessageTableViewCell.self)) { row, element, cell in
-                
-            }
+        output.sections
+            .drive(tableView.rx.items(dataSource: dataSource))
             .disposed(by: disposeBag)
         
         output.commentText

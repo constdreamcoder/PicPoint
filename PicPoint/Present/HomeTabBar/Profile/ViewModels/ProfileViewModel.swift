@@ -22,7 +22,7 @@ final class ProfileViewModel: ViewModelType {
     let myPosts = BehaviorRelay<[String]>(value: [])
     let moveToFollowTap = PublishSubject<Void>()
     let updateFollowingsCountRelay = PublishRelay<Int>()
-    let drectMessageButtonTap = PublishSubject<Void>()
+    let directMessageButtonTap = PublishSubject<Void>()
     
     private let updateContentSizeRelay = PublishRelay<CGFloat>()
     private let userIdSubject = BehaviorSubject<String>(value: "")
@@ -46,7 +46,7 @@ final class ProfileViewModel: ViewModelType {
         let moveToDetailVCTrigger: Driver<Post?>
         let endRefreshTrigger: Driver<Void>
         let goToMapButtonTrigger: Driver<(String?, [Post])>
-        let goToDirectMessageVCTrigger: Driver<Void>
+        let goToDirectMessageVCTrigger: Driver<CreateRoomModel?>
         let isHiddenTabBarTrigger: Driver<Bool>
     }
     
@@ -67,6 +67,7 @@ final class ProfileViewModel: ViewModelType {
         let unFollowTrigger = PublishSubject<FetchMyProfileModel>()
         let endRefreshTrigger = PublishRelay<Void>()
         let isHiddenTabBarTrigger = BehaviorRelay<Bool>(value: false)
+        let goToDirectMessageVCTrigger = PublishRelay<CreateRoomModel?>()
         
         let sections: [SectionModelWrapper] = [
             SectionModelWrapper(
@@ -221,6 +222,20 @@ final class ProfileViewModel: ViewModelType {
         
         let moveToFollowTapTrigger = moveToFollowTap
             .withLatestFrom(myProfile)
+        
+        directMessageButtonTap
+            .withLatestFrom(myProfile) { $1?.userId ?? "" }
+            .flatMap { userId in
+                ChatManager.createRoom(body: CreateRoomBody(opponent_id: userId))
+                    .catch { error in
+                        print(error.errorCode, error.errorDesc)
+                        return Single<CreateRoomModel>.never()
+                    }
+            }
+            .subscribe(with: self) { owner, createRoomModel in
+                goToDirectMessageVCTrigger.accept(createRoomModel)
+            }
+            .disposed(by: disposeBag)
                 
         return Output(
             sections: sectionsObservable.asDriver(onErrorJustReturn: []),
@@ -231,7 +246,7 @@ final class ProfileViewModel: ViewModelType {
             moveToDetailVCTrigger: postForMovingToDetailVCRelay.asDriver(onErrorJustReturn: nil),
             endRefreshTrigger: endRefreshTrigger.asDriver(onErrorJustReturn: ()),
             goToMapButtonTrigger: goToMapButtonTrigger.asDriver(onErrorJustReturn: (nil, [])),
-            goToDirectMessageVCTrigger: drectMessageButtonTap.asDriver(onErrorJustReturn: ()),
+            goToDirectMessageVCTrigger: goToDirectMessageVCTrigger.asDriver(onErrorJustReturn: nil),
             isHiddenTabBarTrigger: isHiddenTabBarTrigger.asDriver()
         )
     }

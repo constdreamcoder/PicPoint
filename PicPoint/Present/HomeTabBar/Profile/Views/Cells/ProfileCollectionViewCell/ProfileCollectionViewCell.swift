@@ -48,7 +48,7 @@ final class ProfileCollectionViewCell: BaseCollectionViewCell {
         return button
     }()
     
-    let drectMessageButton: CustomProfileButton = {
+    let directMessageButton: CustomProfileButton = {
         let button = CustomProfileButton()
         button.setTitle("메세지", for: .normal)
         return button
@@ -61,7 +61,7 @@ final class ProfileCollectionViewCell: BaseCollectionViewCell {
         stackView.distribution = .fillEqually
         [
             bottomButton,
-            drectMessageButton
+            directMessageButton
         ].forEach { stackView.addArrangedSubview($0) }
         return stackView
     }()
@@ -150,14 +150,14 @@ extension ProfileCollectionViewCell {
                 if UserDefaultsManager.userId == myProfile.userId {
                     owner.bottomButton.setTitle("프로필 수정", for: .normal)
                     owner.bottomButton.imageType = .myProfile
-                    owner.drectMessageButton.isHidden = true
+                    owner.directMessageButton.isHidden = true
                 } else {
                     if myProfile.followers.contains(where: { $0.userId == UserDefaultsManager.userId}) {
                         owner.updateProfileFollowButtonUI(owner.bottomButton, with: true)
                     } else {
                         owner.updateProfileFollowButtonUI(owner.bottomButton, with: false)
                     }
-                    owner.drectMessageButton.isHidden = false
+                    owner.directMessageButton.isHidden = false
                 }
             }
             .disposed(by: disposeBag)
@@ -180,9 +180,9 @@ extension ProfileCollectionViewCell {
             }
             .disposed(by: disposeBag)
         
-        drectMessageButton.rx.tap
+        directMessageButton.rx.tap
             .bind(with: self) { owner, _ in
-                profileViewModel.drectMessageButtonTap.onNext(())
+                profileViewModel.directMessageButtonTap.onNext(())
             }
             .disposed(by: disposeBag)
     }

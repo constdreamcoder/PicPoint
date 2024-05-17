@@ -11,6 +11,10 @@ import RxCocoa
 
 final class DirectMessageViewModel: ViewModelType {
     var disposeBag = DisposeBag()
+    
+    private let roomInfoSubject = BehaviorSubject<CreateRoomModel?>(value: nil)
+    private let chattingListSubject = BehaviorSubject<[Chat]>(value: [])
+    private let sectionsRelay = BehaviorRelay<[DirectMessageTableViewSectionDataModel]>(value: [])
 
     struct Input {
         let commentTextEvent: Observable<String>
@@ -25,10 +29,48 @@ final class DirectMessageViewModel: ViewModelType {
         let commentDidEndEditingTrigger: Driver<Void>
         let commentSendingValid: Driver<Bool>
         let sendButtonTapTrigger: Driver<Void>
+        let sections: Driver<[DirectMessageTableViewSectionDataModel]>
+    }
+    
+    init(_ createRoomModel: CreateRoomModel) {
+        Observable.just(createRoomModel)
+            .withUnretained(self)
+            .map { owner, createRoomModel -> (roomId: String, lastChat: Chat?) in
+                owner.roomInfoSubject.onNext(createRoomModel)
+                return (createRoomModel.room_id, createRoomModel.lastChat)
+            }
+            .flatMap { value in
+                ChatManager.fetchChattingHistory(
+                    params: FetchChattingHistoryParams(roomId: value.roomId),
+//                    query: FetchChattingHistoryQuery(cursor_date: value.lastChat?.createdAt)
+                    query: FetchChattingHistoryQuery(cursor_date: nil)
+                )
+                .catch { error in
+                    print(error.errorCode, error.errorDesc)
+                    return Single<ChattingListModel>.never()
+                }
+            }
+            .subscribe(with: self) { owner, chattingListModel in
+                owner.chattingListSubject.onNext(chattingListModel.data)
+            }
+            .disposed(by: disposeBag)
+            
     }
     
     func transform(input: Input) -> Output {
         let commentSendingValidation = BehaviorRelay<Bool>(value: false)
+        
+        chattingListSubject
+            .subscribe(with: self) { owner, chattingList in
+                let sections = [
+                    DirectMessageTableViewSectionDataModel(
+                        header: "",
+                        items: chattingList
+                    )
+                ]
+                owner.sectionsRelay.accept(sections)
+            }
+            .disposed(by: disposeBag)
         
         let commentTextEventTrigger = input.commentTextEvent
             .map {
@@ -48,7 +90,8 @@ final class DirectMessageViewModel: ViewModelType {
             commentDidBeginEditingTrigger: input.didBeginEditing.asDriver(),
             commentDidEndEditingTrigger: input.didEndEditing.asDriver(),
             commentSendingValid: commentSendingValidation.asDriver(),
-            sendButtonTapTrigger: sendButtonTapTrigger.asDriver(onErrorJustReturn: ())
+            sendButtonTapTrigger: sendButtonTapTrigger.asDriver(onErrorJustReturn: ()),
+            sections: sectionsRelay.asDriver()
         )
     }
     

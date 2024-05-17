@@ -64,5 +64,3 @@ extension FollowRouter: TargetType {
         }
     }
 }
-
-

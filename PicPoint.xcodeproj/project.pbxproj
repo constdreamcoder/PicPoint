@@ -54,8 +54,12 @@
 		001F13382BF5EA2D0083BAD6 /* DirectMessageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001F13372BF5EA2D0083BAD6 /* DirectMessageViewController.swift */; };
 		001F133A2BF5EA800083BAD6 /* DirectMessageViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001F13392BF5EA800083BAD6 /* DirectMessageViewModel.swift */; };
 		001F133D2BF5EEEE0083BAD6 /* SocketIO in Frameworks */ = {isa = PBXBuildFile; productRef = 001F133C2BF5EEEE0083BAD6 /* SocketIO */; };
-		001F133F2BF5F0420083BAD6 /* DirectMessageTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001F133E2BF5F0420083BAD6 /* DirectMessageTableViewCell.swift */; };
+		001F133F2BF5F0420083BAD6 /* OpponentDirectMessageTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001F133E2BF5F0420083BAD6 /* OpponentDirectMessageTableViewCell.swift */; };
 		001F13422BF5F16C0083BAD6 /* IQKeyboardManagerSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 001F13412BF5F16C0083BAD6 /* IQKeyboardManagerSwift */; };
+		001F13442BF62A540083BAD6 /* ChatBubbleImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001F13432BF62A540083BAD6 /* ChatBubbleImageView.swift */; };
+		001F134A2BF62FF40083BAD6 /* MyDirectMessageTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001F13492BF62FF40083BAD6 /* MyDirectMessageTableViewCell.swift */; };
+		001F134C2BF634090083BAD6 /* DirectMessageTableViewSectionDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001F134B2BF634090083BAD6 /* DirectMessageTableViewSectionDataModel.swift */; };
+		001F134F2BF635F10083BAD6 /* ChattingListModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001F134E2BF635F10083BAD6 /* ChattingListModel.swift */; };
 		002023162BDA819C004CA12F /* ProfileImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 002023152BDA819C004CA12F /* ProfileImageView.swift */; };
 		0020231A2BDA82F1004CA12F /* FollowerFollowingStackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 002023192BDA82F1004CA12F /* FollowerFollowingStackView.swift */; };
 		00242C552BD7805600B4C96E /* Date+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00242C542BD7805600B4C96E /* Date+Extensions.swift */; };
@@ -115,6 +119,14 @@
 		004FE2772BE8BBA70044C323 /* SelectedPlaceDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 004FE2762BE8BBA70044C323 /* SelectedPlaceDetailsView.swift */; };
 		004FE2792BE8C23F0044C323 /* SelectedPlaceDetailsCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 004FE2782BE8C23F0044C323 /* SelectedPlaceDetailsCollectionViewCell.swift */; };
 		004FE27B2BE8C7490044C323 /* SelectedPlaceDetailsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 004FE27A2BE8C7490044C323 /* SelectedPlaceDetailsViewModel.swift */; };
+		00554FC62BF74065005CC833 /* ChatRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00554FC52BF74065005CC833 /* ChatRouter.swift */; };
+		00554FC92BF74126005CC833 /* CreateRoomBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00554FC82BF74126005CC833 /* CreateRoomBody.swift */; };
+		00554FCB2BF7414F005CC833 /* ChatManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00554FCA2BF7414F005CC833 /* ChatManager.swift */; };
+		00554FCD2BF741D1005CC833 /* CreateRoomModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00554FCC2BF741D1005CC833 /* CreateRoomModel.swift */; };
+		00554FD02BF7444C005CC833 /* CreateRoomNetworkError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00554FCF2BF7444C005CC833 /* CreateRoomNetworkError.swift */; };
+		00554FD32BF75009005CC833 /* FetchChattingHistoryQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00554FD22BF75009005CC833 /* FetchChattingHistoryQuery.swift */; };
+		00554FD62BF75095005CC833 /* FetchChattingHistoryParams.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00554FD52BF75095005CC833 /* FetchChattingHistoryParams.swift */; };
+		00554FD82BF751D9005CC833 /* FetchChattingHistoryNetworkError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00554FD72BF751D9005CC833 /* FetchChattingHistoryNetworkError.swift */; };
 		0055FB3C2BDA773E0053781D /* ProfileCollectionViewSectionDataModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0055FB3B2BDA773E0053781D /* ProfileCollectionViewSectionDataModels.swift */; };
 		0055FB3F2BDA77BA0053781D /* SectionModelWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0055FB3E2BDA77BA0053781D /* SectionModelWrapper.swift */; };
 		005E8F1E2BE0E7DE00B341A5 /* LikeBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = 005E8F1D2BE0E7DE00B341A5 /* LikeBody.swift */; };
@@ -317,7 +329,11 @@
 		001C92092BD6D3C10028E67B /* SelectVisitDateViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectVisitDateViewModel.swift; sourceTree = "<group>"; };
 		001F13372BF5EA2D0083BAD6 /* DirectMessageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DirectMessageViewController.swift; sourceTree = "<group>"; };
 		001F13392BF5EA800083BAD6 /* DirectMessageViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DirectMessageViewModel.swift; sourceTree = "<group>"; };
-		001F133E2BF5F0420083BAD6 /* DirectMessageTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DirectMessageTableViewCell.swift; sourceTree = "<group>"; };
+		001F133E2BF5F0420083BAD6 /* OpponentDirectMessageTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpponentDirectMessageTableViewCell.swift; sourceTree = "<group>"; };
+		001F13432BF62A540083BAD6 /* ChatBubbleImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatBubbleImageView.swift; sourceTree = "<group>"; };
+		001F13492BF62FF40083BAD6 /* MyDirectMessageTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDirectMessageTableViewCell.swift; sourceTree = "<group>"; };
+		001F134B2BF634090083BAD6 /* DirectMessageTableViewSectionDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DirectMessageTableViewSectionDataModel.swift; sourceTree = "<group>"; };
+		001F134E2BF635F10083BAD6 /* ChattingListModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChattingListModel.swift; sourceTree = "<group>"; };
 		002023152BDA819C004CA12F /* ProfileImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileImageView.swift; sourceTree = "<group>"; };
 		002023192BDA82F1004CA12F /* FollowerFollowingStackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowerFollowingStackView.swift; sourceTree = "<group>"; };
 		00242C542BD7805600B4C96E /* Date+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Extensions.swift"; sourceTree = "<group>"; };
@@ -377,6 +393,14 @@
 		004FE2762BE8BBA70044C323 /* SelectedPlaceDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectedPlaceDetailsView.swift; sourceTree = "<group>"; };
 		004FE2782BE8C23F0044C323 /* SelectedPlaceDetailsCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectedPlaceDetailsCollectionViewCell.swift; sourceTree = "<group>"; };
 		004FE27A2BE8C7490044C323 /* SelectedPlaceDetailsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectedPlaceDetailsViewModel.swift; sourceTree = "<group>"; };
+		00554FC52BF74065005CC833 /* ChatRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatRouter.swift; sourceTree = "<group>"; };
+		00554FC82BF74126005CC833 /* CreateRoomBody.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateRoomBody.swift; sourceTree = "<group>"; };
+		00554FCA2BF7414F005CC833 /* ChatManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatManager.swift; sourceTree = "<group>"; };
+		00554FCC2BF741D1005CC833 /* CreateRoomModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateRoomModel.swift; sourceTree = "<group>"; };
+		00554FCF2BF7444C005CC833 /* CreateRoomNetworkError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateRoomNetworkError.swift; sourceTree = "<group>"; };
+		00554FD22BF75009005CC833 /* FetchChattingHistoryQuery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchChattingHistoryQuery.swift; sourceTree = "<group>"; };
+		00554FD52BF75095005CC833 /* FetchChattingHistoryParams.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchChattingHistoryParams.swift; sourceTree = "<group>"; };
+		00554FD72BF751D9005CC833 /* FetchChattingHistoryNetworkError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchChattingHistoryNetworkError.swift; sourceTree = "<group>"; };
 		0055FB3B2BDA773E0053781D /* ProfileCollectionViewSectionDataModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileCollectionViewSectionDataModels.swift; sourceTree = "<group>"; };
 		0055FB3E2BDA77BA0053781D /* SectionModelWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SectionModelWrapper.swift; sourceTree = "<group>"; };
 		005E8F1D2BE0E7DE00B341A5 /* LikeBody.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikeBody.swift; sourceTree = "<group>"; };
@@ -610,6 +634,7 @@
 				003C82C72BDCECFE003315E1 /* CustomInputView.swift */,
 				00EA277B2BDE479400EE3F9C /* CustomBottomButton.swift */,
 				00E1D9482BE4F33A00501328 /* CustomProfileButton.swift */,
+				001F13432BF62A540083BAD6 /* ChatBubbleImageView.swift */,
 			);
 			path = CusomView;
 			sourceTree = "<group>";
@@ -761,6 +786,7 @@
 		001253EB2BD3C45A0065F1E6 /* Parameters */ = {
 			isa = PBXGroup;
 			children = (
+				00554FD42BF75090005CC833 /* Chat */,
 				00DD46882BE2AD04001B3ADA /* Profile */,
 				005E8F1F2BE0E89700B341A5 /* Like */,
 				0027209F2BDFD654004ADC5C /* Follow */,
@@ -808,6 +834,7 @@
 		001253FB2BD417D20065F1E6 /* Bodies */ = {
 			isa = PBXGroup;
 			children = (
+				00554FC72BF7411E005CC833 /* Chat */,
 				009F075C2BE672310048FF15 /* Payment */,
 				005E8F1C2BE0E7A900B341A5 /* Like */,
 				00FE92B02BCE56D000554D0F /* User */,
@@ -884,7 +911,7 @@
 			isa = PBXGroup;
 			children = (
 				001F13372BF5EA2D0083BAD6 /* DirectMessageViewController.swift */,
-				001F133E2BF5F0420083BAD6 /* DirectMessageTableViewCell.swift */,
+				001F13482BF62FD00083BAD6 /* Cells */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -893,8 +920,27 @@
 			isa = PBXGroup;
 			children = (
 				001F13392BF5EA800083BAD6 /* DirectMessageViewModel.swift */,
+				001F134B2BF634090083BAD6 /* DirectMessageTableViewSectionDataModel.swift */,
 			);
 			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		001F13482BF62FD00083BAD6 /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				001F133E2BF5F0420083BAD6 /* OpponentDirectMessageTableViewCell.swift */,
+				001F13492BF62FF40083BAD6 /* MyDirectMessageTableViewCell.swift */,
+			);
+			path = Cells;
+			sourceTree = "<group>";
+		};
+		001F134D2BF635CD0083BAD6 /* Chat */ = {
+			isa = PBXGroup;
+			children = (
+				001F134E2BF635F10083BAD6 /* ChattingListModel.swift */,
+				00554FCC2BF741D1005CC833 /* CreateRoomModel.swift */,
+			);
+			path = Chat;
 			sourceTree = "<group>";
 		};
 		002023172BDA829F004CA12F /* ProfileCollectionViewCell */ = {
@@ -1262,6 +1308,39 @@
 			path = SubViews;
 			sourceTree = "<group>";
 		};
+		00554FC72BF7411E005CC833 /* Chat */ = {
+			isa = PBXGroup;
+			children = (
+				00554FC82BF74126005CC833 /* CreateRoomBody.swift */,
+			);
+			path = Chat;
+			sourceTree = "<group>";
+		};
+		00554FCE2BF74425005CC833 /* ChatErrors */ = {
+			isa = PBXGroup;
+			children = (
+				00554FCF2BF7444C005CC833 /* CreateRoomNetworkError.swift */,
+				00554FD72BF751D9005CC833 /* FetchChattingHistoryNetworkError.swift */,
+			);
+			path = ChatErrors;
+			sourceTree = "<group>";
+		};
+		00554FD12BF75005005CC833 /* Chat */ = {
+			isa = PBXGroup;
+			children = (
+				00554FD22BF75009005CC833 /* FetchChattingHistoryQuery.swift */,
+			);
+			path = Chat;
+			sourceTree = "<group>";
+		};
+		00554FD42BF75090005CC833 /* Chat */ = {
+			isa = PBXGroup;
+			children = (
+				00554FD52BF75095005CC833 /* FetchChattingHistoryParams.swift */,
+			);
+			path = Chat;
+			sourceTree = "<group>";
+		};
 		0055FB3D2BDA779B0053781D /* ViewModel */ = {
 			isa = PBXGroup;
 			children = (
@@ -1594,6 +1673,7 @@
 		00B7C4072BCA694A009AC333 /* Queries */ = {
 			isa = PBXGroup;
 			children = (
+				00554FD12BF75005005CC833 /* Chat */,
 				00FE92B12BCE56D700554D0F /* Post */,
 			);
 			path = Queries;
@@ -1620,6 +1700,7 @@
 				001041762BDC2BD100E5FDA1 /* LikeManager.swift */,
 				002720A22BDFD702004ADC5C /* FollowManager.swift */,
 				009F075F2BE673D50048FF15 /* PaymentManager.swift */,
+				00554FCA2BF7414F005CC833 /* ChatManager.swift */,
 				0065D9DC2BE727AB004DD1F6 /* LocationManager.swift */,
 				003E231E2BF4B459000BF3D7 /* CachedImageManager.swift */,
 			);
@@ -1635,6 +1716,7 @@
 				00FE92B52BCE59DF00554D0F /* Post */,
 				00FE92B42BCE59DA00554D0F /* User */,
 				0010416D2BDBF6B600E5FDA1 /* Profile */,
+				001F134D2BF635CD0083BAD6 /* Chat */,
 			);
 			path = Responses;
 			sourceTree = "<group>";
@@ -1720,6 +1802,7 @@
 				00E4D9D12BE3B1C400C641BE /* Profile */,
 				00E4D9D82BE3B28E00C641BE /* HashTagErrors */,
 				009F07642BE675080048FF15 /* PaymentErrors */,
+				00554FCE2BF74425005CC833 /* ChatErrors */,
 				0065D9DE2BE739ED004DD1F6 /* LocationErrors */,
 			);
 			path = Errors;
@@ -1936,6 +2019,7 @@
 				001041742BDC2ADE00E5FDA1 /* LikeRouter.swift */,
 				0027209D2BDFD59A004ADC5C /* FollowRouter.swift */,
 				009F075A2BE671460048FF15 /* PaymentRouter.swift */,
+				00554FC52BF74065005CC833 /* ChatRouter.swift */,
 			);
 			path = Routers;
 			sourceTree = "<group>";
@@ -2081,15 +2165,19 @@
 				001C920A2BD6D3C10028E67B /* SelectVisitDateViewModel.swift in Sources */,
 				00760E482BD50AE600741C40 /* SelectImageInnerCollectionViewCell.swift in Sources */,
 				00AFF6002BCD14D3006D319A /* HomeCollectionViewCell.swift in Sources */,
+				00554FD82BF751D9005CC833 /* FetchChattingHistoryNetworkError.swift in Sources */,
 				00AFF60D2BCD2CE0006D319A /* UIViewConfiguration.swift in Sources */,
 				0010415E2BDBC00B00E5FDA1 /* MyPostCollectionViewCell.swift in Sources */,
 				009F07542BE60C3D0048FF15 /* TokenRefresher.swift in Sources */,
 				00E414F42BD95C5500C76BE4 /* DeletePostParams.swift in Sources */,
+				001F13442BF62A540083BAD6 /* ChatBubbleImageView.swift in Sources */,
 				00EA277E2BDE516900EE3F9C /* ValidateEmailBody.swift in Sources */,
 				0034FAFA2BCCA19E00D932F3 /* WithdrawalModel.swift in Sources */,
 				00B7C4092BCA695C009AC333 /* LoginBody.swift in Sources */,
 				00A49CFD2BEA8BA10058F35B /* UpdatePostNetworkError.swift in Sources */,
 				005E8F212BE0E89E00B341A5 /* LikeParams.swift in Sources */,
+				00554FD02BF7444C005CC833 /* CreateRoomNetworkError.swift in Sources */,
+				00554FD62BF75095005CC833 /* FetchChattingHistoryParams.swift in Sources */,
 				00B67D872BD824710097ACDE /* PreviewViewController.swift in Sources */,
 				000AD25A2BD258EA00FC7768 /* DetailDisplayInnerCollectionViewCell.swift in Sources */,
 				0002C12B2BD99A1900AE36EC /* MapPreviewViewController.swift in Sources */,
@@ -2140,6 +2228,7 @@
 				003E23192BF4943F000BF3D7 /* PinterestLayout.swift in Sources */,
 				0034FAEF2BCC9AA200D932F3 /* ProfileViewController.swift in Sources */,
 				00EE56002BEC99540016A791 /* Data+Extensions.swift in Sources */,
+				001F134F2BF635F10083BAD6 /* ChattingListModel.swift in Sources */,
 				00A49D002BEAA00E0058F35B /* SettingTableViewCell.swift in Sources */,
 				001C92032BD6A2820028E67B /* UIViewController+Extensions.swift in Sources */,
 				00242C592BD7C7CA00B4C96E /* BaseBottomViewViewController.swift in Sources */,
@@ -2154,6 +2243,7 @@
 				00AFF6092BCD2AAD006D319A /* HomeCollectionViewCellTopView.swift in Sources */,
 				00A49CFB2BEA78390058F35B /* InputDonationViewModel.swift in Sources */,
 				002720A12BDFD65B004ADC5C /* FollowParams.swift in Sources */,
+				001F134A2BF62FF40083BAD6 /* MyDirectMessageTableViewCell.swift in Sources */,
 				009AFAEC2BDA7530003A45BF /* ProfileCollectionViewCell.swift in Sources */,
 				00E4D9BB2BE3AC6500C641BE /* EditPostNetworkError.swift in Sources */,
 				001253F62BD4155B0065F1E6 /* CommentRouter.swift in Sources */,
@@ -2180,6 +2270,7 @@
 				009F075E2BE672380048FF15 /* ValidatePaymentBody.swift in Sources */,
 				0003E9322BD54B0800695D40 /* Label+Extension.swift in Sources */,
 				00E4D9B32BE3A6EB00C641BE /* UploadImagesNetworkError.swift in Sources */,
+				001F134C2BF634090083BAD6 /* DirectMessageTableViewSectionDataModel.swift in Sources */,
 				003E231F2BF4B459000BF3D7 /* CachedImageManager.swift in Sources */,
 				00EA27802BDE728500EE3F9C /* ValidateEmailModel.swift in Sources */,
 				0010414B2BDB25D400E5FDA1 /* PostCustomView.swift in Sources */,
@@ -2204,7 +2295,7 @@
 				00EA27762BDE3D7200EE3F9C /* BirthDaySignUpViewModel.swift in Sources */,
 				00FE92B32BCE56F600554D0F /* FetchPostsQuery.swift in Sources */,
 				007ADD312BEE934D00C1A6ED /* LoadingFooterView.swift in Sources */,
-				001F133F2BF5F0420083BAD6 /* DirectMessageTableViewCell.swift in Sources */,
+				001F133F2BF5F0420083BAD6 /* OpponentDirectMessageTableViewCell.swift in Sources */,
 				003C82C22BDCD5AF003315E1 /* EditProfileViewController.swift in Sources */,
 				009AFAF22BDA7629003A45BF /* ContentsCollectionViewCell.swift in Sources */,
 				00E4D9B92BE3AC5600C641BE /* FetchPostNetworkError.swift in Sources */,
@@ -2229,6 +2320,7 @@
 				00E4D9D72BE3B27C00C641BE /* FetchOtherProfileNetworkError.swift in Sources */,
 				00E414F22BD94FFC00C76BE4 /* CLPlacemark+Extensions.swift in Sources */,
 				002720862BDF87A3004ADC5C /* FollowViewController.swift in Sources */,
+				00554FD32BF75009005CC833 /* FetchChattingHistoryQuery.swift in Sources */,
 				0003E93B2BD584AF00695D40 /* SelectImageCollectionViewCell.swift in Sources */,
 				00E414EC2BD9186400C76BE4 /* ImageFileListModel.swift in Sources */,
 				00B7C3F72BCA5F38009AC333 /* SignInViewController.swift in Sources */,
@@ -2265,14 +2357,18 @@
 				002720A82BDFF2F2004ADC5C /* UIView+Extensions.swift in Sources */,
 				0065D9E02BE73A09004DD1F6 /* SearchCurrentUserLocationError.swift in Sources */,
 				00E414F02BD93C5500C76BE4 /* WritePostBody.swift in Sources */,
+				00554FC62BF74065005CC833 /* ChatRouter.swift in Sources */,
+				00554FC92BF74126005CC833 /* CreateRoomBody.swift in Sources */,
 				00EA277A2BDE3EAC00EE3F9C /* PhoneNumberSignUpView.swift in Sources */,
 				0002C1272BD98A4700AE36EC /* RowView.swift in Sources */,
 				00AFF6022BCD152E006D319A /* CellIdentifiable.swift in Sources */,
 				000AD2672BD2849900FC7768 /* SeparatorView.swift in Sources */,
 				00B67D842BD810570097ACDE /* RecommendedVisitTimeViewModel.swift in Sources */,
+				00554FCB2BF7414F005CC833 /* ChatManager.swift in Sources */,
 				001253F82BD415A90065F1E6 /* WriteCommentParams.swift in Sources */,
 				00E1D9492BE4F33A00501328 /* CustomProfileButton.swift in Sources */,
 				00E4D9AC2BE3A69B00C641BE /* SignUpNetworkError.swift in Sources */,
+				00554FCD2BF741D1005CC833 /* CreateRoomModel.swift in Sources */,
 				001253E52BD373E50065F1E6 /* CommentViewModel.swift in Sources */,
 				00DD46852BE268A3001B3ADA /* FollowType.swift in Sources */,
 				00E4D9B72BE3AC4500C641BE /* FetchPostListNetworkError.swift in Sources */,

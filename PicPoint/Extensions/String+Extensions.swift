@@ -32,6 +32,16 @@ extension String {
         return outputDateFormatter.string(from: date)
     }
     
+    var getChattingDateString: String {
+        let date = self.convertToISO8601DateType
+        guard let date = date else { return "" }
+        
+        let outputDateFormatter = DateFormatter()
+        outputDateFormatter.locale = Locale(identifier: "ko_KR")
+        outputDateFormatter.dateFormat = "a h:mm"
+        return outputDateFormatter.string(from: date)
+    }
+    
     var timeAgoToDisplay: String {
         let date = self.convertToISO8601DateType
         
