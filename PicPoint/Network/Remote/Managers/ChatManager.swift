@@ -76,4 +76,40 @@ struct ChatManager {
             return Disposables.create()
         }
     }
+    
+    static func sendChat(
+        params: SendChatParams,
+        body: SendChatBody
+    ) -> Single<Chat> {
+        return Single<Chat>.create { singleObserver in
+            do {
+                let urlRequest = try ChatRouter
+                    .sendChat(params: params, body: body)
+                    .asURLRequest()
+                
+                CustomSession.shared.session.request(urlRequest)
+                    .validate(statusCode: 200...500)
+                    .responseDecodable(of: Chat.self) { response in
+                        switch response.result {
+                        case .success(let newChat):
+                            singleObserver(.success(newChat))
+                        case .failure(_):
+                            if let statusCode = response.response?.statusCode {
+                                if let commonNetworkError = CommonNetworkError(rawValue: statusCode) {
+                                    singleObserver(.failure(commonNetworkError))
+                                } else if let sendChatNetworkError = SendChatNetworkError(rawValue: statusCode) {
+                                    singleObserver(.failure(sendChatNetworkError))
+                                } else {
+                                    singleObserver(.failure(CommonNetworkError.unknownError))
+                                }
+                            }
+                        }
+                    }
+            } catch {
+                singleObserver(.failure(CommonNetworkError.unknownError))
+            }
+            
+            return Disposables.create()
+        }
+    }
 }

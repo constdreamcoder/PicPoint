@@ -11,6 +11,7 @@ import Alamofire
 enum ChatRouter {
     case createRoom(body: CreateRoomBody)
     case fetchChattingHistory(params: FetchChattingHistoryParams, query: FetchChattingHistoryQuery)
+    case sendChat(params: SendChatParams, body: SendChatBody)
 }
 
 extension ChatRouter: TargetType {
@@ -21,7 +22,7 @@ extension ChatRouter: TargetType {
     
     var method: HTTPMethod {
         switch self {
-        case .createRoom:
+        case .createRoom, .sendChat:
             return .post
         case .fetchChattingHistory:
             return .get
@@ -30,14 +31,14 @@ extension ChatRouter: TargetType {
     
     var path: String {
         switch self {
-        case .createRoom, .fetchChattingHistory:
+        case .createRoom, .fetchChattingHistory, .sendChat:
             return "/chats"
         }
     }
     
     var header: [String : String] {
         switch self {
-        case .createRoom:
+        case .createRoom, .sendChat:
             return [
                 HTTPHeader.sesacKey.rawValue: APIKeys.sesacKey,
                 HTTPHeader.contentType.rawValue: HTTPHeader.json.rawValue
@@ -55,12 +56,14 @@ extension ChatRouter: TargetType {
             return nil
         case .fetchChattingHistory(let params, _):
             return "/\(params.roomId)"
+        case .sendChat(let params, _):
+            return "/\(params.roomId)"
         }
     }
     
     var queryItems: [URLQueryItem]? {
         switch self {
-        case .createRoom:
+        case .createRoom, .sendChat:
             return nil
         case .fetchChattingHistory(_, let query):
             return [
@@ -76,6 +79,9 @@ extension ChatRouter: TargetType {
             return try? encoder.encode(body)
         case .fetchChattingHistory:
             return nil
+        case .sendChat(_, let body):
+            let encoder = JSONEncoder()
+            return try? encoder.encode(body)
         }
     }
 }

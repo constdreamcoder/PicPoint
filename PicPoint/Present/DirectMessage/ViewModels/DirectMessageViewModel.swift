@@ -15,20 +15,21 @@ final class DirectMessageViewModel: ViewModelType {
     private let roomInfoSubject = BehaviorSubject<CreateRoomModel?>(value: nil)
     private let chattingListSubject = BehaviorSubject<[Chat]>(value: [])
     private let sectionsRelay = BehaviorRelay<[DirectMessageTableViewSectionDataModel]>(value: [])
+    private let chattingTextSubject = PublishSubject<String>()
 
     struct Input {
-        let commentTextEvent: Observable<String>
+        let chattingTextEvent: Observable<String>
         let didBeginEditing: ControlEvent<Void>
         let didEndEditing: ControlEvent<Void>
         let sendButtonTap: ControlEvent<Void>
     }
     
     struct Output {
-        let commentText: Driver<String>
-        let commentDidBeginEditingTrigger: Driver<Void>
-        let commentDidEndEditingTrigger: Driver<Void>
-        let commentSendingValid: Driver<Bool>
-        let sendButtonTapTrigger: Driver<Void>
+        let chattingText: Driver<String>
+        let chattingDidBeginEditingTrigger: Driver<Void>
+        let chattingDidEndEditingTrigger: Driver<Void>
+        let chattingSendingValid: Driver<Bool>
+        let clearSendButtonTrigger: Driver<Void>
         let sections: Driver<[DirectMessageTableViewSectionDataModel]>
     }
     
@@ -44,7 +45,7 @@ final class DirectMessageViewModel: ViewModelType {
             .flatMap { value in
                 ChatManager.fetchChattingHistory(
                     params: FetchChattingHistoryParams(roomId: value.roomId),
-//                    query: FetchChattingHistoryQuery(cursor_date: value.lastChat?.createdAt)
+                    //                    query: FetchChattingHistoryQuery(cursor_date: value.lastChat?.createdAt)
                     query: FetchChattingHistoryQuery(cursor_date: nil)
                 )
                 .catch { error in
@@ -58,17 +59,12 @@ final class DirectMessageViewModel: ViewModelType {
                 SocketIOManager.shared.establishConnection()
             }
             .disposed(by: disposeBag)
-            
-    }
-    
-    deinit {
-        print("deinit - DirectMessageViewModel")
-        SocketIOManager.shared.leaveConnection()
-        SocketIOManager.shared.removeAllEventHandlers()
+        
     }
     
     func transform(input: Input) -> Output {
-        let commentSendingValidation = BehaviorRelay<Bool>(value: false)
+        let chattingSendingValidation = BehaviorRelay<Bool>(value: false)
+        let clearSendButtonTrigger = PublishRelay<Void>()
         
         chattingListSubject
             .subscribe(with: self) { owner, chattingList in
@@ -82,25 +78,55 @@ final class DirectMessageViewModel: ViewModelType {
             }
             .disposed(by: disposeBag)
         
-        let commentTextEventTrigger = input.commentTextEvent
-            .map {
-                if $0.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
-                    commentSendingValidation.accept(false)
+        let chattingTextEventTrigger = input.chattingTextEvent
+            .withUnretained(self)
+            .map { owner, chattingText in
+                if chattingText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+                    chattingSendingValidation.accept(false)
                 } else {
-                    commentSendingValidation.accept(true)
+                    chattingSendingValidation.accept(true)
+                    owner.chattingTextSubject.onNext(chattingText)
                 }
-                return $0
+                return chattingText
             }
         
-        let sendButtonTapTrigger = input.sendButtonTap
+        input.sendButtonTap
             .debounce(.milliseconds(200), scheduler: MainScheduler.instance)
+            .withLatestFrom(roomInfoSubject)
+            .withLatestFrom(chattingTextSubject) {
+                (roomId: $0?.roomId ?? "", chattingText: $1)
+            }
+            .flatMap { value in
+                ChatManager.sendChat(
+                    params: SendChatParams(roomId: value.roomId),
+                    body: SendChatBody(content: value.chattingText)
+                )
+                .catch { error in
+                    print(error.errorCode, error.errorDesc)
+                    return Single<Chat>.never()
+                }
+            }
+            .map { newChat in
+                // TODO: - DB에 저장하고 다시 불러오기
+                return newChat
+            }
+            .withLatestFrom(chattingListSubject) { newChat, chattingList in
+                var chattingList = chattingList
+                chattingList.append(newChat)
+                return chattingList
+            }
+            .subscribe(with: self) { owner, updatedChattingList in
+                owner.chattingListSubject.onNext(updatedChattingList)
+                clearSendButtonTrigger.accept(())
+            }
+            .disposed(by: disposeBag)
         
         return Output(
-            commentText: commentTextEventTrigger.asDriver(onErrorJustReturn: ""),
-            commentDidBeginEditingTrigger: input.didBeginEditing.asDriver(),
-            commentDidEndEditingTrigger: input.didEndEditing.asDriver(),
-            commentSendingValid: commentSendingValidation.asDriver(),
-            sendButtonTapTrigger: sendButtonTapTrigger.asDriver(onErrorJustReturn: ()),
+            chattingText: chattingTextEventTrigger.asDriver(onErrorJustReturn: ""),
+            chattingDidBeginEditingTrigger: input.didBeginEditing.asDriver(),
+            chattingDidEndEditingTrigger: input.didEndEditing.asDriver(),
+            chattingSendingValid: chattingSendingValidation.asDriver(),
+            clearSendButtonTrigger: clearSendButtonTrigger.asDriver(onErrorJustReturn: ()),
             sections: sectionsRelay.asDriver()
         )
     }

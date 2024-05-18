@@ -42,7 +42,7 @@
 		001253E72BD3A00B0065F1E6 /* CommentTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001253E62BD3A00B0065F1E6 /* CommentTableViewCell.swift */; };
 		001253EA2BD3B1360065F1E6 /* CommentProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001253E92BD3B1360065F1E6 /* CommentProfileView.swift */; };
 		001253EF2BD3C5010065F1E6 /* FetchPostParams.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001253EE2BD3C5010065F1E6 /* FetchPostParams.swift */; };
-		001253F32BD3DC8C0065F1E6 /* CommentWritingSectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001253F22BD3DC8C0065F1E6 /* CommentWritingSectionView.swift */; };
+		001253F32BD3DC8C0065F1E6 /* TextWritingSectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001253F22BD3DC8C0065F1E6 /* TextWritingSectionView.swift */; };
 		001253F62BD4155B0065F1E6 /* CommentRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001253F52BD4155B0065F1E6 /* CommentRouter.swift */; };
 		001253F82BD415A90065F1E6 /* WriteCommentParams.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001253F72BD415A90065F1E6 /* WriteCommentParams.swift */; };
 		001253FE2BD418350065F1E6 /* WriteCommentBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001253FD2BD418350065F1E6 /* WriteCommentBody.swift */; };
@@ -116,6 +116,9 @@
 		0049D88B2BC96B4900F59852 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0049D8892BC96B4900F59852 /* LaunchScreen.storyboard */; };
 		004CAC862BF7AEE40090D0A6 /* SocketIO in Frameworks */ = {isa = PBXBuildFile; productRef = 004CAC852BF7AEE40090D0A6 /* SocketIO */; };
 		004CAC882BF7B39F0090D0A6 /* SocketIOManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 004CAC872BF7B39F0090D0A6 /* SocketIOManager.swift */; };
+		004CAC8A2BF7C2A90090D0A6 /* SendChatBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = 004CAC892BF7C2A90090D0A6 /* SendChatBody.swift */; };
+		004CAC8C2BF7C38B0090D0A6 /* SendChatParams.swift in Sources */ = {isa = PBXBuildFile; fileRef = 004CAC8B2BF7C38B0090D0A6 /* SendChatParams.swift */; };
+		004CAC8E2BF7C5F10090D0A6 /* SendChatNetworkError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 004CAC8D2BF7C5F10090D0A6 /* SendChatNetworkError.swift */; };
 		004FE2702BE8A4ED0044C323 /* ShowOnMapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 004FE26F2BE8A4ED0044C323 /* ShowOnMapViewController.swift */; };
 		004FE2742BE8A5D70044C323 /* ShowOnMapViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 004FE2732BE8A5D70044C323 /* ShowOnMapViewModel.swift */; };
 		004FE2772BE8BBA70044C323 /* SelectedPlaceDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 004FE2762BE8BBA70044C323 /* SelectedPlaceDetailsView.swift */; };
@@ -320,7 +323,7 @@
 		001253E62BD3A00B0065F1E6 /* CommentTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentTableViewCell.swift; sourceTree = "<group>"; };
 		001253E92BD3B1360065F1E6 /* CommentProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentProfileView.swift; sourceTree = "<group>"; };
 		001253EE2BD3C5010065F1E6 /* FetchPostParams.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchPostParams.swift; sourceTree = "<group>"; };
-		001253F22BD3DC8C0065F1E6 /* CommentWritingSectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentWritingSectionView.swift; sourceTree = "<group>"; };
+		001253F22BD3DC8C0065F1E6 /* TextWritingSectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextWritingSectionView.swift; sourceTree = "<group>"; };
 		001253F52BD4155B0065F1E6 /* CommentRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentRouter.swift; sourceTree = "<group>"; };
 		001253F72BD415A90065F1E6 /* WriteCommentParams.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WriteCommentParams.swift; sourceTree = "<group>"; };
 		001253FD2BD418350065F1E6 /* WriteCommentBody.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WriteCommentBody.swift; sourceTree = "<group>"; };
@@ -391,6 +394,9 @@
 		0049D88A2BC96B4900F59852 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		0049D88C2BC96B4900F59852 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		004CAC872BF7B39F0090D0A6 /* SocketIOManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SocketIOManager.swift; sourceTree = "<group>"; };
+		004CAC892BF7C2A90090D0A6 /* SendChatBody.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendChatBody.swift; sourceTree = "<group>"; };
+		004CAC8B2BF7C38B0090D0A6 /* SendChatParams.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendChatParams.swift; sourceTree = "<group>"; };
+		004CAC8D2BF7C5F10090D0A6 /* SendChatNetworkError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendChatNetworkError.swift; sourceTree = "<group>"; };
 		004FE26F2BE8A4ED0044C323 /* ShowOnMapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowOnMapViewController.swift; sourceTree = "<group>"; };
 		004FE2732BE8A5D70044C323 /* ShowOnMapViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowOnMapViewModel.swift; sourceTree = "<group>"; };
 		004FE2762BE8BBA70044C323 /* SelectedPlaceDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectedPlaceDetailsView.swift; sourceTree = "<group>"; };
@@ -812,7 +818,7 @@
 		001253F42BD3E4110065F1E6 /* SubViews */ = {
 			isa = PBXGroup;
 			children = (
-				001253F22BD3DC8C0065F1E6 /* CommentWritingSectionView.swift */,
+				001253F22BD3DC8C0065F1E6 /* TextWritingSectionView.swift */,
 			);
 			path = SubViews;
 			sourceTree = "<group>";
@@ -1316,6 +1322,7 @@
 			isa = PBXGroup;
 			children = (
 				00554FC82BF74126005CC833 /* CreateRoomBody.swift */,
+				004CAC892BF7C2A90090D0A6 /* SendChatBody.swift */,
 			);
 			path = Chat;
 			sourceTree = "<group>";
@@ -1325,6 +1332,7 @@
 			children = (
 				00554FCF2BF7444C005CC833 /* CreateRoomNetworkError.swift */,
 				00554FD72BF751D9005CC833 /* FetchChattingHistoryNetworkError.swift */,
+				004CAC8D2BF7C5F10090D0A6 /* SendChatNetworkError.swift */,
 			);
 			path = ChatErrors;
 			sourceTree = "<group>";
@@ -1341,6 +1349,7 @@
 			isa = PBXGroup;
 			children = (
 				00554FD52BF75095005CC833 /* FetchChattingHistoryParams.swift */,
+				004CAC8B2BF7C38B0090D0A6 /* SendChatParams.swift */,
 			);
 			path = Chat;
 			sourceTree = "<group>";
@@ -2199,6 +2208,7 @@
 				00E4D9BF2BE3AC8F00C641BE /* FetchPostsForEachUserNetworkError.swift in Sources */,
 				00EE55FE2BEC98DF0016A791 /* EventLogger.swift in Sources */,
 				0010416A2BDBF59A00E5FDA1 /* ProfileRouter.swift in Sources */,
+				004CAC8A2BF7C2A90090D0A6 /* SendChatBody.swift in Sources */,
 				003E23172BF49363000BF3D7 /* HashTagSearchViewModel.swift in Sources */,
 				0010415C2BDBBF2000E5FDA1 /* MyPostViewModel.swift in Sources */,
 				00F9AB022BEFB06A00E51C65 /* RecentKeywordRepository.swift in Sources */,
@@ -2258,6 +2268,7 @@
 				002720942BDFC033004ADC5C /* FollowingViewController.swift in Sources */,
 				0010417A2BDC2C4600E5FDA1 /* FetchMyLikesModel.swift in Sources */,
 				0003E9392BD57ECF00695D40 /* SelectImageViewModel.swift in Sources */,
+				004CAC8E2BF7C5F10090D0A6 /* SendChatNetworkError.swift in Sources */,
 				00E4D9C62BE3AF7300C641BE /* DeleteCommentNetworkError.swift in Sources */,
 				00760E4A2BD5128600741C40 /* AddPostCollectionViewSectionDataModel.swift in Sources */,
 				00DD46872BE27A86001B3ADA /* NotificationCenter+Extensions.swift in Sources */,
@@ -2298,7 +2309,7 @@
 				00FE92AC2BCE53EA00554D0F /* PostManager.swift in Sources */,
 				0046D0692BF257CA001BE9CC /* DetailCollectionViewSecondSectionDataModel.swift in Sources */,
 				00E4D9BD2BE3AC7600C641BE /* DeletePostNetworkError.swift in Sources */,
-				001253F32BD3DC8C0065F1E6 /* CommentWritingSectionView.swift in Sources */,
+				001253F32BD3DC8C0065F1E6 /* TextWritingSectionView.swift in Sources */,
 				00EA27762BDE3D7200EE3F9C /* BirthDaySignUpViewModel.swift in Sources */,
 				00FE92B32BCE56F600554D0F /* FetchPostsQuery.swift in Sources */,
 				007ADD312BEE934D00C1A6ED /* LoadingFooterView.swift in Sources */,
@@ -2318,6 +2329,7 @@
 				004FE2742BE8A5D70044C323 /* ShowOnMapViewModel.swift in Sources */,
 				0065D9DD2BE727AB004DD1F6 /* LocationManager.swift in Sources */,
 				003C82CA2BDD5906003315E1 /* EditMyProfileBody.swift in Sources */,
+				004CAC8C2BF7C38B0090D0A6 /* SendChatParams.swift in Sources */,
 				00AA9A792BCC24B90069C55C /* HomeTabBarViewController.swift in Sources */,
 				00B7C4112BCA6BB7009AC333 /* UserManager.swift in Sources */,
 				00B7C3FA2BCA5F60009AC333 /* UIViewControllerConfiguration.swift in Sources */,

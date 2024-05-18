@@ -26,7 +26,7 @@ final class DirectMessageViewController: BaseViewController {
         return tableView
     }()
     
-    private let chatWritingSectionView = CommentWritingSectionView("")
+    private let chatWritingSectionView = TextWritingSectionView("")
     
     private let viewModel: DirectMessageViewModel
 
@@ -79,7 +79,13 @@ final class DirectMessageViewController: BaseViewController {
         
         tabBarController?.tabBar.isHidden = true
     }
-
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        SocketIOManager.shared.leaveConnection()
+        SocketIOManager.shared.removeAllEventHandlers()
+    }
 }
 
 extension DirectMessageViewController: UIViewControllerConfiguration {
@@ -109,20 +115,20 @@ extension DirectMessageViewController: UIViewControllerConfiguration {
 
     func bind() {
         
-        let textView = chatWritingSectionView.commentTextView
+        let textView = chatWritingSectionView.textView
         
-        let commentText = textView.rx.text.orEmpty
+        let chattingText = textView.rx.text.orEmpty
             .withUnretained(self)
-            .map { owner, commentText in
-                if commentText == owner.chatWritingSectionView.textViewPlaceHolder {
+            .map { owner, chattingText in
+                if chattingText == owner.chatWritingSectionView.textViewPlaceHolder {
                     return ""
                 } else {
-                    return commentText
+                    return chattingText
                 }
             }
 
         let input = DirectMessageViewModel.Input(
-            commentTextEvent: commentText,
+            chattingTextEvent: chattingText,
             didBeginEditing: textView.rx.didBeginEditing,
             didEndEditing: textView.rx.didEndEditing, 
             sendButtonTap: chatWritingSectionView.sendButton.rx.tap
@@ -134,9 +140,19 @@ extension DirectMessageViewController: UIViewControllerConfiguration {
             .drive(tableView.rx.items(dataSource: dataSource))
             .disposed(by: disposeBag)
         
-        output.commentText
+        output.sections
+            .drive(with: self) { owner, sections in
+                let itemCount = sections[0].items.count
+                guard itemCount > 0 else { return }
+                let index = itemCount - 1
+                owner.tableView.scrollToRow(
+                    at: IndexPath(row: index, section: 0), at: .bottom, animated: true)
+            }
+            .disposed(by: disposeBag)
+        
+        output.chattingText
             .drive(with: self) { owner, commentText in
-                let textVeiw = owner.chatWritingSectionView.commentTextView
+                let textVeiw = owner.chatWritingSectionView.textView
                 let size = CGSize(
                     width: textVeiw.frame.size.width,
                     height: .infinity
@@ -157,7 +173,7 @@ extension DirectMessageViewController: UIViewControllerConfiguration {
             }
             .disposed(by: disposeBag)
         
-        output.commentDidBeginEditingTrigger
+        output.chattingDidBeginEditingTrigger
             .drive(with: self) { owner, _ in
                 if textView.text == owner.chatWritingSectionView.textViewPlaceHolder
                     && textView.textColor == .lightGray {
@@ -167,7 +183,7 @@ extension DirectMessageViewController: UIViewControllerConfiguration {
             }
             .disposed(by: disposeBag)
         
-        output.commentDidEndEditingTrigger
+        output.chattingDidEndEditingTrigger
             .drive(with: self) { owner, _ in
                 if textView.textColor == .black
                     && textView.text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
@@ -177,13 +193,13 @@ extension DirectMessageViewController: UIViewControllerConfiguration {
             }
             .disposed(by: disposeBag)
         
-        output.commentSendingValid
+        output.chattingSendingValid
             .drive(chatWritingSectionView.sendButton.rx.isEnabled)
             .disposed(by: disposeBag)
         
-        output.sendButtonTapTrigger
+        output.clearSendButtonTrigger
             .drive(with: self) { owner, _ in
-                owner.chatWritingSectionView.commentTextView.text = nil
+                owner.chatWritingSectionView.textView.text = nil
             }
             .disposed(by: disposeBag)
     }

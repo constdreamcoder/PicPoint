@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 
-final class CommentWritingSectionView: UIView {
+final class TextWritingSectionView: UIView {
     
     let sendImageButton: UIButton = {
         let button = UIButton()
@@ -20,7 +20,7 @@ final class CommentWritingSectionView: UIView {
         return button
     }()
     
-    lazy var commentTextView: UITextView = {
+    lazy var textView: UITextView = {
         let textView = UITextView()
         textView.text = textViewPlaceHolder
         textView.textColor = .lightGray
@@ -62,11 +62,11 @@ final class CommentWritingSectionView: UIView {
     }
 }
 
-extension CommentWritingSectionView: UIViewConfiguration {
+extension TextWritingSectionView: UIViewConfiguration {
     func configureConstraints() {
         [
             sendImageButton,
-            commentTextView,
+            textView,
             sendButton
         ].forEach { addSubview($0) }
         
@@ -75,7 +75,7 @@ extension CommentWritingSectionView: UIViewConfiguration {
             $0.centerY.equalTo(sendButton)
         }
         
-        commentTextView.snp.makeConstraints {
+        textView.snp.makeConstraints {
             $0.top.equalToSuperview().inset(8.0)
             $0.leading.equalTo(sendImageButton.snp.trailing).offset(8.0)
             $0.bottom.equalToSuperview().inset(16.0)
@@ -85,7 +85,7 @@ extension CommentWritingSectionView: UIViewConfiguration {
         
         sendButton.snp.makeConstraints {
             $0.trailing.equalToSuperview().inset(8.0)
-            $0.bottom.equalTo(commentTextView)
+            $0.bottom.equalTo(textView)
             $0.width.equalTo(54.0)
             $0.height.equalTo(34.0)
         }

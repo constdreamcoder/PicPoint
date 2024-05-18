@@ -31,7 +31,7 @@ final class CommentViewController: BaseViewController {
         return tableView
     }()
     
-    let commentWritingSectionView = CommentWritingSectionView()
+    let commentWritingSectionView = TextWritingSectionView()
     
     let bottomSectionView: UIView = {
         let view = UIView()
@@ -125,7 +125,7 @@ extension CommentViewController: UIViewControllerConfiguration {
     
     func bind() {
         
-        let textView = commentWritingSectionView.commentTextView
+        let textView = commentWritingSectionView.textView
         
         let commentDeleteEvent = Observable.zip(
             tableView.rx.itemDeleted,
@@ -186,7 +186,7 @@ extension CommentViewController: UIViewControllerConfiguration {
         
         output.commentText
             .drive(with: self) { owner, commentText in
-                let textVeiw = owner.commentWritingSectionView.commentTextView
+                let textVeiw = owner.commentWritingSectionView.textView
                 let size = CGSize(
                     width: textVeiw.frame.size.width,
                     height: .infinity
@@ -229,7 +229,7 @@ extension CommentViewController: UIViewControllerConfiguration {
         
         output.sendButtonTapTrigger
             .drive(with: self) { owner, _ in
-                owner.commentWritingSectionView.commentTextView.text = nil
+                owner.commentWritingSectionView.textView.text = nil
             }
             .disposed(by: disposeBag)
         
