@@ -1,5 +1,5 @@
 //
-//  CreateRoomModel.swift
+//  Room.swift
 //  PicPoint
 //
 //  Created by SUCHAN CHANG on 5/17/24.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct CreateRoomModel: Decodable {
+struct Room: Decodable {
     let roomId: String
     let createdAt: String
     let updatedAt: String

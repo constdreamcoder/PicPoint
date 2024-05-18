@@ -18,6 +18,7 @@ final class SettingsViewModel: ViewModelType {
         let logoutTrigger: PublishSubject<Void>
         let withdrawalTrigger: PublishSubject<Void>
         let donationDetailsCellTapped: PublishSubject<Void>
+        let myChatRoomListCellTapped: PublishSubject<Void>
     }
     
     struct Output {
@@ -25,6 +26,7 @@ final class SettingsViewModel: ViewModelType {
         let questionWithdrawalTrigger: Driver<Void>
         let successTrigger: Driver<Void>
         let goToPaymentListVCTrigger: Driver<[ValidatePaymentModel]>
+        let goToMyChatRoomsVCTrigger: Driver<[Room]>
     }
     
     func transform(input: Input) -> Output {
@@ -38,6 +40,15 @@ final class SettingsViewModel: ViewModelType {
                     .catch { error in
                         print(error.errorCode, error.errorDesc)
                         return Single<[ValidatePaymentModel]>.never()
+                    }
+            }
+        
+        let goToMyChatRoomsVCTrigger = input.myChatRoomListCellTapped
+            .flatMap { _ in
+                ChatManager.fetchMyChatRoomList()
+                    .catch { error in
+                        print(error.errorCode, error.errorDesc)
+                        return Single<[Room]>.never()
                     }
             }
         
@@ -73,8 +84,6 @@ final class SettingsViewModel: ViewModelType {
             .subscribe(with: self) { owner, withdrawalModel in
                 UserDefaultsManager.clearAllData()
                 successTrigger.accept(())
-            } onError: { owner, error in
-                print("회원탈퇴 오류 발생, \(error)")
             }
             .disposed(by: disposeBag)
         
@@ -82,7 +91,8 @@ final class SettingsViewModel: ViewModelType {
             questionLogoutTrigger: questionLogoutTrigger.asDriver(onErrorJustReturn: ()),
             questionWithdrawalTrigger: questionWithdrawalTrigger.asDriver(onErrorJustReturn: ()),
             successTrigger: successTrigger.asDriver(onErrorJustReturn: ()),
-            goToPaymentListVCTrigger: goToPaymentListVCTrigger.asDriver(onErrorJustReturn: [])
+            goToPaymentListVCTrigger: goToPaymentListVCTrigger.asDriver(onErrorJustReturn: []),
+            goToMyChatRoomsVCTrigger: goToMyChatRoomsVCTrigger.asDriver(onErrorJustReturn: [])
         )
     }
 }

@@ -228,9 +228,9 @@ extension ProfileViewController: UIViewControllerConfiguration {
             .disposed(by: disposeBag)
         
         output.goToDirectMessageVCTrigger
-            .drive(with: self) { owner, createRoomModel in
-                guard let createRoomModel else { return }
-                let viewModel = DirectMessageViewModel(createRoomModel)
+            .drive(with: self) { owner, room in
+                guard let room else { return }
+                let viewModel = DirectMessageViewModel(room)
                 let directMessageVC = DirectMessageViewController(directMessageViewModel: viewModel)
                 owner.navigationController?.pushViewController(directMessageVC, animated: true)
             }

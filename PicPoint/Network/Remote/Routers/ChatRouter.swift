@@ -12,6 +12,7 @@ enum ChatRouter {
     case createRoom(body: CreateRoomBody)
     case fetchChattingHistory(params: FetchChattingHistoryParams, query: FetchChattingHistoryQuery)
     case sendChat(params: SendChatParams, body: SendChatBody)
+    case fetchMyChatRoomList
 }
 
 extension ChatRouter: TargetType {
@@ -24,14 +25,14 @@ extension ChatRouter: TargetType {
         switch self {
         case .createRoom, .sendChat:
             return .post
-        case .fetchChattingHistory:
+        case .fetchChattingHistory, .fetchMyChatRoomList:
             return .get
         }
     }
     
     var path: String {
         switch self {
-        case .createRoom, .fetchChattingHistory, .sendChat:
+        case .createRoom, .fetchChattingHistory, .sendChat, .fetchMyChatRoomList:
             return "/chats"
         }
     }
@@ -43,7 +44,7 @@ extension ChatRouter: TargetType {
                 HTTPHeader.sesacKey.rawValue: APIKeys.sesacKey,
                 HTTPHeader.contentType.rawValue: HTTPHeader.json.rawValue
             ]
-        case .fetchChattingHistory:
+        case .fetchChattingHistory, .fetchMyChatRoomList:
             return [
                 HTTPHeader.sesacKey.rawValue: APIKeys.sesacKey,
             ]
@@ -52,7 +53,7 @@ extension ChatRouter: TargetType {
     
     var parameters: String? {
         switch self {
-        case .createRoom:
+        case .createRoom, .fetchMyChatRoomList:
             return nil
         case .fetchChattingHistory(let params, _):
             return "/\(params.roomId)"
@@ -63,7 +64,7 @@ extension ChatRouter: TargetType {
     
     var queryItems: [URLQueryItem]? {
         switch self {
-        case .createRoom, .sendChat:
+        case .createRoom, .sendChat, .fetchMyChatRoomList:
             return nil
         case .fetchChattingHistory(_, let query):
             return [
@@ -74,11 +75,11 @@ extension ChatRouter: TargetType {
     
     var body: Data? {
         switch self {
+        case .fetchChattingHistory, .fetchMyChatRoomList:
+            return nil
         case .createRoom(let body):
             let encoder = JSONEncoder()
             return try? encoder.encode(body)
-        case .fetchChattingHistory:
-            return nil
         case .sendChat(_, let body):
             let encoder = JSONEncoder()
             return try? encoder.encode(body)

@@ -46,7 +46,7 @@ final class ProfileViewModel: ViewModelType {
         let moveToDetailVCTrigger: Driver<Post?>
         let endRefreshTrigger: Driver<Void>
         let goToMapButtonTrigger: Driver<(String?, [Post])>
-        let goToDirectMessageVCTrigger: Driver<CreateRoomModel?>
+        let goToDirectMessageVCTrigger: Driver<Room?>
         let isHiddenTabBarTrigger: Driver<Bool>
     }
     
@@ -67,7 +67,7 @@ final class ProfileViewModel: ViewModelType {
         let unFollowTrigger = PublishSubject<FetchMyProfileModel>()
         let endRefreshTrigger = PublishRelay<Void>()
         let isHiddenTabBarTrigger = BehaviorRelay<Bool>(value: false)
-        let goToDirectMessageVCTrigger = PublishRelay<CreateRoomModel?>()
+        let goToDirectMessageVCTrigger = PublishRelay<Room?>()
         
         let sections: [SectionModelWrapper] = [
             SectionModelWrapper(
@@ -229,11 +229,11 @@ final class ProfileViewModel: ViewModelType {
                 ChatManager.createRoom(body: CreateRoomBody(opponent_id: userId))
                     .catch { error in
                         print(error.errorCode, error.errorDesc)
-                        return Single<CreateRoomModel>.never()
+                        return Single<Room>.never()
                     }
             }
-            .subscribe(with: self) { owner, createRoomModel in
-                goToDirectMessageVCTrigger.accept(createRoomModel)
+            .subscribe(with: self) { owner, room in
+                goToDirectMessageVCTrigger.accept(room)
             }
             .disposed(by: disposeBag)
                 

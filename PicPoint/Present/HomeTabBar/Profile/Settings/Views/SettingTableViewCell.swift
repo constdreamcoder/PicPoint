@@ -14,7 +14,7 @@ final class SettingTableViewCell: BaseTableViewCell {
     
     let titleLabel: UILabel = {
         let label = UILabel()
-        label.text = "후원내역 확인"
+        label.text = ""
         label.textColor = .black
         label.font = .boldSystemFont(ofSize: 18.0)
         return label

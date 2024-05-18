@@ -12,7 +12,7 @@ import RxCocoa
 final class DirectMessageViewModel: ViewModelType {
     var disposeBag = DisposeBag()
     
-    private let roomInfoSubject = BehaviorSubject<CreateRoomModel?>(value: nil)
+    private let roomInfoSubject = BehaviorSubject<Room?>(value: nil)
     private let chattingListSubject = BehaviorSubject<[Chat]>(value: [])
     private let sectionsRelay = BehaviorRelay<[DirectMessageTableViewSectionDataModel]>(value: [])
     private let chattingTextSubject = PublishSubject<String>()
@@ -33,14 +33,14 @@ final class DirectMessageViewModel: ViewModelType {
         let sections: Driver<[DirectMessageTableViewSectionDataModel]>
     }
     
-    init(_ createRoomModel: CreateRoomModel) {
-        Observable.just(createRoomModel)
+    init(_ room: Room) {
+        Observable.just(room)
             .withUnretained(self)
-            .map { owner, createRoomModel -> (roomId: String, lastChat: Chat?) in
-                SocketIOManager.shared.setupSocketEventListeners(createRoomModel.roomId)
+            .map { owner, room -> (roomId: String, lastChat: Chat?) in
+                SocketIOManager.shared.setupSocketEventListeners(room.roomId)
                 
-                owner.roomInfoSubject.onNext(createRoomModel)
-                return (createRoomModel.roomId, createRoomModel.lastChat)
+                owner.roomInfoSubject.onNext(room)
+                return (room.roomId, room.lastChat)
             }
             .flatMap { value in
                 ChatManager.fetchChattingHistory(

@@ -98,20 +98,22 @@ extension SettingsViewController: UIViewControllerConfiguration {
         let logoutTrigger = PublishSubject<Void>()
         let withdrawalTrigger = PublishSubject<Void>()
         let donationDetailsCellTapped = PublishSubject<Void>()
+        let myChatRoomListCellTapped = PublishSubject<Void>()
         
         let input = SettingsViewModel.Input(
             logoutButtonTapped: logoutButton.rx.tap,
             withdrawalButtonTapped: withdrawalButton.rx.tap,
             logoutTrigger: logoutTrigger,
             withdrawalTrigger: withdrawalTrigger,
-            donationDetailsCellTapped: donationDetailsCellTapped
+            donationDetailsCellTapped: donationDetailsCellTapped,
+            myChatRoomListCellTapped: myChatRoomListCellTapped
         )
         
         let output = viewModel.transform(input: input)
         
         Observable.just(SettingTableViewCellType.allCases)
             .bind(to: tableView.rx.items(cellIdentifier: SettingTableViewCell.identifier, cellType: SettingTableViewCell.self)) { index, element, cell in
-                
+                cell.titleLabel.text = element.title
             }
             .disposed(by: disposeBag)
         
@@ -119,6 +121,8 @@ extension SettingsViewController: UIViewControllerConfiguration {
             .bind { indexPath in
                 if indexPath.row == SettingTableViewCellType.donationDetailsCell.index {
                     donationDetailsCellTapped.onNext(())
+                } else if indexPath.row == SettingTableViewCellType.myChatRoomListCell.index {
+                    myChatRoomListCellTapped.onNext(())
                 }
             }
             .disposed(by: disposeBag)
@@ -166,6 +170,14 @@ extension SettingsViewController: UIViewControllerConfiguration {
                 let paymentListVM = PaymentListViewModel(paymentList)
                 let paymentListVC = PaymentListViewController(paymentListViewModel: paymentListVM)
                 owner.navigationController?.pushViewController(paymentListVC, animated: true)
+            }
+            .disposed(by: disposeBag)
+        
+        output.goToMyChatRoomsVCTrigger
+            .drive(with: self) { owner, myChatRoomList in
+                let myChatRoomsVM = MyChatRoomsViewModel()
+                let myChatRoomsVC = MyChatRoomsViewController(myChatRoomsViewModel: myChatRoomsVM)
+                owner.navigationController?.pushViewController(myChatRoomsVC, animated: true)
             }
             .disposed(by: disposeBag)
     }

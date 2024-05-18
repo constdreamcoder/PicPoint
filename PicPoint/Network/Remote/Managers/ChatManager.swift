@@ -10,17 +10,17 @@ import Alamofire
 import RxSwift
 
 struct ChatManager {
-    static func createRoom(body: CreateRoomBody) -> Single<CreateRoomModel>{
-        return Single<CreateRoomModel>.create { singleObserver in
+    static func createRoom(body: CreateRoomBody) -> Single<Room>{
+        return Single<Room>.create { singleObserver in
             do {
                 let urlRequest = try ChatRouter.createRoom(body: body).asURLRequest()
                 
                 CustomSession.shared.session.request(urlRequest)
                     .validate(statusCode: 200...500)
-                    .responseDecodable(of: CreateRoomModel.self) { response in
+                    .responseDecodable(of: Room.self) { response in
                         switch response.result {
-                        case .success(let createRoomModel):
-                            singleObserver(.success(createRoomModel))
+                        case .success(let room):
+                            singleObserver(.success(room))
                         case .failure(_):
                             if let statusCode = response.response?.statusCode {
                                 if let commonNetworkError = CommonNetworkError(rawValue: statusCode) {
@@ -99,6 +99,37 @@ struct ChatManager {
                                     singleObserver(.failure(commonNetworkError))
                                 } else if let sendChatNetworkError = SendChatNetworkError(rawValue: statusCode) {
                                     singleObserver(.failure(sendChatNetworkError))
+                                } else {
+                                    singleObserver(.failure(CommonNetworkError.unknownError))
+                                }
+                            }
+                        }
+                    }
+            } catch {
+                singleObserver(.failure(CommonNetworkError.unknownError))
+            }
+            
+            return Disposables.create()
+        }
+    }
+    
+    static func fetchMyChatRoomList() -> Single<[Room]> {
+        return Single<[Room]>.create { singleObserver in
+            do {
+                let urlRequest = try ChatRouter.fetchMyChatRoomList.asURLRequest()
+                
+                CustomSession.shared.session.request(urlRequest)
+                    .validate(statusCode: 200...500)
+                    .responseDecodable(of: MyRoomListModel.self) { response in
+                        switch response.result {
+                        case .success(let myRoomListModel):
+                            singleObserver(.success(myRoomListModel.data))
+                        case .failure(_):
+                            if let statusCode = response.response?.statusCode {
+                                if let commonNetworkError = CommonNetworkError(rawValue: statusCode) {
+                                    singleObserver(.failure(commonNetworkError))
+                                } else if let fetchMyChatRoomListNetworkError = FetchMyChatRoomListNetworkError(rawValue: statusCode) {
+                                    singleObserver(.failure(fetchMyChatRoomListNetworkError))
                                 } else {
                                     singleObserver(.failure(CommonNetworkError.unknownError))
                                 }
