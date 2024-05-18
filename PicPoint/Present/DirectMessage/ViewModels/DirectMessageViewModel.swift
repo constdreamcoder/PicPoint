@@ -59,7 +59,6 @@ final class DirectMessageViewModel: ViewModelType {
                 SocketIOManager.shared.establishConnection()
             }
             .disposed(by: disposeBag)
-        
     }
     
     func transform(input: Input) -> Output {
@@ -110,14 +109,19 @@ final class DirectMessageViewModel: ViewModelType {
                 // TODO: - DB에 저장하고 다시 불러오기
                 return newChat
             }
-            .withLatestFrom(chattingListSubject) { newChat, chattingList in
+            .subscribe(with: self) { owner, _ in
+                clearSendButtonTrigger.accept(())
+            }
+            .disposed(by: disposeBag)
+        
+        SocketIOManager.shared.ReceivedChatDataSubject
+            .withLatestFrom(chattingListSubject) { receviedChat, chattingList in
                 var chattingList = chattingList
-                chattingList.append(newChat)
+                chattingList.append(receviedChat)
                 return chattingList
             }
             .subscribe(with: self) { owner, updatedChattingList in
                 owner.chattingListSubject.onNext(updatedChattingList)
-                clearSendButtonTrigger.accept(())
             }
             .disposed(by: disposeBag)
         
