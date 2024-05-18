@@ -185,6 +185,7 @@
 		00AF29BF2BF8A700007B84D8 /* MyChatRoomsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00AF29BE2BF8A700007B84D8 /* MyChatRoomsViewModel.swift */; };
 		00AF29C12BF8AA6F007B84D8 /* FetchMyChatRoomListNetworkError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00AF29C02BF8AA6F007B84D8 /* FetchMyChatRoomListNetworkError.swift */; };
 		00AF29C32BF8AD07007B84D8 /* MyRoomListModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00AF29C22BF8AD07007B84D8 /* MyRoomListModel.swift */; };
+		00AF29C52BF8EA5F007B84D8 /* MyChatRoomsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00AF29C42BF8EA5F007B84D8 /* MyChatRoomsTableViewCell.swift */; };
 		00AFF5FC2BCD1274006D319A /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00AFF5FB2BCD1274006D319A /* HomeViewModel.swift */; };
 		00AFF5FE2BCD1418006D319A /* UICollectionViewConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00AFF5FD2BCD1418006D319A /* UICollectionViewConfiguration.swift */; };
 		00AFF6002BCD14D3006D319A /* HomeCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00AFF5FF2BCD14D3006D319A /* HomeCollectionViewCell.swift */; };
@@ -466,6 +467,7 @@
 		00AF29BE2BF8A700007B84D8 /* MyChatRoomsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyChatRoomsViewModel.swift; sourceTree = "<group>"; };
 		00AF29C02BF8AA6F007B84D8 /* FetchMyChatRoomListNetworkError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchMyChatRoomListNetworkError.swift; sourceTree = "<group>"; };
 		00AF29C22BF8AD07007B84D8 /* MyRoomListModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyRoomListModel.swift; sourceTree = "<group>"; };
+		00AF29C42BF8EA5F007B84D8 /* MyChatRoomsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyChatRoomsTableViewCell.swift; sourceTree = "<group>"; };
 		00AFF5FB2BCD1274006D319A /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
 		00AFF5FD2BCD1418006D319A /* UICollectionViewConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UICollectionViewConfiguration.swift; sourceTree = "<group>"; };
 		00AFF5FF2BCD14D3006D319A /* HomeCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -1592,6 +1594,7 @@
 			isa = PBXGroup;
 			children = (
 				00AF29BC2BF8A67E007B84D8 /* MyChatRoomsViewController.swift */,
+				00AF29C42BF8EA5F007B84D8 /* MyChatRoomsTableViewCell.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -2314,6 +2317,7 @@
 				002720A32BDFD702004ADC5C /* FollowManager.swift in Sources */,
 				00B67D822BD8102F0097ACDE /* RecommendedVisitTimeViewController.swift in Sources */,
 				00B67D8D2BD82ACB0097ACDE /* SelectLocationViewController.swift in Sources */,
+				00AF29C52BF8EA5F007B84D8 /* MyChatRoomsTableViewCell.swift in Sources */,
 				00E1D9422BE4DFB500501328 /* NetworkMonitor.swift in Sources */,
 				00AFF60B2BCD2CA5006D319A /* HomeCollectionViewCellIconView.swift in Sources */,
 				00EA276E2BDE389600EE3F9C /* PasswordSignUpViewModel.swift in Sources */,

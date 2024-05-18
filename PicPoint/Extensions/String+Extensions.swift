@@ -42,6 +42,16 @@ extension String {
         return outputDateFormatter.string(from: date)
     }
     
+    var getLastChatDateString: String {
+        let date = self.convertToISO8601DateType
+        guard let date = date else { return "" }
+        
+        let outputDateFormatter = DateFormatter()
+        outputDateFormatter.locale = Locale(identifier: "ko_KR")
+        outputDateFormatter.dateFormat = "M월 d일"
+        return outputDateFormatter.string(from: date)
+    }
+    
     var timeAgoToDisplay: String {
         let date = self.convertToISO8601DateType
         

@@ -9,18 +9,31 @@ import Foundation
 import RxSwift
 import RxCocoa
 
-struct MyChatRoomsViewModel: ViewModelType {
+final class MyChatRoomsViewModel: ViewModelType {
     var disposeBag = DisposeBag()
+    
+    private let myChatRoomList = BehaviorRelay<[Room]>(value: [])
 
     struct Input {
         
     }
     
     struct Output {
-        
+        let myChatRoomList: Driver<[Room]>
+    }
+    
+    init(_ myChatRoomList: [Room]) {
+        Observable.just(myChatRoomList)
+            .subscribe(with: self) { owner, myChatRoomList in
+                owner.myChatRoomList.accept(myChatRoomList)
+            }
+            .disposed(by: disposeBag)
     }
     
     func transform(input: Input) -> Output {
-        return Output()
+        
+        return Output(
+            myChatRoomList: myChatRoomList.asDriver()
+        )
     }
 }
