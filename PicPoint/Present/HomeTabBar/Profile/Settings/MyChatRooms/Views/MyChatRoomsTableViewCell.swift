@@ -28,8 +28,8 @@ final class MyChatRoomsTableViewCell: BaseTableViewCell {
     
     let lastContentLabel: UILabel = {
         let label = UILabel()
-        label.text = "개발개발개발개발개발개발개발개발개발개발개발개발개발개발개발개발개발개발개발개발개발개발개발개발개발개발개발개발개발개발개발개발개발개발"
-        label.textColor = .black
+        label.text = "대화 내용 없음"
+        label.textColor = .darkGray
         label.font = .systemFont(ofSize: 14.0)
         label.numberOfLines = 2
         return label
@@ -49,7 +49,7 @@ final class MyChatRoomsTableViewCell: BaseTableViewCell {
     let datelabel: UILabel = {
         let label = UILabel()
         label.text = "5월 13일"
-        label.textColor = .darkGray
+        label.textColor = .lightGray
         label.font = .systemFont(ofSize: 12.0)
         return label
     }()

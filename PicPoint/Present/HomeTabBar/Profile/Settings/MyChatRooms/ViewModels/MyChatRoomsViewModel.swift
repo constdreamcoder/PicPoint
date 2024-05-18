@@ -14,9 +14,7 @@ final class MyChatRoomsViewModel: ViewModelType {
     
     private let myChatRoomList = BehaviorRelay<[Room]>(value: [])
 
-    struct Input {
-        
-    }
+    struct Input {}
     
     struct Output {
         let myChatRoomList: Driver<[Room]>
@@ -31,7 +29,7 @@ final class MyChatRoomsViewModel: ViewModelType {
     }
     
     func transform(input: Input) -> Output {
-        
+    
         return Output(
             myChatRoomList: myChatRoomList.asDriver()
         )

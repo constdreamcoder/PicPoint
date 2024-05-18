@@ -76,10 +76,18 @@ extension MyChatRoomsViewController: UIViewControllerConfiguration {
                     cell.userImageView.kf.setImageWithAuthHeaders(with: url, placeholder: placeholderImage)
                 }
                 
+                cell.userNicknameLabel.text = element.participants.map { $0.nick }.joined(separator: ",")
                 guard let lastChat = element.lastChat else { return }
-                cell.userNicknameLabel.text = lastChat.sender.nick
                 cell.lastContentLabel.text = lastChat.content
                 cell.datelabel.text = lastChat.createdAt.getLastChatDateString
+            }
+            .disposed(by: disposeBag)
+        
+        tableView.rx.modelSelected(Room.self)
+            .bind(with: self) { owner, selectedRoom in
+                let directMessageVM = DirectMessageViewModel(selectedRoom)
+                let directMessageVC = DirectMessageViewController(directMessageViewModel: directMessageVM)
+                owner.navigationController?.pushViewController(directMessageVC, animated: true)
             }
             .disposed(by: disposeBag)
     }
