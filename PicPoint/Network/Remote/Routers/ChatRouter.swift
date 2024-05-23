@@ -13,6 +13,7 @@ enum ChatRouter {
     case fetchChattingHistory(params: FetchChattingHistoryParams, query: FetchChattingHistoryQuery)
     case sendChat(params: SendChatParams, body: SendChatBody)
     case fetchMyChatRoomList
+    case uploadImages(params: UploadImagesParams, body: UploadImagesBody)
 }
 
 extension ChatRouter: TargetType {
@@ -23,7 +24,7 @@ extension ChatRouter: TargetType {
     
     var method: HTTPMethod {
         switch self {
-        case .createRoom, .sendChat:
+        case .createRoom, .sendChat, .uploadImages:
             return .post
         case .fetchChattingHistory, .fetchMyChatRoomList:
             return .get
@@ -32,7 +33,7 @@ extension ChatRouter: TargetType {
     
     var path: String {
         switch self {
-        case .createRoom, .fetchChattingHistory, .sendChat, .fetchMyChatRoomList:
+        case .createRoom, .fetchChattingHistory, .sendChat, .fetchMyChatRoomList, .uploadImages:
             return "/chats"
         }
     }
@@ -48,6 +49,11 @@ extension ChatRouter: TargetType {
             return [
                 HTTPHeader.sesacKey.rawValue: APIKeys.sesacKey,
             ]
+        case .uploadImages:
+            return [
+                HTTPHeader.sesacKey.rawValue: APIKeys.sesacKey,
+                HTTPHeader.contentType.rawValue: HTTPHeader.formData.rawValue
+            ]
         }
     }
     
@@ -59,12 +65,14 @@ extension ChatRouter: TargetType {
             return "/\(params.roomId)"
         case .sendChat(let params, _):
             return "/\(params.roomId)"
+        case .uploadImages(let params, _):
+            return "/\(params.roomId)/files"
         }
     }
     
     var queryItems: [URLQueryItem]? {
         switch self {
-        case .createRoom, .sendChat, .fetchMyChatRoomList:
+        case .createRoom, .sendChat, .fetchMyChatRoomList, .uploadImages:
             return nil
         case .fetchChattingHistory(_, let query):
             return [
@@ -75,7 +83,7 @@ extension ChatRouter: TargetType {
     
     var body: Data? {
         switch self {
-        case .fetchChattingHistory, .fetchMyChatRoomList:
+        case .fetchChattingHistory, .fetchMyChatRoomList, .uploadImages:
             return nil
         case .createRoom(let body):
             let encoder = JSONEncoder()

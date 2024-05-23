@@ -12,6 +12,7 @@ import RxCocoa
 final class DirectMessageViewModel: ViewModelType {
     var disposeBag = DisposeBag()
     
+    let selectedImageDataListRelay = BehaviorRelay<[Data]>(value: [])
     private let roomInfoSubject = BehaviorSubject<Room?>(value: nil)
     private let chattingListSubject = BehaviorSubject<[Chat]>(value: [])
     private let sectionsRelay = BehaviorRelay<[DirectMessageTableViewSectionDataModel]>(value: [])
@@ -22,6 +23,7 @@ final class DirectMessageViewModel: ViewModelType {
         let didBeginEditing: ControlEvent<Void>
         let didEndEditing: ControlEvent<Void>
         let sendButtonTap: ControlEvent<Void>
+        let addImagesButtonTap: ControlEvent<Void>
     }
     
     struct Output {
@@ -31,6 +33,9 @@ final class DirectMessageViewModel: ViewModelType {
         let chattingSendingValid: Driver<Bool>
         let clearSendButtonTrigger: Driver<Void>
         let sections: Driver<[DirectMessageTableViewSectionDataModel]>
+        let showPHPickerTrigger: Driver<Void>
+        let showImageCountIimitAlertTrigger: Driver<Void>
+        let selectedImageList: Driver<[Data]>
     }
     
     init(_ room: Room) {
@@ -64,6 +69,10 @@ final class DirectMessageViewModel: ViewModelType {
     func transform(input: Input) -> Output {
         let chattingSendingValidation = BehaviorRelay<Bool>(value: false)
         let clearSendButtonTrigger = PublishRelay<Void>()
+        let showPHPickerTrigger = PublishRelay<Void>()
+        let showImageCountIimitAlertTrigger = PublishRelay<Void>()
+        let uploadOnlyTextTrigger = PublishSubject<Void>()
+        let uploadImagesAndTextTrigger = PublishSubject<Void>()
         
         chattingListSubject
             .subscribe(with: self) { owner, chattingList in
@@ -77,28 +86,55 @@ final class DirectMessageViewModel: ViewModelType {
             }
             .disposed(by: disposeBag)
         
-        let chattingTextEventTrigger = input.chattingTextEvent
-            .withUnretained(self)
-            .map { owner, chattingText in
-                if chattingText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
-                    chattingSendingValidation.accept(false)
-                } else {
-                    chattingSendingValidation.accept(true)
-                    owner.chattingTextSubject.onNext(chattingText)
-                }
-                return chattingText
+        Observable.combineLatest(
+            input.chattingTextEvent,
+            selectedImageDataListRelay
+        )
+        .withUnretained(self) { owner, value in
+            (owner: owner, chattingText: value.0, selectedImageDataList: value.1)
+        }
+        .bind { value in
+            if value.chattingText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+                && value.selectedImageDataList.count <= 0 {
+                chattingSendingValidation.accept(false)
+            } else {
+                chattingSendingValidation.accept(true)
+                value.owner.chattingTextSubject.onNext(value.chattingText)
             }
+        }
+        .disposed(by: disposeBag)
         
         input.sendButtonTap
             .debounce(.milliseconds(200), scheduler: MainScheduler.instance)
             .withLatestFrom(roomInfoSubject)
-            .withLatestFrom(chattingTextSubject) {
-                (roomId: $0?.roomId ?? "", chattingText: $1)
+            .withLatestFrom(selectedImageDataListRelay) { ($0?.roomId ?? "", $1) }
+            .withLatestFrom(chattingTextSubject) { value, chattingText in
+                (files: value.1, roomId: value.0, chattingText: chattingText)
+            }
+            .bind(with: self) { owner, value in
+                if !value.chattingText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+                    && value.files.count <= 0 {
+                    uploadOnlyTextTrigger.onNext(())
+                } else if value.chattingText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+                    && value.files.count >= 1 {
+                    uploadImagesAndTextTrigger.onNext(())
+                } else {
+                    uploadImagesAndTextTrigger.onNext(())
+                }
+            }
+            .disposed(by: disposeBag)
+        
+        uploadOnlyTextTrigger
+            .withLatestFrom(roomInfoSubject)
+            .withLatestFrom(chattingTextSubject) { room, chattingText in
+                (roomId: room?.roomId ?? "", chattingText: chattingText)
             }
             .flatMap { value in
                 ChatManager.sendChat(
                     params: SendChatParams(roomId: value.roomId),
-                    body: SendChatBody(content: value.chattingText)
+                    body: SendChatBody(
+                        content: value.chattingText
+                    )
                 )
                 .catch { error in
                     print(error.errorCode, error.errorDesc)
@@ -110,6 +146,59 @@ final class DirectMessageViewModel: ViewModelType {
                 return newChat
             }
             .subscribe(with: self) { owner, _ in
+                print("채팅 업로드 성공!")
+                clearSendButtonTrigger.accept(())
+            }
+            .disposed(by: disposeBag)
+        
+        uploadImagesAndTextTrigger
+            .withLatestFrom(roomInfoSubject)
+            .withLatestFrom(selectedImageDataListRelay) {
+                (roomId: $0?.roomId ?? "", selectedImageDataList: $1)
+            }
+            .flatMap { value in
+                let imageFiles = value.selectedImageDataList.map {
+                    ImageFile(
+                        imageData: $0,
+                        name: "testimage\(Int.random(in: 1000...2000))",
+                        mimeType: .png
+                    )
+                }
+                return ChatManager.uploadImages(
+                    params: UploadImagesParams(roomId: value.roomId),
+                    body: UploadImagesBody(files: imageFiles)
+                )
+                .catch { error in
+                    print(error.errorCode, error.errorDesc)
+                    return Single<ImageFileListModel>.never()
+                }
+            }
+            .withLatestFrom(roomInfoSubject) {
+                print("이미지 업로드 성공")
+                return (files: $0.files, roomId: $1?.roomId ?? "")
+            }
+            .withLatestFrom(chattingTextSubject) { value, chattingText in
+                (files: value.files, roomId: value.roomId, chattingText: chattingText)
+            }
+            .flatMap { value in
+                ChatManager.sendChat(
+                    params: SendChatParams(roomId: value.roomId),
+                    body: SendChatBody(
+                        content: value.chattingText,
+                        files: value.files
+                    )
+                )
+                .catch { error in
+                    print(error.errorCode, error.errorDesc)
+                    return Single<Chat>.never()
+                }
+            }
+            .map { newChat in
+                // TODO: - DB에 저장하고 다시 불러오기
+                return newChat
+            }
+            .subscribe(with: self) { owner, _ in
+                print("업로드 성공!")
                 clearSendButtonTrigger.accept(())
             }
             .disposed(by: disposeBag)
@@ -125,13 +214,27 @@ final class DirectMessageViewModel: ViewModelType {
             }
             .disposed(by: disposeBag)
         
+        input.addImagesButtonTap
+            .withLatestFrom(selectedImageDataListRelay)
+            .bind { selectedImageList in
+                if selectedImageList.count >= 5 {
+                    showImageCountIimitAlertTrigger.accept(())
+                } else {
+                    showPHPickerTrigger.accept(())
+                }
+            }
+            .disposed(by: disposeBag)
+        
         return Output(
-            chattingText: chattingTextEventTrigger.asDriver(onErrorJustReturn: ""),
+            chattingText: input.chattingTextEvent.asDriver(onErrorJustReturn: ""),
             chattingDidBeginEditingTrigger: input.didBeginEditing.asDriver(),
             chattingDidEndEditingTrigger: input.didEndEditing.asDriver(),
             chattingSendingValid: chattingSendingValidation.asDriver(),
             clearSendButtonTrigger: clearSendButtonTrigger.asDriver(onErrorJustReturn: ()),
-            sections: sectionsRelay.asDriver()
+            sections: sectionsRelay.asDriver(), 
+            showPHPickerTrigger: showPHPickerTrigger.asDriver(onErrorJustReturn: ()),
+            showImageCountIimitAlertTrigger: showImageCountIimitAlertTrigger.asDriver(onErrorJustReturn: ()),
+            selectedImageList: selectedImageDataListRelay.asDriver(onErrorJustReturn: [])
         )
     }
     

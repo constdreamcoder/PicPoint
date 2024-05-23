@@ -34,12 +34,20 @@ final class OpponentDirectMessageTableViewCell: BaseTableViewCell {
     
     let contentLabel: UILabel = {
         let label = UILabel()
-        label.text = "fseflisjeflijselfijslefijsliejflsiejf"
+        label.text = ""
         label.textColor = .white
         label.font = .systemFont(ofSize: 14.0)
         label.numberOfLines = 0
         return label
     }()
+    
+    let imageViewContainerView = UIStackView()
+    
+    let oneImageStackView = OneImageStackView()
+    let twoImagesStackView = TwoImagesStackView()
+    let threeImagesStackView = ThreeImagesStackView()
+    let fourImagesStackView = FourImagesStackView()
+    let fiveImagesStackView = FiveImagesStackView()
     
     let dateLabel: UILabel = {
         let label = UILabel()
@@ -48,10 +56,11 @@ final class OpponentDirectMessageTableViewCell: BaseTableViewCell {
         label.font = .systemFont(ofSize: 12.0)
         return label
     }()
+    
+    private let imageViewContainerViewWidth = UIScreen.main.bounds.width * 0.65
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        
     }
     
     required init?(coder: NSCoder) {
@@ -62,6 +71,132 @@ final class OpponentDirectMessageTableViewCell: BaseTableViewCell {
         super.prepareForReuse()
         
         disposeBag = DisposeBag()
+        
+        imageViewContainerView.arrangedSubviews.forEach {
+            $0.removeFromSuperview()
+        }
+        
+        
+        chatBubbleImageView.snp.removeConstraints()
+        imageViewContainerView.snp.removeConstraints()
+    }
+    
+    func updateCellDatas(_ chat: Chat) {
+        if let profileImage = chat.sender.profileImage, !profileImage.isEmpty {
+            let url = URL(string: APIKeys.baseURL + "/\(profileImage)")
+            let placeholderImage = UIImage(systemName: "person.circle")
+            profileImageView.kf.setImageWithAuthHeaders(with: url, placeholder: placeholderImage)
+        }
+        nicknameLabel.text = chat.sender.nick
+        if let content = chat.content, content.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+            && chat.files.count >= 1 {
+            chatBubbleImageView.snp.makeConstraints {
+                $0.top.equalTo(nicknameLabel.snp.bottom).offset(4.0)
+                $0.leading.equalTo(nicknameLabel)
+                $0.trailing.lessThanOrEqualTo(contentView.safeAreaLayoutGuide).inset(90.0)
+                $0.height.equalTo(0)
+            }
+        } else {
+            chatBubbleImageView.snp.makeConstraints {
+                $0.top.equalTo(nicknameLabel.snp.bottom).offset(4.0)
+                $0.leading.equalTo(nicknameLabel)
+                $0.trailing.lessThanOrEqualTo(contentView.safeAreaLayoutGuide).inset(90.0)
+            }
+        }
+        contentLabel.text = chat.content
+        dateLabel.text = chat.createdAt.getChattingDateString
+        updateImageViewContainerView(chat.files)
+    }
+    
+    private func updateImageViewContainerView(_ uploadedImageFiles: [String]) {
+        switch uploadedImageFiles.count {
+        case 1:
+            oneImageStackView.updateImage(uploadedImageFiles)
+
+            imageViewContainerView.addArrangedSubview(oneImageStackView)
+            
+            imageViewContainerView.snp.makeConstraints {
+                $0.top.equalTo(chatBubbleImageView.snp.bottom).offset(4.0)
+                $0.leading.equalTo(chatBubbleImageView)
+                $0.bottom.equalTo(contentView.safeAreaLayoutGuide).inset(8.0)
+                $0.width.equalTo(imageViewContainerViewWidth)
+            }
+            
+            imageViewContainerView.snp.makeConstraints {
+                $0.height.equalTo(imageViewContainerViewWidth)
+            }
+        case 2:
+            twoImagesStackView.updateImages(uploadedImageFiles)
+
+            imageViewContainerView.addArrangedSubview(twoImagesStackView)
+            
+            imageViewContainerView.snp.makeConstraints {
+                $0.top.equalTo(chatBubbleImageView.snp.bottom).offset(4.0)
+                $0.leading.equalTo(chatBubbleImageView)
+                $0.bottom.equalTo(contentView.safeAreaLayoutGuide).inset(8.0)
+                $0.width.equalTo(imageViewContainerViewWidth)
+            }
+            
+            imageViewContainerView.snp.makeConstraints {
+                $0.height.equalTo(imageViewContainerViewWidth / 2)
+            }
+        case 3:
+            threeImagesStackView.updateImages(uploadedImageFiles)
+
+            imageViewContainerView.addArrangedSubview(threeImagesStackView)
+            
+            imageViewContainerView.snp.makeConstraints {
+                $0.top.equalTo(chatBubbleImageView.snp.bottom).offset(4.0)
+                $0.leading.equalTo(chatBubbleImageView)
+                $0.bottom.equalTo(contentView.safeAreaLayoutGuide).inset(8.0)
+                $0.width.equalTo(imageViewContainerViewWidth)
+            }
+            
+            imageViewContainerView.snp.makeConstraints {
+                $0.height.equalTo(imageViewContainerViewWidth / 3)
+            }
+        case 4:
+            fourImagesStackView.updateImages(uploadedImageFiles)
+
+            imageViewContainerView.addArrangedSubview(fourImagesStackView)
+            
+            imageViewContainerView.snp.makeConstraints {
+                $0.top.equalTo(chatBubbleImageView.snp.bottom).offset(4.0)
+                $0.leading.equalTo(chatBubbleImageView)
+                $0.bottom.equalTo(contentView.safeAreaLayoutGuide).inset(8.0)
+                $0.width.equalTo(imageViewContainerViewWidth)
+            }
+            
+            imageViewContainerView.snp.makeConstraints {
+                $0.height.equalTo(imageViewContainerViewWidth / 2 * 2)
+            }
+        case 5:
+            fiveImagesStackView.updateImages(uploadedImageFiles)
+
+            imageViewContainerView.addArrangedSubview(fiveImagesStackView)
+            
+            imageViewContainerView.snp.makeConstraints {
+                $0.top.equalTo(chatBubbleImageView.snp.bottom).offset(4.0)
+                $0.leading.equalTo(chatBubbleImageView)
+                $0.bottom.equalTo(contentView.safeAreaLayoutGuide).inset(8.0)
+                $0.width.equalTo(imageViewContainerViewWidth)
+            }
+            
+            imageViewContainerView.snp.makeConstraints {
+                $0.height.equalTo(imageViewContainerViewWidth / 3 * 2)
+            }
+        default:
+            imageViewContainerView.snp.makeConstraints {
+                $0.top.equalTo(chatBubbleImageView.snp.bottom).offset(4.0)
+                $0.trailing.equalTo(chatBubbleImageView)
+                $0.bottom.equalTo(contentView.safeAreaLayoutGuide).inset(8.0)
+                $0.width.equalTo(chatBubbleImageView)
+            }
+            
+            imageViewContainerView.snp.makeConstraints {
+                $0.height.equalTo(0.1)
+            }
+        }
     }
 }
 
@@ -72,6 +207,7 @@ extension OpponentDirectMessageTableViewCell {
             profileImageView,
             nicknameLabel,
             chatBubbleImageView,
+            imageViewContainerView,
             dateLabel
         ].forEach { contentView.addSubview($0) }
         
@@ -85,16 +221,10 @@ extension OpponentDirectMessageTableViewCell {
             $0.leading.equalTo(profileImageView.snp.trailing).offset(4.0)
         }
         
-        chatBubbleImageView.snp.makeConstraints {
-            $0.top.equalTo(nicknameLabel.snp.bottom).offset(4.0)
-            $0.leading.equalTo(nicknameLabel)
-            $0.bottom.equalTo(contentView.safeAreaLayoutGuide).inset(8.0)
-        }
-        
         dateLabel.snp.makeConstraints {
-            $0.leading.equalTo(chatBubbleImageView.snp.trailing).offset(4.0)
-            $0.bottom.equalTo(chatBubbleImageView)
-            $0.trailing.lessThanOrEqualTo(contentView.safeAreaLayoutGuide).inset(32.0)
+            $0.leading.equalTo(imageViewContainerView.snp.trailing).offset(4.0)
+            $0.bottom.equalTo(imageViewContainerView)
+            $0.trailing.lessThanOrEqualTo(contentView.safeAreaLayoutGuide).inset(24.0)
         }
         
         chatBubbleImageView.addSubview(contentLabel)

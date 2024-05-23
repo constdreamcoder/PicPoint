@@ -11,6 +11,7 @@ import RxSwift
 import RxCocoa
 import RxDataSources
 import Kingfisher
+import PhotosUI
 
 final class DirectMessageViewController: BaseViewController {
     
@@ -26,34 +27,31 @@ final class DirectMessageViewController: BaseViewController {
         return tableView
     }()
     
-    private let chatWritingSectionView = TextWritingSectionView("")
+    private let chatWritingSectionView: TextWritingSectionView = {
+        let textWritingSectionView = TextWritingSectionView("")
+        textWritingSectionView.addImagesButton.isHidden = false
+        return textWritingSectionView
+    }()
     
     private let viewModel: DirectMessageViewModel
-
+    
     private let dataSource = RxTableViewSectionedReloadDataSource<DirectMessageTableViewSectionDataModel>(
-      configureCell: { dataSource, tableView, indexPath, item in
-          
-          if item.sender.userId == UserDefaultsManager.userId {
-              guard let cell = tableView.dequeueReusableCell(withIdentifier: MyDirectMessageTableViewCell.identifier, for: indexPath) as? MyDirectMessageTableViewCell else { return UITableViewCell() }
-              
-              cell.contentLabel.text = item.content
-              cell.dateLabel.text = item.createdAt.getChattingDateString
-
-              return cell
-          } else {
-              guard let cell = tableView.dequeueReusableCell(withIdentifier: OpponentDirectMessageTableViewCell.identifier, for: indexPath) as? OpponentDirectMessageTableViewCell else { return UITableViewCell() }
-              
-              if let profileImage = item.sender.profileImage, !profileImage.isEmpty {
-                  let url = URL(string: APIKeys.baseURL + "/\(profileImage)")
-                  let placeholderImage = UIImage(systemName: "person.circle")
-                  cell.profileImageView.kf.setImageWithAuthHeaders(with: url, placeholder: placeholderImage)
-              }
-              cell.nicknameLabel.text = item.sender.nick
-              cell.contentLabel.text = item.content
-              cell.dateLabel.text = item.createdAt.getChattingDateString
-              return cell
-          }
-    })
+        configureCell: { dataSource, tableView, indexPath, item in
+            
+            if item.sender.userId == UserDefaultsManager.userId {
+                guard let cell = tableView.dequeueReusableCell(withIdentifier: MyDirectMessageTableViewCell.identifier, for: indexPath) as? MyDirectMessageTableViewCell else { return UITableViewCell() }
+                
+                cell.updateCellDatas(item)
+                
+                return cell
+            } else {
+                guard let cell = tableView.dequeueReusableCell(withIdentifier: OpponentDirectMessageTableViewCell.identifier, for: indexPath) as? OpponentDirectMessageTableViewCell else { return UITableViewCell() }
+                
+                cell.updateCellDatas(item)
+                
+                return cell
+            }
+        })
     
     init(directMessageViewModel: DirectMessageViewModel) {
         self.viewModel = directMessageViewModel
@@ -67,7 +65,7 @@ final class DirectMessageViewController: BaseViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         configureNavigationBar()
         configureConstraints()
         configureUI()
@@ -112,7 +110,7 @@ extension DirectMessageViewController: UIViewControllerConfiguration {
     func configureUI() {
         
     }
-
+    
     func bind() {
         
         let textView = chatWritingSectionView.textView
@@ -126,12 +124,13 @@ extension DirectMessageViewController: UIViewControllerConfiguration {
                     return chattingText
                 }
             }
-
+        
         let input = DirectMessageViewModel.Input(
             chattingTextEvent: chattingText,
             didBeginEditing: textView.rx.didBeginEditing,
-            didEndEditing: textView.rx.didEndEditing, 
-            sendButtonTap: chatWritingSectionView.sendButton.rx.tap
+            didEndEditing: textView.rx.didEndEditing,
+            sendButtonTap: chatWritingSectionView.sendButton.rx.tap,
+            addImagesButtonTap: chatWritingSectionView.addImagesButton.rx.tap
         )
         
         let output = viewModel.transform(input: input)
@@ -200,8 +199,79 @@ extension DirectMessageViewController: UIViewControllerConfiguration {
         output.clearSendButtonTrigger
             .drive(with: self) { owner, _ in
                 owner.chatWritingSectionView.textView.text = nil
+                owner.viewModel.selectedImageDataListRelay.accept([])
+            }
+            .disposed(by: disposeBag)
+        
+        output.showPHPickerTrigger
+            .drive(with: self) { owner, _ in
+                owner.showPHPicker()
+            }
+            .disposed(by: disposeBag)
+        
+        output.showImageCountIimitAlertTrigger
+            .drive(with: self) { owner, _ in
+                owner.makeErrorAlert(title: "이미지 개수 제한", message: "선택할 수 있는 최대 이미지 개수는 5개까지입니다.")
+            }
+            .disposed(by: disposeBag)
+        
+        output.selectedImageList
+            .drive(with: self) { owner, selectedImageList in
+                owner.chatWritingSectionView.collectionView.isHidden = selectedImageList.count <= 0
+            }
+            .disposed(by: disposeBag)
+        
+        output.selectedImageList
+            .drive(chatWritingSectionView.collectionView.rx.items(cellIdentifier: TextWritingSectionViewCollectionViewCell.identifier, cellType: TextWritingSectionViewCollectionViewCell.self)) { item, element, cell in
+                
+                if let image = UIImage(data: element) {
+                    cell.imageView.image = image
+                }
             }
             .disposed(by: disposeBag)
     }
+}
+
+extension DirectMessageViewController: PHPickerViewControllerDelegate {
+    func showPHPicker() {
+        var configuration = PHPickerConfiguration()
+        
+        configuration.selectionLimit = 5
+        configuration.filter = .images
+        
+        let picker = PHPickerViewController(configuration: configuration)
+        picker.delegate = self
+        present(picker, animated: true)
+    }
     
+    func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
+            
+        var imageDataList = [Data]()
+        
+        var group = DispatchGroup()
+        
+        for (_, item) in results.enumerated() {
+            group.enter()
+            let itemProvider = item.itemProvider
+            if itemProvider.canLoadObject(ofClass: UIImage.self) {
+                itemProvider.loadObject(ofClass: UIImage.self) { image, error  in
+                    
+                    guard let image = image as? UIImage else { return }
+                    guard let imageData = image.pngData() else { return }
+                    imageDataList.append(imageData)
+                    group.leave()
+                }
+            }
+        }
+        
+        picker.dismiss(animated: true)
+        
+        group.notify(queue: .main) { [weak self] in
+            guard let self else { return }
+            
+            var existingImageDataList = viewModel.selectedImageDataListRelay.value
+            existingImageDataList = existingImageDataList + imageDataList
+            viewModel.selectedImageDataListRelay.accept(existingImageDataList)
+        }
+    }
 }

@@ -101,7 +101,7 @@ struct PostManager {
                             if let statusCode = response.response?.statusCode {
                                 if let commonNetworkError = CommonNetworkError(rawValue: statusCode) {
                                     singleObserver(.failure(commonNetworkError))
-                                } else if let uploadImagesError = UploadImagesNetworkError(rawValue: statusCode) {
+                                } else if let uploadImagesError = UploadPostImagesNetworkError(rawValue: statusCode) {
                                     singleObserver(.failure(uploadImagesError))
                                 } else {
                                     singleObserver(.failure(CommonNetworkError.unknownError))

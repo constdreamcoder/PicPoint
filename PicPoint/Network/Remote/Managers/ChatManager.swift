@@ -143,4 +143,48 @@ struct ChatManager {
             return Disposables.create()
         }
     }
+    
+    static func uploadImages(params: UploadImagesParams, body: UploadImagesBody) -> Single<ImageFileListModel> {
+        return Single<ImageFileListModel>.create { singleObserver in
+            do {
+                let urlRequest = try ChatRouter.uploadImages(params: params, body: body).asURLRequest()
+                
+                guard let url = urlRequest.url else { return Disposables.create() }
+                guard let method = urlRequest.method else { return Disposables.create() }
+                
+                let headers = urlRequest.headers
+                
+                CustomSession.shared.session.upload(multipartFormData: { multipartFormData in
+                    body.files.forEach { imageFile in
+                        multipartFormData.append(
+                            imageFile.imageData,
+                            withName: body.keyName,
+                            fileName: imageFile.name,
+                            mimeType: imageFile.mimeType.rawValue
+                        )
+                    }
+                }, to: url, method: method, headers: headers)
+                    .validate(statusCode: 200...500)
+                    .responseDecodable(of: ImageFileListModel.self) { response in
+                        switch response.result {
+                        case .success(let postListModel):
+                            singleObserver(.success(postListModel))
+                        case .failure(_):
+                            if let statusCode = response.response?.statusCode {
+                                if let commonNetworkError = CommonNetworkError(rawValue: statusCode) {
+                                    singleObserver(.failure(commonNetworkError))
+                                } else if let uploadChatImagesNetworkError = UploadChatImagesNetworkError(rawValue: statusCode) {
+                                    singleObserver(.failure(uploadChatImagesNetworkError))
+                                } else {
+                                    singleObserver(.failure(CommonNetworkError.unknownError))
+                                }
+                            }
+                        }
+                    }
+            } catch {
+                singleObserver(.failure(CommonNetworkError.unknownError))
+            }
+            return Disposables.create()
+        }
+    }
 }

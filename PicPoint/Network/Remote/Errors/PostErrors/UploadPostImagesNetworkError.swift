@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum UploadImagesNetworkError: Int, LocalizedError {
+enum UploadPostImagesNetworkError: Int, LocalizedError {
     case badRequest = 400
     case unauthorizedAccessToken = 401
     case forbidden = 403
