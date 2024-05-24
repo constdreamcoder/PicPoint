@@ -11,6 +11,8 @@ import RealmSwift
 protocol RepositoryType {
     associatedtype T: Object
     
+    var realm: Realm { get }
+    
     func getLocationOfDefaultRealm()
     func read(_ object: T.Type) -> Results<T>
     func write(_ object: T)
@@ -19,7 +21,44 @@ protocol RepositoryType {
 }
 
 extension RepositoryType {
-    static var realm: Realm {
-        return try! Realm()
+    func getLocationOfDefaultRealm() {
+        print("Realm is located at:", realm.configuration.fileURL!)
+    }
+    
+    func read(_ object: T.Type) -> Results<T> {
+        return realm.objects(object)
+    }
+    
+    func write(_ object: T) {
+        do {
+            try realm.write {
+                realm.add(object)
+                print("\(T.self) 객체가 추가되었습니다.")
+            }
+        } catch {
+            print(error)
+        }
+    }
+    
+    func delete(_ object: T) {
+        do {
+            try realm.write {
+                realm.delete(object)
+                print("\(T.self) 객체가 삭제되었습니다.")
+            }
+        } catch {
+            print(error)
+        }
+    }
+    
+    func deleteAll() {
+        do {
+            try realm.write {
+                realm.delete(realm.objects(T.self))
+                print("\(T.self) 객체가 모두 삭제되었습니다.")
+            }
+        } catch {
+            print(error)
+        }
     }
 }
