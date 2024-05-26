@@ -8,6 +8,7 @@
 import UIKit
 import RxSwift
 import RxCocoa
+import IQKeyboardManagerSwift
 
 class BaseViewController: UIViewController {
     
@@ -24,6 +25,7 @@ class BaseViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        IQKeyboardManager.shared.enable = false
 
         view.backgroundColor = .white        
     }

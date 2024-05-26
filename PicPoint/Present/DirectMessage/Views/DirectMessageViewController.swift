@@ -12,6 +12,7 @@ import RxCocoa
 import RxDataSources
 import Kingfisher
 import PhotosUI
+import IQKeyboardManagerSwift
 
 final class DirectMessageViewController: BaseViewController {
     
@@ -55,7 +56,7 @@ final class DirectMessageViewController: BaseViewController {
     
     init(directMessageViewModel: DirectMessageViewModel) {
         self.viewModel = directMessageViewModel
-        
+
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -108,7 +109,7 @@ extension DirectMessageViewController: UIViewControllerConfiguration {
     }
     
     func configureUI() {
-        
+        IQKeyboardManager.shared.enable = true
     }
     
     func bind() {
