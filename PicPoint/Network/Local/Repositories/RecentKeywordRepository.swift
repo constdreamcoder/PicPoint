@@ -17,5 +17,5 @@ final class RecentKeywordRepository: RepositoryType {
         return try! Realm()
     }
     
-    private init() { }
+    private init() {}
 }

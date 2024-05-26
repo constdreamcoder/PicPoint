@@ -13,8 +13,8 @@ final class DirectMessageViewModel: ViewModelType {
     var disposeBag = DisposeBag()
     
     let selectedImageDataListRelay = BehaviorRelay<[Data]>(value: [])
-    private let roomInfoSubject = BehaviorSubject<Room?>(value: nil)
-    private let chattingListSubject = BehaviorSubject<[Chat]>(value: [])
+    private let roomInfoSubject = BehaviorSubject<ChatRoom?>(value: nil)
+    private let chattingListSubject = BehaviorSubject<[ChatRoomMessage]>(value: [])
     private let sectionsRelay = BehaviorRelay<[DirectMessageTableViewSectionDataModel]>(value: [])
     private let chattingTextSubject = PublishSubject<String>()
 
@@ -38,10 +38,10 @@ final class DirectMessageViewModel: ViewModelType {
         let selectedImageList: Driver<[Data]>
     }
     
-    init(_ room: Room) {
+    init(_ room: ChatRoom) {
         Observable.just(room)
             .withUnretained(self)
-            .map { owner, room -> (roomId: String, lastChat: Chat?) in
+            .map { owner, room -> (roomId: String, lastChat: LastChatMessage?) in
                 SocketIOManager.shared.setupSocketEventListeners(room.roomId)
                 
                 owner.roomInfoSubject.onNext(room)
@@ -50,17 +50,65 @@ final class DirectMessageViewModel: ViewModelType {
             .flatMap { value in
                 ChatManager.fetchChattingHistory(
                     params: FetchChattingHistoryParams(roomId: value.roomId),
-                    //                    query: FetchChattingHistoryQuery(cursor_date: value.lastChat?.createdAt)
-                    query: FetchChattingHistoryQuery(cursor_date: nil)
+                    query: FetchChattingHistoryQuery(cursor_date: value.lastChat?.createdAt)
+//                    query: FetchChattingHistoryQuery(cursor_date: nil)
                 )
                 .catch { error in
                     print(error.errorCode, error.errorDesc)
                     return Single<ChattingListModel>.never()
                 }
             }
-            .subscribe(with: self) { owner, chattingListModel in
-                // TODO: - DB에 저장되어 있는 채팅 내역 불러와서 append하기
-                owner.chattingListSubject.onNext(chattingListModel.data)
+            .withLatestFrom(roomInfoSubject) { chattingListModel, room in
+                (room: room, chattingListModel: chattingListModel)
+            }
+            .map { value in
+                let chattingList = value.chattingListModel.data
+                
+                if chattingList.count >= 1 {
+                    let newChattingList = chattingList.map { chat in
+                        let sender = UserRepository.shared.read().first { $0.userId == chat.sender.userId }
+                        return ChatRoomMessage(
+                            chatId: chat.chatId,
+                            roomId: chat.roomId,
+                            content: chat.content,
+                            createdAt: chat.createdAt,
+                            sender: sender,
+                            files: chat.files
+                        )
+                    }
+                    
+                    ChatRoomRepository.shared.appendNewRecentChattingList(
+                        value.room?.roomId ?? "",
+                        chattingList: newChattingList
+                    )
+                    
+                    guard let lastMessage = newChattingList.last else { return "" }
+                    
+                    let files: [String] = lastMessage.files.map { $0 }
+                    
+                    let lastChat = LastChatMessage(
+                        chatId: lastMessage.chatId,
+                        roomId: lastMessage.roomId,
+                        content: lastMessage.content,
+                        createdAt: lastMessage.createdAt,
+                        sender: lastMessage.sender,
+                        files: files
+                    )
+                    
+                    ChatRoomRepository.shared.updateLastChat(lastChat, chatRoom: room)
+                }
+               
+                ChatRoomRepository.shared.getLocationOfDefaultRealm()
+                
+                return room.roomId
+            }
+            .subscribe(with: self) { owner, roomId in
+                let chatRoom = ChatRoomRepository.shared.read().first { $0.roomId == roomId }
+                guard let chatRoom = chatRoom else { return }
+
+                let updatedChaRoomMessages: [ChatRoomMessage] = chatRoom.messages.map { $0 }
+                
+                owner.chattingListSubject.onNext(updatedChaRoomMessages)
                 SocketIOManager.shared.establishConnection()
             }
             .disposed(by: disposeBag)
@@ -109,7 +157,9 @@ final class DirectMessageViewModel: ViewModelType {
             .withLatestFrom(roomInfoSubject)
             .withLatestFrom(selectedImageDataListRelay) { ($0?.roomId ?? "", $1) }
             .withLatestFrom(chattingTextSubject) { value, chattingText in
-                (files: value.1, roomId: value.0, chattingText: chattingText)
+                let tuple = (files: value.1, roomId: value.0, chattingText: chattingText)
+                print("tuple", tuple)
+                return tuple
             }
             .bind(with: self) { owner, value in
                 if !value.chattingText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
@@ -141,11 +191,7 @@ final class DirectMessageViewModel: ViewModelType {
                     return Single<Chat>.never()
                 }
             }
-            .map { newChat in
-                // TODO: - DB에 저장하고 다시 불러오기
-                return newChat
-            }
-            .subscribe(with: self) { owner, _ in
+            .subscribe(with: self) { owner, newChat in
                 print("채팅 업로드 성공!")
                 clearSendButtonTrigger.accept(())
             }
@@ -193,24 +239,57 @@ final class DirectMessageViewModel: ViewModelType {
                     return Single<Chat>.never()
                 }
             }
-            .map { newChat in
-                // TODO: - DB에 저장하고 다시 불러오기
-                return newChat
-            }
-            .subscribe(with: self) { owner, _ in
+            .subscribe(with: self) { owner, newChat in
                 print("업로드 성공!")
                 clearSendButtonTrigger.accept(())
             }
             .disposed(by: disposeBag)
         
         SocketIOManager.shared.ReceivedChatDataSubject
-            .withLatestFrom(chattingListSubject) { receviedChat, chattingList in
-                var chattingList = chattingList
-                chattingList.append(receviedChat)
-                return chattingList
+            .map { receviedChat in
+
+                let sender = UserRepository.shared.read().first { $0.userId == receviedChat.sender.userId }
+                let convertedReceviedChat = ChatRoomMessage(
+                    chatId: receviedChat.chatId,
+                    roomId: receviedChat.roomId,
+                    content: receviedChat.content,
+                    createdAt: receviedChat.createdAt,
+                    sender: sender,
+                    files: receviedChat.files
+                )
+                
+                ChatRoomRepository.shared.appendNewRecentChat(convertedReceviedChat)
+                                
+                return ChatRoomRepository.shared.readMessages(receviedChat.roomId)
             }
-            .subscribe(with: self) { owner, updatedChattingList in
+            .withUnretained(self)
+            .map { owner, updatedChattingList in
                 owner.chattingListSubject.onNext(updatedChattingList)
+                
+                let chattingList: [ChatRoomMessage] = updatedChattingList
+                return chattingList.last
+            }
+            .withLatestFrom(roomInfoSubject) { (lastMessage: $0, chatRoom: $1) }
+            .subscribe(with: self) { owner, value in
+                guard 
+                    let lastMessage = value.lastMessage,
+                    let chatRoom = value.chatRoom
+                else { return }
+                
+                let files: [String] = lastMessage.files.map { $0 }
+                
+                let lastChat = LastChatMessage(
+                    chatId: lastMessage.chatId,
+                    roomId: lastMessage.roomId,
+                    content: lastMessage.content,
+                    createdAt: lastMessage.createdAt,
+                    sender: lastMessage.sender,
+                    files: files
+                )
+                
+                ChatRoomRepository.shared.updateLastChat(lastChat, chatRoom: chatRoom)
+
+                owner.roomInfoSubject.onNext(chatRoom)
             }
             .disposed(by: disposeBag)
         

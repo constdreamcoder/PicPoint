@@ -26,7 +26,7 @@ final class SettingsViewModel: ViewModelType {
         let questionWithdrawalTrigger: Driver<Void>
         let successTrigger: Driver<Void>
         let goToPaymentListVCTrigger: Driver<[ValidatePaymentModel]>
-        let goToMyChatRoomsVCTrigger: Driver<[Room]>
+        let goToMyChatRoomsVCTrigger: Driver<[ChatRoom]>
     }
     
     func transform(input: Input) -> Output {
@@ -50,6 +50,43 @@ final class SettingsViewModel: ViewModelType {
                         print(error.errorCode, error.errorDesc)
                         return Single<[Room]>.never()
                     }
+            }
+            .map { myChatRoomList in
+                let updatedMyChatRoomList = myChatRoomList.map { chatRoom in
+                    let participants = chatRoom.participants.map {
+                        User(userId: $0.userId, nick: $0.nick, profileImage: $0.profileImage)
+                    }
+
+                    var lastChat: LastChatMessage?
+                    if let lastMessage = chatRoom.lastChat {
+                        let lastMessageSender = lastMessage.sender
+                        let sender = User(
+                            userId: lastMessageSender.userId,
+                            nick: lastMessageSender.nick,
+                            profileImage: lastMessageSender.profileImage
+                        )
+                        
+                        lastChat = LastChatMessage(
+                            chatId: lastMessage.chatId,
+                            roomId: lastMessage.roomId,
+                            content: lastMessage.content,
+                            createdAt: lastMessage.createdAt,
+                            sender: sender,
+                            files: lastMessage.files
+                        )
+                    }
+                    
+                    return ChatRoom(
+                        roomId: chatRoom.roomId,
+                        createdAt: chatRoom.createdAt,
+                        updatedAt: chatRoom.updatedAt,
+                        participants: participants, 
+                        lastChat: lastChat
+                    )
+                }
+                ChatRoomRepository.shared.updateChatRoomList(updatedMyChatRoomList)
+                ChatRoomRepository.shared.getLocationOfDefaultRealm()
+                return updatedMyChatRoomList
             }
         
         input.logoutButtonTapped

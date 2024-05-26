@@ -14,7 +14,7 @@ struct DirectMessageTableViewSectionDataModel {
 }
 
 extension DirectMessageTableViewSectionDataModel: SectionModelType {
-  typealias Item = Chat
+  typealias Item = ChatRoomMessage
 
    init(original: DirectMessageTableViewSectionDataModel, items: [Item]) {
     self = original

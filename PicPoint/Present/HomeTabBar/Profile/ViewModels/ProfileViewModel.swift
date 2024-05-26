@@ -46,7 +46,7 @@ final class ProfileViewModel: ViewModelType {
         let moveToDetailVCTrigger: Driver<Post?>
         let endRefreshTrigger: Driver<Void>
         let goToMapButtonTrigger: Driver<(String?, [Post])>
-        let goToDirectMessageVCTrigger: Driver<Room?>
+        let goToDirectMessageVCTrigger: Driver<ChatRoom?>
         let isHiddenTabBarTrigger: Driver<Bool>
     }
     
@@ -67,7 +67,7 @@ final class ProfileViewModel: ViewModelType {
         let unFollowTrigger = PublishSubject<FetchMyProfileModel>()
         let endRefreshTrigger = PublishRelay<Void>()
         let isHiddenTabBarTrigger = BehaviorRelay<Bool>(value: false)
-        let goToDirectMessageVCTrigger = PublishRelay<Room?>()
+        let goToDirectMessageVCTrigger = PublishRelay<ChatRoom?>()
         
         let sections: [SectionModelWrapper] = [
             SectionModelWrapper(
@@ -231,6 +231,54 @@ final class ProfileViewModel: ViewModelType {
                         print(error.errorCode, error.errorDesc)
                         return Single<Room>.never()
                     }
+            }
+            .map { room in
+                var chatRoom: ChatRoom
+                if !ChatRoomRepository.shared.read().contains(where: { $0.roomId == room.roomId }) {
+                    let participants = room.participants.map { sender in
+                        User(
+                            userId: sender.userId,
+                            nick: sender.nick,
+                            profileImage: sender.profileImage
+                        )
+                    }
+                    
+                    var lastChat: LastChatMessage?
+                    if let lastMessage = room.lastChat {
+                        let lastMessageSender = lastMessage.sender
+                        let sender = User(
+                            userId: lastMessageSender.userId,
+                            nick: lastMessageSender.nick,
+                            profileImage: lastMessageSender.profileImage
+                        )
+                        
+                        lastChat = LastChatMessage(
+                            chatId: lastMessage.chatId,
+                            roomId: lastMessage.roomId,
+                            content: lastMessage.content,
+                            createdAt: lastMessage.createdAt,
+                            sender: sender,
+                            files: lastMessage.files
+                        )
+                    }
+                   
+                    chatRoom = ChatRoom(
+                        roomId: room.roomId,
+                        createdAt: room.createdAt,
+                        updatedAt: room.updatedAt,
+                        participants: participants,
+                        lastChat: lastChat
+                    )
+                    
+                    ChatRoomRepository.shared.write(chatRoom)
+                    ChatRoomRepository.shared.getLocationOfDefaultRealm()
+                    print("채팅방을 새로 생성하였습니다.")
+                } else {
+                    print("이미 존재하는 채팅방입니다.")
+                    chatRoom = ChatRoomRepository.shared.read().first { $0.roomId == room.roomId }!
+                }
+                
+                return chatRoom
             }
             .subscribe(with: self) { owner, room in
                 goToDirectMessageVCTrigger.accept(room)

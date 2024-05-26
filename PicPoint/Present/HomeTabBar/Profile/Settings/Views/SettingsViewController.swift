@@ -174,8 +174,8 @@ extension SettingsViewController: UIViewControllerConfiguration {
             .disposed(by: disposeBag)
         
         output.goToMyChatRoomsVCTrigger
-            .drive(with: self) { owner, myChatRoomList in
-                let myChatRoomsVM = MyChatRoomsViewModel(myChatRoomList)
+            .drive(with: self) { owner, _ in
+                let myChatRoomsVM = MyChatRoomsViewModel()
                 let myChatRoomsVC = MyChatRoomsViewController(myChatRoomsViewModel: myChatRoomsVM)
                 owner.navigationController?.pushViewController(myChatRoomsVC, animated: true)
             }

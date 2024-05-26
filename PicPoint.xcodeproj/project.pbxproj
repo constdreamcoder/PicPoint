@@ -163,6 +163,11 @@
 		00760E5E2BD540C200741C40 /* InnerTextViewContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00760E5D2BD540C200741C40 /* InnerTextViewContainerView.swift */; };
 		007ADD312BEE934D00C1A6ED /* LoadingFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 007ADD302BEE934D00C1A6ED /* LoadingFooterView.swift */; };
 		008D04CD2BED11C300BCCCB1 /* CustomSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 008D04CC2BED11C300BCCCB1 /* CustomSession.swift */; };
+		009504192C007AF600B08474 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 009504182C007AF600B08474 /* User.swift */; };
+		0095041E2C00A08100B08474 /* ChatRoomRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0095041D2C00A08100B08474 /* ChatRoomRepository.swift */; };
+		009504202C00B28C00B08474 /* RecentKeywordRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0095041F2C00B28C00B08474 /* RecentKeywordRepository.swift */; };
+		009504222C00B6D300B08474 /* ChatRoomMessageRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 009504212C00B6D300B08474 /* ChatRoomMessageRepository.swift */; };
+		009504262C00BF6300B08474 /* UserRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 009504252C00BF6300B08474 /* UserRepository.swift */; };
 		009AFAEA2BDA3050003A45BF /* FetchPostWithHashTagQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = 009AFAE92BDA3050003A45BF /* FetchPostWithHashTagQuery.swift */; };
 		009AFAEC2BDA7530003A45BF /* ProfileCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 009AFAEB2BDA7530003A45BF /* ProfileCollectionViewCell.swift */; };
 		009AFAF02BDA75C7003A45BF /* ContentsCollectionHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 009AFAEF2BDA75C7003A45BF /* ContentsCollectionHeaderView.swift */; };
@@ -279,6 +284,8 @@
 		00EA277E2BDE516900EE3F9C /* ValidateEmailBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00EA277D2BDE516900EE3F9C /* ValidateEmailBody.swift */; };
 		00EA27802BDE728500EE3F9C /* ValidateEmailModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00EA277F2BDE728500EE3F9C /* ValidateEmailModel.swift */; };
 		00EA27832BDEA5ED00EE3F9C /* SignUpStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00EA27822BDEA5ED00EE3F9C /* SignUpStorage.swift */; };
+		00EDD0662BFF68DB00436B95 /* ChatRoomMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00EDD0652BFF68DB00436B95 /* ChatRoomMessage.swift */; };
+		00EDD0682BFF6C2000436B95 /* ChatRoom.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00EDD0672BFF6C2000436B95 /* ChatRoom.swift */; };
 		00EE55FE2BEC98DF0016A791 /* EventLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00EE55FD2BEC98DF0016A791 /* EventLogger.swift */; };
 		00EE56002BEC99540016A791 /* Data+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00EE55FF2BEC99540016A791 /* Data+Extensions.swift */; };
 		00F65D372BCA16290027A897 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 00F65D362BCA16290027A897 /* Alamofire */; };
@@ -287,7 +294,6 @@
 		00F65D442BCA178C0027A897 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 00F65D432BCA178C0027A897 /* SnapKit */; };
 		00F9AAFB2BEF953600E51C65 /* SearchLocationTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00F9AAFA2BEF953600E51C65 /* SearchLocationTableViewCell.swift */; };
 		00F9AAFE2BEFAF2600E51C65 /* RepositoryType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00F9AAFD2BEFAF2600E51C65 /* RepositoryType.swift */; };
-		00F9AB022BEFB06A00E51C65 /* RecentKeywordRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00F9AB012BEFB06A00E51C65 /* RecentKeywordRepository.swift */; };
 		00F9AB062BEFBEE000E51C65 /* RecentKeyword.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00F9AB052BEFBEE000E51C65 /* RecentKeyword.swift */; };
 		00F9AB082BEFBF7600E51C65 /* RecentKeywordTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00F9AB072BEFBF7600E51C65 /* RecentKeywordTableViewCell.swift */; };
 		00F9AB0B2BEFD50C00E51C65 /* Realm in Frameworks */ = {isa = PBXBuildFile; productRef = 00F9AB0A2BEFD50C00E51C65 /* Realm */; };
@@ -454,6 +460,11 @@
 		00760E5D2BD540C200741C40 /* InnerTextViewContainerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InnerTextViewContainerView.swift; sourceTree = "<group>"; };
 		007ADD302BEE934D00C1A6ED /* LoadingFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingFooterView.swift; sourceTree = "<group>"; };
 		008D04CC2BED11C300BCCCB1 /* CustomSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomSession.swift; sourceTree = "<group>"; };
+		009504182C007AF600B08474 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		0095041D2C00A08100B08474 /* ChatRoomRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatRoomRepository.swift; sourceTree = "<group>"; };
+		0095041F2C00B28C00B08474 /* RecentKeywordRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentKeywordRepository.swift; sourceTree = "<group>"; };
+		009504212C00B6D300B08474 /* ChatRoomMessageRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatRoomMessageRepository.swift; sourceTree = "<group>"; };
+		009504252C00BF6300B08474 /* UserRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserRepository.swift; sourceTree = "<group>"; };
 		009AFAE92BDA3050003A45BF /* FetchPostWithHashTagQuery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchPostWithHashTagQuery.swift; sourceTree = "<group>"; };
 		009AFAEB2BDA7530003A45BF /* ProfileCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileCollectionViewCell.swift; sourceTree = "<group>"; };
 		009AFAEF2BDA75C7003A45BF /* ContentsCollectionHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentsCollectionHeaderView.swift; sourceTree = "<group>"; };
@@ -569,11 +580,12 @@
 		00EA277D2BDE516900EE3F9C /* ValidateEmailBody.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValidateEmailBody.swift; sourceTree = "<group>"; };
 		00EA277F2BDE728500EE3F9C /* ValidateEmailModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValidateEmailModel.swift; sourceTree = "<group>"; };
 		00EA27822BDEA5ED00EE3F9C /* SignUpStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpStorage.swift; sourceTree = "<group>"; };
+		00EDD0652BFF68DB00436B95 /* ChatRoomMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatRoomMessage.swift; sourceTree = "<group>"; };
+		00EDD0672BFF6C2000436B95 /* ChatRoom.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatRoom.swift; sourceTree = "<group>"; };
 		00EE55FD2BEC98DF0016A791 /* EventLogger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventLogger.swift; sourceTree = "<group>"; };
 		00EE55FF2BEC99540016A791 /* Data+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Data+Extensions.swift"; sourceTree = "<group>"; };
 		00F9AAFA2BEF953600E51C65 /* SearchLocationTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchLocationTableViewCell.swift; sourceTree = "<group>"; };
 		00F9AAFD2BEFAF2600E51C65 /* RepositoryType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepositoryType.swift; sourceTree = "<group>"; };
-		00F9AB012BEFB06A00E51C65 /* RecentKeywordRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentKeywordRepository.swift; sourceTree = "<group>"; };
 		00F9AB052BEFBEE000E51C65 /* RecentKeyword.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentKeyword.swift; sourceTree = "<group>"; };
 		00F9AB072BEFBF7600E51C65 /* RecentKeywordTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentKeywordTableViewCell.swift; sourceTree = "<group>"; };
 		00FE92AB2BCE53EA00554D0F /* PostManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostManager.swift; sourceTree = "<group>"; };
@@ -1525,6 +1537,24 @@
 			path = FooterView;
 			sourceTree = "<group>";
 		};
+		0095041C2C009C6900B08474 /* Chat */ = {
+			isa = PBXGroup;
+			children = (
+				00EDD0672BFF6C2000436B95 /* ChatRoom.swift */,
+				00EDD0652BFF68DB00436B95 /* ChatRoomMessage.swift */,
+				009504182C007AF600B08474 /* User.swift */,
+			);
+			path = Chat;
+			sourceTree = "<group>";
+		};
+		009504272C00D23900B08474 /* SelectLocation */ = {
+			isa = PBXGroup;
+			children = (
+				00F9AB052BEFBEE000E51C65 /* RecentKeyword.swift */,
+			);
+			path = SelectLocation;
+			sourceTree = "<group>";
+		};
 		009AFAED2BDA7537003A45BF /* Cells */ = {
 			isa = PBXGroup;
 			children = (
@@ -2081,7 +2111,8 @@
 		00F9AB032BEFBEBF00E51C65 /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				00F9AB052BEFBEE000E51C65 /* RecentKeyword.swift */,
+				009504272C00D23900B08474 /* SelectLocation */,
+				0095041C2C009C6900B08474 /* Chat */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -2089,7 +2120,10 @@
 		00F9AB042BEFBEC900E51C65 /* Repositories */ = {
 			isa = PBXGroup;
 			children = (
-				00F9AB012BEFB06A00E51C65 /* RecentKeywordRepository.swift */,
+				0095041F2C00B28C00B08474 /* RecentKeywordRepository.swift */,
+				0095041D2C00A08100B08474 /* ChatRoomRepository.swift */,
+				009504212C00B6D300B08474 /* ChatRoomMessageRepository.swift */,
+				009504252C00BF6300B08474 /* UserRepository.swift */,
 			);
 			path = Repositories;
 			sourceTree = "<group>";
@@ -2271,6 +2305,7 @@
 				00760E4D2BD512C800741C40 /* AddPostCollectionViewCellType.swift in Sources */,
 				0010416F2BDBF6D000E5FDA1 /* FetchMyProfileModel.swift in Sources */,
 				00760E572BD531EA00741C40 /* TitleTableViewCell.swift in Sources */,
+				0095041E2C00A08100B08474 /* ChatRoomRepository.swift in Sources */,
 				00760E422BD4FD3D00741C40 /* AddPostViewController.swift in Sources */,
 				001041682BDBEF8800E5FDA1 /* MyLikeCollectionViewCell.swift in Sources */,
 				001041632BDBE9F600E5FDA1 /* MyLikeViewController.swift in Sources */,
@@ -2282,7 +2317,6 @@
 				004CAC8A2BF7C2A90090D0A6 /* SendChatBody.swift in Sources */,
 				003E23172BF49363000BF3D7 /* HashTagSearchViewModel.swift in Sources */,
 				0010415C2BDBBF2000E5FDA1 /* MyPostViewModel.swift in Sources */,
-				00F9AB022BEFB06A00E51C65 /* RecentKeywordRepository.swift in Sources */,
 				00E4D9B02BE3A6B800C641BE /* WithdralNetworkError.swift in Sources */,
 				005E8F1E2BE0E7DE00B341A5 /* LikeBody.swift in Sources */,
 				00760E5C2BD53B5900741C40 /* InnerContainerView.swift in Sources */,
@@ -2444,11 +2478,13 @@
 				00A49D112BEAAD490058F35B /* PaymentListViewModel.swift in Sources */,
 				0035402B2BD0212800A71415 /* String+Extensions.swift in Sources */,
 				0055FB3C2BDA773E0053781D /* ProfileCollectionViewSectionDataModels.swift in Sources */,
+				00EDD0662BFF68DB00436B95 /* ChatRoomMessage.swift in Sources */,
 				00DD468A2BE2AD0A001B3ADA /* FetchOtherProfileParams.swift in Sources */,
 				00B7C3FE2BCA6142009AC333 /* BaseViewController.swift in Sources */,
 				003C82C62BDCE9EA003315E1 /* EditViewModel.swift in Sources */,
 				0046D0672BF257A6001BE9CC /* DetailCollectionViewFirstSectionDataModel.swift in Sources */,
 				005E8F232BE0F24700B341A5 /* LikeModel.swift in Sources */,
+				009504222C00B6D300B08474 /* ChatRoomMessageRepository.swift in Sources */,
 				002720962BDFC058004ADC5C /* FollowingTableViewCell.swift in Sources */,
 				00E4D9D52BE3B26E00C641BE /* EditMyProfileNetworkError.swift in Sources */,
 				009AFAEA2BDA3050003A45BF /* FetchPostWithHashTagQuery.swift in Sources */,
@@ -2461,6 +2497,7 @@
 				00EA277A2BDE3EAC00EE3F9C /* PhoneNumberSignUpView.swift in Sources */,
 				0002C1272BD98A4700AE36EC /* RowView.swift in Sources */,
 				00132DD52BFE17060065352E /* ThreeImagesStackView.swift in Sources */,
+				009504262C00BF6300B08474 /* UserRepository.swift in Sources */,
 				00AFF6022BCD152E006D319A /* CellIdentifiable.swift in Sources */,
 				000AD2672BD2849900FC7768 /* SeparatorView.swift in Sources */,
 				00132DD72BFE17580065352E /* FourImagesStackView.swift in Sources */,
@@ -2488,6 +2525,7 @@
 				000AD2542BD234E800FC7768 /* PhotoImageView.swift in Sources */,
 				0049D8812BC96B4800F59852 /* SceneDelegate.swift in Sources */,
 				00E4D9DA2BE3B2AC00C641BE /* SearchHashTagsNetworkError.swift in Sources */,
+				00EDD0682BFF6C2000436B95 /* ChatRoom.swift in Sources */,
 				002023162BDA819C004CA12F /* ProfileImageView.swift in Sources */,
 				00EA27702BDE3ABB00EE3F9C /* NicknameSignUpViewController.swift in Sources */,
 				003540252BCFCC2D00A71415 /* BaseTableViewCell.swift in Sources */,
@@ -2512,6 +2550,7 @@
 				004FE27B2BE8C7490044C323 /* SelectedPlaceDetailsViewModel.swift in Sources */,
 				002720882BDF87EB004ADC5C /* FollowViewModel.swift in Sources */,
 				0003E9342BD57DA400695D40 /* SelectImageViewController.swift in Sources */,
+				009504192C007AF600B08474 /* User.swift in Sources */,
 				00EA27832BDEA5ED00EE3F9C /* SignUpStorage.swift in Sources */,
 				001254002BD4190D0065F1E6 /* CommentManager.swift in Sources */,
 				00E4D9AE2BE3A6AB00C641BE /* AccessTokenNetworkError.swift in Sources */,
@@ -2521,6 +2560,7 @@
 				002720A62BDFD7C1004ADC5C /* FollowModel.swift in Sources */,
 				003C82C82BDCECFE003315E1 /* CustomInputView.swift in Sources */,
 				00EA27682BDE335700EE3F9C /* EmailSignUpViewController.swift in Sources */,
+				009504202C00B28C00B08474 /* RecentKeywordRepository.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

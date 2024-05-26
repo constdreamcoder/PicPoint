@@ -62,7 +62,9 @@ extension MyChatRoomsViewController: UIViewControllerConfiguration {
     }
     
     func bind() {
-        let input = MyChatRoomsViewModel.Input()
+        let input = MyChatRoomsViewModel.Input(
+            viewWillAppear: self.rx.viewWillAppear
+        )
         
         let output = viewModel.transform(input: input)
         
@@ -83,7 +85,7 @@ extension MyChatRoomsViewController: UIViewControllerConfiguration {
             }
             .disposed(by: disposeBag)
         
-        tableView.rx.modelSelected(Room.self)
+        tableView.rx.modelSelected(ChatRoom.self)
             .bind(with: self) { owner, selectedRoom in
                 let directMessageVM = DirectMessageViewModel(selectedRoom)
                 let directMessageVC = DirectMessageViewController(directMessageViewModel: directMessageVM)

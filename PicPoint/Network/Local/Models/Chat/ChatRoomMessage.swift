@@ -13,17 +13,18 @@ final class ChatRoomMessage: Object {
     @Persisted var roomId: String
     @Persisted var content: String?
     @Persisted var createdAt: String
-    @Persisted var sender: User
+    @Persisted var sender: User?
     @Persisted var files: List<String>
     
     @Persisted(originProperty: "messages") var chatRoom: LinkingObjects<ChatRoom>
-    
+
     convenience init(
         chatId: String,
         roomId: String,
         content: String? = nil,
         createdAt: String,
-        sender: User
+        sender: User? = nil,
+        files: [String]
     ) {
         self.init()
         
@@ -32,5 +33,9 @@ final class ChatRoomMessage: Object {
         self.content = content
         self.createdAt = createdAt
         self.sender = sender
+        files.forEach { [weak self] file in
+            guard let self else { return }
+            self.files.append(file)
+        }
     }
 }

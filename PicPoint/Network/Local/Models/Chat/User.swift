@@ -12,7 +12,7 @@ final class User: Object {
     @Persisted(primaryKey: true) var userId: String
     @Persisted var nick: String
     @Persisted var profileImage: String?
-    
+        
     convenience init(
         userId: String,
         nick: String,

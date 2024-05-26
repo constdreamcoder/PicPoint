@@ -81,13 +81,14 @@ final class OpponentDirectMessageTableViewCell: BaseTableViewCell {
         imageViewContainerView.snp.removeConstraints()
     }
     
-    func updateCellDatas(_ chat: Chat) {
-        if let profileImage = chat.sender.profileImage, !profileImage.isEmpty {
+    func updateCellDatas(_ chat: ChatRoomMessage) {
+        guard let sender = chat.sender else { return }
+        if let profileImage = sender.profileImage, !profileImage.isEmpty {
             let url = URL(string: APIKeys.baseURL + "/\(profileImage)")
             let placeholderImage = UIImage(systemName: "person.circle")
             profileImageView.kf.setImageWithAuthHeaders(with: url, placeholder: placeholderImage)
         }
-        nicknameLabel.text = chat.sender.nick
+        nicknameLabel.text = sender.nick
         if let content = chat.content, content.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
             && chat.files.count >= 1 {
             chatBubbleImageView.snp.makeConstraints {
@@ -105,7 +106,9 @@ final class OpponentDirectMessageTableViewCell: BaseTableViewCell {
         }
         contentLabel.text = chat.content
         dateLabel.text = chat.createdAt.getChattingDateString
-        updateImageViewContainerView(chat.files)
+        
+        let files: [String] = chat.files.map { $0 }
+        updateImageViewContainerView(files)
     }
     
     private func updateImageViewContainerView(_ uploadedImageFiles: [String]) {

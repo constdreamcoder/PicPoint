@@ -48,7 +48,6 @@ final class MyChatRoomsTableViewCell: BaseTableViewCell {
     
     let datelabel: UILabel = {
         let label = UILabel()
-        label.text = "5월 13일"
         label.textColor = .lightGray
         label.font = .systemFont(ofSize: 12.0)
         return label
@@ -67,6 +66,10 @@ final class MyChatRoomsTableViewCell: BaseTableViewCell {
         super.prepareForReuse()
         
         disposeBag = DisposeBag()
+        
+        userImageView.image = UIImage(systemName: "person.circle")
+        lastContentLabel.text = "대화 내용 없음"
+        datelabel.text = nil
     }
 }
 

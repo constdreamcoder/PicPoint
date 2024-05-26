@@ -12,24 +12,25 @@ import RxCocoa
 final class MyChatRoomsViewModel: ViewModelType {
     var disposeBag = DisposeBag()
     
-    private let myChatRoomList = BehaviorRelay<[Room]>(value: [])
+    private let myChatRoomList = BehaviorRelay<[ChatRoom]>(value: [])
 
-    struct Input {}
-    
-    struct Output {
-        let myChatRoomList: Driver<[Room]>
+    struct Input {
+        let viewWillAppear: Observable<Bool>
     }
     
-    init(_ myChatRoomList: [Room]) {
-        Observable.just(myChatRoomList)
-            .subscribe(with: self) { owner, myChatRoomList in
-                owner.myChatRoomList.accept(myChatRoomList)
-            }
-            .disposed(by: disposeBag)
+    struct Output {
+        let myChatRoomList: Driver<[ChatRoom]>
     }
     
     func transform(input: Input) -> Output {
-    
+        
+        input.viewWillAppear
+            .bind(with: self) { owner, _ in
+                let chatRoomList: [ChatRoom] = ChatRoomRepository.shared.read().sorted(by: \.updatedAt, ascending: false).map { $0 }
+                owner.myChatRoomList.accept(chatRoomList)
+            }
+            .disposed(by: disposeBag)
+            
         return Output(
             myChatRoomList: myChatRoomList.asDriver()
         )

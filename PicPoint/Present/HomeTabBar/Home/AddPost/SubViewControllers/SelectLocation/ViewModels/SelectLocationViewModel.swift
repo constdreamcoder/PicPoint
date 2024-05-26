@@ -49,7 +49,7 @@ final class SelectLocationViewModel: ViewModelType {
         
         fetchRecentKeywordListTrigger
             .bind(with: self) { owner,  _ in
-                let recentKeywordList: [RecentKeyword] = RecentKeywordRepository.shared.read(RecentKeyword.self).sorted(byKeyPath: "regDate", ascending: false).map { $0 }
+                let recentKeywordList: [RecentKeyword] = RecentKeywordRepository.shared.read().sorted(byKeyPath: "regDate", ascending: false).map { $0 }
                 owner.recentKeywordListRelay.accept(recentKeywordList)
             }
             .disposed(by: disposeBag)
@@ -78,7 +78,7 @@ final class SelectLocationViewModel: ViewModelType {
                     id: id,
                     keyword: selectedResult.name ?? ""
                 )
-                let count = RecentKeywordRepository.shared.read(RecentKeyword.self).filter { $0.keyword == recentKeyword.keyword }.count
+                let count = RecentKeywordRepository.shared.read().filter { $0.keyword == recentKeyword.keyword }.count
                 
                 if count < 1 {
                     RecentKeywordRepository.shared.write(recentKeyword)

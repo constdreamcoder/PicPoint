@@ -67,8 +67,8 @@ final class MyDirectMessageTableViewCell: BaseTableViewCell {
         imageViewContainerView.snp.removeConstraints()
     }
     
-    func updateCellDatas(_ chat: Chat) {
-        if let content = chat.content, content.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty 
+    func updateCellDatas(_ chat: ChatRoomMessage) {
+        if let content = chat.content, content.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
             && chat.files.count >= 1 {
             chatBubbleImageView.snp.makeConstraints {
                 $0.top.equalTo(contentView.safeAreaLayoutGuide).offset(8.0)
@@ -85,7 +85,8 @@ final class MyDirectMessageTableViewCell: BaseTableViewCell {
         }
         contentLabel.text = chat.content
         dateLabel.text = chat.createdAt.getChattingDateString
-        updateImageViewContainerView(chat.files)
+        let files: [String] = chat.files.map { $0 }
+        updateImageViewContainerView(files)
     }
     
     private func updateImageViewContainerView(_ uploadedImageFiles: [String]) {

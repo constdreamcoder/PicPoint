@@ -38,7 +38,7 @@ final class DirectMessageViewController: BaseViewController {
     private let dataSource = RxTableViewSectionedReloadDataSource<DirectMessageTableViewSectionDataModel>(
         configureCell: { dataSource, tableView, indexPath, item in
             
-            if item.sender.userId == UserDefaultsManager.userId {
+            if item.sender?.userId == UserDefaultsManager.userId {
                 guard let cell = tableView.dequeueReusableCell(withIdentifier: MyDirectMessageTableViewCell.identifier, for: indexPath) as? MyDirectMessageTableViewCell else { return UITableViewCell() }
                 
                 cell.updateCellDatas(item)

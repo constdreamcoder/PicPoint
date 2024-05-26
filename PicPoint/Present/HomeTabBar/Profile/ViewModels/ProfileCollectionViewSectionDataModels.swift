@@ -9,13 +9,6 @@ import Foundation
 import Differentiator
 
 // MARK: - ProfileCollectionViewFirstSectionDataModel
-//struct FirstSectionCellData {
-//    var header: String
-//    var title: String
-//    var address: String
-//    var files: [String]
-//}
-
 struct ProfileCollectionViewFirstSectionDataModel {
     var items: [Item]
 }
