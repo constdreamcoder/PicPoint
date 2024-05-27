@@ -14,4 +14,9 @@ extension RxSwift.Reactive where Base: UIViewController {
         return methodInvoked(#selector(UIViewController.viewWillAppear))
             .map { $0.first as? Bool ?? false }
     }
+    
+    var viewDidAppear: Observable<Bool> {
+        return methodInvoked(#selector(Base.viewDidAppear(_:)))
+            .map { $0.first as? Bool ?? false }
+    }
 }

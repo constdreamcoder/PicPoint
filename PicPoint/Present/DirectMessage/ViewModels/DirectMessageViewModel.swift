@@ -24,6 +24,7 @@ final class DirectMessageViewModel: ViewModelType {
         let didEndEditing: ControlEvent<Void>
         let sendButtonTap: ControlEvent<Void>
         let addImagesButtonTap: ControlEvent<Void>
+        let viewDidAppear: Observable<Bool>
     }
     
     struct Output {
@@ -36,6 +37,7 @@ final class DirectMessageViewModel: ViewModelType {
         let showPHPickerTrigger: Driver<Void>
         let showImageCountIimitAlertTrigger: Driver<Void>
         let selectedImageList: Driver<[Data]>
+        let scrollToBottomTrigger: Driver<([DirectMessageTableViewSectionDataModel], Bool)>
     }
     
     init(_ room: ChatRoom) {
@@ -121,6 +123,18 @@ final class DirectMessageViewModel: ViewModelType {
         let showImageCountIimitAlertTrigger = PublishRelay<Void>()
         let uploadOnlyTextTrigger = PublishSubject<Void>()
         let uploadImagesAndTextTrigger = PublishSubject<Void>()
+        let isScrollingValid = PublishRelay<Bool>()
+        
+        let scrollToBottomValid = Observable.zip(
+            sectionsRelay,
+            isScrollingValid
+        )
+        
+        input.viewDidAppear
+            .bind { _ in
+                isScrollingValid.accept(false)
+            }
+            .disposed(by: disposeBag)
         
         chattingListSubject
             .subscribe(with: self) { owner, chattingList in
@@ -131,6 +145,7 @@ final class DirectMessageViewModel: ViewModelType {
                     )
                 ]
                 owner.sectionsRelay.accept(sections)
+                isScrollingValid.accept(true)
             }
             .disposed(by: disposeBag)
         
@@ -157,9 +172,7 @@ final class DirectMessageViewModel: ViewModelType {
             .withLatestFrom(roomInfoSubject)
             .withLatestFrom(selectedImageDataListRelay) { ($0?.roomId ?? "", $1) }
             .withLatestFrom(chattingTextSubject) { value, chattingText in
-                let tuple = (files: value.1, roomId: value.0, chattingText: chattingText)
-                print("tuple", tuple)
-                return tuple
+                (files: value.1, roomId: value.0, chattingText: chattingText)
             }
             .bind(with: self) { owner, value in
                 if !value.chattingText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
@@ -313,7 +326,8 @@ final class DirectMessageViewModel: ViewModelType {
             sections: sectionsRelay.asDriver(), 
             showPHPickerTrigger: showPHPickerTrigger.asDriver(onErrorJustReturn: ()),
             showImageCountIimitAlertTrigger: showImageCountIimitAlertTrigger.asDriver(onErrorJustReturn: ()),
-            selectedImageList: selectedImageDataListRelay.asDriver(onErrorJustReturn: [])
+            selectedImageList: selectedImageDataListRelay.asDriver(onErrorJustReturn: []),
+            scrollToBottomTrigger: scrollToBottomValid.asDriver(onErrorJustReturn: ([], false))
         )
     }
     

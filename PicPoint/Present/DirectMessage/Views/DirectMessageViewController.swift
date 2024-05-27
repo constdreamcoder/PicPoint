@@ -131,7 +131,8 @@ extension DirectMessageViewController: UIViewControllerConfiguration {
             didBeginEditing: textView.rx.didBeginEditing,
             didEndEditing: textView.rx.didEndEditing,
             sendButtonTap: chatWritingSectionView.sendButton.rx.tap,
-            addImagesButtonTap: chatWritingSectionView.addImagesButton.rx.tap
+            addImagesButtonTap: chatWritingSectionView.addImagesButton.rx.tap, 
+            viewDidAppear: self.rx.viewDidAppear
         )
         
         let output = viewModel.transform(input: input)
@@ -140,16 +141,16 @@ extension DirectMessageViewController: UIViewControllerConfiguration {
             .drive(tableView.rx.items(dataSource: dataSource))
             .disposed(by: disposeBag)
         
-        output.sections
-            .drive(with: self) { owner, sections in
-                let itemCount = sections[0].items.count
+        output.scrollToBottomTrigger
+            .drive(with: self) { owner, value in
+                let itemCount = value.0[0].items.count
                 guard itemCount > 0 else { return }
                 let index = itemCount - 1
                 owner.tableView.scrollToRow(
-                    at: IndexPath(row: index, section: 0), at: .bottom, animated: true)
+                    at: IndexPath(row: index, section: 0), at: .bottom, animated: value.1)
             }
             .disposed(by: disposeBag)
-        
+                    
         output.chattingText
             .drive(with: self) { owner, commentText in
                 let textVeiw = owner.chatWritingSectionView.textView
@@ -249,7 +250,7 @@ extension DirectMessageViewController: PHPickerViewControllerDelegate {
             
         var imageDataList = [Data]()
         
-        var group = DispatchGroup()
+        let group = DispatchGroup()
         
         for (_, item) in results.enumerated() {
             group.enter()
