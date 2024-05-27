@@ -30,6 +30,12 @@ class BaseViewController: UIViewController {
         view.backgroundColor = .white        
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(true)
+        
+        tabBarController?.tabBar.isHidden = false
+    }
+    
     deinit {
         print("deinit - \(type(of: self))")
     }
