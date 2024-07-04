@@ -38,50 +38,12 @@
 
 ## 🛠 기술 소개
 
-- MVVM 패턴
-  - UI 로직과 비지니스 로직의 분리 목적으로 도입
-  - ViewModel 프로토콜 정의하여 구조적으로 일관된 뷰모델 구성
-- RxSwift
-  - Input/Output 패턴을 활용해 데이터의 단방향 흐름 구성
-- Repository 패턴
-  - Realm 구성 시 Repository 패턴을 활용해 비지니스 로직과 데이터 계층을 분리 및 추상화
-- Router 패턴
-  - Alamofire의 URLRequestConvertible 프로토콜를 준수하는 커스텀 TargetType 구성으로 Router 패턴 구현
-  - 커스텀 TargetType 구성을 통한으로 API 호출의 Endpoint 관리를 중앙화
-- Alamofire
-  - EventMonitor 프로토콜 채택하여 이벤트 실시간 모니터링
-  - RequestInterceptor 프로토콜을 채택하여 토큰 만료시 자동 갱신 구성
-  - 커스텀 Session 구성으로 커스텀 EventMonitor와 커스텀 RequestInterceptor 적용
-- RxDatasoure
-  - 프로젝트 반응형 구조 구성에 따른 데이터 바인딩을 위해 도입
-  - Section별 다양한 타입의 Cell 대응
-  - 열거형을 통한 Section 분리 구성
-- SnapKit
-  - DSL를 활용한 AutoLayout 코드 간소화 및 가독성 향상
-- Modern CollectionView
-  - 기기의 다양한 해상도 대응을 위해 UICollectionViewCompositionalLayout 활용
-- MapKit
-  - CLLocationManager 클래스 상속을 통한 커스텀 LocationManger 구성
-  - MKLocalSearchCompleter를 활용한 장소 실시간 검색 구성
-  - reverseGeocodeLocation(\_:completionHandler:) 메서드를 통한 주소 검색 구성
-- IAMPort
-  - 다양한 PG사를 통한 결제를 위해 도입
-  - 게시글별 후원 수단으로 활용
-- NWPathMonitor
-  - NWPathMonitor 실시간 네트워크 연결 상태 모니터링 구성
-  - 네트워크 단절 감지 시 상위 계층의 또 다른 window 구성으로 사용자에서 연결 상태 전달
-- LocalizedError
-  - 열거형에 LocalizedError 프로토콜을 채택하여 Status Code에 따른 오류 코드 및 오류 메세지 재정의
-- SocketIO
-  - Direct Message 기능 구현을 위한 소켓 통신 구성에 활용
-- RealmSwift
-  - Direct Message 기능에 채팅 내역 저장에 활용
-- Property Wrapper
-  - Property Wrapper를 활용한 UserDefaults 코드 간소화
-- Kingfisher
-  - Header를 통한 이미지 다운로드, 캐싱, 표시에 활용
-- PHAsset
-  - PHAsset를 이용한 커스텀 Gallery 구성
+- UIKit, RxSwift, SnapKit
+- MVVM, Input/Output, Router, Repository Pattern
+- Alamofire, Kingfisher, LocalizedError
+- NWPathMonitor, IAMPort, SocketIO, Realm
+- RxDatasoure, Modern CollectionView
+- MapKit, PHAsset, Custom Property Wrapper
 
 <br/>
 
@@ -723,6 +685,45 @@
 <br/>
 
 ### 9.  Resizable Image을 이용한 채팅 말풍선 구현
+
+[👉 Resiable Image 구현 블로그 링크](https://picelworld.tistory.com/51)
+
+<details>
+<summary><b>말풍선 구성 코드</b></summary>
+<div markdown="1">
+
+```swift
+final class ChatBubbleImageView: UIImageView {
+
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        
+        configureUI()
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    private func configureUI() {
+        let image = UIImage(named: "messageBubble")
+        let horizontalInset = (image?.size.width ?? 0.0) * 0.4
+        let verticalInset = (image?.size.height ?? 0.0) * 0.4
+        self.image = image?.resizableImage(
+            withCapInsets: UIEdgeInsets(
+                top: verticalInset,
+                left: horizontalInset,
+                bottom: verticalInset,
+                right: horizontalInset),
+            resizingMode: .stretch
+        ).withRenderingMode(.alwaysTemplate)
+    }
+}
+```
+
+</div>
+</details>
+
 
 <br/>
 
