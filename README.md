@@ -10,7 +10,7 @@
 
 - 서비스 소개: 자신만의 사진 스팟 공유 앱
 - 개발 인원: 1인
-- 개발 기간: 24.04.12 ~ 24.05.05(총 23일)
+- 개발 기간: 24.04.12 ~ 24.05.05(총 24일)
 - 개발 환경
   - 최소버전: iOS 16
   - Portrait Orientation 지원
@@ -44,6 +44,22 @@
 - NWPathMonitor, IAMPort, SocketIO, Realm
 - RxDatasoure, Modern CollectionView
 - MapKit, PHAsset, Custom Property Wrapper
+
+<br/>
+
+## 💻 기술 적용
+
+- MVM Input/ouput 패턴을 통한 View와 ViewModel간 책임 분리
+- URLRequestConvertible를 준수하는 Custom TargetType을 이용한 네트워크 요청 로직 Router 패턴 구성
+- Multipart Form Data 전송 방식을 통한 이미지 파일 업로드 구현
+- 홈 화면에서 효율적인 대량 게시글 데이터 로드를 위한 Cursor-Based Pagination 구현
+- EventMonitor 프로토콜 준수하는 이벤트 모니터 구성으로 네트워크 요청 및 응답을 위한 로깅 구현
+- Interceptor를 활용한 토큰 갱신 로직 구성
+- NWPathMonitor를 활용한 실시간 네트워크 연결 상태 모니터링 구성
+- Custom UICollectionViewLayout 구성으로 핀터레스트 U 구성
+- Resizable Image를 활용한 말풍선 UI 구현
+- Type Erasure Wrapper를 활용한 멀티 섹션 타입의 Collectionview 구성(RxDatasource)
+- UICollectionviewFlowLayout을 활용하여 Dynamic Island로 인한 기기별 Layout 차이 대응
 
 <br/>
 
@@ -729,7 +745,7 @@ final class ChatBubbleImageView: UIImageView {
 
 ### 10. Custom View로 구성
 
-- 공통적인 UI 요소들 Custom View로 정의하여 재활용
+- 공통적인 UI 요소들 Custom View로 정의하여 재사용
 
 <img src="https://github.com/constdreamcoder/SwiftPrac/assets/95998675/e072eeca-03bb-4448-b64a-96cb0e9dd135" align="center" width= "200"/>
 
