@@ -63,7 +63,7 @@
 
 <br/>
 
-## 💻 구현 내용
+## 💾 구현 내용
 
 ### 1. RxSwift + Input/Output pattern을 이용한 게시글 등록 유효성 검사
 
