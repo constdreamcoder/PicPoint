@@ -79,7 +79,7 @@
 - **Custom UICollectionViewLayout** 구성으로 핀터레스트 UI 구성
 - **Resizable Image**를 활용한 말풍선 UI 구현
 - **Type Erasure Wrapper**를 활용한 멀티 섹션 타입의 **CollectionView** 구성(**RxDatasource**)
-- **UICollectionViewFlowLayout**을 활용하여 **Dynamic Island**로 인한 기기별 Layout 차이 대응
+- **Compositional Layout**을 활용한 **Dynamic Island**로 인한 기기별 Layout 차이 대응
 
 <br/>
 
